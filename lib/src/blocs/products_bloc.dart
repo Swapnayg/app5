@@ -6,9 +6,9 @@ import '../models/product_model.dart';
 
 class ProductsBloc {
   Map<String, List<Product>> products;
-  var productsPage = new Map<String, int>();
+  var productsPage = <String, int>{};
   List<AttributesModel> attributes;
-  var productsFilter = new Map<String, dynamic>();
+  var productsFilter = <String, dynamic>{};
 
   final apiProvider = ApiProvider();
   final _productsFetcher = BehaviorSubject<List<Product>>();
@@ -16,7 +16,7 @@ class ProductsBloc {
   final _hasMoreItemsFetcher = BehaviorSubject<bool>();
   final _isLoadingProductsFetcher = BehaviorSubject<bool>();
 
-  ProductsBloc() : products = Map() {}
+  ProductsBloc() : products = <String, List<Product>>{};
 
   //String search="";
 
@@ -42,8 +42,9 @@ class ProductsBloc {
       List<Product> newProducts =
       await apiProvider.fetchProductList(productsFilter);
       products[id].addAll(newProducts);
-      if(productsFilter['id'] == id.toString())
-      _productsFetcher.sink.add(products[id]);
+      if(productsFilter['id'] == id.toString()) {
+        _productsFetcher.sink.add(products[id]);
+      }
       _isLoadingProductsFetcher.sink.add(false);
       if (newProducts.length < 10) {
         _hasMoreItemsFetcher.sink.add(false);
@@ -106,17 +107,16 @@ class ProductsBloc {
 
     productsFilter['min_price'] = minPrice.toString();
     productsFilter['max_price'] = maxPrice.toString();
-    if (attributes != null)
-      for (var i = 0; i < attributes.length; i++) {
-        for (var j = 0; j < attributes[i].terms.length; j++) {
-          if (attributes[i].terms[j].selected) {
-            productsFilter['attribute_term' + j.toString()] =
-                attributes[i].terms[j].termId.toString();
-            productsFilter['attributes' + j.toString()] =
-                attributes[i].terms[j].taxonomy;
-          }
+    for (var i = 0; i < attributes.length; i++) {
+      for (var j = 0; j < attributes[i].terms.length; j++) {
+        if (attributes[i].terms[j].selected) {
+          productsFilter['attribute_term' + j.toString()] =
+              attributes[i].terms[j].termId.toString();
+          productsFilter['attributes' + j.toString()] =
+              attributes[i].terms[j].taxonomy;
         }
       }
+    }
     fetchAllProducts(productsFilter['id']);
   }
 

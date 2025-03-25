@@ -24,7 +24,7 @@ class _SelectAttributesState extends State<SelectAttributes> {
   @override
   void initState() {
     super.initState();
-    if (widget.product.attributes == null) widget.product.attributes = [];
+    widget.product.attributes ??= [];
     widget.attributeBloc.fetchAllAttributes();
   }
 
@@ -47,11 +47,13 @@ class _SelectAttributesState extends State<SelectAttributes> {
 
   buildBody(BuildContext ctxt, ProductAttribute productAttribute) {
     String option = '';
-    widget.product.attributes.forEach((value) {
-      if (value.id == productAttribute.id)
-        value.options.forEach(
-            (name) => option = option.isEmpty ? name : option + ', ' + name);
-    });
+    for (var value in widget.product.attributes) {
+      if (value.id == productAttribute.id) {
+        for (var name in value.options) {
+          option = option.isEmpty ? name : '$option, $name';
+        }
+      }
+    }
     return ListTile(
       onTap: () async {
         final data = await Navigator.push(
@@ -73,7 +75,7 @@ class _SelectAttributesState extends State<SelectAttributes> {
   }
 
   _buildList(AsyncSnapshot<List<ProductAttribute>> snapshot) {
-    List<Widget> list = new List<Widget>();
+    List<Widget> list = List<Widget>();
     list.add(
       SliverFixedExtentList(
         itemExtent: 56, // I'm forcing item heights

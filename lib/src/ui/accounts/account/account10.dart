@@ -26,7 +26,7 @@ import '../wishlist.dart';
 class UserAccount10 extends StatefulWidget {
 
 
-  UserAccount10({Key key})
+  const UserAccount10({Key key})
       : super(key: key);
 
   @override
@@ -58,7 +58,7 @@ class _UserAccount10State extends State<UserAccount10> {
                   ScopedModelDescendant<AppStateModel>(
                       builder: (context, child, model) {
                         if (model.blocks != null &&
-                            model.blocks.pages.length != 0 &&
+                            model.blocks.pages.isNotEmpty &&
                             model.blocks.pages[0].url.isNotEmpty) {
                           return buildPageList(model.blocks.pages);
                         } else {
@@ -66,7 +66,7 @@ class _UserAccount10State extends State<UserAccount10> {
                         }
                       }),
 
-                  (model.user?.id != null && model.user.id > 0)
+                  (model.user.id != null && model.user.id > 0)
                       ? buildLogoutList(context)
                       : Container(),
 
@@ -85,7 +85,7 @@ class _UserAccount10State extends State<UserAccount10> {
         children: [
           ListTile(
             onTap: () {
-              if (model.user?.id != null && model.user.id > 0) {
+              if (model.user.id != null && model.user.id > 0) {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -99,8 +99,8 @@ class _UserAccount10State extends State<UserAccount10> {
               }
             },
             leading: ExcludeSemantics(child: Icon(FlutterIcons.user_fea)),
-            title:  (model.user?.billing?.firstName != null || model.user?.billing?.lastName != null) ? Text(
-              model.user.billing.firstName[0].toUpperCase() + model.user.billing.firstName.substring(1) + ' ' + model.user.billing.lastName[0].toUpperCase() + model.user.billing.lastName.substring(1),
+            title:  (model.user.billing.firstName != null || model.user.billing.lastName != null) ? Text(
+              '${model.user.billing.firstName[0].toUpperCase()}${model.user.billing.firstName.substring(1)} ${model.user.billing.lastName[0].toUpperCase()}${model.user.billing.lastName.substring(1)}',
             ) :
             Text(
               appStateModel.blocks.localeText.signIn,
@@ -114,7 +114,7 @@ class _UserAccount10State extends State<UserAccount10> {
           buildDivider(),
           ListTile(
             onTap: () {
-              if (model.user?.id != null && model.user.id > 0) {
+              if (model.user.id != null && model.user.id > 0) {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -140,7 +140,7 @@ class _UserAccount10State extends State<UserAccount10> {
           buildDivider(),
           ListTile(
             onTap: () {
-              if (model.user?.id != null && model.user.id > 0) {
+              if (model.user.id != null && model.user.id > 0) {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -166,7 +166,7 @@ class _UserAccount10State extends State<UserAccount10> {
           buildDivider(),
           ListTile(
             onTap: () {
-              if (model.user?.id != null && model.user.id > 0) {
+              if (model.user.id != null && model.user.id > 0) {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -192,7 +192,7 @@ class _UserAccount10State extends State<UserAccount10> {
           buildDivider(),
           ListTile(
             onTap: () {
-              if (model.user?.id != null && model.user.id > 0) {
+              if (model.user.id != null && model.user.id > 0) {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -246,7 +246,7 @@ class _UserAccount10State extends State<UserAccount10> {
           ScopedModelDescendant<AppStateModel>(
               builder: (context, child, model) {
                 if (model.blocks?.languages != null &&
-                    model.blocks.languages.length > 0) {
+                    model.blocks.languages.isNotEmpty) {
                   return Column(
                     children: <Widget>[
                       ListTile(
@@ -277,7 +277,7 @@ class _UserAccount10State extends State<UserAccount10> {
           ScopedModelDescendant<AppStateModel>(
               builder: (context, child, model) {
                 if (model.blocks?.currencies != null &&
-                    model.blocks.currencies.length > 0) {
+                    model.blocks.currencies.isNotEmpty) {
                   return Column(
                     children: <Widget>[
                       ListTile(
@@ -323,8 +323,8 @@ class _UserAccount10State extends State<UserAccount10> {
   }
 
   Widget buildVendorDashboard(BuildContext context) {
-    TextStyle itemTextStyle = Theme.of(context).textTheme.subtitle1;
-    TextStyle itemTextStyle2 = Theme.of(context).textTheme.bodyText1;
+    TextStyle itemTextStyle = Theme.of(context).textTheme.titleMedium;
+    TextStyle itemTextStyle2 = Theme.of(context).textTheme.bodyLarge;
     return ScopedModelDescendant<AppStateModel>(
         builder: (context, child, model) {
           if (model.loggedIn &&
@@ -377,8 +377,9 @@ class _UserAccount10State extends State<UserAccount10> {
                 ),
               ],
             );
-          } else
+          } else {
             return Container();
+          }
         });
   }
 
@@ -479,12 +480,10 @@ class _UserAccount10State extends State<UserAccount10> {
   _shareApp() {
     if (Platform.isIOS) {
       //Add ios App link here
-      Share.share('Check out this app: ' +
-          appStateModel.blocks.settings.shareAppIosLink);
+      Share.share('Check out this app: ${appStateModel.blocks.settings.shareAppIosLink}');
     } else {
       //Add android app link here
-      Share.share('Check out this app: ' +
-          appStateModel.blocks.settings.shareAppAndroidLink);
+      Share.share('Check out this app: ${appStateModel.blocks.settings.shareAppAndroidLink}');
     }
   }
 

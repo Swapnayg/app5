@@ -26,7 +26,7 @@ class RegisterTab extends StatefulWidget {
 class _RegisterTabState extends State<RegisterTab> {
   final _formKey = GlobalKey<FormState>();
 
-  var _register = RegisterModel();
+  final _register = RegisterModel();
 
   var isLoading = false;
 
@@ -127,15 +127,15 @@ class _RegisterTabState extends State<RegisterTab> {
                         Text(
                             widget.model.blocks.localeText
                                 .alreadyHaveAnAccount,
-                            style: Theme.of(context).textTheme.bodyText2),
+                            style: Theme.of(context).textTheme.bodyMedium),
                         Padding(
                           padding:
                               const EdgeInsets.symmetric(horizontal: 8.0),
                           child: Text(
                               widget.model.blocks.localeText.signIn,
-                              style: Theme.of(context).textTheme.bodyText2.copyWith(
+                              style: Theme.of(context).textTheme.bodyMedium.copyWith(
                                       color:
-                                          Theme.of(context).accentColor)),
+                                          Theme.of(context).colorScheme.secondary)),
                         ),
                       ],
                     )),

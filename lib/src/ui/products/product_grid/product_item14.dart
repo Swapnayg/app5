@@ -43,7 +43,7 @@ class ProductItem extends StatelessWidget {
 
     double save = 0;
 
-    if ((product.salePrice != null && product.salePrice != 0)) {
+    if ((product.salePrice != 0)) {
       percentOff = (((product.regularPrice - product.salePrice) / product.regularPrice) * 100).round();
       save = product.regularPrice - product.salePrice;
     }
@@ -56,7 +56,7 @@ class ProductItem extends StatelessWidget {
     return Column(
       children: [
         InkWell(
-          splashColor: Theme.of(context).accentColor.withOpacity(0.1),
+          splashColor: Theme.of(context).colorScheme.secondary.withOpacity(0.1),
           onTap: () {
             onProductClick(context, product);
           },
@@ -68,7 +68,7 @@ class ProductItem extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Container(
+                  SizedBox(
                     width: 120,
                     height: 120,
                     child: CachedNetworkImage(
@@ -109,13 +109,13 @@ class ProductItem extends StatelessWidget {
                               maxLines: 2,
                               style: Theme.of(context)
                                   .textTheme
-                                  .bodyText2
+                                  .bodyMedium
                                   .copyWith(fontSize: 16),
                             ),
                             SizedBox(height: 8),
                             Container(child: PriceWidget(onSale: onSale, product: product)),
                             SizedBox(height: 8),
-                            save != 0 ? Text('You Save Rs. ' + save.toString(), style: TextStyle(
+                            save != 0 ? Text('You Save Rs. $save', style: TextStyle(
                                 color: Color(0xff00a100)
                             ),) : Container(),
                             ScopedModelDescendant<AppStateModel>(

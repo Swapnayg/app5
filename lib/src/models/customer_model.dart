@@ -42,35 +42,35 @@ class Customer {
   });
 
   factory Customer.fromJson(Map<String, dynamic> json) => Customer(
-    id: json["id"] == null ? 0 : json["id"],
-    email: json["email"] == null ? null : json["email"],
-    firstName: json["first_name"] == null ? null : json["first_name"],
-    lastName: json["last_name"] == null ? null : json["last_name"],
-    role: json["role"] == null ? null : json["role"],
-    username: json["username"] == null ? null : json["username"],
+    id: json["id"] ?? 0,
+    email: json["email"],
+    firstName: json["first_name"],
+    lastName: json["last_name"],
+    role: json["role"],
+    username: json["username"],
     billing: json["billing"] == null ? null : Address.fromJson(json["billing"]),
     shipping: json["shipping"] == null ? null : Address.fromJson(json["shipping"]),
-    isPayingCustomer: json["is_paying_customer"] == null ? null : json["is_paying_customer"],
-    ordersCount: json["orders_count"] == null ? null : json["orders_count"],
-    totalSpent: json["total_spent"] == null ? null : json["total_spent"],
-    avatarUrl: json["avatar_url"] == null ? null : json["avatar_url"],
+    isPayingCustomer: json["is_paying_customer"],
+    ordersCount: json["orders_count"],
+    totalSpent: json["total_spent"],
+    avatarUrl: json["avatar_url"],
     metaData: json["meta_data"] == null ? null : List<MetaDatum>.from(json["meta_data"].map((x) => MetaDatum.fromJson(x))),
-    guest: json["guest"] == null ? null : json["guest"],
+    guest: json["guest"],
   );
 
   Map<String, dynamic> toJson() => {
-    "id": id == null ? null : id,
-    "email": email == null ? null : email,
-    "first_name": firstName == null ? null : firstName,
-    "last_name": lastName == null ? null : lastName,
-    "role": role == null ? null : role,
-    "username": username == null ? null : username,
-    "billing": billing == null ? null : billing.toJson(),
-    "shipping": shipping == null ? null : shipping.toJson(),
-    "is_paying_customer": isPayingCustomer == null ? null : isPayingCustomer,
-    "orders_count": ordersCount == null ? null : ordersCount,
-    "total_spent": totalSpent == null ? null : totalSpent,
-    "avatar_url": avatarUrl == null ? null : avatarUrl,
+    "id": id,
+    "email": email,
+    "first_name": firstName,
+    "last_name": lastName,
+    "role": role,
+    "username": username,
+    "billing": billing?.toJson(),
+    "shipping": shipping?.toJson(),
+    "is_paying_customer": isPayingCustomer,
+    "orders_count": ordersCount,
+    "total_spent": totalSpent,
+    "avatar_url": avatarUrl,
     "meta_data": metaData == null ? null : List<dynamic>.from(metaData.map((x) => x.toJson())),
   };
 }
@@ -103,31 +103,31 @@ class Address {
   });
 
   factory Address.fromJson(Map<String, dynamic> json) => Address(
-    firstName: json["first_name"] == null ? '' : json["first_name"],
-    lastName: json["last_name"] == null ? '' : json["last_name"],
-    company: json["company"] == null ? '' : json["company"],
-    address1: json["address_1"] == null ? '' : json["address_1"],
-    address2: json["address_2"] == null ? '' : json["address_2"],
-    city: json["city"] == null ? '' : json["city"],
-    postcode: json["postcode"] == null ? '' : json["postcode"],
-    country: json["country"] == null ? '' : json["country"],
-    state: json["state"] == null ? '' : json["state"],
-    email: json["email"] == null ? '' : json["email"],
-    phone: json["phone"] == null ? '' : json["phone"],
+    firstName: json["first_name"] ?? '',
+    lastName: json["last_name"] ?? '',
+    company: json["company"] ?? '',
+    address1: json["address_1"] ?? '',
+    address2: json["address_2"] ?? '',
+    city: json["city"] ?? '',
+    postcode: json["postcode"] ?? '',
+    country: json["country"] ?? '',
+    state: json["state"] ?? '',
+    email: json["email"] ?? '',
+    phone: json["phone"] ?? '',
   );
 
   Map<String, dynamic> toJson() => {
-    "first_name": firstName == null ? null : firstName,
-    "last_name": lastName == null ? null : lastName,
-    "company": company == null ? null : company,
-    "address_1": address1 == null ? null : address1,
-    "address_2": address2 == null ? null : address2,
-    "city": city == null ? null : city,
-    "postcode": postcode == null ? null : postcode,
-    "country": country == null ? null : country,
-    "state": state == null ? null : state,
-    "email": email == null ? null : email,
-    "phone": phone == null ? null : phone,
+    "first_name": firstName,
+    "last_name": lastName,
+    "company": company,
+    "address_1": address1,
+    "address_2": address2,
+    "city": city,
+    "postcode": postcode,
+    "country": country,
+    "state": state,
+    "email": email,
+    "phone": phone,
   };
 }
 
@@ -143,14 +143,14 @@ class MetaDatum {
   });
 
   factory MetaDatum.fromJson(Map<String, dynamic> json) => MetaDatum(
-    id: json["id"] == null ? null : json["id"],
-    key: json["key"] == null ? null : json["key"],
-    value: json["value"] == null ? null : json["value"],
+    id: json["id"],
+    key: json["key"],
+    value: json["value"],
   );
 
   Map<String, dynamic> toJson() => {
-    "id": id == null ? null : id,
-    "key": key == null ? null : key,
-    "value": value == null ? null : value,
+    "id": id,
+    "key": key,
+    "value": value,
   };
 }

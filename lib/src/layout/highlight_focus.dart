@@ -9,7 +9,7 @@ import 'package:flutter/services.dart';
 /// allowing tab-navigation.
 /// Wrap your widget as [child] of a [HighlightFocus] widget.
 class HighlightFocus extends StatefulWidget {
-  const HighlightFocus({
+  const HighlightFocus({super.key, 
     @required this.onPressed,
     @required this.child,
     this.highlightColor,
@@ -55,15 +55,15 @@ class _HighlightFocusState extends State<HighlightFocus> {
 
   @override
   Widget build(BuildContext context) {
-    Color _highlightColor = widget.highlightColor ??
+    Color highlightColor = widget.highlightColor ??
         Theme.of(context).colorScheme.primary.withOpacity(0.5);
-    Color _borderColor =
+    Color borderColor =
         widget.borderColor ?? Theme.of(context).colorScheme.onPrimary;
 
-    BoxDecoration _highlightedDecoration = BoxDecoration(
-      color: _highlightColor,
+    BoxDecoration highlightedDecoration = BoxDecoration(
+      color: highlightColor,
       border: Border.all(
-        color: _borderColor,
+        color: borderColor,
         width: 2,
       ),
     );
@@ -88,7 +88,7 @@ class _HighlightFocusState extends State<HighlightFocus> {
         }
       },
       child: Container(
-        foregroundDecoration: isFocused ? _highlightedDecoration : null,
+        foregroundDecoration: isFocused ? highlightedDecoration : null,
         child: widget.child,
       ),
     );

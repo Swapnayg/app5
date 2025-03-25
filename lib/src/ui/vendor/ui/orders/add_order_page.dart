@@ -20,7 +20,7 @@ class AddOrderPage extends StatefulWidget {
 }
 
 class _AddOrderPageState extends State<AddOrderPage> {
-  TextEditingController _totalController = TextEditingController();
+  final TextEditingController _totalController = TextEditingController();
 
   var qty = 0;
 
@@ -168,6 +168,7 @@ class _AddOrderPageState extends State<AddOrderPage> {
               children: <Widget>[
                 Container(
                   padding: EdgeInsets.all(10),
+                    height: 80,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       mainAxisSize: MainAxisSize.max,
@@ -190,8 +191,7 @@ class _AddOrderPageState extends State<AddOrderPage> {
                               });
                             })
                       ],
-                    ),
-                    height: 80),
+                    )),
                 Container(
                   padding: EdgeInsets.all(10),
                   child: Row(
@@ -275,7 +275,7 @@ class _AddOrderPageState extends State<AddOrderPage> {
                   children: <Widget>[
                     Text(
                       "Billing Details:",
-                      style: Theme.of(context).textTheme.subtitle,
+                      style: Theme.of(context).textTheme.subtitle2,
                     ),
                     SizedBox(height: 10.0),
                     Text(
@@ -288,7 +288,7 @@ class _AddOrderPageState extends State<AddOrderPage> {
                   children: <Widget>[
                     Text(
                       "Shipping Details:",
-                      style: Theme.of(context).textTheme.subtitle,
+                      style: Theme.of(context).textTheme.subtitle2,
                     ),
                     SizedBox(
                       height: 10.0,
@@ -306,7 +306,7 @@ class _AddOrderPageState extends State<AddOrderPage> {
 
 
   void _increaseQty() {
-  if(widget.order.lineItems != null && widget.order.lineItems != 0){
+  if(widget.order.lineItems != 0){
     setState(() {
       qty = qty + 1;
     });

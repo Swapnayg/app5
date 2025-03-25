@@ -13,7 +13,7 @@ const double _minWidthPerColumn = 350.0 + _scaffoldPadding * 2;
 
 class StoresList3 extends StatelessWidget {
   final List<StoreModel> stores;
-  StoresList3({Key key, this.stores}) : super(key: key);
+  const StoresList3({Key key, this.stores}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
@@ -56,7 +56,7 @@ class StoreCard extends StatelessWidget {
                 Container(color: Colors.white),
           )
         : Container();
-    return Container(
+    return SizedBox(
       height: 200,
       child: Card(
         shape: RoundedRectangleBorder(
@@ -70,23 +70,23 @@ class StoreCard extends StatelessWidget {
         clipBehavior: Clip.antiAlias,
         child: InkWell(
           onTap: () => openDetails(store, context),
-          child: new Stack(
+          child: Stack(
             children: <Widget>[
               featuredImage,
-              new BackdropFilter(
-                filter: new ImageFilter.blur(sigmaX: 0.0, sigmaY: 0.0),
-                child: new Container(
-                  decoration: new BoxDecoration(
+              BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 0.0, sigmaY: 0.0),
+                child: Container(
+                  decoration: BoxDecoration(
                     color: Colors.purple,
-                    gradient: new LinearGradient(
+                    gradient: LinearGradient(
                         colors: [Colors.black54, Colors.transparent],
                         begin: Alignment.bottomCenter,
-                        end: new Alignment(0.0, 0.0),
+                        end: Alignment(0.0, 0.0),
                         tileMode: TileMode.clamp),
                   ),
                 ),
               ),
-              new Positioned(
+              Positioned(
                 left: 10.0,
                 bottom: 10.0,
                 child: Row(
@@ -109,12 +109,12 @@ class StoreCard extends StatelessWidget {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        Container(
+                        SizedBox(
                           width: 340,
-                          child: new Text(store.name,
+                          child: Text(store.name,
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
-                              style: new TextStyle(
+                              style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 18.0,
                                 color: Colors.white,
@@ -158,10 +158,7 @@ class StoreCard extends StatelessWidget {
               width: 6.0,
             ),
             Text(
-              '(' +
-                  store.ratingCount.toString() +
-                  ' ' + appStateModel.blocks.localeText.reviews +
-                  ')',
+              '(${store.ratingCount} ${appStateModel.blocks.localeText.reviews})',
               style: TextStyle(
                   fontSize: 10, fontWeight: FontWeight.w300),
             ),

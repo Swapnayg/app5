@@ -30,7 +30,7 @@ class _ExpandableCategoryListState extends State<ExpandableCategoryList> {
   }
 
   _onTap(Category category) {
-    var filter = new Map<String, dynamic>();
+    var filter = Map<String, dynamic>();
     filter['id'] = category.id.toString();
     Navigator.push(
         context,
@@ -70,7 +70,7 @@ class _ExpandableCategoryListState extends State<ExpandableCategoryList> {
           parseHtmlString(category.name),
           style: menuItemStyle(),
         ),
-        subtitle: category.description != '' ? Text(parseHtmlString(category.description), maxLines: 2, style: Theme.of(context).textTheme.caption,) : null,
+        subtitle: category.description != '' ? Text(parseHtmlString(category.description), maxLines: 2, style: Theme.of(context).textTheme.bodySmall,) : null,
         children: subCategories.map(_buildCard).toList(),
       );
     }
@@ -122,7 +122,7 @@ class _ExpandableCategoryListState extends State<ExpandableCategoryList> {
                       ),
                       category.description != '' ? Text(
                         parseHtmlString(category.description),
-                        style: Theme.of(context).textTheme.caption,
+                        style: Theme.of(context).textTheme.bodySmall,
                         maxLines: 2,
                       ) : Container(),
                     ],
@@ -161,24 +161,24 @@ class _ExpandableCategoryListState extends State<ExpandableCategoryList> {
   }
 
   Container leadingIcon(Category category) {
-    return Container(
+    return SizedBox(
       width: 80,
       height: 80,
       child: CachedNetworkImage(
-        imageUrl: category.image != null ? category.image : '',
+        imageUrl: category.image ?? '',
         imageBuilder: (context, imageProvider) => Card(
           clipBehavior: Clip.antiAlias,
           margin: EdgeInsets.all(0.0),
           elevation: 0.0,
           //shape: StadiumBorder(),
           child: Ink.image(
+            image: imageProvider,
+            fit: BoxFit.cover,
             child: InkWell(
               onTap: () {
                 onCategoryClick(category);
               },
             ),
-            image: imageProvider,
-            fit: BoxFit.cover,
           ),
         ),
         placeholder: (context, url) => Card(
@@ -203,20 +203,20 @@ class _ExpandableCategoryListState extends State<ExpandableCategoryList> {
       width: 80,
       height: 80,
       child: CachedNetworkImage(
-        imageUrl: category.image != null ? category.image : '',
+        imageUrl: category.image ?? '',
         imageBuilder: (context, imageProvider) => Card(
           clipBehavior: Clip.antiAlias,
           margin: EdgeInsets.all(0.0),
           elevation: 0.0,
           //shape: StadiumBorder(),
           child: Ink.image(
+            image: imageProvider,
+            fit: BoxFit.cover,
             child: InkWell(
               onTap: () {
                 onCategoryClick(category);
               },
             ),
-            image: imageProvider,
-            fit: BoxFit.cover,
           ),
         ),
         placeholder: (context, url) => Card(
@@ -267,8 +267,7 @@ class ExpansionTile2 extends StatefulWidget {
     this.children = const <Widget>[],
     this.trailing,
     this.initiallyExpanded = false,
-  })  : assert(initiallyExpanded != null),
-        super(key: key);
+  })  : super(key: key);
 
   /// A widget to display before the title.
   ///
@@ -347,7 +346,7 @@ class _ExpansionTile2State extends State<ExpansionTile2>
         _controller.drive(_backgroundColorTween.chain(_easeOutTween));
 
     _isExpanded =
-        PageStorage.of(context)?.readState(context) ?? widget.initiallyExpanded;
+        PageStorage.of(context).readState(context) ?? widget.initiallyExpanded;
     if (_isExpanded) _controller.value = 1.0;
   }
 
@@ -370,10 +369,9 @@ class _ExpansionTile2State extends State<ExpansionTile2>
           });
         });
       }
-      PageStorage.of(context)?.writeState(context, _isExpanded);
+      PageStorage.of(context).writeState(context, _isExpanded);
     });
-    if (widget.onExpansionChanged != null)
-      widget.onExpansionChanged(_isExpanded);
+    widget.onExpansionChanged(_isExpanded);
   }
 
   Widget _buildChildren(BuildContext context, Widget child) {
@@ -405,7 +403,7 @@ class _ExpansionTile2State extends State<ExpansionTile2>
                       padding: EdgeInsets.fromLTRB(16,16,16,16),
                       child: InkWell(
                         onTap: _handleTap,
-                        child: Container(
+                        child: SizedBox(
                           width: MediaQuery.of(context).size.width - 32,
                           child: Row(
                             children: [
@@ -423,25 +421,24 @@ class _ExpansionTile2State extends State<ExpansionTile2>
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
                                           widget.title,
-                                          if(widget.subtitle != null)
                                           Column(
-                                            children: [
-                                              SizedBox(height: 4,),
-                                              widget.subtitle,
-                                            ],
-                                          )
+                                          children: [
+                                            SizedBox(height: 4,),
+                                            widget.subtitle,
+                                          ],
+                                        )
                                         ],
                                       ),
                                     ),
                                     _isExpanded
-                                        ? Container(
+                                        ? SizedBox(
                                       height: 60,
                                       child: RotationTransition(
                                         turns: _iconTurns,
                                         child: const Icon(Icons.keyboard_arrow_down),
                                       ),
                                     )
-                                        : Container(
+                                        : SizedBox(
                                       height: 60,
                                       child: RotationTransition(
                                         turns: _iconTurns,
@@ -479,14 +476,14 @@ class _ExpansionTile2State extends State<ExpansionTile2>
   @override
   void didChangeDependencies() {
     final ThemeData theme = Theme.of(context);
-    _borderColorTween..end = theme.dividerColor;
+    _borderColorTween.end = theme.dividerColor;
     _headerColorTween
-      ..begin = theme.textTheme.subtitle1.color
-      ..end = theme.accentColor;
+      ..begin = theme.textTheme.titleMedium.color
+      ..end = theme.colorScheme.secondary;
     _iconColorTween
       ..begin = theme.unselectedWidgetColor
-      ..end = theme.accentColor;
-    _backgroundColorTween..end = widget.backgroundColor;
+      ..end = theme.colorScheme.secondary;
+    _backgroundColorTween.end = widget.backgroundColor;
     super.didChangeDependencies();
   }
 

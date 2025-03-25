@@ -20,10 +20,10 @@ import '../models/product_model.dart';
 import '../resources/api_provider.dart';
 
 class CheckoutBloc {
-  var filter = new Map<String, dynamic>();
+  var filter = Map<String, dynamic>();
   int searchPage = 1;
   String initialSelectedCountry = 'US';
-  var formData = new Map<String, String>();
+  var formData = <String, String>{};
   OrderReviewModel orderReviewData;
   List<Category> categories = [];
 
@@ -53,7 +53,7 @@ class CheckoutBloc {
   void getCheckoutForm() async {
     final response = await apiProvider.post(
         '/wp-admin/admin-ajax.php?action=mstore_flutter-get_checkout_form',
-        Map()); //formData.toJson();
+        {}); //formData.toJson();
     if (response.statusCode == 200) {
       CheckoutFormModel checkoutForm =
           CheckoutFormModel.fromJson(json.decode(response.body));
@@ -100,15 +100,17 @@ class CheckoutBloc {
     formData['shipping_country'] = formData['billing_country'];
     formData['shipping_state'] = formData['billing_state'];
 
-    if(appStateModel.oneSignalPlayerId != null)
-    formData['onesignal_user_id'] = appStateModel.oneSignalPlayerId;
-    if(appStateModel.fcmToken != null)
-    formData['fcm_token'] = appStateModel.fcmToken;
+    if(appStateModel.oneSignalPlayerId != null) {
+      formData['onesignal_user_id'] = appStateModel.oneSignalPlayerId;
+    }
+    if(appStateModel.fcmToken != null) {
+      formData['fcm_token'] = appStateModel.fcmToken;
+    }
 
     _placingOrderFetcher.sink.add(true);
     for (var i = 0; i < orderReviewData.shipping.length; i++) {
       if (orderReviewData.shipping[i].chosenMethod != '') {
-        formData['shipping_method[' + i.toString() + ']'] =
+        formData['shipping_method[$i]'] =
             orderReviewData.shipping[i].chosenMethod;
       }
     }
@@ -162,13 +164,14 @@ class CheckoutBloc {
   Future updateOrderReview() async {
     final response = await apiProvider.post(
         '/wp-admin/admin-ajax.php?action=mstore_flutter-update_order_review',
-        Map());
+        {});
     if (response.statusCode == 200) {
       orderReviewData = OrderReviewModel.fromJson(json.decode(response.body));
-      if (orderReviewData.paymentMethods != null && orderReviewData.paymentMethods.length != 0)
+      if (orderReviewData.paymentMethods.isNotEmpty) {
         formData['payment_method'] = orderReviewData.paymentMethods
             .firstWhere((method) => method.chosen == true)
             .id;
+      }
       _orderReviewFetcher.sink.add(orderReviewData);
       return true;
     } else {
@@ -202,7 +205,7 @@ class CheckoutBloc {
 
     for (var i = 0; i < orderReviewData.shipping.length; i++) {
       if (orderReviewData.shipping[i].chosenMethod != '') {
-        formData['shipping_method[' + i.toString() + ']'] =
+        formData['shipping_method[$i]'] =
             orderReviewData.shipping[i].chosenMethod;
       }
     }
@@ -235,8 +238,8 @@ class CheckoutBloc {
   }
 
   void addAddToCarErrorMessage(String message) {
-    AddToCartErrorModel addToCartError = new AddToCartErrorModel();
-    addToCartError.data = new AddToCartErrorData();
+    AddToCartErrorModel addToCartError = AddToCartErrorModel();
+    addToCartError.data = AddToCartErrorData();
     addToCartError.data.notice = message;
     //_addToCartErrorFetcher.sink.add(addToCartError);
   }
@@ -244,12 +247,12 @@ class CheckoutBloc {
   List<Order> orders;
   bool hasMoreOrders = true;
   int ordersPage = 0;
-  var addressFormData = new Map<String, String>();
+  var addressFormData = <String, String>{};
 
   final _errorFetcher = BehaviorSubject<WpErrors>();
   final _registerErrorFetcher = BehaviorSubject<RegisterError>();
   final _isLoginLoadingFetcher = BehaviorSubject<String>();
-  var _hasMoreOrdersFetcher = BehaviorSubject<bool>();
+  final _hasMoreOrdersFetcher = BehaviorSubject<bool>();
 
   ValueStream<WpErrors> get error => _errorFetcher.stream;
   ValueStream<String> get isLoginLoading => _isLoginLoadingFetcher.stream;
@@ -264,7 +267,7 @@ class CheckoutBloc {
 
   getOrders() async {
     final response = await apiProvider.post(
-        '/wp-admin/admin-ajax.php?action=mstore_flutter-orders', Map());
+        '/wp-admin/admin-ajax.php?action=mstore_flutter-orders', {});
     orders = orderFromJson(response.body);
     _ordersFetcher.sink.add(orders);
     _hasMoreOrdersFetcher.sink.add(true);
@@ -278,7 +281,7 @@ class CheckoutBloc {
     List<Order> moreOrders = orderFromJson(response.body);
     orders.addAll(moreOrders);
     _ordersFetcher.sink.add(orders);
-    if (moreOrders.length == 0) {
+    if (moreOrders.isEmpty) {
       hasMoreOrders = false;
       _hasMoreOrdersFetcher.sink.add(false);
     }
@@ -300,41 +303,7 @@ class CheckoutBloc {
     String sessionId = redirect.substring(pos3 + 10, pos4);
 
     String body = '';
-    body = 'merchant=E14560950&order.id=' +
-        orderId +
-        '&order.amount=' +
-        newOrder.total +
-        '&order.currency=' +
-        newOrder.currency +
-        '&order.description=Pay+for+order+%23' +
-        orderId +
-        '+via+Credit+Card&order.customerOrderDate=2019-11-17&order.customerReference=' +
-        newOrder.customerId.toString() +
-        '&order.reference=' +
-        orderId +
-        '&session.id=' +
-        sessionId +
-        '&billing.address.city=' +
-        newOrder.billing.city +
-        '&billing.address.country=BHR&billing.address.postcodeZip=' +
-        newOrder.billing.postcode +
-        '&billing.address.stateProvince=' +
-        newOrder.billing.state +
-        '&billing.address.street=' +
-        newOrder.billing.address1 +
-        '&billing.address.street2=' +
-        newOrder.billing.address2 +
-        '&customer.email=' +
-        newOrder.billing.email +
-        '&customer.firstName=' +
-        newOrder.billing.firstName +
-        '&customer.lastName=' +
-        newOrder.billing.lastName +
-        '&customer.phone=' +
-        newOrder.billing.phone +
-        '&interaction.merchant.name=Awal+Pets&interaction.merchant.address.line1=Manama&interaction.merchant.address.line2=Bahrain&interaction.displayControl.billingAddress=HIDE&interaction.displayControl.customerEmail=HIDE&interaction.displayControl.orderSummary=HIDE&interaction.displayControl.shipping=HIDE&interaction.cancelUrl=' +
-        config.url +
-        '%2Fcheckout%2F';
+    body = 'merchant=E14560950&order.id=$orderId&order.amount=${newOrder.total}&order.currency=${newOrder.currency}&order.description=Pay+for+order+%23$orderId+via+Credit+Card&order.customerOrderDate=2019-11-17&order.customerReference=${newOrder.customerId}&order.reference=$orderId&session.id=$sessionId&billing.address.city=${newOrder.billing.city}&billing.address.country=BHR&billing.address.postcodeZip=${newOrder.billing.postcode}&billing.address.stateProvince=${newOrder.billing.state}&billing.address.street=${newOrder.billing.address1}&billing.address.street2=${newOrder.billing.address2}&customer.email=${newOrder.billing.email}&customer.firstName=${newOrder.billing.firstName}&customer.lastName=${newOrder.billing.lastName}&customer.phone=${newOrder.billing.phone}&interaction.merchant.name=Awal+Pets&interaction.merchant.address.line1=Manama&interaction.merchant.address.line2=Bahrain&interaction.displayControl.billingAddress=HIDE&interaction.displayControl.customerEmail=HIDE&interaction.displayControl.orderSummary=HIDE&interaction.displayControl.shipping=HIDE&interaction.cancelUrl=${config.url}%2Fcheckout%2F';
 
     await apiProvider.processCredimaxPayment(body);
     _placingOrderFetcher.sink.add(false);
@@ -375,7 +344,7 @@ class CheckoutBloc {
   }
 
   String getQueryString(Map params,
-      {String prefix: '&', bool inRecursion: false}) {
+      {String prefix = '&', bool inRecursion = false}) {
     String query = '';
 
     params.forEach((key, value) {

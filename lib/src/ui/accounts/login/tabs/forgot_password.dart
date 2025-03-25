@@ -40,9 +40,9 @@ class _ForgotPasswordState extends State<ForgotPassword> {
       children: [
         Container(
           margin: const EdgeInsets.only(left: 16.0, right: 16.0),
-          child: new Form(
+          child: Form(
             key: _formKey,
-            child: new Column(
+            child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
@@ -75,10 +75,10 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                         widget.model.blocks.localeText.signIn,
                         style: Theme.of(context)
                             .textTheme
-                            .bodyText2
+                            .bodyMedium
                             .copyWith(
                             color:
-                            Theme.of(context).accentColor))),
+                            Theme.of(context).colorScheme.secondary))),
               ],
             ),
           ),
@@ -88,7 +88,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
   }
 
   _sendOtp() async {
-    var data = new Map<String, dynamic>();
+    var data = Map<String, dynamic>();
     if (_formKey.currentState.validate()) {
       data["email"] = widget.emailController.text;
       setState(() {
@@ -108,7 +108,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
 }
 
 class ResetPassword extends StatefulWidget {
-  ResetPassword({
+  const ResetPassword({
     Key key,
     @required this.context,
     @required this.model,
@@ -130,8 +130,8 @@ class _ResetPasswordState extends State<ResetPassword> {
   var isLoading = false;
   final apiProvider = ApiProvider();
 
-  TextEditingController otpController = new TextEditingController();
-  TextEditingController newPasswordController = new TextEditingController();
+  TextEditingController otpController = TextEditingController();
+  TextEditingController newPasswordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -140,9 +140,9 @@ class _ResetPasswordState extends State<ResetPassword> {
         Expanded(
           child: Container(
             margin: const EdgeInsets.only(left: 16.0, right: 16.0),
-            child: new Form(
+            child: Form(
               key: _formKey,
-              child: new Column(
+              child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
@@ -184,7 +184,7 @@ class _ResetPasswordState extends State<ResetPassword> {
   }
 
   _resetPassword(AppStateModel model) async {
-    var data = new Map<String, dynamic>();
+    var data = <String, dynamic>{};
     if (_formKey.currentState.validate()) {
       data["email"] = widget.emailController.text;
       data["password"] = newPasswordController.text;

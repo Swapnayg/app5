@@ -16,7 +16,7 @@ class PostDetailBloc {
 
   final _commentsFetcher = BehaviorSubject<CommentsModel>();
   final _hasMoreCommentsFetcher = BehaviorSubject<bool>();
-  var _commentsPage = new Map<int, dynamic>();
+  final _commentsPage = <int, dynamic>{};
 
   final _postIdController = StreamController<int>();
 
@@ -25,10 +25,10 @@ class PostDetailBloc {
   ValueStream<CommentsModel> get comments => _commentsFetcher.stream;
   ValueStream<bool> get hasMoreCommets => _hasMoreCommentsFetcher.stream;
 
-  Map<int, CommentsModel> _comments;
-  var _post = new Map<int, Post>();
+  final Map<int, CommentsModel> _comments;
+  final _post = <int, Post>{};
 
-  PostDetailBloc() : _comments = Map() {
+  PostDetailBloc() : _comments = <int, CommentsModel>{} {
     _postIdController.stream.listen((id) async {
       fetchPost(id);
       fetchComments(id);
@@ -67,7 +67,7 @@ class PostDetailBloc {
   }
 
   Future<CommentsModel> _getComments(id) async {
-    final url = config.url + '/wp-json/wp/v2/comments?page=' + _commentsPage[id].toString() + '&post=' + id.toString();
+    final url = '${config.url}/wp-json/wp/v2/comments?page=${_commentsPage[id]}&post=$id';
     final response = await http.get(url);
     if (response.statusCode == 200) {
       return CommentsModel.fromJson(json.decode(response.body));
@@ -78,7 +78,7 @@ class PostDetailBloc {
   }
 
   Future<Post> _getPost(id) async {
-    final url = config.url + '/wp-json/wp/v2/posts/' + id.toString();
+    final url = '${config.url}/wp-json/wp/v2/posts/$id';
     print(url);
     final response = await http.get(url);
     if (response.statusCode == 200) {

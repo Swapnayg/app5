@@ -39,7 +39,7 @@ class ProductDetail3 extends StatefulWidget {
   final vendorDetailsBloc = VendorDetailStateModel();
 
   final appStateModel = AppStateModel();
-  ProductDetail3({this.product});
+  ProductDetail3({super.key, this.product});
 
   @override
   _ProductDetail3State createState() => _ProductDetail3State();
@@ -47,13 +47,13 @@ class ProductDetail3 extends StatefulWidget {
 
 class _ProductDetail3State extends State<ProductDetail3> {
 
-  Map<String, dynamic> addOnsFormData = Map<String, dynamic>();
+  Map<String, dynamic> addOnsFormData = <String, dynamic>{};
   final addonFormKey = GlobalKey<FormState>();
 
 
   bool _alreadySaved;
   var saved;
-  ScrollController _scrollController = new ScrollController();
+  final ScrollController _scrollController = ScrollController();
   AppStateModel appStateModel = AppStateModel();
 
   List<ReviewModel> reviews;
@@ -81,9 +81,6 @@ class _ProductDetail3State extends State<ProductDetail3> {
   void initState() {
     super.initState();
     _scrollController.addListener(_scrollListener);
-    if (widget.product.description == null) {
-      getProduct();
-    }
     widget.productDetailBloc.getProductsDetails(widget.product.id);
     widget.productDetailBloc.getReviews(widget.product.id);
   }
@@ -92,40 +89,20 @@ class _ProductDetail3State extends State<ProductDetail3> {
     setState(() {
       addingToCart = true;
     });
-    var data = new Map<String, dynamic>();
+    var data = Map<String, dynamic>();
     data['product_id'] = widget.product.id.toString();
     data['quantity'] = _quantity.toString();
     var doAdd = true;
-    if (widget.product.type == 'variable' &&
-        widget.product.variationOptions != null) {
+    if (widget.product.type == 'variable') {
       for (var i = 0; i < widget.product.variationOptions.length; i++) {
-        if (widget.product.variationOptions[i].selected != null) {
-          data['variation[attribute_' +
-              widget.product.variationOptions[i].attribute +
-              ']'] = widget.product.variationOptions[i].selected;
-        } else if (widget.product.variationOptions[i].selected == null &&
-            widget.product.variationOptions[i].options.length != 0) {
-          Fluttertoast.showToast(
-              msg: widget.appStateModel.blocks.localeText.select +
-                  ' ' +
-                  widget.product.variationOptions[i].name);
-          doAdd = false;
-          break;
-        } else if (widget.product.variationOptions[i].selected == null &&
-            widget.product.variationOptions[i].options.length == 0) {
-          setState(() {
-            widget.product.stockStatus = 'outofstock';
-          });
-          doAdd = false;
-          break;
+        data['variation[attribute_' +
+            widget.product.variationOptions[i].attribute +
+            ']'] = widget.product.variationOptions[i].selected;
+            }
+      data['variation_id'] = widget.product.variationId;
         }
-      }
-      if (widget.product.variationId != null) {
-        data['variation_id'] = widget.product.variationId;
-      }
-    }
     if (doAdd) {
-      if (addonFormKey != null && addonFormKey.currentState.validate()) {
+      if (addonFormKey.currentState.validate()) {
         addonFormKey.currentState.save();
         data.addAll(addOnsFormData);
       }
@@ -139,7 +116,7 @@ class _ProductDetail3State extends State<ProductDetail3> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomPadding: false,
+      resizeToAvoidBottomInset: false,
       body: widget.product.description != null
           ? buildBody()
           : CustomScrollView(
@@ -152,7 +129,7 @@ class _ProductDetail3State extends State<ProductDetail3> {
   }
 
   List<Widget> buildSliverList() {
-    List<Widget> list = new List<Widget>();
+    List<Widget> list = List<Widget>();
     String key;
     list.add(_buildProductImages(key));
     list.add(buildNamePrice());
@@ -186,13 +163,13 @@ class _ProductDetail3State extends State<ProductDetail3> {
   Widget buildNamePrice() {
     bool onSale = false;
 
-    if (widget.product.salePrice != null && widget.product.salePrice != 0) {
+    if (widget.product.salePrice != 0) {
       onSale = true;
     }
 
     return SliverList(
         delegate: SliverChildListDelegate([
-          Container(
+          SizedBox(
             height: 140,
             child: Column(
               children: <Widget>[
@@ -293,8 +270,7 @@ class _ProductDetail3State extends State<ProductDetail3> {
                                       mainAxisAlignment: MainAxisAlignment.start,
                                       children: [
                                         Text(
-                                          (widget.product.formattedSalesPrice != null &&
-                                              widget.product.formattedSalesPrice
+                                          (widget.product.formattedSalesPrice
                                                   .isNotEmpty)
                                               ? parseHtmlString(
                                               widget.product.formattedSalesPrice)
@@ -308,8 +284,7 @@ class _ProductDetail3State extends State<ProductDetail3> {
                                             ? SizedBox(width: 6)
                                             : SizedBox(width: 0),
                                         Text(
-                                          (widget.product.formattedPrice != null &&
-                                              widget
+                                          (widget
                                                   .product.formattedPrice.isNotEmpty)
                                               ? parseHtmlString(
                                               widget.product.formattedPrice)
@@ -324,7 +299,7 @@ class _ProductDetail3State extends State<ProductDetail3> {
                                                 ? Theme.of(context).hintColor
                                                 : Theme.of(context)
                                                 .textTheme
-                                                .bodyText1
+                                                .bodyLarge
                                                 .color,
                                             decoration: onSale
                                                 ? TextDecoration.lineThrough
@@ -401,7 +376,7 @@ class _ProductDetail3State extends State<ProductDetail3> {
 
   Container buildProductList(
       List<Product> products, BuildContext context, String title) {
-    if (products.length > 0) {
+    if (products.isNotEmpty) {
       return Container(
         child: SliverList(
           delegate: SliverChildListDelegate(
@@ -411,13 +386,13 @@ class _ProductDetail3State extends State<ProductDetail3> {
                   height: 20,
                   margin: EdgeInsets.symmetric(horizontal: 18.0, vertical: 8),
                   child: Text(title,
-                      style: Theme.of(context).textTheme.bodyText1.copyWith(
+                      style: Theme.of(context).textTheme.bodyLarge.copyWith(
                           fontSize: 14, fontWeight: FontWeight.w600)))
                   : Container(),
               Container(
                   height: 270,
                   margin: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 14.0),
-                  decoration: new BoxDecoration(
+                  decoration: BoxDecoration(
                     color: Theme.of(context).brightness == Brightness.light ? Color(0xFFf2f3f7) : Colors.black,
                   ),
                   child: ListView.builder(
@@ -497,7 +472,7 @@ class _ProductDetail3State extends State<ProductDetail3> {
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(4.0),
                             ),
-                            color: Theme.of(context).accentColor,
+                            color: Theme.of(context).colorScheme.secondary,
                             child: Container(
                                 padding: EdgeInsets.all(2),
                                 constraints: BoxConstraints(minWidth: 20.0),
@@ -508,10 +483,11 @@ class _ProductDetail3State extends State<ProductDetail3> {
                                           fontSize: 12,
                                           fontWeight: FontWeight.w800,
                                           color: Theme.of(context).accentIconTheme.color,
-                                          backgroundColor: Theme.of(context).accentColor),
+                                          backgroundColor: Theme.of(context).colorScheme.secondary),
                                     ))));
-                      } else
+                      } else {
                         return Container();
+                      }
                     }),
               ),
             )
@@ -523,7 +499,7 @@ class _ProductDetail3State extends State<ProductDetail3> {
         background: Container(
             padding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
             child: InkWell(
-              onTap: () => null,
+              onTap: () {},
               child: Swiper(
                 //control: new SwiperControl(),
                 //viewportFraction: 0.8,
@@ -531,7 +507,7 @@ class _ProductDetail3State extends State<ProductDetail3> {
                 itemBuilder: (BuildContext context, int index) {
                   return InkWell(
                     splashColor: Theme.of(context).hintColor,
-                    onTap: () => null,
+                    onTap: () {},
                     child: Card(
                       margin: EdgeInsets.all(0.0),
                       shape: RoundedRectangleBorder(
@@ -542,14 +518,14 @@ class _ProductDetail3State extends State<ProductDetail3> {
                       child: CachedNetworkImage(
                         imageUrl: widget.product.images[index].src,
                         imageBuilder: (context, imageProvider) => Ink.image(
+                          image: imageProvider,
+                          fit: BoxFit.cover,
                           child: InkWell(
                             splashColor: Theme.of(context).hintColor,
                             onTap: () {
                               //null;
                             },
                           ),
-                          image: imageProvider,
-                          fit: BoxFit.cover,
                         ),
                         placeholder: (context, url) =>
                             Container(color: Colors.black12),
@@ -560,7 +536,7 @@ class _ProductDetail3State extends State<ProductDetail3> {
                   );
                 },
                 itemCount: widget.product.images.length,
-                pagination: new SwiperPagination(),
+                pagination: SwiperPagination(),
                 autoplay: true,
               ),
             )),
@@ -572,13 +548,13 @@ class _ProductDetail3State extends State<ProductDetail3> {
     return SliverPadding(
       padding: const EdgeInsets.fromLTRB(16.0, 10.0, 16.0, 10.0),
       sliver: SliverGrid(
-        gridDelegate: new SliverGridDelegateWithMaxCrossAxisExtent(
+        gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
           maxCrossAxisExtent: 80.0,
           mainAxisSpacing: 8.0,
           crossAxisSpacing: 8.0,
           childAspectRatio: 3,
         ),
-        delegate: new SliverChildBuilderDelegate(
+        delegate: SliverChildBuilderDelegate(
               (BuildContext context, int index) {
             return InkWell(
               onTap: () {
@@ -588,8 +564,8 @@ class _ProductDetail3State extends State<ProductDetail3> {
                 });
                 if (widget.product.variationOptions
                     .every((option) => option.selected != null)) {
-                  var selectedOptions = new List<String>();
-                  var matchedOptions = new List<String>();
+                  var selectedOptions = List<String>();
+                  var matchedOptions = List<String>();
                   for (var i = 0;
                   i < widget.product.variationOptions.length;
                   i++) {
@@ -599,7 +575,7 @@ class _ProductDetail3State extends State<ProductDetail3> {
                   for (var i = 0;
                   i < widget.product.availableVariations.length;
                   i++) {
-                    matchedOptions = new List<String>();
+                    matchedOptions = List<String>();
                     for (var j = 0;
                     j < widget.product.availableVariations[i].option.length;
                     j++) {
@@ -625,12 +601,13 @@ class _ProductDetail3State extends State<ProductDetail3> {
                             .product.availableVariations[i].formattedSalesPrice;
                         if (widget.product.availableVariations[i]
                             .displayRegularPrice !=
-                            widget.product.availableVariations[i].displayPrice)
+                            widget.product.availableVariations[i].displayPrice) {
                           widget.product.salePrice = widget.product
                               .availableVariations[i].displayRegularPrice
                               .toDouble();
-                        else
+                        } else {
                           widget.product.formattedSalesPrice = null;
+                        }
                       });
                       if (!widget.product.availableVariations[i].isInStock) {
                         setState(() {
@@ -653,7 +630,7 @@ class _ProductDetail3State extends State<ProductDetail3> {
                   border:
                   variationOption.selected == variationOption.options[index]
                       ? Border.all(
-                      color: Theme.of(context).accentColor, width: 2)
+                      color: Theme.of(context).colorScheme.secondary, width: 2)
                       : Border.all(color: Colors.grey, width: 2),
                   borderRadius: BorderRadius.all(Radius.circular(
                       1.0) //                 <--- border radius here
@@ -666,8 +643,8 @@ class _ProductDetail3State extends State<ProductDetail3> {
                     fontSize: 12.0,
                     color: variationOption.selected ==
                         variationOption.options[index]
-                        ? Theme.of(context).accentColor
-                        : Theme.of(context).textTheme.title.color,
+                        ? Theme.of(context).colorScheme.secondary
+                        : Theme.of(context).textTheme.headline6.color,
                   ),
                 ),
               ),
@@ -720,7 +697,7 @@ class _ProductDetail3State extends State<ProductDetail3> {
   }
 
   Future _openWhatsApp(String number) async {
-    final url = 'https://wa.me/' + number;
+    final url = 'https://wa.me/$number';
     if (await canLaunch(url)) {
       await launch(url);
     } else {
@@ -768,7 +745,7 @@ class _ProductDetail3State extends State<ProductDetail3> {
                   : Colors.black,
             ),
             onPressed: () {
-              Share.share('check out product ' + widget.product.permalink);
+              Share.share('check out product ${widget.product.permalink}');
             }),
       ],
       flexibleSpace: FlexibleSpaceBar(
@@ -802,12 +779,10 @@ class _ProductDetail3State extends State<ProductDetail3> {
   getProduct() async {
     Product product =
     await widget.productDetailBloc.getProduct(widget.product.id);
-    if (product.id != null) {
-      setState(() {
-        widget.product = product;
-      });
+    setState(() {
+      widget.product = product;
+    });
     }
-  }
 
   Widget _qSelector() {
     return Container(
@@ -816,7 +791,7 @@ class _ProductDetail3State extends State<ProductDetail3> {
         height: 55,
         child: Row(
           children: <Widget>[
-            Container(
+            SizedBox(
               height: MediaQuery.of(context).size.height,
               width: 120,
               child: Row(
@@ -844,13 +819,13 @@ class _ProductDetail3State extends State<ProductDetail3> {
                         ),
                         SizedBox(height: 6),
                         Text(widget.appStateModel.blocks.localeText.stores,style: TextStyle(
-                            color: Theme.of(context).textTheme.bodyText1.color,
+                            color: Theme.of(context).textTheme.bodyLarge.color,
                             fontSize: 12
                         ),)
                       ],
                     ),
                   ),
-                  Container(
+                  SizedBox(
                       height: 55,
                       child:VerticalDivider(
                         color: Colors.grey,
@@ -875,7 +850,7 @@ class _ProductDetail3State extends State<ProductDetail3> {
                         ),
                         SizedBox(height: 6),
                         Text(widget.appStateModel.blocks.localeText.contacts,style: TextStyle(
-                            color: Theme.of(context).textTheme.bodyText1.color,
+                            color: Theme.of(context).textTheme.bodyLarge.color,
                             fontSize: 12
                         ),)
                       ],
@@ -885,7 +860,7 @@ class _ProductDetail3State extends State<ProductDetail3> {
             ),
             ScopedModelDescendant<AppStateModel>(builder: (context, child, model) {
               return Expanded(
-                child: Container(
+                child: SizedBox(
                   height: 55,
                   child: AddButtonDetail(
                     product: widget.product,
@@ -901,7 +876,7 @@ class _ProductDetail3State extends State<ProductDetail3> {
   }
 
   Widget _animContainer() {
-    TextStyle textStyle = Theme.of(context).textTheme.bodyText1;
+    TextStyle textStyle = Theme.of(context).textTheme.bodyLarge;
     return _visible
         ? AnimatedContainer(
       duration: Duration(
@@ -951,7 +926,7 @@ class _ProductDetail3State extends State<ProductDetail3> {
                         //height: 70,
                         borderSide: _quantity == 1
                             ? BorderSide(
-                            color: Theme.of(context).accentColor,
+                            color: Theme.of(context).colorScheme.secondary,
                             width: 1.5)
                             : null,
                         onPressed: () {
@@ -979,7 +954,7 @@ class _ProductDetail3State extends State<ProductDetail3> {
                         //height: 70,
                         borderSide: _quantity == 2
                             ? BorderSide(
-                            color: Theme.of(context).accentColor,
+                            color: Theme.of(context).colorScheme.secondary,
                             width: 1.5)
                             : null,
                         onPressed: () {
@@ -1005,7 +980,7 @@ class _ProductDetail3State extends State<ProductDetail3> {
                       child: OutlineButton(
                         borderSide: _quantity == 3
                             ? BorderSide(
-                            color: Theme.of(context).accentColor,
+                            color: Theme.of(context).colorScheme.secondary,
                             width: 1.5)
                             : null,
                         onPressed: () {
@@ -1030,7 +1005,7 @@ class _ProductDetail3State extends State<ProductDetail3> {
                       child: OutlineButton(
                         borderSide: _quantity == 4
                             ? BorderSide(
-                            color: Theme.of(context).accentColor,
+                            color: Theme.of(context).colorScheme.secondary,
                             width: 1.5)
                             : null,
                         onPressed: () {
@@ -1058,7 +1033,7 @@ class _ProductDetail3State extends State<ProductDetail3> {
                         //height: 70,
                         borderSide: _quantity == 5
                             ? BorderSide(
-                            color: Theme.of(context).accentColor,
+                            color: Theme.of(context).colorScheme.secondary,
                             width: 1.5)
                             : null,
                         onPressed: () {
@@ -1158,10 +1133,10 @@ class _ProductDetail3State extends State<ProductDetail3> {
                         children: [
                           ListTile(
                             trailing: Icon(Icons.keyboard_arrow_right),
-                            title: Text(appStateModel.blocks.localeText.reviews + '(' + snapshot.data.length.toString() +')'
+                            title: Text('${appStateModel.blocks.localeText.reviews}(${snapshot.data.length})'
                               ,
                               //Text('Customer Reviews (${snapshot.data.length})',
-                              style: Theme.of(context).textTheme.headline6.copyWith(
+                              style: Theme.of(context).textTheme.titleLarge.copyWith(
                                   fontWeight: FontWeight.w700
                               ),),
                           ),
@@ -1173,12 +1148,12 @@ class _ProductDetail3State extends State<ProductDetail3> {
                                 RichText(
                                   text: TextSpan(
                                     text: widget.product.averageRating.toString(),
-                                    style: Theme.of(context).textTheme.headline5.copyWith(
+                                    style: Theme.of(context).textTheme.headlineSmall.copyWith(
                                         fontSize: 20,
                                         fontWeight: FontWeight.w800
                                     ),
                                     children: <TextSpan>[
-                                      TextSpan(text: '/5', style: Theme.of(context).textTheme.subtitle1.copyWith(color: Colors.grey),),
+                                      TextSpan(text: '/5', style: Theme.of(context).textTheme.titleMedium.copyWith(color: Colors.grey),),
                                     ],
                                   ),
                                 ),
@@ -1227,7 +1202,7 @@ class _ProductDetail3State extends State<ProductDetail3> {
   }
 
   _chatWithVendor() {
-    if(appStateModel.user?.id != null &&
+    if(appStateModel.user.id != null &&
         appStateModel.user.id > 0) {
       Navigator.push(context, MaterialPageRoute(builder: (context) {
         return ChatPage(

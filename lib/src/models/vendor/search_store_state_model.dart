@@ -5,7 +5,7 @@ import 'store_model.dart';
 
 class SearchStoreStateModel extends Model {
 
-  static final SearchStoreStateModel _storeStateModel = new SearchStoreStateModel._internal();
+  static final SearchStoreStateModel _storeStateModel = SearchStoreStateModel._internal();
 
   factory SearchStoreStateModel() {
     return _storeStateModel;
@@ -16,7 +16,7 @@ class SearchStoreStateModel extends Model {
   List<StoreModel> stores;
   int page = 1;
   bool loading = false;
-  var filter = new Map<String, String>();
+  var filter = <String, String>{};
   bool hasMoreItems = false;
 
   getAllStores() async {
@@ -26,8 +26,9 @@ class SearchStoreStateModel extends Model {
     notifyListeners();
     final response = await apiProvider.post('/wp-admin/admin-ajax.php?action=mstore_flutter-vendors', filter);
     loading = false;
-    if(filter['search'] != '')
-    stores = storeModelFromJson(response.body);
+    if(filter['search'] != '') {
+      stores = storeModelFromJson(response.body);
+    }
     hasMoreItems = stores.length > 9;
     notifyListeners();
   }
@@ -46,8 +47,9 @@ class SearchStoreStateModel extends Model {
     page = 1;
     filter['page'] = page.toString();
     final response = await apiProvider.post('/wp-admin/admin-ajax.php?action=mstore_flutter-vendors', filter);
-    if(filter['search'] != '')
-    stores = storeModelFromJson(response.body);
+    if(filter['search'] != '') {
+      stores = storeModelFromJson(response.body);
+    }
     hasMoreItems = stores.length > 9;
     notifyListeners();
   }

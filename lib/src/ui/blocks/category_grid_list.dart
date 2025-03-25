@@ -11,7 +11,7 @@ class CategoryGridList extends StatefulWidget {
   final Block block;
   final List<Category> categories;
   final Function onCategoryClick;
-  CategoryGridList({Key key, this.block, this.categories, this.onCategoryClick}) : super(key: key);
+  const CategoryGridList({Key key, this.block, this.categories, this.onCategoryClick}) : super(key: key);
   @override
   _CategoryGridListState createState() => _CategoryGridListState();
 }
@@ -69,12 +69,12 @@ class _CategoryGridListState extends State<CategoryGridList> {
                         child: categories[index].image != null ? CachedNetworkImage(
                           imageUrl: categories[index].image,
                           imageBuilder: (context, imageProvider) => Ink.image(
+                            image: imageProvider,
+                            fit: BoxFit.cover,
                             child: InkWell(
                               splashColor: HexColor(widget.block.bgColor).withOpacity(0.1),
                               onTap: () => widget.onCategoryClick(categories[index], widget.categories),
                             ),
-                            image: imageProvider,
-                            fit: BoxFit.cover,
                           ),
                           placeholder: (context, url) =>
                               Container(color: Colors.white),
@@ -82,14 +82,14 @@ class _CategoryGridListState extends State<CategoryGridList> {
                         ) : Container(color: Colors.black12),
                       ),
                       SizedBox(height: 10.0),
-                      new Padding(
+                      Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                        child: new Text(
+                        child: Text(
                           parseHtmlString(categories[index].name),
                           maxLines: 2,
                           textAlign: TextAlign.center,
                           overflow: TextOverflow.ellipsis,
-                          style: Theme.of(context).textTheme.bodyText2.copyWith(
+                          style: Theme.of(context).textTheme.bodyMedium.copyWith(
                             fontSize: 12
                           ),
                         ),
@@ -112,7 +112,7 @@ class CategoryStadiumGridList extends StatefulWidget {
   final Block block;
   final List<Category> categories;
   final Function onCategoryClick;
-  CategoryStadiumGridList({Key key, this.block, this.categories, this.onCategoryClick}) : super(key: key);
+  const CategoryStadiumGridList({Key key, this.block, this.categories, this.onCategoryClick}) : super(key: key);
   @override
   _CategoryStadiumGridListState createState() => _CategoryStadiumGridListState();
 }
@@ -162,13 +162,13 @@ class _CategoryStadiumGridListState extends State<CategoryStadiumGridList> {
                       child: categories[index].image != null ? CachedNetworkImage(
                         imageUrl: categories[index].image,
                         imageBuilder: (context, imageProvider) => Ink.image(
+                          image: imageProvider,
+                          fit: BoxFit.cover,
                           child: InkWell(
                             splashColor: HexColor(widget.block.bgColor).withOpacity(0.1),
                             onTap: () => widget.onCategoryClick(categories[index], widget.categories),
 
                           ),
-                          image: imageProvider,
-                          fit: BoxFit.cover,
                         ),
                         placeholder: (context, url) =>
                             Container(color: Colors.white),
@@ -177,9 +177,9 @@ class _CategoryStadiumGridListState extends State<CategoryStadiumGridList> {
                     ),
                   ),
                 ),
-                new Padding(
+                Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
-                  child: new Text(
+                  child: Text(
                     parseHtmlString(categories[index].name),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,

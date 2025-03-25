@@ -27,10 +27,10 @@ class RegisterTab extends StatefulWidget {
 
 class _RegisterTabState extends State<RegisterTab> {
   //Country _selected = Country.IN;
-  Map loginData =  Map<String, dynamic>();
+  Map loginData =  <String, dynamic>{};
   bool _obscureText;
   String radioItem = '';
-  var _register = RegisterModel();
+  final _register = RegisterModel();
   var isLoading = false;
 
   final _formKey = GlobalKey<FormState>();
@@ -172,7 +172,7 @@ class _RegisterTabState extends State<RegisterTab> {
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(50.0),
                             ),
-                            child: Container(
+                            child: SizedBox(
                               height: 50.0, // height of the button
                               width: 50.0,
                               child: GoogleLoginWidget(),
@@ -187,7 +187,7 @@ class _RegisterTabState extends State<RegisterTab> {
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(50.0),
                             ),
-                            child: Container(
+                            child: SizedBox(
                               height: 50.0, // height of the button
                               width: 50.0,
                               child: FacebookLoginWidget(),
@@ -202,7 +202,7 @@ class _RegisterTabState extends State<RegisterTab> {
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(50.0),
                             ),
-                            child: Container(
+                            child: SizedBox(
                               height: 50.0, // height of the button
                               width: 50.0,
                               child: AppleLogin(),
@@ -217,7 +217,7 @@ class _RegisterTabState extends State<RegisterTab> {
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(50.0),
                             ),
-                            child: Container(
+                            child: SizedBox(
                               height: 50.0, // height of the button
                               width: 50.0,
                               child: SmsLogin(),
@@ -239,7 +239,7 @@ class _RegisterTabState extends State<RegisterTab> {
                           Text(
                               widget.model.blocks.localeText
                                   .alreadyHaveAnAccount,
-                              style: Theme.of(context).textTheme.bodyText2.copyWith(
+                              style: Theme.of(context).textTheme.bodyMedium.copyWith(
                                   fontSize: 15,
                                   color: Colors.grey)),
                           Padding(
@@ -247,9 +247,9 @@ class _RegisterTabState extends State<RegisterTab> {
                             const EdgeInsets.symmetric(horizontal: 8.0),
                             child: Text(
                                 widget.model.blocks.localeText.signIn,
-                                style: Theme.of(context).textTheme.bodyText2.copyWith(
+                                style: Theme.of(context).textTheme.bodyMedium.copyWith(
                                     color:
-                                    Theme.of(context).accentColor)),
+                                    Theme.of(context).colorScheme.secondary)),
                           ),
                         ],
                       ))
@@ -278,7 +278,7 @@ class _RegisterTabState extends State<RegisterTab> {
   }
 
   Container buildIcon(child) {
-    return Container(
+    return SizedBox(
       width: 30,
       height: 30,
       child: child,
@@ -319,7 +319,7 @@ class CustomTextFormField extends StatelessWidget {
   FormFieldSetter onSaved;
 
   CustomTextFormField(
-      {this.label,
+      {super.key, this.label,
         this.prefix,
         this.validationMsg,
         this.controller,

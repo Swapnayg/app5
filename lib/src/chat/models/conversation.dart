@@ -22,28 +22,28 @@ class ConversationSnippet {
       this.image,
       this.type});
 
-  factory ConversationSnippet.fromFirestore(DocumentSnapshot _snapshot) {
-    var _data = _snapshot.data();
-    var _messageType = MessageType.Text;
-    if (_data["type"] != null) {
-      switch (_data["type"]) {
+  factory ConversationSnippet.fromFirestore(DocumentSnapshot snapshot) {
+    var data = snapshot.data();
+    var messageType = MessageType.Text;
+    if (data["type"] != null) {
+      switch (data["type"]) {
         case "text":
           break;
         case "image":
-          _messageType = MessageType.Image;
+          messageType = MessageType.Image;
           break;
         default:
       }
     }
     return ConversationSnippet(
-      id: _snapshot.id,
-      conversationID: _data["conversationID"],
-      lastMessage: _data["lastMessage"] != null ? _data["lastMessage"] : "",
-      unseenCount: _data["unseenCount"],
-      timestamp: _data["timestamp"] != null ? _data["timestamp"] : null,
-      name: _data["name"],
-      image: _data["image"],
-      type: _messageType,
+      id: snapshot.id,
+      conversationID: data["conversationID"],
+      lastMessage: data["lastMessage"] != null ? data["lastMessage"] : "",
+      unseenCount: data["unseenCount"],
+      timestamp: data["timestamp"] != null ? data["timestamp"] : null,
+      name: data["name"],
+      image: data["image"],
+      type: messageType,
     );
   }
 }
@@ -78,36 +78,36 @@ class Conversation {
       this.vendorLastSeen,
       this.userLastSeen});
 
-  factory Conversation.fromFirestore(DocumentSnapshot _snapshot) {
-    var _data = _snapshot.data();
-    List _messages = _data["messages"];
-    if (_messages != null) {
-      _messages = _messages.map(
-        (_m) {
+  factory Conversation.fromFirestore(DocumentSnapshot snapshot) {
+    var data = snapshot.data();
+    List messages = data["messages"];
+    if (messages != null) {
+      messages = messages.map(
+        (m) {
           return Message(
-              type: _m["type"] == "text" ? MessageType.Text : MessageType.Image,
-              content: _m["message"],
-              timestamp: _m["timestamp"],
-              senderID: _m["senderID"]);
+              type: m["type"] == "text" ? MessageType.Text : MessageType.Image,
+              content: m["message"],
+              timestamp: m["timestamp"],
+              senderID: m["senderID"]);
         },
       ).toList();
     } else {
-      _messages = [];
+      messages = [];
     }
     return Conversation(
-      id: _snapshot.documentID,
-      members: _data["members"],
-      userId: _data["userId"],
-      messages: _messages,
-      userName: _data["userName"],
-      userAvatar: _data["userAvatar"],
-      vendorId: _data["vendorId"],
-      vendorName: _data["vendorName"],
-      vendorAvatar: _data["vendorAvatar"],
-      chatId: _data["chatId"],
-      timeStamp: _data["timeStamp"] == null ? null : _data["timeStamp"],
-      vendorLastSeen: _data["vendorLastSeen"] == null ? null : _data["vendorLastSeen"],
-      userLastSeen: _data["userLastSeen"] == null ? null : _data["userLastSeen"],
+      id: snapshot.documentID,
+      members: data["members"],
+      userId: data["userId"],
+      messages: messages,
+      userName: data["userName"],
+      userAvatar: data["userAvatar"],
+      vendorId: data["vendorId"],
+      vendorName: data["vendorName"],
+      vendorAvatar: data["vendorAvatar"],
+      chatId: data["chatId"],
+      timeStamp: data["timeStamp"] == null ? null : data["timeStamp"],
+      vendorLastSeen: data["vendorLastSeen"] == null ? null : data["vendorLastSeen"],
+      userLastSeen: data["userLastSeen"] == null ? null : data["userLastSeen"],
     );
   }
 }

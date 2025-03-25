@@ -18,6 +18,8 @@ import 'register.dart';
 
 
 class Login2 extends StatefulWidget {
+  const Login2({super.key});
+
   @override
   _Login2State createState() => _Login2State();
 }
@@ -30,10 +32,10 @@ class _Login2State extends State<Login2> {
   bool _obscureText = true;
   bool isLoading = false;
   final _formKey = GlobalKey<FormState>();
-  TextEditingController usernameController = new TextEditingController();
-  TextEditingController passwordController = new TextEditingController();
+  TextEditingController usernameController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
 
-  final RoundedLoadingButtonController _btnController = new RoundedLoadingButtonController();
+  final RoundedLoadingButtonController _btnController = RoundedLoadingButtonController();
 
   @override
   Widget build(BuildContext context) {
@@ -106,11 +108,11 @@ class _Login2State extends State<Login2> {
                       RoundedLoadingButton(
                         elevation: 0,
                         valueColor: Theme.of(context).buttonTheme.colorScheme.onPrimary,
-                        child: Text(appStateModel.blocks.localeText.signIn, style: TextStyle(color: Theme.of(context).buttonTheme.colorScheme.onPrimary)),
                         controller: _btnController,
                         onPressed: () => _submit(context),
                         animateOnTap: false,
                         width: 200,
+                        child: Text(appStateModel.blocks.localeText.signIn, style: TextStyle(color: Theme.of(context).buttonTheme.colorScheme.onPrimary)),
                       ),
                       SizedBox(height: 12.0),
                       FlatButton(
@@ -120,7 +122,7 @@ class _Login2State extends State<Login2> {
                           },
                           child: Text(
                               appStateModel.blocks.localeText.forgotPassword,
-                              style: Theme.of(context).textTheme.bodyText2.copyWith(
+                              style: Theme.of(context).textTheme.bodyMedium.copyWith(
                                   fontSize: 15,
                                   color: Colors.grey
                               ))),
@@ -136,7 +138,7 @@ class _Login2State extends State<Login2> {
                               Text(
                                   appStateModel.blocks.localeText
                                       .dontHaveAnAccount,
-                                  style: Theme.of(context).textTheme.bodyText2.copyWith(
+                                  style: Theme.of(context).textTheme.bodyMedium.copyWith(
                                       fontSize: 15,
                                       color: Colors.grey
                                   )),
@@ -147,10 +149,10 @@ class _Login2State extends State<Login2> {
                                     appStateModel.blocks.localeText.signUp,
                                     style: Theme.of(context)
                                         .textTheme
-                                        .bodyText2
+                                        .bodyMedium
                                         .copyWith(
                                         color:
-                                        Theme.of(context).accentColor)),
+                                        Theme.of(context).colorScheme.secondary)),
                               ),
                             ],
                           )),
@@ -160,14 +162,14 @@ class _Login2State extends State<Login2> {
                           children: <Widget>[
                             Padding(
                               padding: const EdgeInsets.all(8.0),
-                              child: Container(
+                              child: SizedBox(
                                 height: 50.0, // height of the button
                                 width: 50.0,
                                 child: Card(
                                   shape: StadiumBorder(),
                                   margin: EdgeInsets.all(0),
                                   color: Color(0xFFEA4335),
-                                  child: Container(
+                                  child: SizedBox(
                                     height: 50,
                                     width: 50,
                                     child: Center(
@@ -201,7 +203,7 @@ class _Login2State extends State<Login2> {
                                   shape: StadiumBorder(),
                                   margin: EdgeInsets.all(0),
                                   color: Color(0xFF3b5998),
-                                  child: Container(
+                                  child: SizedBox(
                                     height: 50,
                                     width: 50,
                                     child: IconButton(
@@ -232,7 +234,7 @@ class _Login2State extends State<Login2> {
                                   shape: StadiumBorder(),
                                   margin: EdgeInsets.all(0),
                                   color: Theme.of(context).brightness == Brightness.dark ? Color(0xFFFFFFFF) : Color(0xFF000000),
-                                  child: Container(
+                                  child: SizedBox(
                                     height: 50,
                                     width: 50,
                                     child: IconButton(
@@ -264,7 +266,7 @@ class _Login2State extends State<Login2> {
                                   shape: StadiumBorder(),
                                   margin: EdgeInsets.all(0),
                                   color: Color(0xFF34B7F1),
-                                  child: Container(
+                                  child: SizedBox(
                                     height: 50,
                                     width: 50,
                                     child: IconButton(
@@ -296,7 +298,7 @@ class _Login2State extends State<Login2> {
   }
 
   _submit(BuildContext context) async {
-    var login = new Map<String, dynamic>();
+    var login = Map<String, dynamic>();
     if (_formKey.currentState.validate()) {
       login["username"] = usernameController.text;
       login["password"] = passwordController.text;
@@ -318,7 +320,7 @@ class _Login2State extends State<Login2> {
 
   _loginGoogleUser(String idToken, GoogleSignInAccount googleUser,
       BuildContext context) async {
-    var login = new Map<String, dynamic>();
+    var login = Map<String, dynamic>();
     login["type"] = 'google';
     login["token"] = idToken;
     login["name"] = googleUser.displayName;
@@ -377,29 +379,26 @@ class _Login2State extends State<Login2> {
       ),
     );
 
-    if(credential.authorizationCode != null) {
-
-      var login = new Map<String, dynamic>();
-      login["userIdentifier"] = credential.userIdentifier;
-      if(credential.authorizationCode != null)
-        login["authorizationCode"] = credential.authorizationCode;
-      if(credential.email != null) {
-        login["email"] = credential.email;
-      } else {
-        //await _showDialog(context);
-        //TODO If email and name is empty Request Email and Name
-      }
-      if(credential.userIdentifier != null)
-        login["email"] = credential.userIdentifier;
-      if(credential.givenName != null)
-        login["name"] = credential.givenName;
-      else login["name"] = '';
-      login["useBundleId"] = Platform.isIOS || Platform.isMacOS ? 'true' : 'false';
-      bool status = await appStateModel.appleLogin(login);
-      if (status) {
-        Navigator.of(context).pop();
-      }
+    var login = new Map<String, dynamic>();
+    login["userIdentifier"] = credential.userIdentifier;
+    if(credential.authorizationCode != null)
+      login["authorizationCode"] = credential.authorizationCode;
+    if(credential.email != null) {
+      login["email"] = credential.email;
+    } else {
+      //await _showDialog(context);
+      //TODO If email and name is empty Request Email and Name
     }
-  }
+    if(credential.userIdentifier != null)
+      login["email"] = credential.userIdentifier;
+    if(credential.givenName != null)
+      login["name"] = credential.givenName;
+    else login["name"] = '';
+    login["useBundleId"] = Platform.isIOS || Platform.isMacOS ? 'true' : 'false';
+    bool status = await appStateModel.appleLogin(login);
+    if (status) {
+      Navigator.of(context).pop();
+    }
+    }
 
 }

@@ -9,6 +9,8 @@ import '../../../color_override.dart';
 import 'otp_verification.dart';
 
 class PhoneNumber extends StatefulWidget {
+  const PhoneNumber({super.key});
+
   @override
   _PhoneNumberState createState() => _PhoneNumberState();
 }
@@ -19,10 +21,10 @@ class _PhoneNumberState extends State<PhoneNumber> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   String verificationId;
   final appStateModel = AppStateModel();
-  TextEditingController phoneNumberController = new TextEditingController();
+  TextEditingController phoneNumberController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   var isLoading = false;
-  final RoundedLoadingButtonController _btnController = new RoundedLoadingButtonController();
+  final RoundedLoadingButtonController _btnController = RoundedLoadingButtonController();
 
   @override
   void initState() {
@@ -75,7 +77,7 @@ class _PhoneNumberState extends State<PhoneNumber> {
                           alignLeft: false,
                         ),
                         SizedBox(width: 10),
-                        Container(
+                        SizedBox(
                           width: MediaQuery.of(context).size.width - 170,
                           child: TextFormField(
                             obscureText: false,
@@ -99,7 +101,6 @@ class _PhoneNumberState extends State<PhoneNumber> {
                   RoundedLoadingButton(
                     elevation: 0,
                     valueColor: Theme.of(context).buttonTheme.colorScheme.onPrimary,
-                    child: Text(appStateModel.blocks.localeText.sendOtp, style: TextStyle(color: Theme.of(context).buttonTheme.colorScheme.onPrimary)),
                     controller: _btnController,
                     onPressed: () {
                       if (_formKey.currentState.validate()) {
@@ -108,6 +109,7 @@ class _PhoneNumberState extends State<PhoneNumber> {
                     },
                     animateOnTap: false,
                     width: 200,
+                    child: Text(appStateModel.blocks.localeText.sendOtp, style: TextStyle(color: Theme.of(context).buttonTheme.colorScheme.onPrimary)),
                   ),
                 ],
               ),
@@ -181,7 +183,7 @@ class _PhoneNumberState extends State<PhoneNumber> {
     try {
       await _auth.signInWithCredential(phoneAuthCredential);
       //Wordpress Login user with
-    } on FirebaseAuthException catch (e) {
+    } on FirebaseAuthException {
       showSnackBar(context, appStateModel.blocks.localeText.inValidCode);
     }
     _btnController.stop();
@@ -190,11 +192,11 @@ class _PhoneNumberState extends State<PhoneNumber> {
   handlePhoneNumberError(FirebaseAuthException error, BuildContext context) {
     switch (error.code) {
       case 'TOO_LONG':
-        FocusScope.of(context).requestFocus(new FocusNode());
+        FocusScope.of(context).requestFocus(FocusNode());
         showSnackBar(context, appStateModel.blocks.localeText.inValidNumber);
         break;
       case 'TOO_SHORT':
-        FocusScope.of(context).requestFocus(new FocusNode());
+        FocusScope.of(context).requestFocus(FocusNode());
         showSnackBar(context, appStateModel.blocks.localeText.inValidNumber);
         Navigator.of(context).pop();
         break;

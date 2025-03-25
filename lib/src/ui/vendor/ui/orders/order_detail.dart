@@ -10,7 +10,7 @@ class OrderDetail extends StatefulWidget {
   final Order order;
   final VendorBloc vendorBloc;
   final appStateModel = AppStateModel();
-  OrderDetail({this.order, this.vendorBloc});
+  OrderDetail({super.key, this.order, this.vendorBloc});
 
   @override
   _OrderDetailState createState() => _OrderDetailState(order: order);
@@ -72,8 +72,8 @@ class _OrderDetailState extends State<OrderDetail> {
           children: <Widget>[
             SizedBox(height: 10.0),
             Text(
-              "Order" + ' - ' + order.id.toString(),
-              style: Theme.of(context).textTheme.title,
+              "Order" ' - ' + order.id.toString(),
+              style: Theme.of(context).textTheme.headline6,
             ),
             Divider(),
             SizedBox(height: 10.0),
@@ -82,7 +82,7 @@ class _OrderDetailState extends State<OrderDetail> {
                 children: <Widget>[
                   Text(
                     "Billing",
-                    style: Theme.of(context).textTheme.subtitle,
+                    style: Theme.of(context).textTheme.subtitle2,
                   ),
                   SizedBox(height: 10.0),
                   Text(
@@ -95,7 +95,7 @@ class _OrderDetailState extends State<OrderDetail> {
                 children: <Widget>[
                   Text(
                     "Shipping",
-                    style: Theme.of(context).textTheme.subtitle,
+                    style: Theme.of(context).textTheme.subtitle2,
                   ),
                   SizedBox(
                     height: 10.0,
@@ -110,7 +110,7 @@ class _OrderDetailState extends State<OrderDetail> {
                 children: <Widget>[
                   Text(
                     "Payment",
-                    style: Theme.of(context).textTheme.subtitle,
+                    style: Theme.of(context).textTheme.subtitle2,
                   ),
                   SizedBox(
                     height: 10.0,
@@ -125,7 +125,7 @@ class _OrderDetailState extends State<OrderDetail> {
                     children: <Widget>[
                         Text(
                           "Items",
-                          style: Theme.of(context).textTheme.subtitle,
+                          style: Theme.of(context).textTheme.subtitle2,
                         ),
                         SizedBox(
                           height: 10.0,
@@ -149,7 +149,7 @@ class _OrderDetailState extends State<OrderDetail> {
           SizedBox(height: 10.0),
           Text(
             "Total",
-            style: Theme.of(context).textTheme.subtitle,
+            style: Theme.of(context).textTheme.subtitle2,
           ),
           SizedBox(height: 10.0),
           Row(
@@ -158,7 +158,7 @@ class _OrderDetailState extends State<OrderDetail> {
               Expanded(
                 child: Text("Shipping"),
               ),
-              Text(formatter.format((double.parse('${order.shippingTotal}')))),
+              Text(formatter.format((double.parse(order.shippingTotal)))),
             ],
           ),
           SizedBox(height: 10.0),
@@ -170,7 +170,7 @@ class _OrderDetailState extends State<OrderDetail> {
                   widget.appStateModel.blocks.localeText.tax,
                 ),
               ),
-              Text(formatter.format((double.parse('${order.totalTax}')))),
+              Text(formatter.format((double.parse(order.totalTax)))),
             ],
           ),
           SizedBox(height: 10.0),
@@ -180,7 +180,7 @@ class _OrderDetailState extends State<OrderDetail> {
               Expanded(
                 child: Text(widget.appStateModel.blocks.localeText.discount),
               ),
-              Text(formatter.format((double.parse('${order.discountTotal}')))),
+              Text(formatter.format((double.parse(order.discountTotal)))),
             ],
           ),
           SizedBox(height: 10.0),
@@ -190,14 +190,14 @@ class _OrderDetailState extends State<OrderDetail> {
               Expanded(
                 child: Text(
                   widget.appStateModel.blocks.localeText.total,
-                  style: Theme.of(context).textTheme.title,
+                  style: Theme.of(context).textTheme.headline6,
                 ),
               ),
               Text(
                 formatter.format(
                   double.parse(order.total),
                 ),
-                style: Theme.of(context).textTheme.title,
+                style: Theme.of(context).textTheme.headline6,
               ),
             ],
           ),
@@ -214,7 +214,8 @@ class _OrderDetailState extends State<OrderDetail> {
           (BuildContext context, int index) {
             return Column(
               children: <Widget>[
-                Container(
+                SizedBox(
+                    height: 50,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
@@ -226,8 +227,7 @@ class _OrderDetailState extends State<OrderDetail> {
                         Text(formatter.format(
                             (double.parse('${order.lineItems[index].total}')))),
                       ],
-                    ),
-                    height: 50),
+                    )),
               ],
             );
           },

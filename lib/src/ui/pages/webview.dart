@@ -69,7 +69,7 @@ class _WebViewPageState extends State<WebViewPage> {
   _seCookies() async {
     Uri uri = Uri.parse(config.url);
     String domain = uri.host;
-    print('Domain: ' + domain);
+    print('Domain: $domain');
     ApiProvider apiProvider = ApiProvider();
     List<Cookie> cookies = apiProvider.generateCookies();
     apiProvider.cookieList.forEach((element) async {

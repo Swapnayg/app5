@@ -34,14 +34,14 @@ class ProductScroll extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (products.length > 0) {
+    if (products.isNotEmpty) {
       return Container(
         child: SliverList(
           delegate: SliverChildListDelegate(
             [
               products.length != null
                   ? Container(
-                decoration: new BoxDecoration(
+                decoration: BoxDecoration(
                   color: Theme.of(context).brightness == Brightness.light ? Colors.white : Colors.black,
                 ),
                     child: Row(
@@ -51,7 +51,7 @@ class ProductScroll extends StatelessWidget {
                         Container(
                         margin: EdgeInsets.symmetric(horizontal: 18.0, vertical: 8),
                         child: Text(title,
-                            style: Theme.of(context).textTheme.headline6)),
+                            style: Theme.of(context).textTheme.titleLarge)),
                         viewAllTitle != null ? Container(
                             margin: EdgeInsets.symmetric(horizontal: 18.0, vertical: 8),
                             child: InkWell(
@@ -64,7 +64,7 @@ class ProductScroll extends StatelessWidget {
                                             name: title)));
                               },
                               child: Text(viewAllTitle,
-                                  style: Theme.of(context).textTheme.bodyText2),
+                                  style: Theme.of(context).textTheme.bodyMedium),
                             )) : Container(),
                       ],
                     ),
@@ -73,7 +73,7 @@ class ProductScroll extends StatelessWidget {
               Container(
                   height: 270,
                   margin: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 14.0),
-                  decoration: new BoxDecoration(
+                  decoration: BoxDecoration(
                     color: Theme.of(context).brightness == Brightness.light ? Colors.white : Colors.black,
                   ),
                   child: ListView.builder(
@@ -103,7 +103,7 @@ class ProductScrollItem extends StatefulWidget {
 
   final Product product;
 
-  ProductScrollItem({
+  const ProductScrollItem({
     Key key,
     this.product,
   }) : super(key: key);
@@ -122,7 +122,7 @@ class _ProductScrollItemState extends State<ProductScrollItem> {
 
     int percentOff = 0;
 
-    if ((widget.product.salePrice != null && widget.product.salePrice != 0)) {
+    if ((widget.product.salePrice != 0)) {
       percentOff = (((widget.product.regularPrice - widget.product.salePrice) / widget.product.regularPrice) * 100).round();
     }
     bool onSale = false;
@@ -153,7 +153,7 @@ class _ProductScrollItemState extends State<ProductScrollItem> {
            child: Column(
              mainAxisSize: MainAxisSize.min,
              children: <Widget>[
-               Container(
+               SizedBox(
                  height: 160,
                  child: Stack(
                    children: <Widget>[
@@ -172,7 +172,7 @@ class _ProductScrollItemState extends State<ProductScrollItem> {
                         top: 0.0,
                         right: 0.0,
                         child: IconButton(
-                            icon: model.wishListIds.contains(widget.product.id) ? Icon(Icons.favorite, color: Theme.of(context).accentColor) :
+                            icon: model.wishListIds.contains(widget.product.id) ? Icon(Icons.favorite, color: Theme.of(context).colorScheme.secondary) :
                             Icon(Icons.favorite_border, color: Colors.black87),
                             onPressed: () {
                               if (!model.loggedIn) {
@@ -197,11 +197,11 @@ class _ProductScrollItemState extends State<ProductScrollItem> {
                          clipBehavior: Clip.antiAlias,
                          elevation: 0.0,
                          margin: EdgeInsets.all(0.0),
-                         color: Theme.of(context).accentColor,
+                         color: Theme.of(context).colorScheme.secondary,
                          child: percentOff != 0 ? Center(
                            child: Container(
                              padding: EdgeInsets.fromLTRB(8.0, 4.0, 8.0, 4.0),
-                             child: Text('-'+percentOff.toString() + '%', style: Theme.of(context).accentTextTheme.bodyText1.copyWith(
+                             child: Text('-$percentOff%', style: Theme.of(context).accentTextTheme.bodyText1.copyWith(
                                  fontSize: 12.0
                              ),),
                            ),
@@ -223,8 +223,8 @@ class _ProductScrollItemState extends State<ProductScrollItem> {
                        maxLines: 2,
                        overflow: TextOverflow.ellipsis,
                        textAlign: TextAlign.left,
-                       style: Theme.of(context).textTheme.bodyText2.copyWith(
-                           color: Theme.of(context).textTheme.bodyText2.color.withOpacity(0.6)
+                       style: Theme.of(context).textTheme.bodyMedium.copyWith(
+                           color: Theme.of(context).textTheme.bodyMedium.color.withOpacity(0.6)
                        ),
                      ),
                      SizedBox(height: 6.0),

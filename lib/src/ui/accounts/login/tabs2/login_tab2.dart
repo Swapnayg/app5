@@ -29,8 +29,8 @@ class _LoginTabState extends State<LoginTab> {
 
   bool _obscureText;
   final _formKey = GlobalKey<FormState>();
-  TextEditingController usernameController = new TextEditingController();
-  TextEditingController passwordController = new TextEditingController();
+  TextEditingController usernameController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
 
   var isLoading = false;
 
@@ -125,7 +125,7 @@ class _LoginTabState extends State<LoginTab> {
                       },
                       child: Text(
                           widget.model.blocks.localeText.forgotPassword,
-                          style: Theme.of(context).textTheme.bodyText2.copyWith(
+                          style: Theme.of(context).textTheme.bodyMedium.copyWith(
                               fontSize: 15,
                               color: Colors.grey
                           ))),
@@ -140,7 +140,7 @@ class _LoginTabState extends State<LoginTab> {
                           Text(
                               widget.model.blocks.localeText
                                   .dontHaveAnAccount,
-                              style: Theme.of(context).textTheme.bodyText2.copyWith(
+                              style: Theme.of(context).textTheme.bodyMedium.copyWith(
                                   fontSize: 15,
                                   color: Colors.grey
                               )),
@@ -151,10 +151,10 @@ class _LoginTabState extends State<LoginTab> {
                                 widget.model.blocks.localeText.signUp,
                                 style: Theme.of(context)
                                     .textTheme
-                                    .bodyText2
+                                    .bodyMedium
                                     .copyWith(
                                     color:
-                                    Theme.of(context).accentColor)),
+                                    Theme.of(context).colorScheme.secondary)),
                           ),
                         ],
                       )),
@@ -170,7 +170,7 @@ class _LoginTabState extends State<LoginTab> {
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(50.0),
                             ),
-                            child: Container(
+                            child: SizedBox(
                               height: 50.0, // height of the button
                               width: 50.0,
                               child: GoogleLoginWidget(),
@@ -185,7 +185,7 @@ class _LoginTabState extends State<LoginTab> {
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(50.0),
                             ),
-                            child: Container(
+                            child: SizedBox(
                               height: 50.0, // height of the button
                               width: 50.0,
                               child: FacebookLoginWidget(),
@@ -200,7 +200,7 @@ class _LoginTabState extends State<LoginTab> {
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(50.0),
                             ),
-                            child: Container(
+                            child: SizedBox(
                               height: 50.0, // height of the button
                               width: 50.0,
                               child: AppleLogin(),
@@ -215,7 +215,7 @@ class _LoginTabState extends State<LoginTab> {
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(50.0),
                             ),
-                            child: Container(
+                            child: SizedBox(
                               height: 50.0, // height of the button
                               width: 50.0,
                               child: SmsLogin(),
@@ -233,14 +233,14 @@ class _LoginTabState extends State<LoginTab> {
   }
 
   Container buildIcon(child) {
-    return Container(
+    return SizedBox(
       width: 30,
       height: 30,
       child: child,
     );
   }
   _login(BuildContext context) async {
-    var login = new Map<String, dynamic>();
+    var login = Map<String, dynamic>();
     if (_formKey.currentState.validate()) {
       login["username"] = usernameController.text;
       login["password"] = passwordController.text;
@@ -269,7 +269,7 @@ class CustomTextFormField extends StatelessWidget {
   TextInputType inputType;
 
   CustomTextFormField(
-      {this.label,
+      {super.key, this.label,
         this.validationMsg,
         this.controller,
         this.icon,

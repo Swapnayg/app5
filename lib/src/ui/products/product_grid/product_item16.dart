@@ -62,15 +62,15 @@ class ProductItem extends StatelessWidget {
 
     int percentOff = 0;
 
-    if ((product.salePrice != null && product.salePrice != 0)) {
+    if ((product.salePrice != 0)) {
       percentOff = (((product.regularPrice - product.salePrice / product.regularPrice)).round());
     }
     bool onSale = false;
-    if(product.regularPrice == null || product.regularPrice.isNaN) {
+    if(product.regularPrice.isNaN) {
       product.regularPrice = product.price;
     }
 
-    if(product.salePrice != null && product.salePrice != 0) {
+    if(product.salePrice != 0) {
       onSale = true;
     }
 
@@ -88,7 +88,7 @@ class ProductItem extends StatelessWidget {
           child: Column(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
-                Container(
+                SizedBox(
                   height: 180,
                   child: Stack(
                     children: <Widget>[
@@ -99,16 +99,16 @@ class ProductItem extends StatelessWidget {
                           fit: BoxFit.cover,
                         ),
                         placeholder: (context, url) => Container(
-                          color: Theme.of(context).colorScheme.background,
+                          color: Theme.of(context).colorScheme.surface,
                         ),
-                        errorWidget: (context, url, error) => Container(color: Theme.of(context).colorScheme.background),
+                        errorWidget: (context, url, error) => Container(color: Theme.of(context).colorScheme.surface),
                       ),
                       ScopedModelDescendant<AppStateModel>(builder: (context, child, model) {
                         return Positioned(
                           top: 0.0,
                           right: 0.0,
                           child: IconButton(
-                              icon: model.wishListIds.contains(product.id) ? Icon(Icons.favorite, color: Theme.of(context).accentColor) :
+                              icon: model.wishListIds.contains(product.id) ? Icon(Icons.favorite, color: Theme.of(context).colorScheme.secondary) :
                               Icon(Icons.favorite_border, color: Colors.black87),
                               onPressed: () {
                                 if (!model.loggedIn) {
@@ -138,9 +138,9 @@ class ProductItem extends StatelessWidget {
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         textAlign: TextAlign.center,
-                        style: Theme.of(context).textTheme.subtitle.copyWith(
+                        style: Theme.of(context).textTheme.subtitle2.copyWith(
                             fontSize: 12,
-                          color: Theme.of(context).textTheme.caption.color
+                          color: Theme.of(context).textTheme.bodySmall.color
                         ),
                       ),
                       SizedBox(height: 4.0),
@@ -150,13 +150,12 @@ class ProductItem extends StatelessWidget {
                        // textBaseline: TextBaseline.alphabetic,
                         children: <Widget>[
                           Text(onSale ? parseHtmlString(product.formattedSalesPrice)
-                              : '', style: Theme.of(context).textTheme.body1.copyWith(
+                              : '', style: Theme.of(context).textTheme.bodyText2.copyWith(
                             fontSize: 14,
                             fontWeight: FontWeight.w600,
                           )),
                           onSale ? SizedBox(width: 4.0) : SizedBox(width: 0.0),
-                          Text((product.formattedPrice !=
-                              null && product.formattedPrice.isNotEmpty)
+                          Text((product.formattedPrice.isNotEmpty)
                               ? parseHtmlString(product.formattedPrice)
                               : '', style: TextStyle(
                             fontWeight: onSale ? FontWeight.w200 : FontWeight.w600,
@@ -190,7 +189,7 @@ class ProductItem extends StatelessWidget {
                           product.averageRating != '0.00' ? Row(
                             children: <Widget>[
                               SizedBox(width: 4.0),
-                              Text('(' + product.ratingCount.toString() + ')',
+                              Text('(${product.ratingCount})',
                                   maxLines: 2,
                                   style: TextStyle(
                                     color: Theme.of(context).hintColor.withOpacity(0.8),

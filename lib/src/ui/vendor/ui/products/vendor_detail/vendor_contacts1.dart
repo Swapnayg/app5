@@ -21,20 +21,21 @@ class VendorContacts1 extends StatefulWidget {
 }
 
 class _VendorContacts1State extends State<VendorContacts1> {
-  Completer<GoogleMapController> _controller = Completer();
+  final Completer<GoogleMapController> _controller = Completer();
 
   LatLng _lastMapPosition;
   final Set<Marker> _markers = {};
   Config config = Config();
   AppStateModel appStateModel = AppStateModel();
 
-  MapType _currentMapType = MapType.normal;
+  final MapType _currentMapType = MapType.normal;
 
   void _onMapCreated(GoogleMapController controller) {
     _controller.complete(controller);
   }
 
   BitmapDescriptor pinLocationIcon;
+  @override
   void initState() {
     super.initState();
     print(widget.store.latitude);
@@ -52,13 +53,13 @@ class _VendorContacts1State extends State<VendorContacts1> {
     });
   }
 
-  Map contactData = new Map<String, dynamic>();
+  Map contactData = Map<String, dynamic>();
   final _formKey = GlobalKey<FormState>();
 
-  TextEditingController nameController = new TextEditingController();
-  TextEditingController emailController = new TextEditingController();
-  TextEditingController phoneController = new TextEditingController();
-  TextEditingController messageController = new TextEditingController();
+  TextEditingController nameController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController phoneController = TextEditingController();
+  TextEditingController messageController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -88,7 +89,7 @@ class _VendorContacts1State extends State<VendorContacts1> {
                       target: _lastMapPosition,
                       zoom: 11.0,
                     ),
-                    gestureRecognizers: Set()
+                    gestureRecognizers: <dynamic>{}
                       ..add(Factory<PanGestureRecognizer>(
                               () => PanGestureRecognizer())),
                     scrollGesturesEnabled: true,
@@ -103,9 +104,9 @@ class _VendorContacts1State extends State<VendorContacts1> {
             Container(
               //padding:  EdgeInsets.all(8),
               //margin: const EdgeInsets.only(left: 8.0, right: 8.0),
-              child: new Form(
+              child: Form(
                 key: _formKey,
-                child: new Column(
+                child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: <Widget>[
@@ -126,10 +127,10 @@ class _VendorContacts1State extends State<VendorContacts1> {
                       controller: messageController,
                       decoration: InputDecoration(
                         enabledBorder: OutlineInputBorder(
-                            borderSide: new BorderSide(
+                            borderSide: BorderSide(
                                 color: Theme.of(context).focusColor)),
                         border: OutlineInputBorder(
-                            borderSide: new BorderSide(
+                            borderSide: BorderSide(
                                 color: Theme.of(context).focusColor)),
                         alignLabelWithHint: true,
                         labelText: appStateModel.blocks.localeText.message,
@@ -137,10 +138,8 @@ class _VendorContacts1State extends State<VendorContacts1> {
                       ),
                       validator: (value) {
                         if (value.isEmpty) {
-                          return appStateModel
-                              .blocks.localeText.pleaseEnter +
-                              ' ' +
-                              appStateModel.blocks.localeText.message;
+                          return '${appStateModel
+                              .blocks.localeText.pleaseEnter} ${appStateModel.blocks.localeText.message}';
                         }
                         return null;
                       },
@@ -159,7 +158,7 @@ class _VendorContacts1State extends State<VendorContacts1> {
                           contactData["vendor"] = widget.store.id.toString();
                           widget.vendorDetailsBloc.submitContactForm(contactData);
                           _showThankYouDialogue();
-                          contactData = new Map<String, dynamic>();
+                          contactData = <String, dynamic>{};
                           nameController.clear();
                           emailController.clear();
                           phoneController.clear();
@@ -181,16 +180,14 @@ class _VendorContacts1State extends State<VendorContacts1> {
       controller: controller,
       decoration: InputDecoration(
         enabledBorder: OutlineInputBorder(
-            borderSide: new BorderSide(color: Theme.of(context).focusColor)),
+            borderSide: BorderSide(color: Theme.of(context).focusColor)),
         border: OutlineInputBorder(
-            borderSide: new BorderSide(color: Theme.of(context).focusColor)),
+            borderSide: BorderSide(color: Theme.of(context).focusColor)),
         labelText: name,
       ),
       validator: (value) {
         if (value.isEmpty) {
-          return appStateModel.blocks.localeText.pleaseEnter +
-              ' ' +
-              '${name.toLowerCase()}';
+          return '${appStateModel.blocks.localeText.pleaseEnter} ${name.toLowerCase()}';
         }
         return null;
       },
@@ -198,7 +195,7 @@ class _VendorContacts1State extends State<VendorContacts1> {
   }
 
   Container buildIcon(child) {
-    return Container(
+    return SizedBox(
       width: 30,
       height: 30,
       child: child,
@@ -206,10 +203,7 @@ class _VendorContacts1State extends State<VendorContacts1> {
   }
 
   void _showThankYouDialogue() {
-    showDialog(context: context,
-        barrierDismissible: false,
-        // ignore: deprecated_member_use
-        child: AlertDialog(
+    showDialog(builder: (context) => AlertDialog(
           title: new Text(appStateModel.blocks.localeText.thankYou),
           content: new Text(appStateModel.blocks.localeText.thankYouForYourMessage),
           actions: <Widget>[
@@ -221,7 +215,8 @@ class _VendorContacts1State extends State<VendorContacts1> {
                 }
             )
           ],
-        )
+        ), context: context,
+        barrierDismissible: false
     );
   }
 }

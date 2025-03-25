@@ -22,9 +22,9 @@ class Address extends StatefulWidget {
 class _AddressState extends State<Address> {
 
   List<Region> regions;
-  TextEditingController _billingAddress1Controller = TextEditingController();
-  TextEditingController _billingCityController = TextEditingController();
-  TextEditingController _billingPostCodeController = TextEditingController();
+  final TextEditingController _billingAddress1Controller = TextEditingController();
+  final TextEditingController _billingCityController = TextEditingController();
+  final TextEditingController _billingPostCodeController = TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
   Config config = Config();
@@ -54,7 +54,7 @@ class _AddressState extends State<Address> {
 
   buildCheckoutForm(BuildContext context, AsyncSnapshot<CheckoutFormModel> snapshot) {
 
-    if(snapshot.data.countries.length > 0) {
+    if(snapshot.data.countries.isNotEmpty) {
       if(snapshot.data.countries.length == 1) {
         regions = snapshot.data.countries[0].regions;
         snapshot.data.billingCountry = snapshot.data.countries.first.value;
@@ -67,18 +67,21 @@ class _AddressState extends State<Address> {
       }
     }
 
-    if(regions != null && regions.length != 0) {
+    if(regions.isNotEmpty) {
       snapshot.data.billingState = regions.any((z) => z.value == snapshot.data.billingState) ? snapshot.data.billingState
           : regions.first.value;
       widget.homeBloc.formData['billing_state'] = snapshot.data.billingState;
     }
 
-    if(_billingAddress1Controller.text.isEmpty)
-    _billingAddress1Controller.text = snapshot.data.billingAddress1;
-    if(_billingCityController.text.isEmpty)
-    _billingCityController.text = snapshot.data.billingCity;
-    if(_billingPostCodeController.text.isEmpty)
-    _billingPostCodeController.text = snapshot.data.billingPostcode;
+    if(_billingAddress1Controller.text.isEmpty) {
+      _billingAddress1Controller.text = snapshot.data.billingAddress1;
+    }
+    if(_billingCityController.text.isEmpty) {
+      _billingCityController.text = snapshot.data.billingCity;
+    }
+    if(_billingPostCodeController.text.isEmpty) {
+      _billingPostCodeController.text = snapshot.data.billingPostcode;
+    }
 
     return ListView(
       children: <Widget>[
@@ -153,7 +156,7 @@ class _AddressState extends State<Address> {
                 PrimaryColorOverride(
                   child: TextFormField(
                     initialValue: snapshot.data.billingAddress2,
-                    decoration: InputDecoration(labelText: widget.appStateModel.blocks.localeText.address + ' 2'),
+                    decoration: InputDecoration(labelText: '${widget.appStateModel.blocks.localeText.address} 2'),
                     onSaved: (value) {
                       widget.homeBloc.formData['billing_address_2'] = value;
                     },
@@ -251,14 +254,14 @@ class _AddressState extends State<Address> {
                           .map<DropdownMenuItem<String>>(
                               (value) {
                             return DropdownMenuItem<String>(
-                              value: value.value != null ? value.value : '',
+                              value: value.value ?? '',
                               child: Text(parseHtmlString(value.label)),
                             );
                           }).toList(),
                     ),
                   ],
                 ) : Container(),
-                (regions != null  && regions.length != 0) ? Column(
+                (regions.isNotEmpty) ? Column(
                   children: <Widget>[
                     SizedBox(height: 20,),
                     DropdownButton<String>(
@@ -285,7 +288,7 @@ class _AddressState extends State<Address> {
                           .map<DropdownMenuItem<String>>(
                               (value) {
                             return DropdownMenuItem<String>(
-                              value: value.value != null ? value.value : '',
+                              value: value.value ?? '',
                               child: Text(parseHtmlString(value.label)),
                             );
                           }).toList(),
@@ -299,6 +302,7 @@ class _AddressState extends State<Address> {
                       if (value.isEmpty) {
                         return widget.appStateModel.blocks.localeText.pleaseEnterState;
                       }
+                      return null;
                     },
                     onSaved: (val) => setState(() => widget.homeBloc.formData['billing_state'] = val),
                   ),
@@ -348,24 +352,22 @@ class _AddressState extends State<Address> {
   void showPlacePicker(AsyncSnapshot<CheckoutFormModel> snapshot) async {
     LocationResult result = await Navigator.of(context).push(
         MaterialPageRoute(builder: (context) => PlacePicker(config.mapApiKey)));
-    if(result != null) {
+    setState(() {
+      _billingAddress1Controller.text = result.formattedAddress;
+      _billingCityController.text = result.city.name;
+      _billingPostCodeController.text = result.postalCode;
+    });
+    if(snapshot.data.countries.indexWhere((country) => country.value == result.country.shortName) != -1) {
       setState(() {
-        _billingAddress1Controller.text = result.formattedAddress;
-        _billingCityController.text = result.city.name;
-        _billingPostCodeController.text = result.postalCode;
+        snapshot.data.billingCountry = result.country.shortName;
       });
-      if(snapshot.data.countries.indexWhere((country) => country.value == result.country.shortName) != -1) {
-        setState(() {
-          snapshot.data.billingCountry = result.country.shortName;
-        });
-        regions = snapshot.data.countries.singleWhere((country) => country.value == result.country.shortName).regions;
-      } else if(snapshot.data.countries.length != 0) {
-        snapshot.data.billingCountry = snapshot.data.countries.first.value;
-      } if(regions != null) {
-        snapshot.data.billingState = regions.any((z) => z.value == result.administrativeAreaLevel1.shortName) ? result.administrativeAreaLevel1.shortName
-            : regions.first.value;
-      }
+      regions = snapshot.data.countries.singleWhere((country) => country.value == result.country.shortName).regions;
+    } else if(snapshot.data.countries.length != 0) {
+      snapshot.data.billingCountry = snapshot.data.countries.first.value;
+    } if(regions != null) {
+      snapshot.data.billingState = regions.any((z) => z.value == result.administrativeAreaLevel1.shortName) ? result.administrativeAreaLevel1.shortName
+          : regions.first.value;
     }
-  }
+    }
 }
 

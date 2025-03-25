@@ -12,7 +12,7 @@ import '../../../color_override.dart';
 import '../../../widgets/buttons/button_text.dart';
 
 class LoginTab extends StatefulWidget {
-  LoginTab({
+  const LoginTab({
     Key key,
     @required this.context,
     @required this.model,
@@ -30,9 +30,9 @@ class LoginTab extends StatefulWidget {
 class _LoginTabState extends State<LoginTab> {
   final _formKey = GlobalKey<FormState>();
 
-  TextEditingController usernameController = new TextEditingController();
+  TextEditingController usernameController = TextEditingController();
 
-  TextEditingController passwordController = new TextEditingController();
+  TextEditingController passwordController = TextEditingController();
 
   var isLoading = false;
 
@@ -43,9 +43,9 @@ class _LoginTabState extends State<LoginTab> {
       children: [
         Container(
           margin: const EdgeInsets.only(left: 16.0, right: 16.0),
-          child: new Form(
+          child: Form(
             key: _formKey,
-            child: new Column(
+            child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
@@ -87,7 +87,7 @@ class _LoginTabState extends State<LoginTab> {
                     },
                     child: Text(
                         widget.model.blocks.localeText.forgotPassword,
-                        style: Theme.of(context).textTheme.bodyText2)),
+                        style: Theme.of(context).textTheme.bodyMedium)),
                 FlatButton(
                     padding: EdgeInsets.all(16.0),
                     onPressed: () {
@@ -99,7 +99,7 @@ class _LoginTabState extends State<LoginTab> {
                         Text(
                             widget.model.blocks.localeText
                                 .dontHaveAnAccount,
-                            style: Theme.of(context).textTheme.bodyText2),
+                            style: Theme.of(context).textTheme.bodyMedium),
                         Padding(
                           padding:
                               const EdgeInsets.symmetric(horizontal: 8.0),
@@ -107,10 +107,10 @@ class _LoginTabState extends State<LoginTab> {
                               widget.model.blocks.localeText.signUp,
                               style: Theme.of(context)
                                   .textTheme
-                                  .bodyText2
+                                  .bodyMedium
                                   .copyWith(
                                       color:
-                                          Theme.of(context).accentColor)),
+                                          Theme.of(context).colorScheme.secondary)),
                         ),
                       ],
                     )),
@@ -150,7 +150,7 @@ class _LoginTabState extends State<LoginTab> {
   }
 
   _login(BuildContext) async {
-    var login = new Map<String, dynamic>();
+    var login = <String, dynamic>{};
     if (_formKey.currentState.validate()) {
       login["username"] = usernameController.text;
       login["password"] = passwordController.text;

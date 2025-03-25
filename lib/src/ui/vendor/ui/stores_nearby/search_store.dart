@@ -11,6 +11,8 @@ import 'store_list.dart';
 class SearchStores extends StatefulWidget {
   final SearchStoreStateModel model = SearchStoreStateModel();
 
+  SearchStores({super.key});
+
   @override
   _SearchStoresState createState() => _SearchStoresState();
 }
@@ -40,7 +42,7 @@ class _SearchStoresState extends State<SearchStores> {
 
   _onSearchChanged() {
     widget.model.filter['search'] = inputController.text;
-    if (_debounce?.isActive ?? false) _debounce.cancel();
+    if (_debounce.isActive ?? false) _debounce.cancel();
     _debounce = Timer(const Duration(milliseconds: 300), () {
       if(inputController.text.isNotEmpty) {
         widget.model.getAllStores();
@@ -52,8 +54,8 @@ class _SearchStoresState extends State<SearchStores> {
 
   Timer _debounce;
 
-  ScrollController _scrollController = new ScrollController();
-  TextEditingController inputController = new TextEditingController();
+  final ScrollController _scrollController = ScrollController();
+  TextEditingController inputController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -72,7 +74,7 @@ class _SearchStoresState extends State<SearchStores> {
               model: widget.model,
               child: ScopedModelDescendant<SearchStoreStateModel>(
                   builder: (context, child, model) {
-                if ((model.stores != null && model.stores.isNotEmpty)) {
+                if ((model.stores.isNotEmpty)) {
                   return CustomScrollView(
                         controller: _scrollController,
                         slivers: buildListOfBlocks(model.stores, model),
@@ -143,7 +145,7 @@ class _SearchStoresState extends State<SearchStores> {
                                 size: 16,
                                 color: Theme.of(context).hintColor,
                               ))
-                          : Container(
+                          : SizedBox(
                               width: 4,
                               height: 4,
                             ),
@@ -157,7 +159,7 @@ class _SearchStoresState extends State<SearchStores> {
                 onTap: Navigator.of(context).pop,
                 child: Text(appStateModel.blocks.localeText.cancel,
                     style:
-                        Theme.of(context).primaryTextTheme.subtitle1.copyWith(
+                        Theme.of(context).primaryTextTheme.titleMedium.copyWith(
                               color: Theme.of(context).primaryIconTheme.color,//Theme.of(context).hintColor,
                           )),
               ),
@@ -168,14 +170,14 @@ class _SearchStoresState extends State<SearchStores> {
 
   List<Widget> buildListOfBlocks(
       List<StoreModel> stores, SearchStoreStateModel model) {
-      List<Widget> list = new List<Widget>();
+      List<Widget> list = List<Widget>();
       list.add(StoresList(stores: stores));
       list.add(SliverPadding(
           padding: EdgeInsets.all(0.0),
           sliver: SliverList(
               delegate: SliverChildListDelegate([
                 model.hasMoreItems
-                    ? Container(
+                    ? SizedBox(
                     height: 60, child: Center(child: CircularProgressIndicator()))
                     : Container()
               ]))));

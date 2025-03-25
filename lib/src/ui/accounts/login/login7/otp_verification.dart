@@ -27,10 +27,10 @@ class _OTPVerificationState extends State<OTPVerification> {
   final appStateModel = AppStateModel();
   final _formKey = GlobalKey<FormState>();
   var isLoading = false;
-  TextEditingController otpController = new TextEditingController();
+  TextEditingController otpController = TextEditingController();
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final RoundedLoadingButtonController _btnController =
-      new RoundedLoadingButtonController();
+      RoundedLoadingButtonController();
   StreamController<ErrorAnimationType> errorController;
 
   @override
@@ -68,9 +68,9 @@ class _OTPVerificationState extends State<OTPVerification> {
                   ),
                   Container(
                     padding: EdgeInsets.all(32),
-                    child: new Form(
+                    child: Form(
                       key: _formKey,
-                      child: new ListView(
+                      child: ListView(
                         children: <Widget>[
                           SizedBox(
                             height: height * 0.150,
@@ -95,17 +95,17 @@ class _OTPVerificationState extends State<OTPVerification> {
                                       Text(appStateModel.blocks.localeText.enterOtp,
                                           style: Theme.of(context)
                                               .textTheme
-                                              .bodyText2
+                                              .bodyMedium
                                               .copyWith(
                                                 fontSize: 15,
                                               )),
                                       Padding(
                                         padding: const EdgeInsets.symmetric(
                                             horizontal: 8.0),
-                                        child: Text('${widget.phoneNumber}',
+                                        child: Text(widget.phoneNumber,
                                             style: Theme.of(context)
                                                 .textTheme
-                                                .subtitle1
+                                                .titleMedium
                                                 .copyWith(
                                                     color: Color(0xfff7892b),
                                                     fontWeight:
@@ -176,6 +176,12 @@ class _OTPVerificationState extends State<OTPVerification> {
                             elevation: 0,
                             color: Color(0xfff7892b),
                             valueColor: Colors.white,
+                            controller: _btnController,
+                            onPressed: () {
+                              verifyOTP(context);
+                            },
+                            animateOnTap: false,
+                            width: MediaQuery.of(context).size.width - 34,
                             child: Container(
                                 alignment: Alignment.center,
                                 height: 50,
@@ -202,12 +208,6 @@ class _OTPVerificationState extends State<OTPVerification> {
                                       color: Colors.white, fontSize: 20),
                                   textAlign: TextAlign.center,
                                 )),
-                            controller: _btnController,
-                            onPressed: () {
-                              verifyOTP(context);
-                            },
-                            animateOnTap: false,
-                            width: MediaQuery.of(context).size.width - 34,
                           ),
                           SizedBox(height: 30.0),
                           FlatButton(
@@ -218,7 +218,7 @@ class _OTPVerificationState extends State<OTPVerification> {
                                   appStateModel.blocks.localeText.resendOTP,
                                   style: Theme.of(context)
                                       .textTheme
-                                      .bodyText2
+                                      .bodyMedium
                                       .copyWith(
                                         fontSize: 15,
                                         color: Color(0xfff7892b),
@@ -257,7 +257,7 @@ class _OTPVerificationState extends State<OTPVerification> {
     _btnController.start();
 
     //Server end verification
-    var data = new Map<String, dynamic>();
+    var data = Map<String, dynamic>();
     data["smsOTP"] = otpController.text;
     data["verificationId"] = widget.verificationId;
     data["phoneNumber"] = widget.phoneNumber;
@@ -329,11 +329,11 @@ class _OTPVerificationState extends State<OTPVerification> {
   handlePhoneNumberError(FirebaseAuthException error, BuildContext context) {
     switch (error.code) {
       case 'TOO_LONG':
-        FocusScope.of(context).requestFocus(new FocusNode());
+        FocusScope.of(context).requestFocus(FocusNode());
         showSnackBar(context, appStateModel.blocks.localeText.inValidNumber);
         break;
       case 'TOO_SHORT':
-        FocusScope.of(context).requestFocus(new FocusNode());
+        FocusScope.of(context).requestFocus(FocusNode());
         showSnackBar(context, appStateModel.blocks.localeText.inValidNumber);
         Navigator.of(context).pop();
         break;

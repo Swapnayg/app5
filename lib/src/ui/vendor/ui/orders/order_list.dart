@@ -16,7 +16,7 @@ class VendorOrderList extends StatefulWidget {
 }
 
 class _VendorOrderListState extends State<VendorOrderList> {
-  ScrollController _scrollController = new ScrollController();
+  final ScrollController _scrollController = ScrollController();
   bool hasMoreOrder = true;
 
   @override
@@ -80,7 +80,7 @@ class _VendorOrderListState extends State<VendorOrderList> {
   }
 
   buildList(AsyncSnapshot<List<Order>> snapshot) {
-    var formatter1 = new DateFormat('yyyy-MM-dd  hh:mm a');
+    var formatter1 = DateFormat('yyyy-MM-dd  hh:mm a');
     return SliverPadding(
       padding: EdgeInsets.all(8.0),
       sliver: SliverList(
@@ -104,17 +104,16 @@ class _VendorOrderListState extends State<VendorOrderList> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
                              Text(
-                               "ORDER" +
-                                    '-' +
+                               "ORDER" '-' +
                                     snapshot.data[index].number.toString(),
-                                style: Theme.of(context).textTheme.bodyText1,
+                                style: Theme.of(context).textTheme.bodyLarge,
                               ),
 
                              Text(
                                 formatter.format(double.parse(
                                   snapshot.data[index].total,
                                 )),
-                                style: Theme.of(context).textTheme.bodyText1,
+                                style: Theme.of(context).textTheme.bodyLarge,
                               ),
                             ],
                           ),
@@ -124,7 +123,7 @@ class _VendorOrderListState extends State<VendorOrderList> {
                               SizedBox(
                                 height: 5,
                               ),
-                              Text(snapshot.data[index].status.toUpperCase(), style: Theme.of(context).textTheme.subtitle.copyWith(
+                              Text(snapshot.data[index].status.toUpperCase(), style: Theme.of(context).textTheme.subtitle2.copyWith(
                                 color: getColor(snapshot.data[index].status)
                               )),
                               SizedBox(
@@ -155,7 +154,7 @@ class _VendorOrderListState extends State<VendorOrderList> {
         padding: EdgeInsets.all(0.0),
         sliver: SliverList(
             delegate: SliverChildListDelegate([
-          Container(
+          SizedBox(
               height: 60,
               child: hasMoreOrder ? Center(child: CircularProgressIndicator()) : Container()),
         ])));

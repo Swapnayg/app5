@@ -24,7 +24,7 @@ import 'ui/products/product_detail/product_detail.dart';
 class App extends StatefulWidget {
   //final ProductsBloc productsBloc = ProductsBloc();
 
-  App({Key? key}) : super(key: key);
+  const App({super.key});
 
   @override
   _AppState createState() => _AppState();
@@ -51,7 +51,7 @@ class _AppState extends State<App> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    List<Widget> _children = [
+    List<Widget> children = [
       Home(),
       Categories(),
       //ProductAddons(),
@@ -76,7 +76,7 @@ class _AppState extends State<App> with TickerProviderStateMixin {
           return Container();
         }
       }),
-      body: _children[_currentIndex],
+      body: children[_currentIndex],
       bottomNavigationBar: buildBottomNavigationBar(context),
     );
   }
@@ -88,7 +88,7 @@ class _AppState extends State<App> with TickerProviderStateMixin {
   }
 
   Future _openWhatsApp(String number) async {
-    final url = 'https://wa.me/' + number;
+    final url = 'https://wa.me/$number';
     if (await canLaunch(url)) {
       await launch(url);
     } else {
@@ -133,7 +133,7 @@ class _AppState extends State<App> with TickerProviderStateMixin {
                 padding: const EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0),
                 child: Icon(MStoreIcons.shopping_basket_2_line),
               ),
-              new Positioned(
+              Positioned(
                 top: 0.0,
                 right: 0.0,
                 child: ScopedModelDescendant<AppStateModel>(
@@ -156,8 +156,9 @@ class _AppState extends State<App> with TickerProviderStateMixin {
                                   color: Colors.white,
                                   backgroundColor: Colors.red),
                             ))));
-                  } else
+                  } else {
                     return Container();
+                  }
                 }),
               ),
             ]),
@@ -166,7 +167,7 @@ class _AppState extends State<App> with TickerProviderStateMixin {
                 padding: const EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0),
                 child: Icon(MStoreIcons.shopping_basket_2_fill),
               ),
-              new Positioned(
+              Positioned(
                 top: 0.0,
                 right: 0.0,
                 child: ScopedModelDescendant<AppStateModel>(
@@ -189,8 +190,9 @@ class _AppState extends State<App> with TickerProviderStateMixin {
                                   color: Colors.white,
                                   backgroundColor: Colors.red),
                             ))));
-                  } else
+                  } else {
                     return Container();
+                  }
                 }),
               ),
             ]),
@@ -287,7 +289,7 @@ class _AppState extends State<App> with TickerProviderStateMixin {
   void _onMessage(message) {
     if (message != null && message.isNotEmpty) {
       if (message['category'] != null) {
-        var filter = new Map<String, dynamic>();
+        var filter = <String, dynamic>{};
         filter['id'] = message['category'];
         Navigator.push(
             context,

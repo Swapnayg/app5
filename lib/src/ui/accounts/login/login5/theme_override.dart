@@ -7,30 +7,22 @@ class ThemeOverride extends StatelessWidget {
   Widget build(BuildContext context) {
     bool isDark = Theme.of(context).brightness == Brightness.dark;
     return isDark ? Theme(
-      child: child,
       data: ThemeData(
         brightness: Brightness.dark,
         primaryColor: Colors.lightBlue[800],
-        accentColor: Colors.cyan[600],
-        backgroundColor: isDark ? Colors.black : Colors.white,
         scaffoldBackgroundColor: isDark ? Colors.black : Colors.white,
-        buttonColor: Colors.white,
         buttonTheme: ButtonThemeData(
           buttonColor: Colors.white,
           textTheme: ButtonTextTheme.primary,
           height: 45.0,
           colorScheme: ColorScheme(
-              primary: Colors.red,//Color(0xff6200ee),
-              primaryVariant: Colors.redAccent,//const Color(0xff3700b3),
+              primary: Colors.red,//const Color(0xff3700b3),
               secondary: Color(0xff03dac6),
-              secondaryVariant: const Color(0xff018786),
               surface: Colors.white,
-              background: Colors.white,
               error: Color(0xffb00020),
               onPrimary: Colors.black,
               onSecondary: Colors.black,
               onSurface: Colors.black,
-              onBackground: Colors.black,
               onError: Colors.white,
               brightness: Brightness.light),
         ),
@@ -56,33 +48,26 @@ class ThemeOverride extends StatelessWidget {
             BorderSide(color: Colors.red, width: 1.0),
           ),
           contentPadding: EdgeInsets.symmetric(vertical: 20, horizontal: 16),
-        ),
+        ), colorScheme: ColorScheme.fromSwatch().copyWith(secondary: Colors.cyan[600]), colorScheme: ColorScheme(background: isDark ? Colors.black : Colors.white),
       ),
-    ) : Theme(
       child: child,
+    ) : Theme(
       data: ThemeData(
         brightness: Brightness.light,
         primaryColor: Colors.lightBlue[500],
-        accentColor: Colors.cyan[600],
-        backgroundColor: isDark ? Colors.black : Colors.white,
         scaffoldBackgroundColor: isDark ? Colors.black : Colors.white,
-        buttonColor: Colors.white,
         buttonTheme: ButtonThemeData(
           buttonColor: Colors.white,
           textTheme: ButtonTextTheme.primary,
           height: 45.0,
           colorScheme: ColorScheme(
-              primary: Colors.red,//Color(0xff6200ee),
-              primaryVariant: Colors.redAccent,//const Color(0xff3700b3),
+              primary: Colors.red,//const Color(0xff3700b3),
               secondary: Color(0xff03dac6),
-              secondaryVariant: const Color(0xff018786),
               surface: Colors.white,
-              background: Colors.white,
               error: Color(0xffb00020),
               onPrimary: Colors.black,
               onSecondary: Colors.black,
               onSurface: Colors.black,
-              onBackground: Colors.black,
               onError: Colors.white,
               brightness: Brightness.light),
         ),
@@ -108,8 +93,9 @@ class ThemeOverride extends StatelessWidget {
             BorderSide(color: Colors.red, width: 1.0),
           ),
           contentPadding: EdgeInsets.symmetric(vertical: 20, horizontal: 16),
-        ),
+        ), colorScheme: ColorScheme.fromSwatch().copyWith(secondary: Colors.cyan[600]), colorScheme: ColorScheme(background: isDark ? Colors.black : Colors.white),
       ),
+      child: child,
     );
   }
 }

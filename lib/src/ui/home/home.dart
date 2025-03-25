@@ -50,7 +50,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> with TickerProviderStateMixin {
-  ScrollController _scrollController = new ScrollController();
+  final ScrollController _scrollController = ScrollController();
   AppStateModel appStateModel = AppStateModel();
   TabController _controller;
   Category selectedCategory;
@@ -115,14 +115,14 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                   indicatorHeight: 5,
                   indicatorColor: Theme.of(context)
                       .primaryTextTheme
-                      .bodyText1
+                      .bodyLarge
                       .color, //Theme.of(context).primaryColor,//Colors.white,//Theme.of(context).primaryColor,
                   indicatorSize: MD2IndicatorSize
                       .full //3 different modes tiny-normal-full
               ),
               tabs: model.mainCategories.map<Widget>((Category category) => Tab(
                   text: category.name
-                      .replaceAll(new RegExp(r'&amp;'), '&')))
+                      .replaceAll(RegExp(r'&amp;'), '&')))
                   .toList(),
             ),
           ),
@@ -169,7 +169,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
   }
 
   List<Widget> buildLisOfCategoryBlocks(AsyncSnapshot<List<Product>> snapshot) {
-    List<Widget> list = new List<Widget>();
+    List<Widget> list = List<Widget>();
 
     list.add(addCategoryBanner());
 
@@ -182,7 +182,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
           padding: EdgeInsets.all(0.0),
           sliver: SliverList(
               delegate: SliverChildListDelegate([
-                Container(
+                SizedBox(
                     height: 60,
                     child: StreamBuilder(
                         stream: widget.productsBloc.hasMoreItems,
@@ -203,7 +203,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
     List<Category> subCategories = appStateModel.blocks.categories
         .where((element) => element.parent == selectedCategory.id)
         .toList();
-    return subCategories.length != 0
+    return subCategories.isNotEmpty
         ? SliverToBoxAdapter(
       child: Container(
         padding: EdgeInsets.fromLTRB(0.0, 16.0, 0.0, 0.0),
@@ -227,7 +227,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                       elevation: 0,
                       child: InkWell(
                         onTap: () {
-                          var filter = new Map<String, dynamic>();
+                          var filter = <String, dynamic>{};
                           filter['id'] =
                               subCategories[index].id.toString();
                           Navigator.push(
@@ -255,7 +255,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                     SizedBox(height: 10.0),
                     InkWell(
                       onTap: () {
-                        var filter = new Map<String, dynamic>();
+                        var filter = <String, dynamic>{};
                         filter['id'] = subCategories[index].id.toString();
                         Navigator.push(
                             context,
@@ -297,13 +297,13 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
           ),
           child: CachedNetworkImage(
             imageUrl:
-            selectedCategory.image != null ? selectedCategory.image : '',
+            selectedCategory.image ?? '',
             imageBuilder: (context, imageProvider) => Ink.image(
+              image: imageProvider,
+              fit: BoxFit.cover,
               child: InkWell(
                 onTap: () => _categoryBannerClick(selectedCategory),
               ),
-              image: imageProvider,
-              fit: BoxFit.cover,
             ),
             placeholder: (context, url) => Container(color: Colors.black12),
             errorWidget: (context, url, error) =>
@@ -315,7 +315,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
   }
 
   _categoryBannerClick(Category selectedCategory) {
-    var filter = new Map<String, dynamic>();
+    var filter = <String, dynamic>{};
     filter['id'] = selectedCategory.id.toString();
     Navigator.push(
         context,
@@ -327,7 +327,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
   }
 
   List<Widget> buildLisOfBlocks(BlocksModel snapshot) {
-    List<Widget> list = new List<Widget>();
+    List<Widget> list = List<Widget>();
 
     for (var i = 0; i < snapshot.blocks.length; i++) {
       if (snapshot.blocks[i].blockType == 'banner_block') {
@@ -408,32 +408,32 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
       }
     }
 
-    if(snapshot.settings.showOnsale == 1 && snapshot.onSale.length > 0) {
-      var filter = new Map<String, dynamic>();
+    if(snapshot.settings.showOnsale == 1 && snapshot.onSale.isNotEmpty) {
+      var filter = Map<String, dynamic>();
       filter['on_sale'] = '1';
       list.add(ProductScroll(products: snapshot.onSale, context: context, title: snapshot.localeText.sale, viewAllTitle: snapshot.localeText.viewAll, filter: filter));
     }
 
-    if(snapshot.settings.showFeatured == 1 && snapshot.featured.length > 0) {
-      var filter = new Map<String, dynamic>();
+    if(snapshot.settings.showFeatured == 1 && snapshot.featured.isNotEmpty) {
+      var filter = Map<String, dynamic>();
       filter['featured'] = '1';
       list.add(ProductScroll(products: snapshot.featured, context: context, title: snapshot.localeText.featured, viewAllTitle: snapshot.localeText.viewAll, filter: filter));
     }
 
-    if(snapshot.settings.showBestSelling == 1 && snapshot.bestSelling.length > 0) {
-      var filter = new Map<String, dynamic>();
+    if(snapshot.settings.showBestSelling == 1 && snapshot.bestSelling.isNotEmpty) {
+      var filter = Map<String, dynamic>();
       filter['popularity'] = '1';
       list.add(ProductScroll(products: snapshot.bestSelling, context: context, title: snapshot.localeText.bestSelling, viewAllTitle: snapshot.localeText.viewAll, filter: filter));
     }
 
-    if (snapshot.recentProducts != null && snapshot.recentProducts.length > 0 && snapshot.settings.showLatest == 1) {
+    if (snapshot.recentProducts.isNotEmpty && snapshot.settings.showLatest == 1) {
       list.add(buildRecentProductGridList(snapshot));
 
       list.add(SliverPadding(
           padding: EdgeInsets.all(0.0),
           sliver: SliverList(
               delegate: SliverChildListDelegate([
-            Container(
+            SizedBox(
                 height: 60,
                 child: ScopedModelDescendant<AppStateModel>(
                     builder: (context, child, model) {
@@ -497,11 +497,11 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                   snapshot.data.blocks[childIndex].title,
                   textAlign: TextAlign.start,
                   style: GalleryOptions.of(context).themeMode == ThemeMode.light
-                      ? Theme.of(context).textTheme.headline6.copyWith(
+                      ? Theme.of(context).textTheme.titleLarge.copyWith(
                             color: HexColor(
                                 snapshot.data.blocks[childIndex].titleColor),
                           )
-                      : Theme.of(context).textTheme.headline6,
+                      : Theme.of(context).textTheme.titleLarge,
                 ));
           }))
         : SliverToBoxAdapter(
@@ -526,14 +526,14 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
   Widget buildGridHeader(BlocksModel snapshot, int childIndex) {
     double textAlign = _headerAlign(snapshot.blocks[childIndex].headerAlign);
     TextStyle subhead = Theme.of(context).brightness != Brightness.dark
-        ? Theme.of(context).textTheme.headline6.copyWith(color: HexColor(snapshot.blocks[childIndex].titleColor))
+        ? Theme.of(context).textTheme.titleLarge.copyWith(color: HexColor(snapshot.blocks[childIndex].titleColor))
         : Theme.of(context)
             .textTheme
-            .headline6;
+            .titleLarge;
 
-    TextStyle _textStyleCounter = Theme.of(context)
+    TextStyle textStyleCounter = Theme.of(context)
         .textTheme
-        .bodyText2
+        .bodyMedium
         .copyWith(color: Colors.white, fontSize: 12);
 
     if(snapshot.blocks[childIndex].blockType == 'flash_sale_block') {
@@ -572,41 +572,41 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                           Container(
                             width: 24,
                             height: 24,
-                            decoration: new BoxDecoration(
+                            decoration: BoxDecoration(
                                 color: Colors.black,
                                 borderRadius:
-                                new BorderRadius.all(Radius.circular(2.0))),
+                                BorderRadius.all(Radius.circular(2.0))),
                             margin: EdgeInsets.all(4),
                             child: Center(
                                 child: Text('${remaining.inHours.clamp(0, 99)}',
                                     maxLines: 1,
-                                    style: _textStyleCounter)),
+                                    style: textStyleCounter)),
                           ),
                           Container(
                             width: 24,
                             height: 24,
                             margin: EdgeInsets.all(4),
-                            decoration: new BoxDecoration(
+                            decoration: BoxDecoration(
                                 color: Colors.black,
                                 borderRadius:
-                                new BorderRadius.all(Radius.circular(2.0))),
+                                BorderRadius.all(Radius.circular(2.0))),
                             child: Center(
                                 child: Text(
                                     '${remaining.inMinutes.remainder(60)}',
-                                    style: _textStyleCounter)),
+                                    style: textStyleCounter)),
                           ),
                           Container(
                             width: 24,
                             height: 24,
-                            decoration: new BoxDecoration(
+                            decoration: BoxDecoration(
                                 color: Colors.black,
                                 borderRadius:
-                                new BorderRadius.all(Radius.circular(2.0))),
+                                BorderRadius.all(Radius.circular(2.0))),
                             margin: EdgeInsets.all(4),
                             child: Center(
                                 child: Text(
                                     '${remaining.inSeconds.remainder(60)}',
-                                    style: _textStyleCounter)),
+                                    style: textStyleCounter)),
                           ),
                         ]),
                   ],
@@ -684,7 +684,7 @@ apiProvider.cookieList.forEach((element) {
 
     if (data.url.isNotEmpty) {
       if (data.description == 'category') {
-        var filter = new Map<String, dynamic>();
+        var filter = <String, dynamic>{};
         filter['id'] = data.url;
         Navigator.push(
             context,
@@ -731,7 +731,7 @@ apiProvider.cookieList.forEach((element) {
   }
 
   onCategoryClick(Category category, List<Category> categories) {
-    var filter = new Map<String, dynamic>();
+    var filter = <String, dynamic>{};
     filter['id'] = category.id.toString();
     Navigator.push(
         context,
@@ -831,7 +831,7 @@ apiProvider.cookieList.forEach((element) {
               FlutterIcons.shopping_cart_fea,
               color: Theme.of(context).hintColor, //Theme.of(context).hintColor
             ),
-            new Positioned(
+            Positioned(
               top: -3.0,
               right: -3.0,
               child: ScopedModelDescendant<AppStateModel>(
@@ -855,8 +855,9 @@ apiProvider.cookieList.forEach((element) {
                                       backgroundColor: Colors.red,
                                     ),
                                   ))));
-                    } else
+                    } else {
                       return Container();
+                    }
                   }),
             ),
           ]),
@@ -888,7 +889,7 @@ class HexColor extends Color {
   static int _getColorFromHex(String hexColor) {
     hexColor = hexColor.toUpperCase().replaceAll("#", "");
     if (hexColor.length == 6) {
-      hexColor = "FF" + hexColor;
+      hexColor = "FF$hexColor";
     }
     return int.parse(hexColor, radix: 16);
   }

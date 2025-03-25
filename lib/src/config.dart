@@ -11,7 +11,7 @@ class Config {
   //iOS MAP API Key
   String mapApiKey = 'AIzaSyC2V9VH3SjGRNshjuabkkAiWUeHt1Yc';
 
-  static Config _singleton = new Config._internal();
+  static final Config _singleton = Config._internal();
 
   factory Config() {
     return _singleton;
@@ -19,7 +19,7 @@ class Config {
 
   Config._internal();
 
-  Map<String, dynamic> appConfig = Map<String, dynamic>();
+  Map<String, dynamic> appConfig = <String, dynamic>{};
 
   Config loadFromMap(Map<String, dynamic> map) {
     appConfig.addAll(map);

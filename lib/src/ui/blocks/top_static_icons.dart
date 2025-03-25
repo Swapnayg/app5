@@ -10,7 +10,7 @@ import '../../ui/accounts/wishlist.dart';
 import '../../ui/products/products.dart';
 import '../../ui/vendor/ui/stores/stores.dart';
 class TopStaticIcons extends StatefulWidget {
-  TopStaticIcons({Key key}) : super(key: key);
+  const TopStaticIcons({Key key}) : super(key: key);
   @override
   _TopStaticIconsState createState() => _TopStaticIconsState();
 }
@@ -18,7 +18,7 @@ class TopStaticIcons extends StatefulWidget {
 class _TopStaticIconsState extends State<TopStaticIcons> {
   @override
   Widget build(BuildContext context) {
-    TextStyle labelstyel = Theme.of(context).textTheme.bodyText1.copyWith(
+    TextStyle labelstyel = Theme.of(context).textTheme.bodyLarge.copyWith(
       fontSize: 10,
     );
     final bool isDesktop = isDisplayDesktop(context);
@@ -95,7 +95,7 @@ class _TopStaticIconsState extends State<TopStaticIcons> {
                   borderRadius: BorderRadius.circular(8)),
               child: InkWell(
                   onTap: () {
-                    var filter = new Map<String, dynamic>();
+                    var filter = <String, dynamic>{};
                     Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -127,7 +127,7 @@ class _TopStaticIconsState extends State<TopStaticIcons> {
                       borderRadius: BorderRadius.circular(8)),
                   child: InkWell(
                       onTap: () {
-                        if (model.user?.id != null && model.user.id > 0) {
+                        if (model.user.id != null && model.user.id > 0) {
                           Navigator.push(
                               context,
                               MaterialPageRoute(

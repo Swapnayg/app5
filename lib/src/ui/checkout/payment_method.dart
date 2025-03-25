@@ -50,8 +50,7 @@ class _ShippingPaymentState extends State<ShippingPayment> {
       body: StreamBuilder<OrderReviewModel>(
           stream: widget.homeBloc.orderReview,
           builder: (context, snapshot) {
-            if (snapshot.hasData &&
-                widget.homeBloc.orderReviewData.paymentMethods != null) {
+            if (snapshot.hasData) {
               for (var i = 0;
                   i < widget.homeBloc.orderReviewData.paymentMethods.length;
                   i++) {
@@ -66,7 +65,7 @@ class _ShippingPaymentState extends State<ShippingPayment> {
               padding: const EdgeInsets.all(8.0),
               child: snapshot.hasData
                   ? CustomScrollView(slivers: <Widget>[
-                      snapshot.data.shipping.length != 0
+                      snapshot.data.shipping.isNotEmpty
                           ? SliverToBoxAdapter(
                               child: Padding(
                               padding: const EdgeInsets.all(16.0),
@@ -77,7 +76,7 @@ class _ShippingPaymentState extends State<ShippingPayment> {
                               ),
                             ))
                           : SliverToBoxAdapter(),
-                      snapshot.data.shipping.length != 0
+                      snapshot.data.shipping.isNotEmpty
                           ? ShippingMethods(
                               shipping: snapshot.data.shipping,
                               handleShippingMethodChanged:
@@ -116,12 +115,12 @@ class _ShippingPaymentState extends State<ShippingPayment> {
                                     builder: (context, snapshot) {
                                       if (snapshot.hasData &&
                                           snapshot.data == true) {
-                                        return Container(
+                                        return SizedBox(
                                             width: 17,
                                             height: 17,
                                             child: CircularProgressIndicator(
                                                 valueColor:
-                                                    new AlwaysStoppedAnimation<
+                                                    AlwaysStoppedAnimation<
                                                         Color>(Colors.white),
                                                 strokeWidth: 2.0));
                                       } else {
@@ -142,10 +141,10 @@ class _ShippingPaymentState extends State<ShippingPayment> {
                                                     snapshot.data.messages),
                                                 style: Theme.of(context)
                                                     .textTheme
-                                                    .subtitle
+                                                    .subtitle2
                                                     .copyWith(
                                                         color: Theme.of(context)
-                                                            .errorColor))),
+                                                            .colorScheme.error))),
                                       );
                                     } else if (snapshot.hasData &&
                                         snapshot.data.result == "success") {
@@ -212,7 +211,7 @@ class _ShippingPaymentState extends State<ShippingPayment> {
 class ShippingMethods extends StatefulWidget {
   final List<Shipping> shipping;
   final Function(String value) handleShippingMethodChanged;
-  ShippingMethods({
+  const ShippingMethods({
     Key key,
     this.shipping,
     this.handleShippingMethodChanged,

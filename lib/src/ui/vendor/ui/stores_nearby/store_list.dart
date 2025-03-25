@@ -17,7 +17,7 @@ const double _minWidthPerColumn = 350.0 + _scaffoldPadding * 2;
 
 class StoresList extends StatelessWidget {
   final List<StoreModel> stores;
-  StoresList({Key key, this.stores}) : super(key: key);
+  const StoresList({Key key, this.stores}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
@@ -58,11 +58,11 @@ class _StoreCardState extends State<StoreCard> {
 
   AppStateModel appStateModel = AppStateModel();
 
-  ScrollController _homeScrollController = new ScrollController();
+  final ScrollController _homeScrollController = ScrollController();
 
-  ScrollController _allProductsScrollController = new ScrollController();
+  final ScrollController _allProductsScrollController = ScrollController();
 
-  ScrollController _vendorDetailScrollController = new ScrollController();
+  final ScrollController _vendorDetailScrollController = ScrollController();
 
   @override
   Widget build(BuildContext context) {
@@ -91,7 +91,7 @@ class _StoreCardState extends State<StoreCard> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            Container(
+            SizedBox(
               height: 140,
               width: 100,
                 child: ClipRRect(
@@ -102,25 +102,25 @@ class _StoreCardState extends State<StoreCard> {
               flex: 6,
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(16,8,16,0),
-                child: Container(
+                child: SizedBox(
                   height: 140,
                   child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: <Widget>[
                         Text(widget.store.name,
-                            style: Theme.of(context).textTheme.subtitle2.copyWith(fontSize: 18)),
+                            style: Theme.of(context).textTheme.titleSmall.copyWith(fontSize: 18)),
                         SizedBox(height: 3,),
                         widget.store.description != null ? Text(parseHtmlString((widget.store.description)),
                             //widget.store.address.city,
                             maxLines: 1,
-                            style: Theme.of(context).textTheme.caption) : Container(),
+                            style: Theme.of(context).textTheme.bodySmall) : Container(),
                         SizedBox(height: 2,),
-                        widget.store.address?.city != null ? Text(widget.store.address.city,
+                        widget.store.address.city != null ? Text(widget.store.address.city,
                             style: TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.w400,
-                              color: Theme.of(context).textTheme.caption.color,
+                              color: Theme.of(context).textTheme.bodySmall.color,
                             )) : Container(),
                         SizedBox(height: 5,),
                     Row(
@@ -135,7 +135,7 @@ class _StoreCardState extends State<StoreCard> {
                               //fontStyle: FontStyle.italic,
                               fontWeight: FontWeight.w700,
                               fontSize: 14,
-                              color: Theme.of(context).textTheme.caption.color,
+                              color: Theme.of(context).textTheme.bodySmall.color,
                             )),
                       ],
                     )

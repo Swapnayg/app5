@@ -22,8 +22,7 @@ class FadeInImagePlaceholder extends StatelessWidget {
     this.width,
     this.height,
     this.fit,
-  })  : assert(placeholder != null),
-        assert(image != null),
+  })  : assert(image != null),
         super(key: key);
 
   /// The target image that we are loading into memory.

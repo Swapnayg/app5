@@ -12,18 +12,20 @@ import '../../../color_override.dart';
 import 'theme_override.dart';
 
 class ForgotPassword extends StatefulWidget {
+  const ForgotPassword({super.key});
+
   @override
   _ForgotPasswordState createState() => _ForgotPasswordState();
 }
 
 class _ForgotPasswordState extends State<ForgotPassword> {
   final appStateModel = AppStateModel();
-  TextEditingController emailController = new TextEditingController();
+  TextEditingController emailController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   var isLoading = false;
   final apiProvider = ApiProvider();
   final RoundedLoadingButtonController _btnController =
-      new RoundedLoadingButtonController();
+      RoundedLoadingButtonController();
 
   final LinearGradient lightGradient = LinearGradient(
       begin: Alignment.centerLeft, end: Alignment.centerRight,
@@ -108,7 +110,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                         ),
 
                         Text('Enter valid Email to get an OTP',
-                            style: Theme.of(context).textTheme.caption.copyWith(
+                            style: Theme.of(context).textTheme.bodySmall.copyWith(
                                 //color: Colors.white,
                                 fontSize: 16, color: Colors.white70)),
                         SizedBox(
@@ -116,7 +118,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                         ),
                         Text('Forgot Password',
                             style:
-                            Theme.of(context).textTheme.headline6.copyWith(
+                            Theme.of(context).textTheme.titleLarge.copyWith(
                               //color: Colors.white,
                                 fontSize: 32, color: Colors.white, fontWeight: FontWeight.w700)),
                         SizedBox(
@@ -146,6 +148,10 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                           color: Theme.of(context).brightness == Brightness.light ? Color(0xff041F5F) : Color(0xffbdbdbd),
                           elevation: 3,
                           valueColor: Colors.white,
+                          controller: _btnController,
+                          onPressed: () => _sendOtp(context),
+                          animateOnTap: false,
+                          width: MediaQuery.of(context).size.width - 34,
                           child: Container(
                               alignment: Alignment.center,
                               height: 50,
@@ -159,10 +165,6 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                                     fontSize: 20
                                 ),
                                 textAlign: TextAlign.center,)),
-                          controller: _btnController,
-                          onPressed: () => _sendOtp(context),
-                          animateOnTap: false,
-                          width: MediaQuery.of(context).size.width - 34,
                         ),
                         /*FlatButton(
                             padding: EdgeInsets.all(16.0),
@@ -213,7 +215,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
   }
 
   _sendOtp(BuildContext context) async {
-    var data = new Map<String, dynamic>();
+    var data = <String, dynamic>{};
     if (_formKey.currentState.validate()) {
       data["email"] = emailController.text;
       _btnController.start();
@@ -238,7 +240,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
 }
 
 class ResetPassword extends StatefulWidget {
-  ResetPassword({
+  const ResetPassword({
     Key key,
     @required this.email,
   }) : super(key: key);
@@ -256,10 +258,10 @@ class _ResetPasswordState extends State<ResetPassword> {
   final apiProvider = ApiProvider();
   bool _obscureText = true;
 
-  TextEditingController otpController = new TextEditingController();
-  TextEditingController newPasswordController = new TextEditingController();
+  TextEditingController otpController = TextEditingController();
+  TextEditingController newPasswordController = TextEditingController();
   final RoundedLoadingButtonController _btnController =
-      new RoundedLoadingButtonController();
+      RoundedLoadingButtonController();
 
   final LinearGradient lightGradient = LinearGradient(
       begin: Alignment.centerLeft, end: Alignment.centerRight,
@@ -336,16 +338,16 @@ class _ResetPasswordState extends State<ResetPassword> {
                   ),
                   Container(
                     padding: EdgeInsets.all(32),
-                    child: new Form(
+                    child: Form(
                       key: _formKey,
-                      child: new ListView(
+                      child: ListView(
                         children: <Widget>[
                           SizedBox(
                             height: height * 0.05,
                           ),
                           Text('Reset your password by entering OTP',
                               style:
-                              Theme.of(context).textTheme.caption.copyWith(
+                              Theme.of(context).textTheme.bodySmall.copyWith(
                                 //color: Colors.white,
                                   fontSize: 16, color: Colors.white70)),
                           SizedBox(
@@ -354,7 +356,7 @@ class _ResetPasswordState extends State<ResetPassword> {
                           Text('Reset Password',
                               style: Theme.of(context)
                                   .textTheme
-                                  .headline6
+                                  .titleLarge
                                   .copyWith(
                                 //color: Colors.white,
                                   fontSize: 32,color: Colors.white, fontWeight: FontWeight.w700)),
@@ -414,6 +416,10 @@ class _ResetPasswordState extends State<ResetPassword> {
                             color: Theme.of(context).brightness == Brightness.light ? Color(0xff041F5F) : Color(0xffbdbdbd),
                             elevation: 3,
                             valueColor: Colors.white,
+                            controller: _btnController,
+                            onPressed: () => _resetPassword(context),
+                            animateOnTap: false,
+                            width: MediaQuery.of(context).size.width - 34,
                             child: Container(
                               alignment: Alignment.center,
                               height: 50,
@@ -429,10 +435,6 @@ class _ResetPasswordState extends State<ResetPassword> {
                                 ),
                                 textAlign: TextAlign.center,),
                             ),
-                            controller: _btnController,
-                            onPressed: () => _resetPassword(context),
-                            animateOnTap: false,
-                            width: MediaQuery.of(context).size.width - 34,
                           ),
                         ],
                       ),
@@ -466,7 +468,7 @@ class _ResetPasswordState extends State<ResetPassword> {
   }
 
   _resetPassword(BuildContext context) async {
-    var data = new Map<String, dynamic>();
+    var data = <String, dynamic>{};
     if (_formKey.currentState.validate()) {
       data["email"] = widget.email;
       data["password"] = newPasswordController.text;

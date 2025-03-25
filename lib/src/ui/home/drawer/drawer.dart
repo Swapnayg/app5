@@ -39,7 +39,7 @@ class _MyDrawerState extends State<MyDrawer> {
                       Container(
                         padding:EdgeInsets.only(top: 12),
                         child: ListTile(
-                          title: Container(
+                          title: SizedBox(
                               height: 40,
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.start,
@@ -138,7 +138,7 @@ class _MyDrawerState extends State<MyDrawer> {
                         title: Text(widget.appStateModel.blocks.localeText.sales,
                             style: menuItemStyle()),
                         onTap: () {
-                          var filter = new Map<String, dynamic>();
+                          var filter = Map<String, dynamic>();
                           filter['on_sale'] = '1';
                           Navigator.push(
                               context,
@@ -153,7 +153,7 @@ class _MyDrawerState extends State<MyDrawer> {
                         title: Text(widget.appStateModel.blocks.localeText.localeTextNew,
                             style: menuItemStyle()),
                         onTap: () {
-                          var filter = new Map<String, dynamic>();
+                          var filter = Map<String, dynamic>();
                           Navigator.push(
                               context,
                               MaterialPageRoute(
@@ -230,24 +230,24 @@ class _MyDrawerState extends State<MyDrawer> {
   }
 
   Container leadingIcon(Category category) {
-    return Container(
+    return SizedBox(
       width: 30,
       height: 30,
       child: CachedNetworkImage(
-        imageUrl: category.image != null ? category.image : '',
+        imageUrl: category.image ?? '',
         imageBuilder: (context, imageProvider) => Card(
           clipBehavior: Clip.antiAlias,
           elevation: 0.0,
           margin: EdgeInsets.all(0.0),
           //shape: StadiumBorder(),
           child: Ink.image(
+            image: imageProvider,
+            fit: BoxFit.cover,
             child: InkWell(
               onTap: () {
                 //onCategoryClick(category);
               },
             ),
-            image: imageProvider,
-            fit: BoxFit.cover,
           ),
         ),
         placeholder: (context, url) => Card(
@@ -265,7 +265,7 @@ class _MyDrawerState extends State<MyDrawer> {
   }
 
   _onTap(Category category) {
-    var filter = new Map<String, dynamic>();
+    var filter = Map<String, dynamic>();
     filter['id'] = category.id.toString();
     Navigator.push(
         context,
@@ -276,7 +276,7 @@ class _MyDrawerState extends State<MyDrawer> {
   }
 
   void _onTapTag({String tag, String name}) {
-    var filter = new Map<String, dynamic>();
+    var filter = <String, dynamic>{};
     filter['tag'] = tag;
     Navigator.push(
         context,
@@ -309,7 +309,7 @@ class _MyDrawerState extends State<MyDrawer> {
   }
 
   Future _openWhatsApp(String number) async {
-    final url = 'https://wa.me/' + number;
+    final url = 'https://wa.me/$number';
     if (await canLaunch(url)) {
       await launch(url);
     } else {
@@ -318,7 +318,7 @@ class _MyDrawerState extends State<MyDrawer> {
   }
 
   Future _callNumber(String number) async {
-    final url = 'tel:' + number;
+    final url = 'tel:$number';
     if (await canLaunch(url)) {
       await launch(url);
     } else {

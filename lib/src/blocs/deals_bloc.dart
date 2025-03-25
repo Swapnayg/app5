@@ -5,7 +5,7 @@ import '../models/product_model.dart';
 
 class DealsBloc {
   List<Product> dealsProducts;
-  var dealsFilter = new Map<String, dynamic>();
+  var dealsFilter = <String, dynamic>{};
   int dealsPage = 0;
 
   final apiProvider = ApiProvider();

@@ -12,7 +12,7 @@ class VendorCategoryGridList extends StatefulWidget {
   final Block block;
   final List<Category> categories;
   final Function onCategoryClick;
-  VendorCategoryGridList({Key key, this.block, this.categories, this.onCategoryClick}) : super(key: key);
+  const VendorCategoryGridList({Key key, this.block, this.categories, this.onCategoryClick}) : super(key: key);
   @override
   _VendorCategoryGridListState createState() => _VendorCategoryGridListState();
 }
@@ -24,9 +24,11 @@ class _VendorCategoryGridListState extends State<VendorCategoryGridList> {
   @override
   void initState() {
     super.initState();
-    if(widget.categories.length < 8)
+    if(widget.categories.length < 8) {
       count = widget.categories.length;
-    else count = 8;
+    } else {
+      count = 8;
+    }
   }
 
   @override
@@ -77,12 +79,12 @@ class _VendorCategoryGridListState extends State<VendorCategoryGridList> {
                         child: widget.categories[index].image != null ? CachedNetworkImage(
                           imageUrl: widget.categories[index].image,
                           imageBuilder: (context, imageProvider) => Ink.image(
+                            image: imageProvider,
+                            fit: BoxFit.cover,
                             child: InkWell(
                               splashColor: HexColor(widget.block.bgColor).withOpacity(0.1),
                               onTap: () => widget.onCategoryClick(widget.categories[index], widget.categories),
                             ),
-                            image: imageProvider,
-                            fit: BoxFit.cover,
                           ),
                           placeholder: (context, url) =>
                               Container(color: Colors.black12),
@@ -90,9 +92,9 @@ class _VendorCategoryGridListState extends State<VendorCategoryGridList> {
                         ) : Container(color: Colors.black12),
                       ),
                       SizedBox(height: 10.0),
-                      new Padding(
+                      Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                        child: new Text(
+                        child: Text(
                           parseHtmlString(widget.categories[index].name),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
@@ -124,12 +126,12 @@ class _VendorCategoryGridListState extends State<VendorCategoryGridList> {
                         child: widget.categories[index].image != null ? CachedNetworkImage(
                           imageUrl: widget.categories[index].image,
                           imageBuilder: (context, imageProvider) => Ink.image(
+                            image: imageProvider,
+                            fit: BoxFit.cover,
                             child: InkWell(
                               splashColor: HexColor(widget.block.bgColor).withOpacity(0.1),
                               onTap: () => widget.onCategoryClick(widget.categories[index], widget.categories),
                             ),
-                            image: imageProvider,
-                            fit: BoxFit.cover,
                           ),
                           placeholder: (context, url) =>
                               Container(color: Colors.black12),
@@ -137,9 +139,9 @@ class _VendorCategoryGridListState extends State<VendorCategoryGridList> {
                         ) : Container(color: Colors.black12),
                       ),
                       SizedBox(height: 10.0),
-                      new Padding(
+                      Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                        child: new Text(
+                        child: Text(
                           parseHtmlString(widget.categories[index].name),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
@@ -166,7 +168,7 @@ class VendorCategoryStadiumGridList extends StatefulWidget {
   final Block block;
   final List<Category> categories;
   final Function onCategoryClick;
-  VendorCategoryStadiumGridList({Key key, this.block, this.categories, this.onCategoryClick}) : super(key: key);
+  const VendorCategoryStadiumGridList({Key key, this.block, this.categories, this.onCategoryClick}) : super(key: key);
   @override
   _VendorCategoryStadiumGridListState createState() => _VendorCategoryStadiumGridListState();
 }
@@ -178,9 +180,11 @@ class _VendorCategoryStadiumGridListState extends State<VendorCategoryStadiumGri
   @override
   void initState() {
     super.initState();
-    if(widget.categories.length < 8)
+    if(widget.categories.length < 8) {
       count = widget.categories.length;
-    else count = 8;
+    } else {
+      count = 8;
+    }
   }
 
 
@@ -225,13 +229,13 @@ class _VendorCategoryStadiumGridListState extends State<VendorCategoryStadiumGri
                       child: widget.categories[index].image != null ? CachedNetworkImage(
                         imageUrl: widget.categories[index].image,
                         imageBuilder: (context, imageProvider) => Ink.image(
+                          image: imageProvider,
+                          fit: BoxFit.cover,
                           child: InkWell(
                             splashColor: HexColor(widget.block.bgColor).withOpacity(0.1),
                             onTap: () => widget.onCategoryClick(widget.categories[index], widget.categories),
 
                           ),
-                          image: imageProvider,
-                          fit: BoxFit.cover,
                         ),
                         placeholder: (context, url) =>
                             Container(color: Colors.black12.withOpacity(0.01)),
@@ -240,9 +244,9 @@ class _VendorCategoryStadiumGridListState extends State<VendorCategoryStadiumGri
                     ),
                   ),
                 ),
-                new Padding(
+                Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
-                  child: new Text(
+                  child: Text(
                     parseHtmlString(widget.categories[index].name),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
@@ -265,9 +269,9 @@ class _VendorCategoryStadiumGridListState extends State<VendorCategoryStadiumGri
                     ),
                   ),
                 ),
-                new Padding(
+                Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
-                  child: new Text(
+                  child: Text(
                     parseHtmlString('View All'),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,

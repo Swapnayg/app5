@@ -105,7 +105,7 @@ class ProductItem extends StatelessWidget {
     return Card(
       margin: EdgeInsets.symmetric(vertical: 5.0),
       child: InkWell(
-        splashColor: Theme.of(context).accentColor.withOpacity(0.1),
+        splashColor: Theme.of(context).colorScheme.secondary.withOpacity(0.1),
         onTap: () {
           onProductClick(product);
         },
@@ -154,11 +154,11 @@ class ProductItem extends StatelessWidget {
                             ),
                             elevation: 0.0,
                             margin: EdgeInsets.all(0.0),
-                            color: Theme.of(context).accentColor,
+                            color: Theme.of(context).colorScheme.secondary,
                             child: Container(
                               padding: EdgeInsets.fromLTRB(8.0, 4.0, 8.0, 4.0),
                               child: Text(
-                                percentOff.toString() + '% OFF',
+                                '$percentOff% OFF',
                                 style: Theme.of(context)
                                     .accentTextTheme
                                     .body2
@@ -171,7 +171,7 @@ class ProductItem extends StatelessWidget {
                 ],
               ),
             ),
-            Container(
+            SizedBox(
               width: detailsWidth,
               height: 160,
               child: Padding(
@@ -218,8 +218,7 @@ class ProductItem extends StatelessWidget {
                             Row(
                               children: <Widget>[
                                 Text(
-                                    (product.regularPrice != null &&
-                                            product.regularPrice.isNotEmpty)
+                                    (product.regularPrice.isNotEmpty)
                                         ? formatter
                                             .format(double.parse(product.regularPrice))
                                         : '',
@@ -263,9 +262,7 @@ class ProductItem extends StatelessWidget {
                                 children: <Widget>[
                                   SizedBox(width: 4.0),
                                   Text(
-                                      '(' +
-                                          product.ratingCount.toString() +
-                                          ')',
+                                      '(${product.ratingCount})',
                                       maxLines: 2,
                                       style: TextStyle(
                                         color: Theme.of(context)

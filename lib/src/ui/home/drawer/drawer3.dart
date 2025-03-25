@@ -10,6 +10,8 @@ import '../../products/products.dart';
 
 
 class MyDrawer extends StatefulWidget {
+  const MyDrawer({super.key});
+
   @override
   _MyDrawerState createState() => _MyDrawerState();
 }
@@ -86,7 +88,7 @@ class _MyDrawerState extends State<MyDrawer> {
                           ),
                           trailing: Icon(Icons.arrow_forward_ios, size: 16, color: Theme.of(context).iconTheme.color.withOpacity(0.2),),
                             onTap: () {
-                              var filter = new Map<String, dynamic>();
+                              var filter = <String, dynamic>{};
                               filter['featured'] = '1';
                               Navigator.push(
                                   context,
@@ -110,7 +112,7 @@ class _MyDrawerState extends State<MyDrawer> {
                             ),
                             trailing: Icon(Icons.arrow_forward_ios, size: 16, color: Theme.of(context).iconTheme.color.withOpacity(0.2),),
                             onTap: () {
-                              var filter = new Map<String, dynamic>();
+                              var filter = <String, dynamic>{};
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
@@ -133,7 +135,7 @@ class _MyDrawerState extends State<MyDrawer> {
                           ),
                           trailing: Icon(Icons.arrow_forward_ios, size: 16, color: Theme.of(context).iconTheme.color.withOpacity(0.2),  ),
                           onTap: () {
-                            var filter = new Map<String, dynamic>();
+                            var filter = <String, dynamic>{};
                             filter['on_sale'] = '1';
                             Navigator.push(
                                 context,
@@ -196,24 +198,24 @@ class _MyDrawerState extends State<MyDrawer> {
   }
 
   Container leadingIcon(Category category) {
-    return Container(
+    return SizedBox(
       width: 24,
       height: 24,
       child: CachedNetworkImage(
-        imageUrl: category.image != null ? category.image : '',
+        imageUrl: category.image ?? '',
         imageBuilder: (context, imageProvider) => Card(
           clipBehavior: Clip.antiAlias,
           elevation: 0.0,
           margin: EdgeInsets.all(0.0),
           //shape: StadiumBorder(),
           child: Ink.image(
+            image: imageProvider,
+            fit: BoxFit.cover,
             child: InkWell(
               onTap: () {
                 //onCategoryClick(category);
               },
             ),
-            image: imageProvider,
-            fit: BoxFit.cover,
           ),
         ),
         placeholder: (context, url) => Card(
@@ -233,7 +235,7 @@ class _MyDrawerState extends State<MyDrawer> {
   }
 
   _onTap(Category category) {
-    var filter = new Map<String, dynamic>();
+    var filter = <String, dynamic>{};
     filter['id'] = category.id.toString();
     Navigator.push(
         context,
@@ -251,7 +253,7 @@ class _MyDrawerState extends State<MyDrawer> {
   }
 
   void _onTapTag({String tag, String name}) {
-    var filter = new Map<String, dynamic>();
+    var filter = <String, dynamic>{};
     filter['tag'] = tag;
     Navigator.push(
         context,

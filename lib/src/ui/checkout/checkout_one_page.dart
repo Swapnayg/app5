@@ -19,13 +19,13 @@ import 'payment/payment_card.dart';
 class CheckoutOnePage extends StatefulWidget {
   final CheckoutBloc homeBloc;
   final appStateModel = AppStateModel();
-  CheckoutOnePage({this.homeBloc});
+  CheckoutOnePage({super.key, this.homeBloc});
   @override
   _CheckoutOnePageState createState() => _CheckoutOnePageState();
 }
 
 class _CheckoutOnePageState extends State<CheckoutOnePage> {
-  GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
   String _error;
 
   var isLoading = false;
@@ -70,14 +70,14 @@ class _CheckoutOnePageState extends State<CheckoutOnePage> {
       BuildContext context, AppStateModel model) {
     TextStyle subhead = Theme.of(context)
         .textTheme
-        .subtitle1
+        .titleMedium
         .copyWith(fontWeight: FontWeight.w600);
 
-    List<Widget> list = new List<Widget>();
+    List<Widget> list = List<Widget>();
 
-    if (snapshot.data.shipping.length > 0) {
+    if (snapshot.data.shipping.isNotEmpty) {
       for (var i = 0; i < snapshot.data.shipping.length; i++) {
-        if (snapshot.data.shipping[i].shippingMethods.length > 0) {
+        if (snapshot.data.shipping[i].shippingMethods.isNotEmpty) {
           list.add(SliverToBoxAdapter(
               child: Padding(
             padding: const EdgeInsets.fromLTRB(24.0, 16.0, 24.0, 8.0),
@@ -146,9 +146,9 @@ class _CheckoutOnePageState extends State<CheckoutOnePage> {
                           child: Text(parseHtmlString(snapshot.data.messages),
                               style: Theme.of(context)
                                   .textTheme
-                                  .subtitle
+                                  .subtitle2
                                   .copyWith(
-                                      color: Theme.of(context).errorColor))),
+                                      color: Theme.of(context).colorScheme.error))),
                     );
                   } else if (snapshot.hasData &&
                       snapshot.data.result == "success") {
@@ -180,10 +180,8 @@ class _CheckoutOnePageState extends State<CheckoutOnePage> {
               });
               widget.homeBloc.updateOrderReview2();
             },
-            title: Text(snapshot.data.shipping[i].shippingMethods[index].label +
-                ' ' +
-                parseHtmlString(
-                    snapshot.data.shipping[i].shippingMethods[index].cost)),
+            title: Text('${snapshot.data.shipping[i].shippingMethods[index].label} ${parseHtmlString(
+                    snapshot.data.shipping[i].shippingMethods[index].cost)}'),
           );
         },
         childCount: snapshot.data.shipping[i].shippingMethods.length,
@@ -200,7 +198,7 @@ class _CheckoutOnePageState extends State<CheckoutOnePage> {
             children: [
               Text(parseHtmlString(snapshot.data.paymentMethods[index].title)),
               SizedBox(width: 8),
-              Text(parseHtmlString(snapshot.data.balanceFormatted), style: Theme.of(context).textTheme.subtitle2,)
+              Text(parseHtmlString(snapshot.data.balanceFormatted), style: Theme.of(context).textTheme.titleSmall,)
             ],
           ) : Text(parseHtmlString(snapshot.data.paymentMethods[index].title));
           return Padding(
@@ -218,7 +216,7 @@ class _CheckoutOnePageState extends State<CheckoutOnePage> {
                     widget.homeBloc.updateOrderReview2();
                   },
                 ),
-                Container(width: cWidth, child: paymentTitle),
+                SizedBox(width: cWidth, child: paymentTitle),
               ],
             ),
           );
@@ -229,8 +227,8 @@ class _CheckoutOnePageState extends State<CheckoutOnePage> {
   }
 
   _buildOrderList(AsyncSnapshot<OrderReviewModel> snapshot) {
-    final smallAmountStyle = Theme.of(context).textTheme.body1;
-    final largeAmountStyle = Theme.of(context).textTheme.title;
+    final smallAmountStyle = Theme.of(context).textTheme.bodyText2;
+    final largeAmountStyle = Theme.of(context).textTheme.headline6;
 
     return SliverToBoxAdapter(
       child: Padding(
@@ -241,7 +239,7 @@ class _CheckoutOnePageState extends State<CheckoutOnePage> {
               children: [
                 Expanded(
                   child: Text(
-                      widget.appStateModel.blocks.localeText.subtotal + ':'),
+                      '${widget.appStateModel.blocks.localeText.subtotal}:'),
                 ),
                 Text(
                   parseHtmlString(snapshot.data.totals.subtotal),
@@ -254,7 +252,7 @@ class _CheckoutOnePageState extends State<CheckoutOnePage> {
               children: [
                 Expanded(
                   child: Text(
-                      widget.appStateModel.blocks.localeText.shipping + ':'),
+                      '${widget.appStateModel.blocks.localeText.shipping}:'),
                 ),
                 Text(
                   parseHtmlString(snapshot.data.totals.shippingTotal),
@@ -266,7 +264,7 @@ class _CheckoutOnePageState extends State<CheckoutOnePage> {
             Row(
               children: [
                 Expanded(
-                  child: Text(widget.appStateModel.blocks.localeText.tax + ':'),
+                  child: Text('${widget.appStateModel.blocks.localeText.tax}:'),
                 ),
                 Text(
                   parseHtmlString(snapshot.data.totals.totalTax),
@@ -501,7 +499,7 @@ class _CheckoutOnePageState extends State<CheckoutOnePage> {
     PaymentCard paymentMethod = await showDialog(
         barrierDismissible: false,
         context: context,
-        builder: (BuildContext context) => new CheckoutWidget(
+        builder: (BuildContext context) => CheckoutWidget(
               charge: charge,
               fullscreen: false,
               total: snapshot.data.totals.total,
@@ -511,7 +509,7 @@ class _CheckoutOnePageState extends State<CheckoutOnePage> {
               ),
             ));
     if (paymentMethod != null) {
-      var stripeTokenParams = new Map<String, dynamic>();
+      var stripeTokenParams = <String, dynamic>{};
 
       stripeTokenParams['key'] = stripePublicKey;
       stripeTokenParams['payment_user_agent'] =
@@ -524,34 +522,22 @@ class _CheckoutOnePageState extends State<CheckoutOnePage> {
       stripeTokenParams['card[name]'] =
           widget.homeBloc.formData['billing_last_name'];
       stripeTokenParams['card[address_line1]'] =
-          widget.homeBloc.formData['billing_address_1'] != null
-              ? widget.homeBloc.formData['billing_address_1']
-              : '';
+          widget.homeBloc.formData['billing_address_1'] ?? '';
       stripeTokenParams['card[address_line2]'] =
-          widget.homeBloc.formData['billing_address_2'] != null
-              ? widget.homeBloc.formData['billing_address_2']
-              : '';
+          widget.homeBloc.formData['billing_address_2'] ?? '';
       stripeTokenParams['card[address_state]'] =
-          widget.homeBloc.formData['billing_state'] != null
-              ? widget.homeBloc.formData['billing_state']
-              : '';
+          widget.homeBloc.formData['billing_state'] ?? '';
       stripeTokenParams['card[address_city]'] =
-          widget.homeBloc.formData['billing_city'] != null
-              ? widget.homeBloc.formData['billing_city']
-              : '';
+          widget.homeBloc.formData['billing_city'] ?? '';
       stripeTokenParams['card[address_zip]'] =
-          widget.homeBloc.formData['billing_postcode'] != null
-              ? widget.homeBloc.formData['billing_postcode']
-              : '';
+          widget.homeBloc.formData['billing_postcode'] ?? '';
       stripeTokenParams['card[address_country]'] =
-          widget.homeBloc.formData['billing_country'] != null
-              ? widget.homeBloc.formData['billing_country']
-              : '';
+          widget.homeBloc.formData['billing_country'] ?? '';
 
       StripeTokenModel stripeToken =
           await widget.homeBloc.getStripeToken(stripeTokenParams);
 
-      var stripeSourceParams = new Map<String, dynamic>();
+      var stripeSourceParams = Map<String, dynamic>();
       stripeSourceParams['type'] = 'card';
       stripeSourceParams['token'] = stripeToken.id;
       stripeSourceParams['key'] = stripeTokenParams['key'];

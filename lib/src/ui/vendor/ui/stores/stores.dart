@@ -18,15 +18,13 @@ class Stores extends StatefulWidget {
 }
 
 class _StoresState extends State<Stores> {
-  ScrollController _scrollController = new ScrollController();
+  final ScrollController _scrollController = ScrollController();
   AppStateModel appStateModel = AppStateModel();
   @override
   void initState() {
     super.initState();
-    if(widget.filter != null) {
-      widget.model.filter = widget.filter;
-    }
-    widget.model.getAllStores();
+    widget.model.filter = widget.filter;
+      widget.model.getAllStores();
     _scrollController.addListener(_loadMoreItems);
   }
 
@@ -71,14 +69,14 @@ class _StoresState extends State<Stores> {
 
   List<Widget> buildListOfBlocks(
       List<StoreModel> stores, StoreStateModel model) {
-    List<Widget> list = new List<Widget>();
+    List<Widget> list = List<Widget>();
     list.add(StoresList(stores: stores));
     list.add(SliverPadding(
         padding: EdgeInsets.all(0.0),
         sliver: SliverList(
             delegate: SliverChildListDelegate([
           model.hasMoreItems
-              ? Container(
+              ? SizedBox(
                   height: 60, child: Center(child: CircularProgressIndicator()))
               : Container()
         ]))));

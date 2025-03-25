@@ -10,7 +10,7 @@ class AddVariations extends StatefulWidget {
   final VendorBloc vendorBloc;
   final VendorProduct product;
 
-  AddVariations({Key key, this.vendorBloc, this.product}) : super(key: key);
+  const AddVariations({Key key, this.vendorBloc, this.product}) : super(key: key);
   @override
   _AddVariationsState createState() => _AddVariationsState();
 }
@@ -24,7 +24,7 @@ class _AddVariationsState extends State<AddVariations> {
   @override
   void initState() {
     super.initState();
-    if (variationProduct.attributes == null) variationProduct.attributes = [];
+    variationProduct.attributes ??= [];
   }
 
   void handlestockStatusValueChanged(String value) {
@@ -52,10 +52,10 @@ class _AddVariationsState extends State<AddVariations> {
   }
 
   _buildList() {
-    List<Widget> list = new List<Widget>();
+    List<Widget> list = List<Widget>();
 
-    widget.product.attributes.forEach((attribute) {
-      if (attribute.variation != null && attribute.variation) {
+    for (var attribute in widget.product.attributes) {
+      if (attribute.variation) {
         String selected = attribute.options.first;
         if (variationProduct.attributes
             .any((item) => item.name == attribute.name)) {
@@ -66,7 +66,7 @@ class _AddVariationsState extends State<AddVariations> {
         list.add(SliverToBoxAdapter(
           child: Container(
             child: Text(attribute.name,
-                style: Theme.of(context).textTheme.subtitle1),
+                style: Theme.of(context).textTheme.titleMedium),
           ),
         ));
         list.add(
@@ -82,7 +82,7 @@ class _AddVariationsState extends State<AddVariations> {
               ),
               onChanged: (String newValue) {
                 VariationAttribute variationAttribute =
-                    new VariationAttribute();
+                    VariationAttribute();
                 variationAttribute.id = attribute.id;
                 variationAttribute.name = attribute.name;
                 variationAttribute.option = newValue;
@@ -113,7 +113,7 @@ class _AddVariationsState extends State<AddVariations> {
           ),
         );
       }
-    });
+    }
     list.add(SliverToBoxAdapter(
       child: Form(
         key: _formKey,
@@ -128,6 +128,7 @@ class _AddVariationsState extends State<AddVariations> {
                 if (value.isEmpty) {
                   return "Please enter products Sku";
                 }
+                return null;
               },
               onSaved: (val) => setState(() => variationProduct.sku = val),
             ),
@@ -142,6 +143,7 @@ class _AddVariationsState extends State<AddVariations> {
                 if (value.isEmpty) {
                   return "please enter regular price";
                 }
+                return null;
               },
               onSaved: (val) =>
                   setState(() => variationProduct.regularPrice = val),
@@ -152,12 +154,13 @@ class _AddVariationsState extends State<AddVariations> {
                 if (value.isEmpty) {
                   return "please enter sale price";
                 }
+                return null;
               },
               onSaved: (val) =>
                   setState(() => variationProduct.salePrice = val),
             ),
             const SizedBox(height: 16.0),
-            Text("Stock Status", style: Theme.of(context).textTheme.subtitle1),
+            Text("Stock Status", style: Theme.of(context).textTheme.titleMedium),
             Row(
               children: <Widget>[
                 Radio<String>(
@@ -165,18 +168,18 @@ class _AddVariationsState extends State<AddVariations> {
                   groupValue: variationProduct.stockStatus,
                   onChanged: handlestockStatusValueChanged,
                 ),
-                new Text(
+                Text(
                   "Instock",
-                  style: new TextStyle(fontSize: 16.0),
+                  style: TextStyle(fontSize: 16.0),
                 ),
                 Radio<String>(
                   value: 'outofstock',
                   groupValue: variationProduct.stockStatus,
                   onChanged: handlestockStatusValueChanged,
                 ),
-                new Text(
+                Text(
                   "Outof Stock",
-                  style: new TextStyle(fontSize: 16.0),
+                  style: TextStyle(fontSize: 16.0),
                 ),
               ],
             ),
@@ -187,9 +190,9 @@ class _AddVariationsState extends State<AddVariations> {
                   groupValue: variationProduct.stockStatus,
                   onChanged: handlestockStatusValueChanged,
                 ),
-                new Text(
+                Text(
                   "onbackorder",
-                  style: new TextStyle(fontSize: 16.0),
+                  style: TextStyle(fontSize: 16.0),
                 ),
               ],
             ),

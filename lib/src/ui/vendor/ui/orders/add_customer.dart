@@ -11,7 +11,7 @@ import '../../../../ui/color_override.dart';
 class AddCustomer extends StatefulWidget {
   final VendorBloc vendorBloc;
 final Order order;
-   AddCustomer({Key key, this.vendorBloc,this.order}) : super(key: key);
+   const AddCustomer({Key key, this.vendorBloc,this.order}) : super(key: key);
 
   @override
   _AddCustomerState createState() => _AddCustomerState();
@@ -63,7 +63,7 @@ class _AddCustomerState extends State<AddCustomer> {
         widget.order.billing.country) == -1) {
       widget.order.billing.country = snapshot.data.countries.first.value;
     }
-    if (regions != null && regions.isNotEmpty) {
+    if (regions.isNotEmpty) {
       widget.order.billing.state =
       regions.any((z) => z.value == widget.order.billing.state) ? widget.order
           .billing.state
@@ -94,6 +94,7 @@ class _AddCustomerState extends State<AddCustomer> {
                       if (value.isEmpty) {
                         return "please enter firstname";
                       }
+                      return null;
                     },
                     onSaved: (val) => setState(() => widget.order.billing.firstName = val),
                   ),
@@ -106,6 +107,7 @@ class _AddCustomerState extends State<AddCustomer> {
                       if (value.isEmpty) {
                         return "please enter last name";
                       }
+                      return null;
                     },
                     onSaved: (val) => setState(() => widget.order.billing.lastName = val),
                   ),
@@ -159,6 +161,7 @@ class _AddCustomerState extends State<AddCustomer> {
                       if (value.isEmpty) {
                         return "Please enter email";
                       }
+                      return null;
                     },
                     onSaved: (val) => setState(() =>  widget.order.billing.email = val),
                   ),
@@ -194,12 +197,12 @@ class _AddCustomerState extends State<AddCustomer> {
                         .map<DropdownMenuItem<String>>(
                             (value) {
                           return DropdownMenuItem<String>(
-                            value: value.value != null ? value.value : '',
+                            value: value.value ?? '',
                             child: Text(parseHtmlString(value.label)),
                           );
                         }).toList(),
                   ),
-                  (regions != null  && regions.length != 0) ? Column(
+                  (regions.isNotEmpty) ? Column(
                     children: <Widget>[
                       SizedBox(height: 20,),
                       DropdownButton<String>(
@@ -223,7 +226,7 @@ class _AddCustomerState extends State<AddCustomer> {
                             .map<DropdownMenuItem<String>>(
                                 (value) {
                               return DropdownMenuItem<String>(
-                                value: value.value != null ? value.value : '',
+                                value: value.value ?? '',
                                 child: Text(parseHtmlString(value.label)),
                               );
                             }).toList(),
@@ -237,6 +240,7 @@ class _AddCustomerState extends State<AddCustomer> {
                         if (value.isEmpty) {
                           return "Please Enter State";
                         }
+                        return null;
                       },
                       onSaved: (val) => setState(() => widget.vendorBloc.formData['billing_state'] = val),
                     ),
@@ -332,12 +336,12 @@ class _AddCustomerState extends State<AddCustomer> {
                         .map<DropdownMenuItem<String>>(
                             (value) {
                           return DropdownMenuItem<String>(
-                            value: value.value != null ? value.value : '',
+                            value: value.value ?? '',
                             child: Text(parseHtmlString(value.label)),
                           );
                         }).toList(),
                   ),
-                  (regions != null  && regions.length != 0) ? Column(
+                  (regions.isNotEmpty) ? Column(
                     children: <Widget>[
                       SizedBox(height: 20,),
                       DropdownButton<String>(
@@ -361,7 +365,7 @@ class _AddCustomerState extends State<AddCustomer> {
                             .map<DropdownMenuItem<String>>(
                                 (value) {
                               return DropdownMenuItem<String>(
-                                value: value.value != null ? value.value : '',
+                                value: value.value ?? '',
                                 child: Text(parseHtmlString(value.label)),
                               );
                             }).toList(),
@@ -375,6 +379,7 @@ class _AddCustomerState extends State<AddCustomer> {
                         if (value.isEmpty) {
                           return "Please Enter State";
                         }
+                        return null;
                       },
                       onSaved: (val) => setState(() => widget.vendorBloc.formData['billing_state'] = val),
                     ),

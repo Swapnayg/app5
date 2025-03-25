@@ -1,4 +1,4 @@
-library woocommerce_api;
+library;
 
 import 'dart:async';
 import "dart:collection";
@@ -20,49 +20,41 @@ class WooCommerceAPI {
   Config config = Config();
 
   WooCommerceAPI(){
-    this.url = config.url;
-    this.consumerKey = config.consumerKey;
-    this.consumerSecret = config.consumerSecret;
+    url = config.url;
+    consumerKey = config.consumerKey;
+    consumerSecret = config.consumerSecret;
 
-    if(this.url.startsWith("https")){
-      this.isHttps = true;
+    if(url.startsWith("https")){
+      isHttps = true;
     } else {
-      this.isHttps = false;
+      isHttps = false;
     }
   }
 
-  _getOAuthURL(String request_method, String endpoint) {
+  _getOAuthURL(String requestMethod, String endpoint) {
     var consumerKey = this.consumerKey;
     var consumerSecret = this.consumerSecret;
 
     var token = "";
-    var token_secret = "";
-    var url = this.url + "/wp-json/wc/v2/" + endpoint;
+    var tokenSecret = "";
+    var url = "${this.url}/wp-json/wc/v2/$endpoint";
     var containsQueryParams = url.contains("?");
 
-    if(this.isHttps == true){
-      return url + (containsQueryParams == true ? "&consumer_key=" + this.consumerKey + "&consumer_secret=" + this.consumerSecret : "?consumer_key=" + this.consumerKey + "&consumer_secret=" + this.consumerSecret);
+    if(isHttps == true){
+      return url + (containsQueryParams == true ? "&consumer_key=${this.consumerKey}&consumer_secret=${this.consumerSecret}" : "?consumer_key=${this.consumerKey}&consumer_secret=${this.consumerSecret}");
     }
 
-    var rand = new Random();
-    var codeUnits = new List.generate(10, (index) {
+    var rand = Random();
+    var codeUnits = List.generate(10, (index) {
       return rand.nextInt(26) + 97;
     });
 
-    var nonce = new String.fromCharCodes(codeUnits);
-    int timestamp = (new DateTime.now().millisecondsSinceEpoch / 1000).toInt();
+    var nonce = String.fromCharCodes(codeUnits);
+    int timestamp = (DateTime.now().millisecondsSinceEpoch / 1000).toInt();
 
-    var method = request_method;
+    var method = requestMethod;
     var path = url.split("?")[0];
-    var parameters = "oauth_consumer_key=" +
-        consumerKey +
-        "&oauth_nonce=" +
-        nonce +
-        "&oauth_signature_method=HMAC-SHA1&oauth_timestamp=" +
-        timestamp.toString() +
-        "&oauth_token=" +
-        token +
-        "&oauth_version=1.0&";
+    var parameters = "oauth_consumer_key=$consumerKey&oauth_nonce=$nonce&oauth_signature_method=HMAC-SHA1&oauth_timestamp=$timestamp&oauth_token=$token&oauth_version=1.0&";
 
     if (containsQueryParams == true) {
       parameters = parameters + url.split("?")[1];
@@ -71,31 +63,25 @@ class WooCommerceAPI {
     }
 
     Map<dynamic, dynamic> params = QueryString.parse(parameters);
-    Map<dynamic, dynamic> treeMap = new SplayTreeMap<dynamic, dynamic>();
+    Map<dynamic, dynamic> treeMap = SplayTreeMap<dynamic, dynamic>();
     treeMap.addAll(params);
 
     String parameterString = "";
 
     for (var key in treeMap.keys) {
-      parameterString = parameterString +
-          Uri.encodeQueryComponent(key) +
-          "=" +
+      parameterString = "$parameterString${Uri.encodeQueryComponent(key)}=" +
           treeMap[key] +
           "&";
     }
 
     parameterString = parameterString.substring(0, parameterString.length - 1);
 
-    var baseString = method +
-        "&" +
-        Uri.encodeQueryComponent(
-            containsQueryParams == true ? url.split("?")[0] : url) +
-        "&" +
-        Uri.encodeQueryComponent(parameterString);
+    var baseString = "$method&${Uri.encodeQueryComponent(
+            containsQueryParams == true ? url.split("?")[0] : url)}&${Uri.encodeQueryComponent(parameterString)}";
 
-    var signingKey = consumerSecret + "&" + token;
+    var signingKey = "$consumerSecret&$token";
     var hmacSha1 =
-    new crypto.Hmac(crypto.sha1, utf8.encode(signingKey)); // HMAC-SHA1
+    crypto.Hmac(crypto.sha1, utf8.encode(signingKey)); // HMAC-SHA1
     var signature = hmacSha1.convert(utf8.encode(baseString));
 
     var finalSignature = base64Encode(signature.bytes);
@@ -103,66 +89,50 @@ class WooCommerceAPI {
     var requestUrl = "";
 
     if (containsQueryParams == true) {
-      requestUrl = url.split("?")[0] +
-          "?" +
-          parameterString +
-          "&oauth_signature=" +
-          Uri.encodeQueryComponent(finalSignature);
+      requestUrl = "${url.split("?")[0]}?$parameterString&oauth_signature=${Uri.encodeQueryComponent(finalSignature)}";
     } else {
-      requestUrl = url +
-          "?" +
-          parameterString +
-          "&oauth_signature=" +
-          Uri.encodeQueryComponent(finalSignature);
+      requestUrl = "$url?$parameterString&oauth_signature=${Uri.encodeQueryComponent(finalSignature)}";
     }
 
     return requestUrl;
   }
 
   Future<http.Response> getAsync(String endPoint) async {
-    var url = this._getOAuthURL("GET", endPoint);
+    var url = _getOAuthURL("GET", endPoint);
     final response = await http.get(url);
     return response;
   }
 
   Future<http.Response> getproductAddons(String endPoint) async {
-    var url = this._getgetProductAddonsURL("GET", endPoint);
+    var url = _getgetProductAddonsURL("GET", endPoint);
     final response = await http.get(url);
     return response;
   }
 
-  _getgetProductAddonsURL(String request_method, String endpoint) {
+  _getgetProductAddonsURL(String requestMethod, String endpoint) {
     var consumerKey = this.consumerKey;
     var consumerSecret = this.consumerSecret;
 
     var token = "";
-    var token_secret = "";
-    var url = this.url + "/wp-json/wc-product-add-ons/v1/" + endpoint;
+    var tokenSecret = "";
+    var url = "${this.url}/wp-json/wc-product-add-ons/v1/$endpoint";
     var containsQueryParams = url.contains("?");
 
-    if(this.isHttps == true){
-      return url + (containsQueryParams == true ? "&consumer_key=" + this.consumerKey + "&consumer_secret=" + this.consumerSecret : "?consumer_key=" + this.consumerKey + "&consumer_secret=" + this.consumerSecret);
+    if(isHttps == true){
+      return url + (containsQueryParams == true ? "&consumer_key=${this.consumerKey}&consumer_secret=${this.consumerSecret}" : "?consumer_key=${this.consumerKey}&consumer_secret=${this.consumerSecret}");
     }
 
-    var rand = new Random();
-    var codeUnits = new List.generate(10, (index) {
+    var rand = Random();
+    var codeUnits = List.generate(10, (index) {
       return rand.nextInt(26) + 97;
     });
 
-    var nonce = new String.fromCharCodes(codeUnits);
-    int timestamp = (new DateTime.now().millisecondsSinceEpoch / 1000).toInt();
+    var nonce = String.fromCharCodes(codeUnits);
+    int timestamp = (DateTime.now().millisecondsSinceEpoch / 1000).toInt();
 
-    var method = request_method;
+    var method = requestMethod;
     var path = url.split("?")[0];
-    var parameters = "oauth_consumer_key=" +
-        consumerKey +
-        "&oauth_nonce=" +
-        nonce +
-        "&oauth_signature_method=HMAC-SHA1&oauth_timestamp=" +
-        timestamp.toString() +
-        "&oauth_token=" +
-        token +
-        "&oauth_version=1.0&";
+    var parameters = "oauth_consumer_key=$consumerKey&oauth_nonce=$nonce&oauth_signature_method=HMAC-SHA1&oauth_timestamp=$timestamp&oauth_token=$token&oauth_version=1.0&";
 
     if (containsQueryParams == true) {
       parameters = parameters + url.split("?")[1];
@@ -171,31 +141,25 @@ class WooCommerceAPI {
     }
 
     Map<dynamic, dynamic> params = QueryString.parse(parameters);
-    Map<dynamic, dynamic> treeMap = new SplayTreeMap<dynamic, dynamic>();
+    Map<dynamic, dynamic> treeMap = SplayTreeMap<dynamic, dynamic>();
     treeMap.addAll(params);
 
     String parameterString = "";
 
     for (var key in treeMap.keys) {
-      parameterString = parameterString +
-          Uri.encodeQueryComponent(key) +
-          "=" +
+      parameterString = "$parameterString${Uri.encodeQueryComponent(key)}=" +
           treeMap[key] +
           "&";
     }
 
     parameterString = parameterString.substring(0, parameterString.length - 1);
 
-    var baseString = method +
-        "&" +
-        Uri.encodeQueryComponent(
-            containsQueryParams == true ? url.split("?")[0] : url) +
-        "&" +
-        Uri.encodeQueryComponent(parameterString);
+    var baseString = "$method&${Uri.encodeQueryComponent(
+            containsQueryParams == true ? url.split("?")[0] : url)}&${Uri.encodeQueryComponent(parameterString)}";
 
-    var signingKey = consumerSecret + "&" + token;
+    var signingKey = "$consumerSecret&$token";
     var hmacSha1 =
-    new crypto.Hmac(crypto.sha1, utf8.encode(signingKey)); // HMAC-SHA1
+    crypto.Hmac(crypto.sha1, utf8.encode(signingKey)); // HMAC-SHA1
     var signature = hmacSha1.convert(utf8.encode(baseString));
 
     var finalSignature = base64Encode(signature.bytes);
@@ -203,17 +167,9 @@ class WooCommerceAPI {
     var requestUrl = "";
 
     if (containsQueryParams == true) {
-      requestUrl = url.split("?")[0] +
-          "?" +
-          parameterString +
-          "&oauth_signature=" +
-          Uri.encodeQueryComponent(finalSignature);
+      requestUrl = "${url.split("?")[0]}?$parameterString&oauth_signature=${Uri.encodeQueryComponent(finalSignature)}";
     } else {
-      requestUrl = url +
-          "?" +
-          parameterString +
-          "&oauth_signature=" +
-          Uri.encodeQueryComponent(finalSignature);
+      requestUrl = "$url?$parameterString&oauth_signature=${Uri.encodeQueryComponent(finalSignature)}";
     }
 
     return requestUrl;
@@ -232,7 +188,7 @@ class WooCommerceAPI {
       } else if (value is Map) {
         data[key] = removeNullAndEmptyParams(value);
       } else if(value is List){
-        value.forEach((item) {
+        for (var item in value) {
           if(item is Map) {
             item = removeNullAndEmptyParams(item);
           } else if(item == null) {
@@ -240,14 +196,14 @@ class WooCommerceAPI {
           } else if(item is String && item.isEmpty) {
             value.remove(item);
           }
-        });
+        }
       }
     }
     return data;
   }
 
   Future<http.Response> postAsync(String endPoint, Map data) async {
-    var url = this._getOAuthURL("POST", endPoint);
+    var url = _getOAuthURL("POST", endPoint);
     data = removeNullAndEmptyParams(data);
 
     final response = await http.post(Uri.parse(url),
@@ -260,7 +216,7 @@ class WooCommerceAPI {
   }
 
   Future<http.Response> putAsync(String endPoint, Map data) async {
-    var url = this._getOAuthURL("PUT", endPoint);
+    var url = _getOAuthURL("PUT", endPoint);
     data = removeNullAndEmptyParams(data);
 
     final response = await http.put(Uri.parse(url),
@@ -273,7 +229,7 @@ class WooCommerceAPI {
   }
 
   Future<http.Response> deleteAsync(String endPoint) async {
-    var url = this._getOAuthURL("DELETE", endPoint);
+    var url = _getOAuthURL("DELETE", endPoint);
 
     final response = await http.delete(url);
 
@@ -284,8 +240,8 @@ class WooCommerceAPI {
 
 class QueryString {
   static Map parse(String query) {
-    var search = new RegExp('([^&=]+)=?([^&]*)');
-    var result = new Map();
+    var search = RegExp('([^&=]+)=?([^&]*)');
+    var result = {};
 
     if (query.startsWith('?')) query = query.substring(1);
 

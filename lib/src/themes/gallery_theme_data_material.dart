@@ -3,6 +3,7 @@
 // found in the LICENSE file.
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class GalleryThemeData {
 
@@ -20,11 +21,9 @@ class GalleryThemeData {
       //*** For White App Bar ***/
       primaryTextTheme: _textTheme.apply(bodyColor: Colors.black),
       appBarTheme: AppBarTheme(
-        textTheme: _textTheme.apply(bodyColor: Colors.black),
         color: Colors.white,
         elevation: 0.0,
-        iconTheme: IconThemeData(color: Colors.black),
-        brightness: Brightness.light,
+        iconTheme: IconThemeData(color: Colors.black), systemOverlayStyle: SystemUiOverlayStyle.dark, toolbarTextStyle: _textTheme.apply(bodyColor: Colors.black).bodyText2, titleTextStyle: _textTheme.apply(bodyColor: Colors.black).headline6,
       ),
       primaryIconTheme: IconThemeData(color: Colors.black),
       tabBarTheme: TabBarTheme(
@@ -37,18 +36,14 @@ class GalleryThemeData {
         //shape: StadiumBorder(),
         textTheme: ButtonTextTheme.primary,
         height: 45.0,
-        colorScheme: new ColorScheme(
-            primary: Colors.red,//Color(0xff6200ee),
-            primaryVariant: Colors.redAccent,//const Color(0xff3700b3),
+        colorScheme: ColorScheme(
+            primary: Colors.red,//const Color(0xff3700b3),
             secondary: Color(0xff03dac6),
-            secondaryVariant: const Color(0xff018786),
             surface: Colors.white,
-            background: Colors.white,
             error: Color(0xffb00020),
             onPrimary: Colors.white,
             onSecondary: Colors.black,
             onSurface: Colors.black,
-            onBackground: Colors.black,
             onError: Colors.white,
             brightness: Brightness.light),
       ),
@@ -64,18 +59,14 @@ class GalleryThemeData {
           //shape: StadiumBorder(),
           textTheme: ButtonTextTheme.primary,
           height: 45.0,
-          colorScheme: new ColorScheme(
+          colorScheme: ColorScheme(
               primary: Color(0xff03dac6),
-              primaryVariant: const Color(0xff03dac6),
               secondary: const Color(0xff03dac6),
-              secondaryVariant: const Color(0xff03dac6),
-              background: const Color(0xff000000),
               surface: const Color(0xff121212),
               error: Color(0xffb00020),
               onPrimary: Colors.black,
               onSecondary: Colors.black,
               onSurface: Colors.black,
-              onBackground: Colors.black,
               onError: Colors.white,
               brightness: Brightness.light),
         ),
@@ -92,11 +83,9 @@ class GalleryThemeData {
       //*** For White App Bar ***/
       primaryTextTheme: _textTheme.apply(bodyColor: Colors.black),
       appBarTheme: AppBarTheme(
-        textTheme: _textTheme.apply(bodyColor: Colors.black),
         color: Colors.white,
         elevation: 0.0,
-        iconTheme: IconThemeData(color: Colors.black),
-        brightness: Brightness.light,
+        iconTheme: IconThemeData(color: Colors.black), systemOverlayStyle: SystemUiOverlayStyle.dark, toolbarTextStyle: _textTheme.apply(bodyColor: Colors.black).bodyText2, titleTextStyle: _textTheme.apply(bodyColor: Colors.black).headline6,
       ),
       primaryIconTheme: IconThemeData(color: Colors.black),
       tabBarTheme: TabBarTheme(
@@ -109,18 +98,14 @@ class GalleryThemeData {
         //shape: StadiumBorder(),
         textTheme: ButtonTextTheme.primary,
         height: 45.0,
-        colorScheme: new ColorScheme(
-            primary: Colors.green,//Color(0xff6200ee),
-            primaryVariant: Colors.greenAccent,//const Color(0xff3700b3),
+        colorScheme: ColorScheme(
+            primary: Colors.green,//const Color(0xff3700b3),
             secondary: Color(0xff03dac6),
-            secondaryVariant: const Color(0xff018786),
             surface: Colors.white,
-            background: Colors.white,
             error: Color(0xffb00020),
             onPrimary: Colors.white,
             onSecondary: Colors.black,
             onSurface: Colors.black,
-            onBackground: Colors.black,
             onError: Colors.white,
             brightness: Brightness.light),
       ),
@@ -136,42 +121,37 @@ class GalleryThemeData {
           //shape: StadiumBorder(),
           textTheme: ButtonTextTheme.primary,
           height: 45.0,
-          colorScheme: new ColorScheme(
+          colorScheme: ColorScheme(
               primary: Color(0xff03dac6),
-              primaryVariant: const Color(0xff03dac6),
               secondary: const Color(0xff03dac6),
-              secondaryVariant: const Color(0xff03dac6),
-              background: const Color(0xff000000),
               surface: const Color(0xff121212),
               error: Color(0xffb00020),
               onPrimary: Colors.black,
               onSecondary: Colors.black,
               onSurface: Colors.black,
-              onBackground: Colors.black,
               onError: Colors.white,
               brightness: Brightness.light),
         ),
         scaffoldBackgroundColor: Colors.black,
         canvasColor: Colors.black,
-        backgroundColor: Colors.black,
-        cardColor: Colors.black87
+        cardColor: Colors.black87, colorScheme: ColorScheme(background: Colors.black)
     );
   }
 
-  static TextTheme _textTheme = TextTheme(
-    headline4: _GalleryTextStyles.display1,
-    headline3: _GalleryTextStyles.display2,
-    headline2: _GalleryTextStyles.display3,
-    headline1: _GalleryTextStyles.display4,
-    caption: _GalleryTextStyles.studyTitle,
-    headline5: _GalleryTextStyles.categoryTitle,
-    subtitle1: _GalleryTextStyles.listTitle,
-    overline: _GalleryTextStyles.listDescription,
-    bodyText2: _GalleryTextStyles.sliderTitle,
-    subtitle2: _GalleryTextStyles.settingsFooter,
-    bodyText1: _GalleryTextStyles.options,
-    headline6: _GalleryTextStyles.title,
-    button: _GalleryTextStyles.button,
+  static final TextTheme _textTheme = TextTheme(
+    headlineMedium: _GalleryTextStyles.display1,
+    displaySmall: _GalleryTextStyles.display2,
+    displayMedium: _GalleryTextStyles.display3,
+    displayLarge: _GalleryTextStyles.display4,
+    bodySmall: _GalleryTextStyles.studyTitle,
+    headlineSmall: _GalleryTextStyles.categoryTitle,
+    titleMedium: _GalleryTextStyles.listTitle,
+    labelSmall: _GalleryTextStyles.listDescription,
+    bodyMedium: _GalleryTextStyles.sliderTitle,
+    titleSmall: _GalleryTextStyles.settingsFooter,
+    bodyLarge: _GalleryTextStyles.options,
+    titleLarge: _GalleryTextStyles.title,
+    labelLarge: _GalleryTextStyles.button,
   );
 
 }
@@ -267,12 +247,8 @@ class _GalleryTextStyles {
 
 ColorScheme lightColorScheme = ColorScheme(
   primary: Colors.blue,
-  primaryVariant: Colors.blue[700],
   secondary: Colors.blue[700],
-  secondaryVariant: const Color(0xFF000000),
-  background: const Color(0xFFFFFFFF),
   surface: const Color(0xFFFFFFFF),
-  onBackground: Colors.black,
   error: Colors.black,
   onError: Colors.black,
   onPrimary: Colors.black,

@@ -10,13 +10,15 @@ import '../../../color_override.dart';
 
 
 class ForgotPassword extends StatefulWidget {
+  const ForgotPassword({super.key});
+
   @override
   _ForgotPasswordState createState() => _ForgotPasswordState();
 }
 
 class _ForgotPasswordState extends State<ForgotPassword> {
   final appStateModel = AppStateModel();
-  TextEditingController emailController = new TextEditingController();
+  TextEditingController emailController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   var isLoading = false;
   final apiProvider = ApiProvider();
@@ -79,7 +81,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
   }
 
   _sendOtp(BuildContext context) async {
-    var data = new Map<String, dynamic>();
+    var data = <String, dynamic>{};
     if (_formKey.currentState.validate()) {
       data["email"] = emailController.text;
       setState(() {
@@ -102,7 +104,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
 }
 
 class ResetPassword extends StatefulWidget {
-  ResetPassword({
+  const ResetPassword({
     Key key,
     @required this.email,
   }) : super(key: key);
@@ -120,8 +122,8 @@ class _ResetPasswordState extends State<ResetPassword> {
   final apiProvider = ApiProvider();
   bool _obscureText = true;
 
-  TextEditingController otpController = new TextEditingController();
-  TextEditingController newPasswordController = new TextEditingController();
+  TextEditingController otpController = TextEditingController();
+  TextEditingController newPasswordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -133,9 +135,9 @@ class _ResetPasswordState extends State<ResetPassword> {
           children: [
             Container(
               margin: const EdgeInsets.only(left: 16.0, right: 16.0),
-              child: new Form(
+              child: Form(
                 key: _formKey,
-                child: new Column(
+                child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     SizedBox(
@@ -205,7 +207,7 @@ class _ResetPasswordState extends State<ResetPassword> {
   }
 
   _resetPassword(BuildContext context) async {
-    var data = new Map<String, dynamic>();
+    var data = <String, dynamic>{};
     if (_formKey.currentState.validate()) {
       data["email"] = widget.email;
       data["password"] = newPasswordController.text;

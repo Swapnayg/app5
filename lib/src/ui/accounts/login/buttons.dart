@@ -2,24 +2,22 @@ import 'package:flutter/material.dart';
 
 class WhiteButton extends _BaseButton {
   final bool flat;
+  @override
   final IconData iconData;
   final bool bold;
 
   WhiteButton({
-    @required VoidCallback onPressed,
-    String text,
-    Widget child,
+    @required super.onPressed,
+    super.text,
+    super.child,
     this.flat = false,
     this.bold = true,
     this.iconData,
   }) : super(
-          onPressed: onPressed,
           showProgress: false,
-          text: text,
-          child: child,
           iconData: iconData,
           borderRadius: BorderRadius.circular(0),
-          textStyle: new TextStyle(
+          textStyle: TextStyle(
               fontSize: 14.0,
               color: Colors.black87.withOpacity(0.8),
               fontWeight: bold ? FontWeight.bold : FontWeight.normal),
@@ -35,7 +33,7 @@ class AccentButton extends StatelessWidget {
   final String text;
   final bool showProgress;
 
-  AccentButton({
+  const AccentButton({super.key, 
     @required this.onPressed,
     @required this.text,
     this.showProgress = false,
@@ -64,7 +62,7 @@ class AccountButton extends StatelessWidget {
   final bool showProgress;
   final BorderRadius borderRadius;
 
-  AccountButton({
+  const AccountButton({super.key, 
     @required this.onPressed,
     @required this.text,
     this.showProgress = false,
@@ -93,7 +91,7 @@ class AddToCartButton extends StatelessWidget {
   final String text;
   final bool showProgress;
 
-  AddToCartButton({
+  const AddToCartButton({super.key, 
     @required this.onPressed,
     @required this.text,
     this.showProgress = false,
@@ -121,7 +119,7 @@ class PrimaryButton extends StatelessWidget {
   final String text;
   final bool showProgress;
 
-  PrimaryButton({
+  const PrimaryButton({super.key, 
     @required this.onPressed,
     @required this.text,
     this.showProgress = false,
@@ -150,8 +148,8 @@ class BlackButton extends StatelessWidget {
   final bool showProgress;
   final IconData iconData;
 
-  BlackButton(
-      {@required this.onPressed,
+  const BlackButton(
+      {super.key, @required this.onPressed,
       @required this.text,
       this.showProgress = false,
       this.iconData});
@@ -189,7 +187,7 @@ class _BaseButton extends StatelessWidget {
   final IconData iconData;
   final Widget child;
 
-  _BaseButton({
+  const _BaseButton({
     @required this.onPressed,
     @required this.showProgress,
     @required this.text,
@@ -204,46 +202,44 @@ class _BaseButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     //const borderRadius = const BorderRadius.all(Radius.circular(5.0));
-    var textWidget;
-    if (text != null) {
-      textWidget = new Text(
-        text,
-        textAlign: TextAlign.center,
-        style: textStyle,
-      );
-    }
-    return new Container(
+    Text textWidget;
+    textWidget = new Text(
+      text,
+      textAlign: TextAlign.center,
+      style: textStyle,
+    );
+      return Container(
         //width: 300,
         height: 50.0,
         alignment: Alignment.center,
-        decoration: new BoxDecoration(
+        decoration: BoxDecoration(
           borderRadius: borderRadius,
           color: color,
         ),
-        child: new Container(
+        child: SizedBox(
           width: double.infinity,
           height: double.infinity,
-          child: new RaisedButton(
+          child: RaisedButton(
               onPressed: showProgress ? null : onPressed,
-              shape: new RoundedRectangleBorder(
+              shape: RoundedRectangleBorder(
                   borderRadius: borderRadius, side: borderSide),
               child: showProgress
-                  ? new Container(
+                  ? SizedBox(
                       width: 20.0,
                       height: 20.0,
-                      child: new Theme(
+                      child: Theme(
                           data: Theme.of(context)
-                              .copyWith(accentColor: textStyle.color),
-                          child: new CircularProgressIndicator(
+                              .copyWith(colorScheme: ColorScheme.fromSwatch().copyWith(secondary: textStyle.color)),
+                          child: CircularProgressIndicator(
                             strokeWidth: 2.0,
                           )),
                     )
                   : iconData == null
-                      ? child == null ? textWidget : child
-                      : new Row(
+                      ? child ?? textWidget
+                      : Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
-                            new Icon(
+                            Icon(
                               iconData,
                               color: textStyle.color.withOpacity(0.5),
                             ),

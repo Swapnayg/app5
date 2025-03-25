@@ -12,6 +12,8 @@ import '../products/products.dart';
 
 
 class Categories1 extends StatefulWidget {
+  const Categories1({super.key});
+
   @override
   _Categories1State createState() => _Categories1State();
 }
@@ -51,7 +53,7 @@ class _Categories1State extends State<Categories1> {
       body: Container(
         child: Row(
           children: <Widget>[
-            Container(
+            SizedBox(
               width: MediaQuery.of(context).size.width * 0.25,
               //color: Theme.of(context).canvasColor,
               child: ListView.builder(
@@ -69,7 +71,7 @@ class _Categories1State extends State<Categories1> {
                             ? BoxDecoration(
                           border: Border(
                             left: BorderSide( //                   <--- left side
-                              color: Theme.of(context).accentColor,
+                              color: Theme.of(context).colorScheme.secondary,
                               width: 2.0,
                             ),
                           ),
@@ -118,7 +120,7 @@ class _Categories1State extends State<Categories1> {
                         Expanded(
                           child: InkWell(
                             onTap: () {
-                              var filter = new Map<String, dynamic>();
+                              var filter = <String, dynamic>{};
                               filter['id'] = selectedCategory.id.toString();
                               Navigator.push(
                                   context,
@@ -126,11 +128,13 @@ class _Categories1State extends State<Categories1> {
                                       builder: (context) => ProductsWidget(
                                           filter: filter, name: selectedCategory.name)));
                             },
-                            child: Container(
+                            child: SizedBox(
                               height: MediaQuery.of(context).size.width * 0.3,
                               child: CachedNetworkImage(
                                 imageUrl: selectedCategory.image,
                                 imageBuilder: (context, imageProvider) => Ink.image(
+                                  image: imageProvider,
+                                  fit: BoxFit.cover,
                                   child: InkWell(
                                     onTap: () {
                                       var filter = new Map<String, dynamic>();
@@ -142,8 +146,6 @@ class _Categories1State extends State<Categories1> {
                                                   filter: filter, name: selectedCategory.name)));
                                     },
                                   ),
-                                  image: imageProvider,
-                                  fit: BoxFit.cover,
                                 ),
                                 placeholder: (context, url) =>
                                     Container(color: Colors.transparent),
@@ -188,7 +190,7 @@ class _Categories1State extends State<Categories1> {
   Widget CategoryItem(Category category, int i, List<Category> categories) {
     return InkWell(
       onTap: () {
-        var filter = new Map<String, dynamic>();
+        var filter = <String, dynamic>{};
         filter['id'] = category.id.toString();
         Navigator.push(
             context,
@@ -203,7 +205,7 @@ class _Categories1State extends State<Categories1> {
             Container(
               child: Align(
                 alignment: Alignment.topCenter,
-                child: Container(
+                child: SizedBox(
                   width: 60,
                   height: 60,
                   child: CachedNetworkImage(
@@ -226,6 +228,8 @@ class _Categories1State extends State<Categories1> {
                           ),
                          */
                       child: Ink.image(
+                        image: imageProvider,
+                        fit: BoxFit.cover,
                         child: InkWell(
                           onTap: () {
                             var filter = new Map<String, dynamic>();
@@ -237,8 +241,6 @@ class _Categories1State extends State<Categories1> {
                                         filter: filter, name: category.name)));
                           },
                         ),
-                        image: imageProvider,
-                        fit: BoxFit.cover,
                       ),
                     ),
                     placeholder: (context, url) => Card(clipBehavior: Clip.antiAlias,
@@ -266,7 +268,7 @@ class _Categories1State extends State<Categories1> {
                     textAlign: TextAlign.center,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: Theme.of(context).textTheme.bodyText1.copyWith(
+                    style: Theme.of(context).textTheme.bodyLarge.copyWith(
                       fontSize: 10.0,
                     ),
                   )),

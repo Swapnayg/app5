@@ -11,7 +11,7 @@ class EditOrder extends StatefulWidget {
   final VendorBloc vendorBloc;
   final Order order;
 
-  EditOrder({Key key, this.vendorBloc,this.order})
+  const EditOrder({Key key, this.vendorBloc,this.order})
       : super(key: key);
   @override
   _EditOrderState createState() => _EditOrderState();
@@ -51,7 +51,7 @@ Widget buildListView(BuildContext context, AsyncSnapshot<CheckoutFormModel> snap
     regions = snapshot.data.countries.singleWhere((country) => country.value == widget.order.billing.country).regions;
   } else if(snapshot.data.countries.indexWhere((country) => country.value == widget.order.billing.country) == -1) {
     widget.order.billing.country = snapshot.data.countries.first.value;
-  } if(regions != null && regions.isNotEmpty) {
+  } if(regions.isNotEmpty) {
     widget.order.billing.state = regions.any((z) => z.value == widget.order.billing.state) ? widget.order.billing.state
         : regions.first.value;
   }
@@ -77,6 +77,7 @@ Widget buildListView(BuildContext context, AsyncSnapshot<CheckoutFormModel> snap
                   if (value.isEmpty) {
                     return "please enter firstname";
                   }
+                  return null;
                 },
                 onSaved: (val) =>
                     setState(() =>widget.order.billing.firstName = val),
@@ -88,6 +89,7 @@ Widget buildListView(BuildContext context, AsyncSnapshot<CheckoutFormModel> snap
                   if (value.isEmpty) {
                     return "please enter last name";
                   }
+                  return null;
                 },
                 onSaved: (val) =>
                     setState(() =>widget.order.billing.lastName = val),
@@ -139,6 +141,7 @@ Widget buildListView(BuildContext context, AsyncSnapshot<CheckoutFormModel> snap
                   if (value.isEmpty) {
                     return "Please enter email";
                   }
+                  return null;
                 },
                 onSaved: (val) =>
                     setState(() => widget.order.billing.email = val),
@@ -172,12 +175,12 @@ Widget buildListView(BuildContext context, AsyncSnapshot<CheckoutFormModel> snap
                     .map<DropdownMenuItem<String>>(
                         (value) {
                       return DropdownMenuItem<String>(
-                        value: value.value != null ? value.value : '',
+                        value: value.value ?? '',
                         child: Text(parseHtmlString(value.label)),
                       );
                     }).toList(),
               ),
-              (regions != null  && regions.length != 0) ? Column(
+              (regions.isNotEmpty) ? Column(
                 children: <Widget>[
                   SizedBox(height: 20,),
                   DropdownButton<String>(
@@ -201,7 +204,7 @@ Widget buildListView(BuildContext context, AsyncSnapshot<CheckoutFormModel> snap
                         .map<DropdownMenuItem<String>>(
                             (value) {
                           return DropdownMenuItem<String>(
-                            value: value.value != null ? value.value : '',
+                            value: value.value ?? '',
                             child: Text(parseHtmlString(value.label)),
                           );
                         }).toList(),
@@ -215,6 +218,7 @@ Widget buildListView(BuildContext context, AsyncSnapshot<CheckoutFormModel> snap
                     if (value.isEmpty) {
                       return "Please Enter State";
                     }
+                    return null;
                   },
                   onSaved: (val) => setState(() => widget.vendorBloc.formData['billing_state'] = val),
                 ),
@@ -292,12 +296,12 @@ Widget buildListView(BuildContext context, AsyncSnapshot<CheckoutFormModel> snap
                     .map<DropdownMenuItem<String>>(
                         (value) {
                       return DropdownMenuItem<String>(
-                        value: value.value != null ? value.value : '',
+                        value: value.value ?? '',
                         child: Text(parseHtmlString(value.label)),
                       );
                     }).toList(),
               ),
-              (regions != null && regions.isNotEmpty) ? Column(
+              (regions.isNotEmpty) ? Column(
                 children: <Widget>[
                   SizedBox(height: 20,),
                   DropdownButton<String>(
@@ -321,7 +325,7 @@ Widget buildListView(BuildContext context, AsyncSnapshot<CheckoutFormModel> snap
                         .map<DropdownMenuItem<String>>(
                             (value) {
                           return DropdownMenuItem<String>(
-                            value: value.value != null ? value.value : '',
+                            value: value.value ?? '',
                             child: Text(parseHtmlString(value.label)),
                           );
                         }).toList(),
@@ -336,6 +340,7 @@ Widget buildListView(BuildContext context, AsyncSnapshot<CheckoutFormModel> snap
                     if (value.isEmpty) {
                       return "Please Enter State";
                     }
+                    return null;
                   },
                   onSaved: (val) => setState(() =>
                   widget.vendorBloc.formData['billing_state'] = val),

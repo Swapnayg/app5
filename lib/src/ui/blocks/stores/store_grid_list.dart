@@ -10,7 +10,7 @@ import '../hex_color.dart';
 
 class StoreGridList extends StatefulWidget {
   final Block block;
-  StoreGridList({Key key, this.block}) : super(key: key);
+  const StoreGridList({Key key, this.block}) : super(key: key);
   @override
   _StoreGridListState createState() => _StoreGridListState();
 }
@@ -66,12 +66,12 @@ class _StoreGridListState extends State<StoreGridList> {
                         child: widget.block.stores[index].banner != null ? CachedNetworkImage(
                           imageUrl: widget.block.stores[index].banner,
                           imageBuilder: (context, imageProvider) => Ink.image(
+                            image: imageProvider,
+                            fit: BoxFit.cover,
                             child: InkWell(
                               splashColor: HexColor(widget.block.bgColor).withOpacity(0.1),
                               onTap: () => onStoreClick(widget.block.stores[index]),
                             ),
-                            image: imageProvider,
-                            fit: BoxFit.cover,
                           ),
                           placeholder: (context, url) =>
                               Container(color: Colors.white),
@@ -79,14 +79,14 @@ class _StoreGridListState extends State<StoreGridList> {
                         ) : Container(color: Colors.black12),
                       ),
                       SizedBox(height: 10.0),
-                      new Padding(
+                      Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                        child: new Text(
+                        child: Text(
                           parseHtmlString(widget.block.stores[index].name),
                           maxLines: 2,
                           textAlign: TextAlign.center,
                           overflow: TextOverflow.ellipsis,
-                          style: Theme.of(context).textTheme.bodyText2.copyWith(
+                          style: Theme.of(context).textTheme.bodyMedium.copyWith(
                             fontSize: 12
                           ),
                         ),
@@ -114,7 +114,7 @@ class _StoreGridListState extends State<StoreGridList> {
 
 class StoreStadiumGridList extends StatefulWidget {
   final Block block;
-  StoreStadiumGridList({Key key, this.block}) : super(key: key);
+  const StoreStadiumGridList({Key key, this.block}) : super(key: key);
   @override
   _StoreStadiumGridListState createState() => _StoreStadiumGridListState();
 }
@@ -163,13 +163,13 @@ class _StoreStadiumGridListState extends State<StoreStadiumGridList> {
                       child: widget.block.stores[index].banner != null ? CachedNetworkImage(
                         imageUrl: widget.block.stores[index].banner,
                         imageBuilder: (context, imageProvider) => Ink.image(
+                          image: imageProvider,
+                          fit: BoxFit.cover,
                           child: InkWell(
                             splashColor: HexColor(widget.block.bgColor).withOpacity(0.1),
                             onTap: () => onStoreClick(widget.block.stores[index]),
 
                           ),
-                          image: imageProvider,
-                          fit: BoxFit.cover,
                         ),
                         placeholder: (context, url) =>
                             Container(color: Colors.white),
@@ -178,9 +178,9 @@ class _StoreStadiumGridListState extends State<StoreStadiumGridList> {
                     ),
                   ),
                 ),
-                new Padding(
+                Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
-                  child: new Text(
+                  child: Text(
                     parseHtmlString(widget.block.stores[index].name),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,

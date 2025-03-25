@@ -6,7 +6,7 @@ import 'variations_products.dart';
 
 class AddButtonDetail extends StatefulWidget {
 
-  AddButtonDetail({
+  const AddButtonDetail({
     Key key,
     this.addonFormKey,
     this.addOnsFormData,
@@ -29,7 +29,7 @@ class _AddButtonDetailState extends State<AddButtonDetail> {
   
   @override
   Widget build(BuildContext context) {
-    if(getQty() != 0 || isLoading)
+    if(getQty() != 0 || isLoading) {
       return Container(
         color: Theme.of(context).buttonTheme.colorScheme.primary,
         child: SizedBox(
@@ -44,21 +44,23 @@ class _AddButtonDetailState extends State<AddButtonDetail> {
                 onPressed: () {
                   if(widget.product.type == 'variable' || widget.product.type == 'grouped') {
                     _bottomSheet(context);
-                  } else decreaseQty();
+                  } else {
+                    decreaseQty();
+                  }
                 },
               ),
               isLoading ? SizedBox(
+                height: 20.0,
+                width: 20.0,
                 child: Theme(
                   data: Theme.of(context).copyWith(
                     accentColor: Theme.of(context).buttonTheme.colorScheme.onPrimary
                   ),
                     child: CircularProgressIndicator(strokeWidth: 2)
                 ),
-                height: 20.0,
-                width: 20.0,
               ) :  SizedBox(
                 width: 20.0,
-                child: Text(getQty().toString(), textAlign: TextAlign.center, style: Theme.of(context).textTheme.bodyText1.copyWith(
+                child: Text(getQty().toString(), textAlign: TextAlign.center, style: Theme.of(context).textTheme.bodyLarge.copyWith(
                   color:Theme.of(context).buttonTheme.colorScheme.onPrimary
                 ),),
               ),
@@ -68,14 +70,17 @@ class _AddButtonDetailState extends State<AddButtonDetail> {
                 onPressed: () {
                   if(widget.product.type == 'variable' || widget.product.type == 'grouped') {
                     _bottomSheet(context);
-                  } else increaseQty();
+                  } else {
+                    increaseQty();
+                  }
                 },
               ),
             ],
           ),
         ),
       );
-    else return SizedBox(
+    } else {
+      return SizedBox(
       width: MediaQuery.of(context).size.width - 70,
       height: 55,
       child: RaisedButton(
@@ -96,14 +101,15 @@ class _AddButtonDetailState extends State<AddButtonDetail> {
         },
       ),
     );
+    }
   }
 
   addToCart(BuildContext context) async {
-    var data = new Map<String, dynamic>();
+    var data = <String, dynamic>{};
     data['product_id'] = widget.product.id.toString();
     data['quantity'] = '1';
 
-    if(widget.addonFormKey != null && widget.addonFormKey.currentState.validate()) {
+    if(widget.addonFormKey.currentState.validate()) {
       widget.addonFormKey.currentState.save();
       data.addAll(widget.addOnsFormData);
     }
@@ -117,7 +123,7 @@ class _AddButtonDetailState extends State<AddButtonDetail> {
   }
 
   decreaseQty() async {
-    if (widget.model.shoppingCart?.cartContents != null) {
+    if (widget.model.shoppingCart.cartContents != null) {
       if (widget.model.shoppingCart.cartContents
           .any((cartContent) => cartContent.productId == widget.product.id)) {
         final cartContent = widget.model.shoppingCart.cartContents
@@ -134,7 +140,7 @@ class _AddButtonDetailState extends State<AddButtonDetail> {
   }
 
   increaseQty() async {
-    if (widget.model.shoppingCart?.cartContents != null) {
+    if (widget.model.shoppingCart.cartContents != null) {
       if (widget.model.shoppingCart.cartContents
           .any((cartContent) => cartContent.productId == widget.product.id)) {
         final cartContent = widget.model.shoppingCart.cartContents
@@ -154,12 +160,16 @@ class _AddButtonDetailState extends State<AddButtonDetail> {
     var count = 0;
     if(widget.model.shoppingCart.cartContents.any((element) => element.productId == widget.product.id)) {
       if(widget.product.type == 'variable') {
-        widget.model.shoppingCart.cartContents.where((variation) => variation.productId == widget.product.id).toList().forEach((e) => {
-          count = count + e.quantity
+        widget.model.shoppingCart.cartContents.where((variation) => variation.productId == widget.product.id).toList().forEach((e) {
+          count = count + e.quantity;
         });
         return count;
-      } else return widget.model.shoppingCart.cartContents.firstWhere((element) => element.productId == widget.product.id).quantity;
-    } else return count;
+      } else {
+        return widget.model.shoppingCart.cartContents.firstWhere((element) => element.productId == widget.product.id).quantity;
+      }
+    } else {
+      return count;
+    }
   }
 
   void _bottomSheet(BuildContext context) {
@@ -178,12 +188,12 @@ class _AddButtonDetailState extends State<AddButtonDetail> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Container(
+                      SizedBox(
                         width: MediaQuery.of(context).size.width - 80,
                         child: Text(widget.product.name,
                           overflow: TextOverflow.ellipsis,
                           maxLines: 2,
-                          style: Theme.of(context).textTheme.bodyText1,
+                          style: Theme.of(context).textTheme.bodyLarge,
                         ),
                       ),
                       IconButton(
@@ -201,7 +211,7 @@ class _AddButtonDetailState extends State<AddButtonDetail> {
                         return VariationProduct(id: widget.product.id, variation: widget.product.availableVariations[Index], addOnsFormData: widget.addOnsFormData, addonFormKey: widget.addonFormKey,);
                       }
                   ),
-                ) else widget.product.children.length > 0 ? Expanded(
+                ) else widget.product.children.isNotEmpty ? Expanded(
                   child: ListView.builder
                     (
                       itemCount: widget.product.children.length,

@@ -36,9 +36,9 @@ class _VendorDetailsState extends State<VendorDetails>
   var _isVisible;
  // TabController _tabController;
 
-  ScrollController _homeScrollController = new ScrollController();
-  ScrollController _allProductsScrollController = new ScrollController();
-  ScrollController _vendorDetailScrollController = new ScrollController();
+  final ScrollController _homeScrollController = ScrollController();
+  final ScrollController _allProductsScrollController = ScrollController();
+  final ScrollController _vendorDetailScrollController = ScrollController();
   AppStateModel appStateModel = AppStateModel();
   final apiProvider = ApiProvider();
 
@@ -96,7 +96,7 @@ class _VendorDetailsState extends State<VendorDetails>
   }
 
   List<Widget> buildLisOfBlocks(AsyncSnapshot<List<Product>> snapshot) {
-    List<Widget> list = new List<Widget>();
+    List<Widget> list = List<Widget>();
 
     if (snapshot.data != null) {
       list.add(ProductGrid(products: snapshot.data));
@@ -105,7 +105,7 @@ class _VendorDetailsState extends State<VendorDetails>
           sliver: SliverList(
               delegate: SliverChildListDelegate([
                 widget.vendorProductsBloc.hasMoreItems
-                    ? Container(
+                    ? SizedBox(
                     height: 60,
                     child: Center(child: CircularProgressIndicator()))
                     : Container()

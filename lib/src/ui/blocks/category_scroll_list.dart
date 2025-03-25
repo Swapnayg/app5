@@ -13,7 +13,7 @@ class CategoryScrollList extends StatefulWidget {
   final Block block;
   final List<Category> categories;
   final Function onCategoryClick;
-  CategoryScrollList({Key key, this.block, this.categories, this.onCategoryClick}) : super(key: key);
+  const CategoryScrollList({Key key, this.block, this.categories, this.onCategoryClick}) : super(key: key);
   @override
   _CategoryScrollListState createState() => _CategoryScrollListState();
 }
@@ -97,12 +97,12 @@ class _CategoryScrollListState extends State<CategoryScrollList> {
                                             child: categories[index].image != null ? CachedNetworkImage(
                                               imageUrl: categories[index].image,
                                               imageBuilder: (context, imageProvider) => Ink.image(
+                                                image: imageProvider,
+                                                fit: BoxFit.cover,
                                                 child: InkWell(
                                                   splashColor: HexColor(widget.block.bgColor).withOpacity(0.1),
                                                   onTap: () => widget.onCategoryClick(categories[index], widget.categories),
                                                 ),
-                                                image: imageProvider,
-                                                fit: BoxFit.cover,
                                               ),
                                               placeholder: (context, url) =>
                                                   Container(color: HexColor(widget.block.bgColor).withOpacity(0.5)),
@@ -111,12 +111,12 @@ class _CategoryScrollListState extends State<CategoryScrollList> {
                                         ),
                                         Expanded(
                                           child: Center(
-                                            child: new Text(
+                                            child: Text(
                                               parseHtmlString(categories[index].name),
                                               maxLines: 2,
                                               textAlign: TextAlign.center,
                                               overflow: TextOverflow.ellipsis,
-                                              style: Theme.of(context).textTheme.bodyText2.copyWith(
+                                              style: Theme.of(context).textTheme.bodyMedium.copyWith(
                                                   fontSize: 12
                                               ),
                                             ),
@@ -140,7 +140,7 @@ class CategoryScrollStadiumList extends StatefulWidget {
   final Block block;
   final List<Category> categories;
   final Function onCategoryClick;
-  CategoryScrollStadiumList({Key key, this.block, this.categories, this.onCategoryClick}) : super(key: key);
+  const CategoryScrollStadiumList({Key key, this.block, this.categories, this.onCategoryClick}) : super(key: key);
   @override
   _CategoryScrollStadiumListState createState() => _CategoryScrollStadiumListState();
 }
@@ -219,12 +219,12 @@ class _CategoryScrollStadiumListState extends State<CategoryScrollStadiumList> {
                                                 child: categories[index].image != null ? CachedNetworkImage(
                                                   imageUrl: categories[index].image,
                                                   imageBuilder: (context, imageProvider) => Ink.image(
+                                                    image: imageProvider,
+                                                    fit: BoxFit.cover,
                                                     child: InkWell(
                                                       splashColor: HexColor(widget.block.bgColor).withOpacity(0.1),
                                                       onTap: () => widget.onCategoryClick(categories[index], widget.categories),
                                                     ),
-                                                    image: imageProvider,
-                                                    fit: BoxFit.cover,
                                                   ),
                                                   placeholder: (context, url) =>
                                                       Container(color: HexColor(widget.block.bgColor).withOpacity(0.5)),
@@ -236,12 +236,12 @@ class _CategoryScrollStadiumListState extends State<CategoryScrollStadiumList> {
                                       )),
                                   Padding(
                                     padding: const EdgeInsets.all(8.0),
-                                    child: new Text(
+                                    child: Text(
                                       parseHtmlString(categories[index].name),
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
                                       textAlign: TextAlign.center,
-                                      style: Theme.of(context).textTheme.bodyText2,
+                                      style: Theme.of(context).textTheme.bodyMedium,
                                     ),
                                   ),
                                 ],

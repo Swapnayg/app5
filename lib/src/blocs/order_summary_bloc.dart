@@ -31,6 +31,6 @@ class OrderSummaryBloc {
   }
 
   Future<void> thankYou(Order order) async {
-    final response = await apiProvider.get('/checkout/order-received/'+ order.id.toString() +'/?key=' + order.orderKey);
+    final response = await apiProvider.get('/checkout/order-received/${order.id}/?key=${order.orderKey}');
   }
 }

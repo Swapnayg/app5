@@ -150,9 +150,10 @@ class NetworkToFileImage extends ImageProvider<NetworkToFileImage> {
       request.headers.add(name, value);
     });
     final HttpClientResponse response = await request.close();
-    if (response.statusCode != HttpStatus.ok)
+    if (response.statusCode != HttpStatus.ok) {
       throw NetworkImageLoadException(
           statusCode: response.statusCode, uri: resolved);
+    }
 
     final Uint8List bytes = await consolidateHttpClientResponseBytes(
       response,

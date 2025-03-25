@@ -19,8 +19,8 @@ class Search extends StatefulWidget {
 
 class _SearchState extends State<Search> {
 
-  ScrollController _scrollController = new ScrollController();
-  TextEditingController inputController = new TextEditingController();
+  final ScrollController _scrollController = ScrollController();
+  TextEditingController inputController = TextEditingController();
   final appStateModel = AppStateModel();
 
   Timer _debounce;
@@ -38,7 +38,7 @@ class _SearchState extends State<Search> {
   }
 
   _onSearchChanged() {
-    if (_debounce?.isActive ?? false) _debounce.cancel();
+    if (_debounce.isActive ?? false) _debounce.cancel();
     _debounce = Timer(const Duration(milliseconds: 300), () {
       if(inputController.text.isNotEmpty) {
         widget.searchBloc.fetchSearchResults(inputController.text);
@@ -99,7 +99,7 @@ class _SearchState extends State<Search> {
                           setState(() {});
                           },
                           child: Icon(FlutterIcons.ios_close_ion, size: 16, color: Theme.of(context).hintColor,)
-                      ) : Container(
+                      ) : SizedBox(
                         width: 4,
                         height: 4,
                       ),
@@ -114,7 +114,7 @@ class _SearchState extends State<Search> {
             Container(
               child: InkWell(
                 onTap: Navigator.of(context).pop,
-                child: Text(appStateModel.blocks.localeText.cancel, style: Theme.of(context).primaryTextTheme.bodyText2.copyWith(
+                child: Text(appStateModel.blocks.localeText.cancel, style: Theme.of(context).primaryTextTheme.bodyMedium.copyWith(
                   color: Theme.of(context).hintColor,//Theme.of(context).primaryIconTheme.color,//Theme.of(context).hintColor,
                 )),
               ),

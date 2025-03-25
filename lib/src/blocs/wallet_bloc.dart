@@ -5,7 +5,7 @@ import './../resources/api_provider.dart';
 
 class WalletBloc {
   List<WalletModel> transaction;
-  var filter = new Map<String, dynamic>();
+  var filter = <String, dynamic>{};
   int page = 1;
   bool hasMoreItems = true;
 
@@ -34,7 +34,7 @@ class WalletBloc {
       if (response.statusCode == 200) {
         List<WalletModel> moreData = walletModelFromJson(response.body);
         transaction.addAll(moreData);
-        hasMoreItems = moreData.length == 0;
+        hasMoreItems = moreData.isEmpty;
       } else {
         throw Exception('Failed to load wallet');
       }

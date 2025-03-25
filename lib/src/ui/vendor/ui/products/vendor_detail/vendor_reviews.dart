@@ -20,7 +20,7 @@ class VendorReviewsList extends StatefulWidget {
 
 class _VendorReviewsListState extends State<VendorReviewsList> {
 
-  ScrollController _reviewScrollController = new ScrollController();
+  final ScrollController _reviewScrollController = ScrollController();
   AppStateModel appStateModel = AppStateModel();
   @override
   initState() {
@@ -56,10 +56,10 @@ class _VendorReviewsListState extends State<VendorReviewsList> {
   }
 
   buildList(List<VendorReviews> reviews, BuildContext context) {
-    List<Widget> list = new List<Widget>();
+    List<Widget> list = List<Widget>();
     list.add(writeReviewTile());
     list.add(buildReviewsList(reviews, context));
-    if(reviews.length < 10);
+    if(reviews.length < 10) {}
     return list;
   }
 
@@ -123,7 +123,7 @@ class _VendorReviewsListState extends State<VendorReviewsList> {
                       Text(timeago.format(comment.created),
                           style: TextStyle(
                               fontSize: 12.0,
-                              color: Theme.of(context).textTheme.caption.color))
+                              color: Theme.of(context).textTheme.bodySmall.color))
                     ]),
               ),
             ],

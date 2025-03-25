@@ -9,6 +9,8 @@ import '../../../color_override.dart';
 import 'otp_verification.dart';
 
 class PhoneNumber extends StatefulWidget {
+  const PhoneNumber({super.key});
+
   @override
   _PhoneNumberState createState() => _PhoneNumberState();
 }
@@ -19,7 +21,7 @@ class _PhoneNumberState extends State<PhoneNumber> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   String verificationId;
   final appStateModel = AppStateModel();
-  TextEditingController phoneNumberController = new TextEditingController();
+  TextEditingController phoneNumberController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   var isLoading = false;
 
@@ -74,7 +76,7 @@ class _PhoneNumberState extends State<PhoneNumber> {
                           alignLeft: false,
                         ),
                         SizedBox(width: 10),
-                        Container(
+                        SizedBox(
                           width: MediaQuery.of(context).size.width - 170,
                           child: TextFormField(
                             obscureText: false,
@@ -188,7 +190,7 @@ class _PhoneNumberState extends State<PhoneNumber> {
     try {
       await _auth.signInWithCredential(phoneAuthCredential);
       //Wordpress Login user with
-    } on FirebaseAuthException catch (e) {
+    } on FirebaseAuthException {
       showSnackBarError(context, appStateModel.blocks.localeText.inValidCode);
     }
     setState(() {
@@ -199,11 +201,11 @@ class _PhoneNumberState extends State<PhoneNumber> {
   handlePhoneNumberError(FirebaseAuthException error, BuildContext context) {
     switch (error.code) {
       case 'TOO_LONG':
-        FocusScope.of(context).requestFocus(new FocusNode());
+        FocusScope.of(context).requestFocus(FocusNode());
         showSnackBarError(context, appStateModel.blocks.localeText.inValidNumber);
         break;
       case 'TOO_SHORT':
-        FocusScope.of(context).requestFocus(new FocusNode());
+        FocusScope.of(context).requestFocus(FocusNode());
         showSnackBarError(context, appStateModel.blocks.localeText.inValidNumber);
         Navigator.of(context).pop();
         break;

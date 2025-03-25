@@ -73,21 +73,21 @@ class ProductItem extends StatelessWidget {
         : screenWidth ~/ _minWidthPerColumn;
 
     double detailsWidth = (screenWidth / crossAxisCount) - 160;
-    if ((product.salePrice != null && product.salePrice != 0)) {
+    if ((product.salePrice != 0)) {
       percentOff = ((((product.regularPrice - product.salePrice) /
           product.regularPrice *
           100))
           .round());
     }
     bool onSale = false;
-    if (product.regularPrice == null || product.regularPrice.isNaN) {
+    if (product.regularPrice.isNaN) {
       product.regularPrice = product.price;
     }
-    if (product.salePrice != null && product.salePrice != 0) {
+    if (product.salePrice != 0) {
       onSale = true;
     }
     return InkWell(
-      splashColor: Theme.of(context).accentColor.withOpacity(0.1),
+      splashColor: Theme.of(context).colorScheme.secondary.withOpacity(0.1),
       onTap: () {
         onProductClick(product);
       },
@@ -150,14 +150,14 @@ class ProductItem extends StatelessWidget {
                       clipBehavior: Clip.antiAlias,
                       elevation: 0.0,
                       margin: EdgeInsets.all(0.0),
-                      color: Theme.of(context).accentColor,
+                      color: Theme.of(context).colorScheme.secondary,
                       child: percentOff != 0
                           ? Center(
                         child: Container(
                           padding: EdgeInsets.fromLTRB(
                               8.0, 4.0, 8.0, 4.0),
                           child: Text(
-                            '-' + percentOff.toString() + '%',
+                            '-$percentOff%',
                             style: Theme.of(context)
                                 .accentTextTheme
                                 .bodyText2
@@ -182,8 +182,7 @@ class ProductItem extends StatelessWidget {
               width: detailsWidth,
               height: 150,
               child: Stack(
-                overflow: Overflow.visible,
-                children:  [
+                clipBehavior: Clip.none, children:  [
                   Padding(
                     padding: const EdgeInsets.fromLTRB(10.0, 8.0, 10, 4.0),
                     child: Column(
@@ -205,7 +204,7 @@ class ProductItem extends StatelessWidget {
                             style: TextStyle(
                               fontFamily: 'Lexend_Deca',
                               fontSize: 12,
-                              color: Theme.of(context).brightness == Brightness.light ? Theme.of(context).textTheme.caption.color: Colors.grey.withOpacity(.9) ,
+                              color: Theme.of(context).brightness == Brightness.light ? Theme.of(context).textTheme.bodySmall.color: Colors.grey.withOpacity(.9) ,
                             )),
                         SizedBox(height: 6.0),
                         Column(
@@ -218,7 +217,7 @@ class ProductItem extends StatelessWidget {
                                     product.formattedSalesPrice)
                                     : parseHtmlString(product.formattedPrice),
                                 style:
-                                Theme.of(context).textTheme.body1.copyWith(
+                                Theme.of(context).textTheme.bodyText2.copyWith(
                                   fontSize: 18,
                                     fontWeight: FontWeight.w900,
 
@@ -228,7 +227,7 @@ class ProductItem extends StatelessWidget {
                                 ? SizedBox(width: 6.0)
                                 : SizedBox(width: 0.0),
                            Text(
-                                (onSale && product.formattedPrice != null &&
+                                (onSale &&
                                     product.formattedPrice.isNotEmpty)
                                     ? parseHtmlString(product.formattedPrice)
                                     : '',

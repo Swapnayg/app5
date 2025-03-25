@@ -13,7 +13,7 @@ class FilterProduct3 extends StatefulWidget {
 }
 
 class _FilterProduct3State extends State<FilterProduct3> {
-  var filter = new Map<String, dynamic>();
+  var filter = <String, dynamic>{};
   final appStateModel = AppStateModel();
 
   @override
@@ -48,11 +48,11 @@ class _FilterProduct3State extends State<FilterProduct3> {
   }
 
   buildFilterList(AsyncSnapshot<List<AttributesModel>> snapshot) {
-    List<Widget> list = new List<Widget>();
+    List<Widget> list = List<Widget>();
 
     list.add(_priceFilter());
     for (var i = 0; i < snapshot.data.length; i++) {
-      if (snapshot.data[i].terms.length != 0) {
+      if (snapshot.data[i].terms.isNotEmpty) {
         list.add(buildFilter(snapshot, i));
       }
     }
@@ -98,8 +98,8 @@ class _FilterProduct3State extends State<FilterProduct3> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   Text(
-                      '${formatter.format(appStateModel.selectedRange.start)}'),
-                  Text('${formatter.format(appStateModel.selectedRange.end)}'),
+                      formatter.format(appStateModel.selectedRange.start)),
+                  Text(formatter.format(appStateModel.selectedRange.end)),
                 ],
               ),
             ),
@@ -110,8 +110,8 @@ class _FilterProduct3State extends State<FilterProduct3> {
                   divisions: appStateModel.maxPrice.toInt(),
                   values: appStateModel.selectedRange,
                   labels: RangeLabels(
-                      '${formatter.format(appStateModel.selectedRange.start)}',
-                      '${formatter.format(appStateModel.selectedRange.end)}'),
+                      formatter.format(appStateModel.selectedRange.start),
+                      formatter.format(appStateModel.selectedRange.end)),
                   onChanged: (RangeValues newRange) {
                     appStateModel.updateRangeValue(newRange);
                     setState(() {

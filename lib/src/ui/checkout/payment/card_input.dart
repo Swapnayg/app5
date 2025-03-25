@@ -11,14 +11,14 @@ class CardInput extends StatefulWidget {
   final PaymentCard card;
   final ValueChanged<PaymentCard> onValidated;
 
-  CardInput({@required this.text, @required this.card, this.onValidated});
+  const CardInput({super.key, @required this.text, @required this.card, this.onValidated});
 
   @override
   _CardInputState createState() => _CardInputState(card);
 }
 
 class _CardInputState extends State<CardInput> {
-  var _formKey = new GlobalKey<FormState>();
+  final _formKey = GlobalKey<FormState>();
   final PaymentCard _card;
   var _autoValidate = false;
   TextEditingController numberController;
@@ -29,7 +29,7 @@ class _CardInputState extends State<CardInput> {
   @override
   void initState() {
     super.initState();
-    numberController = new TextEditingController();
+    numberController = TextEditingController();
     numberController.addListener(_getCardTypeFrmNumber);
     numberController.text =
     _card != null && _card.number != null ? _card.number : null;
@@ -44,27 +44,27 @@ class _CardInputState extends State<CardInput> {
 
   @override
   Widget build(BuildContext context) {
-    return new Form(
+    return Form(
         autovalidate: _autoValidate,
         key: _formKey,
-        child: new Column(
+        child: Column(
           children: <Widget>[
-            new NumberField(
+            NumberField(
               controller: numberController,
               card: _card,
               onSaved: (String value) =>
               _card.number = CardUtils.getCleanedNumber(value),
               suffix: getCardIcon(),
             ),
-            new SizedBox(
+            SizedBox(
               height: 15.0,
             ),
-            new Row(
+            Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-                new Flexible(
-                    child: new DateField(
+                Flexible(
+                    child: DateField(
                       card: _card,
                       onSaved: (value) {
                         List<int> expiryDate = CardUtils.getExpiryDate(value);
@@ -72,9 +72,9 @@ class _CardInputState extends State<CardInput> {
                         _card.expiryYear = expiryDate[1];
                       },
                     )),
-                new SizedBox(width: 15.0),
-                new Flexible(
-                    child: new CVCField(
+                SizedBox(width: 15.0),
+                Flexible(
+                    child: CVCField(
                       card: _card,
                       onSaved: (value) {
                         _card.cvc = CardUtils.getCleanedNumber(value);
@@ -82,10 +82,10 @@ class _CardInputState extends State<CardInput> {
                     )),
               ],
             ),
-            new SizedBox(
+            SizedBox(
               height: 20.0,
             ),
-            new AccentButton(
+            AccentButton(
                 onPressed: _validateInputs,
                 text: widget.text,
                 showProgress: _validated),
@@ -97,12 +97,12 @@ class _CardInputState extends State<CardInput> {
     String input = CardUtils.getCleanedNumber(numberController.text);
     String cardType = _card.getTypeForIIN(input);
     setState(() {
-      this._card.type = cardType;
+      _card.type = cardType;
     });
   }
 
   void _validateInputs() {
-    FocusScope.of(context).requestFocus(new FocusNode());
+    FocusScope.of(context).requestFocus(FocusNode());
     final FormState form = _formKey.currentState;
     if (form.validate()) {
       form.save();
@@ -117,7 +117,7 @@ class _CardInputState extends State<CardInput> {
 
   Widget getCardIcon() {
     String img = "";
-    var defaultIcon = new Icon(
+    var defaultIcon = Icon(
       Icons.credit_card,
       size: 15.0,
       color: Colors.grey[600],
@@ -149,7 +149,7 @@ class _CardInputState extends State<CardInput> {
     }
     Widget widget;
     if (img.isNotEmpty) {
-      widget = new Image.asset('assets/images/$img',
+      widget = Image.asset('assets/images/$img',
           height: 15.0, width: 30.0, package: 'flutter_paystack');
     } else {
       widget = defaultIcon;

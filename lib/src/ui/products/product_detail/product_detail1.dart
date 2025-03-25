@@ -36,18 +36,18 @@ class ProductDetail1 extends StatefulWidget {
   final vendorDetailsBloc = VendorDetailStateModel();
 
   final appStateModel = AppStateModel();
-  ProductDetail1({this.product});
+  ProductDetail1({super.key, this.product});
 
   @override
   _ProductDetail1State createState() => _ProductDetail1State();
 }
 
 class _ProductDetail1State extends State<ProductDetail1> {
-  Map<String, dynamic> addOnsFormData = Map<String, dynamic>();
+  Map<String, dynamic> addOnsFormData = <String, dynamic>{};
   final addonFormKey = GlobalKey<FormState>();
 
   var saved;
-  ScrollController _scrollController = new ScrollController();
+  final ScrollController _scrollController = ScrollController();
 
   List<ReviewModel> reviews;
   bool _visible = false;
@@ -74,9 +74,6 @@ class _ProductDetail1State extends State<ProductDetail1> {
   void initState() {
     super.initState();
     _scrollController.addListener(_scrollListener);
-    if (widget.product.description == null) {
-      getProduct();
-    }
     widget.productDetailBloc.getProductsDetails(widget.product.id);
     widget.productDetailBloc.getReviews(widget.product.id);
   }
@@ -85,40 +82,20 @@ class _ProductDetail1State extends State<ProductDetail1> {
     setState(() {
       addingToCart = true;
     });
-    var data = new Map<String, dynamic>();
+    var data = <String, dynamic>{};
     data['product_id'] = widget.product.id.toString();
     data['quantity'] = _quantity.toString();
     var doAdd = true;
-    if (widget.product.type == 'variable' &&
-        widget.product.variationOptions != null) {
+    if (widget.product.type == 'variable') {
       for (var i = 0; i < widget.product.variationOptions.length; i++) {
-        if (widget.product.variationOptions[i].selected != null) {
-          data['variation[attribute_' +
-              widget.product.variationOptions[i].attribute +
-              ']'] = widget.product.variationOptions[i].selected;
-        } else if (widget.product.variationOptions[i].selected == null &&
-            widget.product.variationOptions[i].options.length != 0) {
-          Fluttertoast.showToast(
-              msg: widget.appStateModel.blocks.localeText.select +
-                  ' ' +
-                  widget.product.variationOptions[i].name);
-          doAdd = false;
-          break;
-        } else if (widget.product.variationOptions[i].selected == null &&
-            widget.product.variationOptions[i].options.length == 0) {
-          setState(() {
-            widget.product.stockStatus = 'outofstock';
-          });
-          doAdd = false;
-          break;
+        data['variation[attribute_' +
+            widget.product.variationOptions[i].attribute +
+            ']'] = widget.product.variationOptions[i].selected;
+            }
+      data['variation_id'] = widget.product.variationId;
         }
-      }
-      if (widget.product.variationId != null) {
-        data['variation_id'] = widget.product.variationId;
-      }
-    }
     if (doAdd) {
-      if (addonFormKey != null && addonFormKey.currentState.validate()) {
+      if (addonFormKey.currentState.validate()) {
         addonFormKey.currentState.save();
         data.addAll(addOnsFormData);
       }
@@ -132,7 +109,7 @@ class _ProductDetail1State extends State<ProductDetail1> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomPadding: false,
+      resizeToAvoidBottomInset: false,
       body: widget.product.description != null
           ? buildBody()
           : CustomScrollView(
@@ -145,7 +122,7 @@ class _ProductDetail1State extends State<ProductDetail1> {
   }
 
   List<Widget> buildSliverList() {
-    List<Widget> list = new List<Widget>();
+    List<Widget> list = List<Widget>();
     list.add(_buildProductImages());
     list.add(buildNamePrice());
 
@@ -178,7 +155,7 @@ class _ProductDetail1State extends State<ProductDetail1> {
   Widget buildNamePrice() {
     bool onSale = false;
 
-    if (widget.product.salePrice != null && widget.product.salePrice != 0) {
+    if (widget.product.salePrice != 0) {
       onSale = true;
     }
 
@@ -266,9 +243,7 @@ class _ProductDetail1State extends State<ProductDetail1> {
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
                                   Text(
-                                    (widget.product.formattedSalesPrice !=
-                                        null &&
-                                        widget.product.formattedSalesPrice
+                                    (widget.product.formattedSalesPrice
                                             .isNotEmpty)
                                         ? parseHtmlString(widget
                                         .product.formattedSalesPrice)
@@ -282,8 +257,7 @@ class _ProductDetail1State extends State<ProductDetail1> {
                                       ? SizedBox(width: 6)
                                       : SizedBox(width: 0),
                                   Text(
-                                    (widget.product.formattedPrice != null &&
-                                        widget.product.formattedPrice
+                                    (widget.product.formattedPrice
                                             .isNotEmpty)
                                         ? parseHtmlString(
                                         widget.product.formattedPrice)
@@ -298,7 +272,7 @@ class _ProductDetail1State extends State<ProductDetail1> {
                                           ? Theme.of(context).hintColor
                                           : Theme.of(context)
                                           .textTheme
-                                          .bodyText1
+                                          .bodyLarge
                                           .color,
                                       decoration: onSale
                                           ? TextDecoration.lineThrough
@@ -403,7 +377,7 @@ class _ProductDetail1State extends State<ProductDetail1> {
                   : Colors.black,
             ),
             onPressed: () {
-              Share.share('check out product ' + widget.product.permalink);
+              Share.share('check out product ${widget.product.permalink}');
             }),
       ],
       expandedHeight: expandedAppBarHeight,
@@ -411,7 +385,7 @@ class _ProductDetail1State extends State<ProductDetail1> {
         background: Container(
             padding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
             child: InkWell(
-              onTap: () => null,
+              onTap: () {},
               child: Swiper(
                 //control: new SwiperControl(),
                 //viewportFraction: 0.8,
@@ -419,7 +393,7 @@ class _ProductDetail1State extends State<ProductDetail1> {
                 itemBuilder: (BuildContext context, int index) {
                   return InkWell(
                     splashColor: Theme.of(context).hintColor,
-                    onTap: () => null,
+                    onTap: () {},
                     child: Card(
                       margin: EdgeInsets.all(0.0),
                       shape: RoundedRectangleBorder(
@@ -430,6 +404,8 @@ class _ProductDetail1State extends State<ProductDetail1> {
                       child: CachedNetworkImage(
                         imageUrl: widget.product.images[index].src,
                         imageBuilder: (context, imageProvider) => Ink.image(
+                          image: imageProvider,
+                          fit: BoxFit.contain,
                           child: InkWell(
                             splashColor: Theme.of(context).hintColor,
                             onTap: () {
@@ -440,8 +416,6 @@ class _ProductDetail1State extends State<ProductDetail1> {
                                   }));
                             },
                           ),
-                          image: imageProvider,
-                          fit: BoxFit.contain,
                         ),
                         placeholder: (context, url) =>
                             Container(color: Colors.black12),
@@ -452,7 +426,7 @@ class _ProductDetail1State extends State<ProductDetail1> {
                   );
                 },
                 itemCount: widget.product.images.length,
-                pagination: new SwiperPagination(),
+                pagination: SwiperPagination(),
                 autoplay: true,
               ),
             )),
@@ -464,13 +438,13 @@ class _ProductDetail1State extends State<ProductDetail1> {
     return SliverPadding(
       padding: const EdgeInsets.fromLTRB(16.0, 10.0, 16.0, 10.0),
       sliver: SliverGrid(
-        gridDelegate: new SliverGridDelegateWithMaxCrossAxisExtent(
+        gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
           maxCrossAxisExtent: 80.0,
           mainAxisSpacing: 8.0,
           crossAxisSpacing: 8.0,
           childAspectRatio: 3,
         ),
-        delegate: new SliverChildBuilderDelegate(
+        delegate: SliverChildBuilderDelegate(
               (BuildContext context, int index) {
             return InkWell(
               onTap: () {
@@ -480,8 +454,8 @@ class _ProductDetail1State extends State<ProductDetail1> {
                 });
                 if (widget.product.variationOptions
                     .every((option) => option.selected != null)) {
-                  var selectedOptions = new List<String>();
-                  var matchedOptions = new List<String>();
+                  var selectedOptions = List<String>();
+                  var matchedOptions = List<String>();
                   for (var i = 0;
                   i < widget.product.variationOptions.length;
                   i++) {
@@ -491,7 +465,7 @@ class _ProductDetail1State extends State<ProductDetail1> {
                   for (var i = 0;
                   i < widget.product.availableVariations.length;
                   i++) {
-                    matchedOptions = new List<String>();
+                    matchedOptions = List<String>();
                     for (var j = 0;
                     j < widget.product.availableVariations[i].option.length;
                     j++) {
@@ -517,12 +491,13 @@ class _ProductDetail1State extends State<ProductDetail1> {
                             .product.availableVariations[i].formattedSalesPrice;
                         if (widget.product.availableVariations[i]
                             .displayRegularPrice !=
-                            widget.product.availableVariations[i].displayPrice)
+                            widget.product.availableVariations[i].displayPrice) {
                           widget.product.salePrice = widget.product
                               .availableVariations[i].displayRegularPrice
                               .toDouble();
-                        else
+                        } else {
                           widget.product.formattedSalesPrice = null;
+                        }
                       });
                       if (!widget.product.availableVariations[i].isInStock) {
                         setState(() {
@@ -545,7 +520,7 @@ class _ProductDetail1State extends State<ProductDetail1> {
                   border:
                   variationOption.selected == variationOption.options[index]
                       ? Border.all(
-                      color: Theme.of(context).accentColor, width: 2)
+                      color: Theme.of(context).colorScheme.secondary, width: 2)
                       : Border.all(color: Colors.grey, width: 2),
                   borderRadius: BorderRadius.all(Radius.circular(
                       1.0) //                 <--- border radius here
@@ -558,8 +533,8 @@ class _ProductDetail1State extends State<ProductDetail1> {
                     fontSize: 12.0,
                     color: variationOption.selected ==
                         variationOption.options[index]
-                        ? Theme.of(context).accentColor
-                        : Theme.of(context).textTheme.title.color,
+                        ? Theme.of(context).colorScheme.secondary
+                        : Theme.of(context).textTheme.headline6.color,
                   ),
                 ),
               ),
@@ -612,7 +587,7 @@ class _ProductDetail1State extends State<ProductDetail1> {
   }
 
   Future _openWhatsApp(String number) async {
-    final url = 'https://wa.me/' + number;
+    final url = 'https://wa.me/$number';
     if (await canLaunch(url)) {
       await launch(url);
     } else {
@@ -658,7 +633,7 @@ class _ProductDetail1State extends State<ProductDetail1> {
                   : Colors.black,
             ),
             onPressed: () {
-              Share.share('check out product ' + widget.product.permalink);
+              Share.share('check out product ${widget.product.permalink}');
             }),
       ],
       flexibleSpace: FlexibleSpaceBar(
@@ -692,12 +667,10 @@ class _ProductDetail1State extends State<ProductDetail1> {
   getProduct() async {
     Product product =
     await widget.productDetailBloc.getProduct(widget.product.id);
-    if (product.id != null) {
-      setState(() {
-        widget.product = product;
-      });
+    setState(() {
+      widget.product = product;
+    });
     }
-  }
 
   Widget _qSelector() {
     return Container(
@@ -707,7 +680,7 @@ class _ProductDetail1State extends State<ProductDetail1> {
         child: Row(
           children: <Widget>[
             InkWell(
-              child: Container(
+              child: SizedBox(
                 height: MediaQuery.of(context).size.height,
                 width: 70,
                 child: Stack(
@@ -748,7 +721,7 @@ class _ProductDetail1State extends State<ProductDetail1> {
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(4.0),
                                     ),
-                                    color: Theme.of(context).accentColor,
+                                    color: Theme.of(context).colorScheme.secondary,
                                     child: Container(
                                         padding: EdgeInsets.all(2),
                                         constraints: BoxConstraints(minWidth: 20.0),
@@ -762,10 +735,11 @@ class _ProductDetail1State extends State<ProductDetail1> {
                                                       .accentIconTheme
                                                       .color,
                                                   backgroundColor:
-                                                  Theme.of(context).accentColor),
+                                                  Theme.of(context).colorScheme.secondary),
                                             ))));
-                              } else
+                              } else {
                                 return Container();
+                              }
                             }),
                       ),
                     )
@@ -780,7 +754,7 @@ class _ProductDetail1State extends State<ProductDetail1> {
             ),
             ScopedModelDescendant<AppStateModel>(
                 builder: (context, child, model) {
-                  return Container(
+                  return SizedBox(
                     height: 55,
                     child: AddButtonDetail(
                       product: widget.product,
@@ -795,7 +769,7 @@ class _ProductDetail1State extends State<ProductDetail1> {
   }
 
   Widget _animContainer() {
-    TextStyle textStyle = Theme.of(context).textTheme.bodyText1;
+    TextStyle textStyle = Theme.of(context).textTheme.bodyLarge;
     return _visible
         ? AnimatedContainer(
       duration: Duration(
@@ -845,7 +819,7 @@ class _ProductDetail1State extends State<ProductDetail1> {
                         //height: 70,
                         borderSide: _quantity == 1
                             ? BorderSide(
-                            color: Theme.of(context).accentColor,
+                            color: Theme.of(context).colorScheme.secondary,
                             width: 1.5)
                             : null,
                         onPressed: () {
@@ -873,7 +847,7 @@ class _ProductDetail1State extends State<ProductDetail1> {
                         //height: 70,
                         borderSide: _quantity == 2
                             ? BorderSide(
-                            color: Theme.of(context).accentColor,
+                            color: Theme.of(context).colorScheme.secondary,
                             width: 1.5)
                             : null,
                         onPressed: () {
@@ -899,7 +873,7 @@ class _ProductDetail1State extends State<ProductDetail1> {
                       child: OutlineButton(
                         borderSide: _quantity == 3
                             ? BorderSide(
-                            color: Theme.of(context).accentColor,
+                            color: Theme.of(context).colorScheme.secondary,
                             width: 1.5)
                             : null,
                         onPressed: () {
@@ -924,7 +898,7 @@ class _ProductDetail1State extends State<ProductDetail1> {
                       child: OutlineButton(
                         borderSide: _quantity == 4
                             ? BorderSide(
-                            color: Theme.of(context).accentColor,
+                            color: Theme.of(context).colorScheme.secondary,
                             width: 1.5)
                             : null,
                         onPressed: () {
@@ -952,7 +926,7 @@ class _ProductDetail1State extends State<ProductDetail1> {
                         //height: 70,
                         borderSide: _quantity == 5
                             ? BorderSide(
-                            color: Theme.of(context).accentColor,
+                            color: Theme.of(context).colorScheme.secondary,
                             width: 1.5)
                             : null,
                         onPressed: () {
@@ -1057,7 +1031,7 @@ class _ProductDetail1State extends State<ProductDetail1> {
                               'Customer Reviews (${snapshot.data.length})',
                               style: Theme.of(context)
                                   .textTheme
-                                  .headline6
+                                  .titleLarge
                                   .copyWith(fontWeight: FontWeight.w700),
                             ),
                           ),
@@ -1072,7 +1046,7 @@ class _ProductDetail1State extends State<ProductDetail1> {
                                     widget.product.averageRating.toString(),
                                     style: Theme.of(context)
                                         .textTheme
-                                        .headline5
+                                        .headlineSmall
                                         .copyWith(
                                         fontSize: 20,
                                         fontWeight: FontWeight.w800),
@@ -1081,7 +1055,7 @@ class _ProductDetail1State extends State<ProductDetail1> {
                                         text: '/5',
                                         style: Theme.of(context)
                                             .textTheme
-                                            .subtitle1
+                                            .titleMedium
                                             .copyWith(color: Colors.grey),
                                       ),
                                     ],

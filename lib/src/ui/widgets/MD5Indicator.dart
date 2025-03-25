@@ -18,7 +18,7 @@ class MD2Indicator extends Decoration {
 
   @override
   _MD2Painter createBoxPainter([VoidCallback onChanged]) {
-    return new _MD2Painter(this, onChanged);
+    return _MD2Painter(this, onChanged);
   }
 }
 
@@ -26,12 +26,10 @@ class _MD2Painter extends BoxPainter {
   final MD2Indicator decoration;
 
   _MD2Painter(this.decoration, VoidCallback onChanged)
-      : assert(decoration != null),
-        super(onChanged);
+      : super(onChanged);
 
   @override
   void paint(Canvas canvas, Offset offset, ImageConfiguration configuration) {
-    assert(configuration != null);
     assert(configuration.size != null);
 
     Rect rect;

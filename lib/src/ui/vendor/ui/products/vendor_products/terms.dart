@@ -10,7 +10,7 @@ class AttributeOptionsPage extends StatefulWidget {
   final ProductAttribute productAttribute;
   final VendorProduct product;
 
-  AttributeOptionsPage(
+  const AttributeOptionsPage(
       {Key key,
       this.productAttribute,
       this.product,

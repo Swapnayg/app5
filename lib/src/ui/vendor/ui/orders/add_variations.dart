@@ -11,7 +11,7 @@ class AddVariations extends StatefulWidget {
   final VendorBloc vendorBloc;
   final VendorProduct product;
   final Order order;
-  AddVariations({Key key, this.product, this.vendorBloc, this.order}) : super(key: key);
+  const AddVariations({Key key, this.product, this.vendorBloc, this.order}) : super(key: key);
 
   @override
   _AddVariationsState createState() => _AddVariationsState();
@@ -19,7 +19,7 @@ class AddVariations extends StatefulWidget {
 
 
 class _AddVariationsState extends State<AddVariations> {
-  ScrollController _scrollController = new ScrollController();
+  final ScrollController _scrollController = ScrollController();
 
 
   @override
@@ -66,9 +66,9 @@ class _AddVariationsState extends State<AddVariations> {
   Widget buildListTile(BuildContext context, ProductVariation product) {
 
     var name = '';
-    product.attributes.forEach((value) {
-      name = name + ' ' + value.option;
-    });
+    for (var value in product.attributes) {
+      name = '$name ${value.option}';
+    }
 
     return VariationItem(vendorBloc: widget.vendorBloc, product: widget.product, order: widget.order);
   }
@@ -89,14 +89,14 @@ class _AddVariationsState extends State<AddVariations> {
   }
 
   buildList(AsyncSnapshot<List<ProductVariation>> snapshot) {
-    List<Widget> list = new List<Widget>();
+    List<Widget> list = List<Widget>();
     list.add(buildItemList(snapshot));
     if (snapshot.data != null) {
       list.add(SliverPadding(
           padding: EdgeInsets.all(0.0),
           sliver: SliverList(
               delegate: SliverChildListDelegate([
-                Container(
+                SizedBox(
                     height: 60,
                     child: StreamBuilder(
                         builder: (context, AsyncSnapshot<bool> snapshot) {

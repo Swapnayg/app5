@@ -27,7 +27,7 @@ import '../../../../../ui/products/products.dart';
 class VendorHome extends StatefulWidget {
   final VendorDetailStateModel vendorDetailsModel;
   final ScrollController homeScrollController;
-  VendorHome({Key key, this.vendorDetailsModel, this.homeScrollController})
+  const VendorHome({Key key, this.vendorDetailsModel, this.homeScrollController})
       : super(key: key);
 
   @override
@@ -51,7 +51,7 @@ class _VendorHomeState extends State<VendorHome> {
   @override
   Widget build(BuildContext context) {
     return RefreshIndicator(onRefresh: () async {
-      await widget.vendorDetailsModel.getDetails();
+      widget.vendorDetailsModel.getDetails();
       return;
     }, child: ScopedModelDescendant<VendorDetailStateModel>(
         builder: (context, child, model) {
@@ -72,11 +72,11 @@ class _VendorHomeState extends State<VendorHome> {
   }
 
   List<Widget> buildLisOfBlocks(VendorDetailsModel vendorDetails) {
-    List<Widget> list = new List<Widget>();
+    List<Widget> list = List<Widget>();
 
     for (var i = 0; i < vendorDetails.blocks.length; i++) {
       if (vendorDetails.blocks[i].blockType == 'banner_block' &&
-          vendorDetails.blocks[i].children.length != 0) {
+          vendorDetails.blocks[i].children.isNotEmpty) {
         if (vendorDetails.blocks[i].style == 'grid') {
           // list.add(buildGridHeader(snapshot, i));
           list.add(BannerGridList(
@@ -111,8 +111,8 @@ class _VendorHomeState extends State<VendorHome> {
 
       if (vendorDetails.blocks[i].blockType == 'product_block' &&
           vendorDetails.blocks[i].style == 'scroll' &&
-          vendorDetails.blocks[i].products.length != 0) {
-        var filter = new Map<String, dynamic>();
+          vendorDetails.blocks[i].products.isNotEmpty) {
+        var filter = Map<String, dynamic>();
         filter[vendorDetails.blocks[i].filterBy] = '1';
         list.add(ProductScroll(products: vendorDetails.blocks[i].products, context: context, title: vendorDetails.blocks[i].title, viewAllTitle: AppStateModel().blocks.localeText.viewAll, filter: filter));
       }
@@ -156,24 +156,22 @@ class _VendorHomeState extends State<VendorHome> {
       }
     }
 
-    if (vendorDetails.recentProducts != null) {
-      list.add(ProductGrid(products: vendorDetails.recentProducts));
+    list.add(ProductGrid(products: vendorDetails.recentProducts));
 
-      list.add(SliverPadding(
-          padding: EdgeInsets.all(0.0),
-          sliver: SliverList(
-              delegate: SliverChildListDelegate([
-            ScopedModelDescendant<VendorDetailStateModel>(
-                builder: (context, child, model) {
-              return model.hasMoreItems
-                  ? Container(
-                      height: 60,
-                      child: Center(child: CircularProgressIndicator()))
-                  : Container();
-            })
-          ]))));
-    }
-
+    list.add(SliverPadding(
+        padding: EdgeInsets.all(0.0),
+        sliver: SliverList(
+            delegate: SliverChildListDelegate([
+          ScopedModelDescendant<VendorDetailStateModel>(
+              builder: (context, child, model) {
+            return model.hasMoreItems
+                ? Container(
+                    height: 60,
+                    child: Center(child: CircularProgressIndicator()))
+                : Container();
+          })
+        ]))));
+  
     return list;
   }
 
@@ -197,11 +195,11 @@ class _VendorHomeState extends State<VendorHome> {
   Widget buildGridHeader(Block block, int childIndex) {
     double textAlign = _headerAlign(block.headerAlign);
     TextStyle subhead = Theme.of(context).brightness != Brightness.dark
-        ? Theme.of(context).textTheme.subtitle1.copyWith(
+        ? Theme.of(context).textTheme.titleMedium.copyWith(
             fontWeight: FontWeight.w600, color: HexColor(block.titleColor))
         : Theme.of(context)
             .textTheme
-            .subtitle1
+            .titleMedium
             .copyWith(fontWeight: FontWeight.w600);
     return textAlign != null
         ? SliverToBoxAdapter(
@@ -244,7 +242,7 @@ class _VendorHomeState extends State<VendorHome> {
     //Naviaget yo product or product list depend on type
     if (data.url.isNotEmpty) {
       if (data.description == 'category') {
-        var filter = new Map<String, dynamic>();
+        var filter = <String, dynamic>{};
         filter['id'] = data.url;
         Navigator.push(
             context,
@@ -252,7 +250,6 @@ class _VendorHomeState extends State<VendorHome> {
                 builder: (context) =>
                     ProductsWidget(filter: filter, name: data.title)));
       }
-      ;
       if (data.description == 'product') {
         Navigator.push(
             context,
@@ -264,12 +261,11 @@ class _VendorHomeState extends State<VendorHome> {
                       ),
                     )));
       }
-      ;
     }
   }
 
   onCategoryClick(Category category, List<Category> categories) {
-    var filter = new Map<String, dynamic>();
+    var filter = <String, dynamic>{};
     filter['id'] = category.id.toString();
     Navigator.push(
         context,
@@ -287,7 +283,7 @@ class _VendorHomeState extends State<VendorHome> {
   }
 
   Widget ProductOnSale({List<Product> products, String title}) {
-    if (products.length > 0) {
+    if (products.isNotEmpty) {
       return Container(
         child: SliverList(
           delegate: SliverChildListDelegate(
@@ -297,13 +293,13 @@ class _VendorHomeState extends State<VendorHome> {
                       height: 20,
                       padding: EdgeInsets.symmetric(horizontal: 18.0),
                       child: Text('On Sale',
-                          style: Theme.of(context).textTheme.bodyText1.copyWith(
+                          style: Theme.of(context).textTheme.bodyLarge.copyWith(
                               fontSize: 16, fontWeight: FontWeight.w800)))
                   : Container(),
               Container(
                   height: 310,
                   margin: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 14.0),
-                  decoration: new BoxDecoration(
+                  decoration: BoxDecoration(
                       //color: Colors.pink,
                       ),
                   child: ListView.builder(
@@ -329,7 +325,7 @@ class _VendorHomeState extends State<VendorHome> {
   }
 
   Widget ProductFeaturedGrid({List<Product> products}) {
-    if (products.length > 0) {
+    if (products.isNotEmpty) {
       return Container(
         child: SliverList(
           delegate: SliverChildListDelegate(
@@ -339,7 +335,7 @@ class _VendorHomeState extends State<VendorHome> {
                       height: 20,
                       padding: EdgeInsets.symmetric(horizontal: 18.0),
                       child: Text('Featured',
-                          style: Theme.of(context).textTheme.bodyText1.copyWith(
+                          style: Theme.of(context).textTheme.bodyLarge.copyWith(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w800,
                               )))
@@ -347,7 +343,7 @@ class _VendorHomeState extends State<VendorHome> {
               Container(
                   height: 310,
                   margin: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 14.0),
-                  decoration: new BoxDecoration(
+                  decoration: BoxDecoration(
                       //color: Colors.pink,
                       ),
                   child: ListView.builder(
@@ -377,7 +373,7 @@ class HexColor extends Color {
   static int _getColorFromHex(String hexColor) {
     hexColor = hexColor.toUpperCase().replaceAll("#", "");
     if (hexColor.length == 6) {
-      hexColor = "FF" + hexColor;
+      hexColor = "FF$hexColor";
     }
     return int.parse(hexColor, radix: 16);
   }

@@ -18,7 +18,7 @@ class FacebookLoginWidget extends StatelessWidget {
       shape: StadiumBorder(),
       margin: EdgeInsets.all(0),
       color: Color(0xFF3b5998),
-      child: Container(
+      child: SizedBox(
         height: 50,
         width: 50,
         child: IconButton(

@@ -10,7 +10,7 @@ import '../../config.dart';
 import '../color_override.dart';
 
 class TryDemo extends StatefulWidget {
-  TryDemo({Key key}) : super(key: key);
+  const TryDemo({Key key}) : super(key: key);
 
   @override
   _TryDemoState createState() => _TryDemoState();
@@ -18,7 +18,7 @@ class TryDemo extends StatefulWidget {
 
 class _TryDemoState extends State<TryDemo> {
   final _formKey = GlobalKey<FormState>();
-  TextEditingController urlController = new TextEditingController();
+  TextEditingController urlController = TextEditingController();
   final apiProvider = ApiProvider();
   Config config = Config();
   bool isLoading = false;
@@ -69,8 +69,7 @@ class _TryDemoState extends State<TryDemo> {
                             error = '';
                           });
                           final response = await http.get(
-                            Uri.parse(urlController.text +
-                                '/wp-admin/admin-ajax.php?action=mstore_flutter-keys'),
+                            Uri.parse('${urlController.text}/wp-admin/admin-ajax.php?action=mstore_flutter-keys'),
                           );
                           if (response.statusCode == 200) {
                             config.url = stripSlash(urlController.text);
@@ -100,10 +99,10 @@ class _TryDemoState extends State<TryDemo> {
                 ),
                 Text('Note - Before contine please read document clearly, install plugin and save settings',
                     style:
-                    TextStyle(color: Theme.of(context).accentColor)),
+                    TextStyle(color: Theme.of(context).colorScheme.secondary)),
                 SizedBox(height: 6.0),
                 InkWell(
-                    child: new Text('https://mstoreapp.com/documents/flutter/woocommerce/woocommerce/wordpress_plugin_installtion.html', style: TextStyle(
+                    child: Text('https://mstoreapp.com/documents/flutter/woocommerce/woocommerce/wordpress_plugin_installtion.html', style: TextStyle(
                       color: Colors.blue
                     ),),
                     onTap: () => launch('https://mstoreapp.com/documents/flutter/woocommerce/woocommerce/wordpress_plugin_installtion.html')
@@ -117,7 +116,7 @@ class _TryDemoState extends State<TryDemo> {
   }
 
    String stripSlash(String str) {
-    if (str != null && str.length > 0 && str.substring(str.length - 1) == '/') {
+    if (str.isNotEmpty && str.substring(str.length - 1) == '/') {
       str = str.substring(0, str.length - 1);
     }
     return str;

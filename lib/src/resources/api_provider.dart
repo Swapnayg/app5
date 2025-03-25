@@ -19,9 +19,9 @@ Directory _appDocsDir;
 
 class ApiProvider {
 
-  static final ApiProvider _apiProvider = new ApiProvider._internal();
+  static final ApiProvider _apiProvider = ApiProvider._internal();
 
-  var filter = new Map<String, String>();
+  var filter = <String, String>{};
 
   factory ApiProvider() {
     return _apiProvider;
@@ -51,7 +51,7 @@ class ApiProvider {
     'application/x-www-form-urlencoded; charset=utf-8';
     headers['cookie'] = generateCookieHeader();
     final response = await http.post(
-      Uri.parse(config.url + '/wp-admin/admin-ajax.php?action=mstore_flutter-keys'),
+      Uri.parse('${config.url}/wp-admin/admin-ajax.php?action=mstore_flutter-keys'),
       headers: headers,
       body: filter,
     );
@@ -64,7 +64,7 @@ class ApiProvider {
     headers['content-type'] =
     'application/x-www-form-urlencoded; charset=utf-8';
     final response = await http.post(
-      Uri.parse(config.url + '/wp-admin/admin-ajax.php?action=mstore_flutter-products'),
+      Uri.parse('${config.url}/wp-admin/admin-ajax.php?action=mstore_flutter-products'),
       headers: headers,
       body: data,
     );
@@ -78,7 +78,7 @@ class ApiProvider {
   Future<List<Product>> fetchRecentProducts(data) async {
     data.addAll(filter);
     final response = await http.post(
-      Uri.parse(config.url + '/wp-admin/admin-ajax.php?action=mstore_flutter-products'),
+      Uri.parse('${config.url}/wp-admin/admin-ajax.php?action=mstore_flutter-products'),
       headers: headers,
       body: data,
     );
@@ -94,7 +94,7 @@ class ApiProvider {
     headers['content-type'] =
     'application/x-www-form-urlencoded; charset=utf-8';
     final response = await http.post(
-      Uri.parse(config.url + '/wp-admin/admin-ajax.php?action=mstore_flutter-products'),
+      Uri.parse('${config.url}/wp-admin/admin-ajax.php?action=mstore_flutter-products'),
       headers: headers,
       body: data,
     );
@@ -105,7 +105,7 @@ class ApiProvider {
     headers['content-type'] =
     'application/x-www-form-urlencoded; charset=utf-8';
     final response = await http.get(
-      Uri.parse(config.url + endPoint + '&lang=' + filter['lan'] + '&flutter_app=' + '1'),
+      Uri.parse('${config.url}$endPoint&lang=${filter['lan']}&flutter_app=1'),
       headers: headers,
     );
     _updateCookie(response);
@@ -156,22 +156,20 @@ class ApiProvider {
 
   void _updateCookie(http.Response response) async {
     String allSetCookie = response.headers['set-cookie'];
-    if (allSetCookie != null) {
-      var setCookies = allSetCookie.split(',');
-      for (var setCookie in setCookies) {
-        var cookies = setCookie.split(';');
-        for (var cookie in cookies) {
-          _setCookie(cookie);
-        }
+    var setCookies = allSetCookie.split(',');
+    for (var setCookie in setCookies) {
+      var cookies = setCookie.split(';');
+      for (var cookie in cookies) {
+        _setCookie(cookie);
       }
-      headers['cookie'] = generateCookieHeader();
     }
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+    headers['cookie'] = generateCookieHeader();
+      SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString('cookies', json.encode(cookies));
   }
 
   void _setCookie(String rawCookie) {
-    if (rawCookie.length > 0) {
+    if (rawCookie.isNotEmpty) {
       var keyValue = rawCookie.split('=');
       if (keyValue.length == 2) {
         var key = keyValue[0].trim();
@@ -185,8 +183,8 @@ class ApiProvider {
   String generateCookieHeader() {
     String cookie = "";
     for (var key in cookies.keys) {
-      if (cookie.length > 0) cookie += "; ";
-      cookie += key + "=" + cookies[key];
+      if (cookie.isNotEmpty) cookie += "; ";
+      cookie += "$key=" + cookies[key];
     }
     return cookie;
   }
@@ -197,8 +195,8 @@ class ApiProvider {
       if( key.contains('woocommerce') ||
           key.contains('wordpress')
       ) {
-        if (cookie.length > 0) cookie += "; ";
-        cookie += key + "=" + cookies[key];
+        if (cookie.isNotEmpty) cookie += "; ";
+        cookie += "$key=" + cookies[key];
       }
     }
     return cookie;
@@ -207,7 +205,7 @@ class ApiProvider {
   List<Cookie> generateCookies() {
     //cookieList.clear();
     for (var key in cookies.keys) {
-      Cookie ck = new Cookie(key, cookies[key]);
+      Cookie ck = Cookie(key, cookies[key]);
       cookieList.add(ck);
     }
     return cookieList;

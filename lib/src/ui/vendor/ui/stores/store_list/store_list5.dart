@@ -13,7 +13,7 @@ const double _minWidthPerColumn = 350.0 + _scaffoldPadding * 2;
 
 class StoresList5 extends StatelessWidget {
   final List<StoreModel> stores;
-  StoresList5({Key key, this.stores}) : super(key: key);
+  const StoresList5({Key key, this.stores}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
@@ -57,10 +57,10 @@ class StoreCard extends StatelessWidget {
     return Card(
       child: InkWell(
         onTap: () => openDetails(store, context),
-        child: new Column(
+        child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Container(
+            SizedBox(
               height: 170,
               child: featuredImage,
             ),
@@ -86,10 +86,10 @@ class StoreCard extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       Container(
-                        child: new Text(store.name,
+                        child: Text(store.name,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
-                            style: new TextStyle(
+                            style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 18.0,
                             )),
@@ -134,10 +134,7 @@ class StoreCard extends StatelessWidget {
               width: 6.0,
             ),
             Text(
-              '(' +
-                  store.ratingCount.toString() +
-                  ' ' + appStateModel.blocks.localeText.reviews +
-                  ')',
+              '(${store.ratingCount} ${appStateModel.blocks.localeText.reviews})',
               style: TextStyle(
                   fontSize: 10, fontWeight: FontWeight.w300),
             ),

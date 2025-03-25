@@ -8,16 +8,16 @@ import '../../../../color_override.dart';
 
 class ReviewsPage extends StatefulWidget {
   final VendorDetailStateModel vendorDetailModel;
-  ReviewsPage({Key key, this.vendorDetailModel}) : super(key: key);
+  const ReviewsPage({Key key, this.vendorDetailModel}) : super(key: key);
   @override
   _ReviewsPageState createState() => _ReviewsPageState();
 }
 
 class _ReviewsPageState extends State<ReviewsPage> {
-  Map reviewData = Map<String, dynamic>();
+  Map reviewData = <String, dynamic>{};
   final _formKey = GlobalKey<FormState>();
-  TextEditingController titleController = new TextEditingController();
-  TextEditingController reviewController = new TextEditingController();
+  TextEditingController titleController = TextEditingController();
+  TextEditingController reviewController = TextEditingController();
   AppStateModel appStateModel = AppStateModel();
 
   bool showRatingError = false;
@@ -33,7 +33,7 @@ class _ReviewsPageState extends State<ReviewsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        resizeToAvoidBottomPadding: false,
+        resizeToAvoidBottomInset: false,
         appBar: AppBar(
           elevation: 0,
           centerTitle: true,
@@ -53,7 +53,7 @@ class _ReviewsPageState extends State<ReviewsPage> {
                       height: 20,
                     ),
                     Text(appStateModel.blocks.localeText.whatIsYourRate,
-                        style: Theme.of(context).textTheme.caption.copyWith(
+                        style: Theme.of(context).textTheme.bodySmall.copyWith(
                             // fontWeight: FontWeight.w600
                             )),
                     SizedBox(
@@ -82,8 +82,8 @@ class _ReviewsPageState extends State<ReviewsPage> {
                       Text(appStateModel.blocks.localeText.pleaseSelectYourRating,
                           style: Theme.of(context)
                               .textTheme
-                              .bodyText2
-                              .copyWith(color: Theme.of(context).errorColor))
+                              .bodyMedium
+                              .copyWith(color: Theme.of(context).colorScheme.error))
                     else
                       Container(),
                     SizedBox(
@@ -173,7 +173,7 @@ class _ReviewsPageState extends State<ReviewsPage> {
       ),
       validator: (value) {
         if (value.isEmpty) {
-          return appStateModel.blocks.localeText.pleaseEnter +  ' ${name.toLowerCase()}';
+          return '${appStateModel.blocks.localeText.pleaseEnter} ${name.toLowerCase()}';
         }
         return null;
       },
@@ -181,7 +181,7 @@ class _ReviewsPageState extends State<ReviewsPage> {
   }
 
   void _thankYouMessage() {
-    showDialog(context: context, child: AlertDialog(
+    showDialog(builder: (context) => AlertDialog(
       content: Text(appStateModel.blocks.localeText.thankYouForYourReview),
       actions: [
         RaisedButton(
@@ -194,7 +194,7 @@ class _ReviewsPageState extends State<ReviewsPage> {
           //color: const Color(0xFF1BC0C5),
         ),
       ],
-    ),
+    ), context: context,
     );
   }
 }

@@ -63,14 +63,14 @@ class ProductItem extends StatelessWidget {
   Widget build(BuildContext context) {
     double detailsWidth = MediaQuery.of(context).size.width - 160;
 
-    if ((product.salePrice != null && product.salePrice != 0)) {
+    if ((product.salePrice != 0)) {
       percentOff = ((((product.regularPrice - product.salePrice) / product.regularPrice * 100)).round());
     }
     bool onSale = false;
-    if(product.regularPrice == null || product.regularPrice.isNaN) {
+    if(product.regularPrice.isNaN) {
       product.regularPrice = product.price;
     }
-    if(product.salePrice != null && product.salePrice != 0) {
+    if(product.salePrice != 0) {
       onSale = true;
     }
 
@@ -91,7 +91,7 @@ class ProductItem extends StatelessWidget {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Container(
+              SizedBox(
                 //color: Colors.black,
                 width: 140,
                 height: 140,
@@ -135,11 +135,11 @@ class ProductItem extends StatelessWidget {
                         ),
                         elevation: 0.0,
                         margin: EdgeInsets.all(0.0),
-                        color: Theme.of(context).accentColor,
+                        color: Theme.of(context).colorScheme.secondary,
                         child: percentOff != 0 ? Center(
                           child: Container(
                             padding: EdgeInsets.fromLTRB(8.0, 4.0, 8.0, 4.0),
-                            child: Text(percentOff.toString() + '% OFF', style: Theme.of(context).accentTextTheme.bodyText1.copyWith(
+                            child: Text('$percentOff% OFF', style: Theme.of(context).accentTextTheme.bodyText1.copyWith(
                                 fontSize: 12.0
                             ),),
                           ),
@@ -186,7 +186,7 @@ class ProductItem extends StatelessWidget {
                         Row(
                           children: <Widget>[
                             Text(onSale ? parseHtmlString(product.formattedSalesPrice)
-                                : '', style: Theme.of(context).textTheme.body1.copyWith(
+                                : '', style: Theme.of(context).textTheme.bodyText2.copyWith(
                               fontSize: 16,
                               fontWeight: FontWeight.w600,
                               fontStyle: FontStyle.italic,
@@ -195,8 +195,7 @@ class ProductItem extends StatelessWidget {
                             SizedBox(
                               width: 4.0,
                             ),
-                            Text((product.formattedPrice !=
-                                null && product.formattedPrice.isNotEmpty)
+                            Text((product.formattedPrice.isNotEmpty)
                                 ? parseHtmlString(product.formattedPrice)
                                 : '', style: TextStyle(
                               fontWeight: onSale ? FontWeight.w200 : FontWeight.w600 ,
@@ -257,7 +256,7 @@ class ProductItem extends StatelessWidget {
                                     width: 100,
                                     height: 15,
                                     padding: EdgeInsets.symmetric(horizontal: 8),
-                                    child: Text(product.totalSales.toString() + ' Sold',
+                                    child: Text('${product.totalSales} Sold',
                                         maxLines: 1,
                                         style: TextStyle(
                                             color:

@@ -12,13 +12,13 @@ class ButtonText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return isLoading ? Container(
+    return isLoading ? SizedBox(
       width: 20.0,
       height: 20.0,
-      child: new Theme(
+      child: Theme(
           data: Theme.of(context)
-              .copyWith(accentColor: Theme.of(context).buttonTheme.colorScheme.onPrimary),
-          child: new CircularProgressIndicator(
+              .copyWith(colorScheme: ColorScheme.fromSwatch().copyWith(secondary: Theme.of(context).buttonTheme.colorScheme.onPrimary)),
+          child: CircularProgressIndicator(
             strokeWidth: 2.0,
           )),
     ) : Text(text);

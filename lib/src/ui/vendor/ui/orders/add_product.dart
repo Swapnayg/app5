@@ -9,14 +9,14 @@ import 'product_item.dart';
 class AddProductList extends StatefulWidget {
   final VendorBloc vendorBloc;
 final Order order;
-   AddProductList({Key key,this.vendorBloc, this.order}) : super(key: key);
+   const AddProductList({Key key,this.vendorBloc, this.order}) : super(key: key);
   @override
   _AddProductListState createState() => _AddProductListState();
 }
 
 class _AddProductListState extends State<AddProductList> {
-  ScrollController _scrollController = new ScrollController();
-  Widget appBarTitle = new Text("Order Products");
+  final ScrollController _scrollController = ScrollController();
+  Widget appBarTitle = Text("Order Products");
 
 
   @override

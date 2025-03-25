@@ -12,7 +12,7 @@ import 'store_list7.dart';
 
 class StoresList extends StatelessWidget {
   final List<StoreModel> stores;
-  StoresList({Key key, this.stores}) : super(key: key);
+  const StoresList({Key key, this.stores}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return ScopedModelDescendant<AppStateModel>(

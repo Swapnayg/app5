@@ -19,11 +19,10 @@ const homePeekMobile = 0.0;
 
 class SplashPageAnimation extends InheritedWidget {
   const SplashPageAnimation({
-    Key key,
+    Key super.key,
     @required this.isFinished,
-    @required Widget child,
-  })  : assert(child != null),
-        super(key: key, child: child);
+    @required super.child,
+  })  : assert(child != null);
 
   final bool isFinished;
 
@@ -92,7 +91,7 @@ class _SplashPageState extends State<SplashPage>
         value: 1,
         vsync: this)
       ..addListener(() {
-        this.setState(() {});
+        setState(() {});
       });
     if (widget.isAnimated) {
       _launchTimer = Timer(
@@ -109,7 +108,7 @@ class _SplashPageState extends State<SplashPage>
   @override
   void dispose() {
     _controller.dispose();
-    _launchTimer?.cancel();
+    _launchTimer.cancel();
     _launchTimer = null;
     super.dispose();
   }
@@ -184,7 +183,7 @@ class _SplashPageState extends State<SplashPage>
 }
 
 class _SplashBackLayer extends StatelessWidget {
-  _SplashBackLayer({
+  const _SplashBackLayer({
     Key key,
     @required this.isSplashCollapsed,
     this.effect,

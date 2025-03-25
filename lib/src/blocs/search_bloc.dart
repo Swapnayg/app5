@@ -5,7 +5,7 @@ import './../models/product_model.dart';
 import './../resources/api_provider.dart';
 
 class SearchBloc with ChangeNotifier {
-  var filter = new Map<String, dynamic>();
+  var filter = <String, dynamic>{};
   int page = 1;
   bool moreItems = true;
   final apiProvider = ApiProvider();
@@ -28,7 +28,7 @@ class SearchBloc with ChangeNotifier {
     if (response.statusCode == 200) {
       products = productModelFromJson(response.body);
       _searchFetcher.sink.add(products);
-      if (products.length == 0) {
+      if (products.isEmpty) {
         moreItems = false;
         _hasMoreSearchItemsFetcher.sink.add(moreItems);
       }
@@ -47,7 +47,7 @@ class SearchBloc with ChangeNotifier {
       List<Product> moreProducts = productModelFromJson(response.body);
       products.addAll(moreProducts);
       _searchFetcher.sink.add(products);
-      if (moreProducts.length == 0) {
+      if (moreProducts.isEmpty) {
         _hasMoreSearchItemsFetcher.sink.add(false);
       }
     } else {
@@ -55,6 +55,7 @@ class SearchBloc with ChangeNotifier {
     }
   }
 
+  @override
   dispose() {
     _hasMoreSearchItemsFetcher.close();
     _searchFetcher.close();

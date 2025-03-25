@@ -14,12 +14,12 @@ class OrdersBloc {
   List<Order> orders;
   bool hasMoreOrders = true;
   int ordersPage = 0;
-  var addressFormData = new Map<String, String>();
+  var addressFormData = <String, String>{};
 
   final _errorFetcher = BehaviorSubject<WpErrors>();
   final _registerErrorFetcher = BehaviorSubject<RegisterError>();
   final _isLoginLoadingFetcher = BehaviorSubject<String>();
-  var _hasMoreOrdersFetcher = BehaviorSubject<bool>();
+  final _hasMoreOrdersFetcher = BehaviorSubject<bool>();
 
   ValueStream<WpErrors> get error => _errorFetcher.stream;
   ValueStream<String> get isLoginLoading => _isLoginLoadingFetcher.stream;
@@ -34,7 +34,7 @@ class OrdersBloc {
 
   getOrders() async {
     final response = await apiProvider.post(
-        '/wp-admin/admin-ajax.php?action=mstore_flutter-orders', Map());
+        '/wp-admin/admin-ajax.php?action=mstore_flutter-orders', {});
     orders = orderFromJson(response.body);
     _ordersFetcher.sink.add(orders);
     _hasMoreOrdersFetcher.sink.add(true);
@@ -48,7 +48,7 @@ class OrdersBloc {
     List<Order> moreOrders = orderFromJson(response.body);
     orders.addAll(moreOrders);
     _ordersFetcher.sink.add(orders);
-    if (moreOrders.length == 0) {
+    if (moreOrders.isEmpty) {
       hasMoreOrders = false;
       _hasMoreOrdersFetcher.sink.add(false);
     }

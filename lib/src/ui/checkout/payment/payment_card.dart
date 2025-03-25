@@ -15,7 +15,7 @@ class CheckoutWidget extends StatefulWidget {
   final Widget logo;
   final String total;
 
-  CheckoutWidget({
+  const CheckoutWidget({super.key, 
     @required this.charge,
     @required this.fullscreen,
     @required this.logo,
@@ -36,15 +36,9 @@ class _CheckoutWidgetState extends BaseState<CheckoutWidget>
   @override
   void initState() {
     super.initState();
-    if (_charge.card == null) {
-      _charge.card = PaymentCard.empty();
-    }
+    _charge.card ??= PaymentCard.empty();
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-  }
 
   @override
   Widget buildChild(BuildContext context) {
@@ -78,28 +72,28 @@ class _CheckoutWidgetState extends BaseState<CheckoutWidget>
         )
       ],
     );
-    return new CustomAlertDialog(
+    return CustomAlertDialog(
       expanded: true,
       fullscreen: widget.fullscreen,
       titlePadding: EdgeInsets.all(0.0),
       onCancelPress: onCancelPress,
       title: _buildTitle(),
-      content: new Container(
-        child: new SingleChildScrollView(
-          child: new Container(
+      content: Container(
+        child: SingleChildScrollView(
+          child: Container(
               padding:
               const EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
               child: Column(
                 children: <Widget>[
-                  new Text(
+                  Text(
                     'Enter your card details to pay',
                     style: const TextStyle(fontWeight: FontWeight.w500),
                   ),
-                  new SizedBox(
+                  SizedBox(
                     height: 20.0,
                   ),
                   CardInput(
-                    text: 'PAY ' + parseHtmlString(widget.total),
+                    text: 'PAY ${parseHtmlString(widget.total)}',
                     card: _charge.card,
                     onValidated: _onCardValidated,
                   ),
@@ -113,47 +107,47 @@ class _CheckoutWidgetState extends BaseState<CheckoutWidget>
   }
 
   Widget _buildTitle() {
-    var emailAndAmount = new Column(
+    var emailAndAmount = Column(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: <Widget>[
         _charge.email != null
-            ? new Text(
+            ? Text(
           _charge.email,
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
           style: const TextStyle(color: Colors.grey, fontSize: 12.0),
         )
-            : new Container(),
+            : Container(),
         _charge.amount == null || _charge.amount.isNegative
-            ? new Container()
-            : new Row(
+            ? Container()
+            : Row(
           mainAxisAlignment: MainAxisAlignment.end,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             const Text(
               'Pay',
               style:
-              const TextStyle(fontSize: 14.0, color: Colors.black54),
+              TextStyle(fontSize: 14.0, color: Colors.black54),
             ),
-            new SizedBox(
+            SizedBox(
               width: 5.0,
             ),
-            new Flexible(
-                child: new Text(parseHtmlString(widget.total),
+            Flexible(
+                child: Text(parseHtmlString(widget.total),
                     style: TextStyle(
                         fontSize: 15.0,
-                        color: Theme.of(context).textTheme.bodyText1.color,
+                        color: Theme.of(context).textTheme.bodyLarge.color,
                         fontWeight: FontWeight.w500)))
           ],
         )
       ],
     );
-    return new Column(
+    return Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        new Container(
+        Container(
           padding: const EdgeInsets.all(10.0),
-          child: new Row(
+          child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
@@ -161,10 +155,10 @@ class _CheckoutWidgetState extends BaseState<CheckoutWidget>
                 'lib/assets/images/stripe_logo_slate_sm.png',
                 width: 80,
               ),
-              new SizedBox(
+              SizedBox(
                 width: 50,
               ),
-              new Expanded(child: emailAndAmount),
+              Expanded(child: emailAndAmount),
             ],
           ),
         ),

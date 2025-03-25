@@ -49,23 +49,23 @@ class _VariationProductState extends State<VariationProduct> {
           children: <Widget>[
             IconButton(
               padding: EdgeInsets.all(0.0),
-              icon: Icon(Icons.remove_circle_outline, color: Theme.of(context).textTheme.bodyText1.color.withOpacity(0.6)),
+              icon: Icon(Icons.remove_circle_outline, color: Theme.of(context).textTheme.bodyLarge.color.withOpacity(0.6)),
               //tooltip: 'Decrease quantity by 1',
               onPressed: () {
                 decreaseQty();
               },
             ),
             isLoading ? SizedBox(
-              child: CircularProgressIndicator(strokeWidth: 2),
               height: 20.0,
               width: 20.0,
+              child: CircularProgressIndicator(strokeWidth: 2),
             ) :  SizedBox(
               width: 20.0,
               child: Text(getQty().toString(), textAlign: TextAlign.center,),
             ),
             IconButton(
               padding: EdgeInsets.all(0.0),
-              icon: Icon(Icons.add_circle_outline, color: Theme.of(context).textTheme.bodyText1.color.withOpacity(0.6)),
+              icon: Icon(Icons.add_circle_outline, color: Theme.of(context).textTheme.bodyLarge.color.withOpacity(0.6)),
               //tooltip: 'Increase quantity by 1',
               onPressed: () {
                 increaseQty();
@@ -89,31 +89,30 @@ class _VariationProductState extends State<VariationProduct> {
   getTitle() {
     var name = '';
     for (var value in widget.variation.option) {
-      if(value.value != null)
       name = name + value.value + ' ';
     }
     return name;
   }
 
   Container leadingIcon() {
-    return Container(
+    return SizedBox(
       width: 30,
       height: 30,
       child: CachedNetworkImage(
-        imageUrl: widget.variation.image?.url != null ? widget.variation.image.url : '',
+        imageUrl: widget.variation.image.url != null ? widget.variation.image.url : '',
         imageBuilder: (context, imageProvider) => Card(
           clipBehavior: Clip.antiAlias,
           elevation: 0.0,
           margin: EdgeInsets.all(0.0),
           //shape: StadiumBorder(),
           child: Ink.image(
+            image: imageProvider,
+            fit: BoxFit.cover,
             child: InkWell(
               onTap: () {
                 //onCategoryClick(category);
               },
             ),
-            image: imageProvider,
-            fit: BoxFit.cover,
           ),
         ),
         placeholder: (context, url) => Card(
@@ -131,7 +130,7 @@ class _VariationProductState extends State<VariationProduct> {
   }
 
   addToCart(BuildContext context) async {
-    var data = new Map<String, dynamic>();
+    var data = <String, dynamic>{};
     data['product_id'] = widget.id.toString();
     data['variation_id'] = widget.variation.variationId.toString();
     data['quantity'] = '1';
@@ -139,7 +138,7 @@ class _VariationProductState extends State<VariationProduct> {
       isLoading = true;
     });
 
-    if(widget.addonFormKey != null && widget.addonFormKey.currentState.validate()) {
+    if(widget.addonFormKey.currentState.validate()) {
       widget.addonFormKey.currentState.save();
       data.addAll(widget.addOnsFormData);
     }
@@ -151,7 +150,7 @@ class _VariationProductState extends State<VariationProduct> {
   }
 
   decreaseQty() async {
-    if (widget.model.shoppingCart?.cartContents != null) {
+    if (widget.model.shoppingCart.cartContents != null) {
       if (widget.model.shoppingCart.cartContents
           .any((cartContent) => cartContent.variationId == widget.variation.variationId)) {
         final cartContent = widget.model.shoppingCart.cartContents
@@ -168,7 +167,7 @@ class _VariationProductState extends State<VariationProduct> {
   }
 
   increaseQty() async {
-    if (widget.model.shoppingCart?.cartContents != null) {
+    if (widget.model.shoppingCart.cartContents != null) {
       if (widget.model.shoppingCart.cartContents
           .any((cartContent) => cartContent.variationId == widget.variation.variationId)) {
         final cartContent = widget.model.shoppingCart.cartContents
@@ -187,15 +186,17 @@ class _VariationProductState extends State<VariationProduct> {
   getQty() {
     if(widget.model.shoppingCart.cartContents.any((element) => element.variationId == widget.variation.variationId)) {
       return widget.model.shoppingCart.cartContents.firstWhere((element) => element.variationId == widget.variation.variationId).quantity;
-    } else return 0;
+    } else {
+      return 0;
+    }
   }
 
   _variationPrice() {
-    if(widget.variation.formattedPrice != null && widget.variation.formattedSalesPrice == null) {
+    if(widget.variation.formattedSalesPrice == null) {
       return Text(parseHtmlString(widget.variation.formattedPrice), style: TextStyle(
         fontWeight: FontWeight.bold,
       ));
-    } else if(widget.variation.formattedPrice != null && widget.variation.formattedSalesPrice != null) {
+    } else if(widget.variation.formattedSalesPrice != null) {
       return Row(
         children: [
           Text(parseHtmlString(widget.variation.formattedSalesPrice), style: TextStyle(

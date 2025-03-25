@@ -25,7 +25,7 @@ class _ReviewListState extends State<ReviewList> {
           } else {
             return SliverToBoxAdapter();
           }
-        });;
+        });
   }
 
   Widget buildReviewsList(
@@ -89,7 +89,7 @@ class _ReviewListState extends State<ReviewList> {
                       Text(timeago.format(comment.date),
                           style: TextStyle(
                               fontSize: 12.0,
-                              color: Theme.of(context).textTheme.caption.color))
+                              color: Theme.of(context).textTheme.bodySmall.color))
                     ]),
               ),
             ],

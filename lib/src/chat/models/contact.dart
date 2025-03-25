@@ -9,14 +9,14 @@ class Contact {
 
   Contact({this.id, this.email, this.name, this.image, this.lastseen});
 
-  factory Contact.fromFirestore(DocumentSnapshot _snapshot) {
-    var _data = _snapshot.data();
+  factory Contact.fromFirestore(DocumentSnapshot snapshot) {
+    var data = snapshot.data();
     return Contact(
-      id: _snapshot.id,
-      lastseen: _data["lastSeen"],
-      email: _data["email"],
-      name: _data["name"],
-      image: _data["image"],
+      id: snapshot.id,
+      lastseen: data["lastSeen"],
+      email: data["email"],
+      name: data["name"],
+      image: data["image"],
     );
   }
 }

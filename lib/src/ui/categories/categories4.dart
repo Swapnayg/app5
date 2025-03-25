@@ -11,6 +11,8 @@ import '../products/products.dart';
 
 
 class Categories4 extends StatefulWidget {
+  const Categories4({super.key});
+
   @override
   _Categories4State createState() => _Categories4State();
 }
@@ -36,7 +38,7 @@ class _Categories4State extends State<Categories4> {
   }
 
   _onTap(Category category) {
-    var filter = new Map<String, dynamic>();
+    var filter = Map<String, dynamic>();
     filter['id'] = category.id.toString();
     Navigator.push(
         context,
@@ -64,7 +66,7 @@ class _CategoryListState extends State<CategoryList> {
   void initState() {
     super.initState();
     mainCategories = widget.categories.where((cat) => cat.parent == 0).toList();
-    if (mainCategories.length != 0) selectedCategory = mainCategories[0];
+    if (mainCategories.isNotEmpty) selectedCategory = mainCategories[0];
   }
 
   void onCategoryClick(Category category) {
@@ -155,24 +157,24 @@ class _CategoryListState extends State<CategoryList> {
   }
 
   Container leadingIcon(Category category) {
-    return Container(
+    return SizedBox(
       width: 20,
       height: 20,
       child: CachedNetworkImage(
-        imageUrl: category.image != null ? category.image : '',
+        imageUrl: category.image ?? '',
         imageBuilder: (context, imageProvider) => Card(
           clipBehavior: Clip.antiAlias,
           margin: EdgeInsets.all(0.0),
           elevation: 0.0,
           //shape: StadiumBorder(),
           child: Ink.image(
+            image: imageProvider,
+            fit: BoxFit.cover,
             child: InkWell(
               onTap: () {
                 onCategoryClick(category);
               },
             ),
-            image: imageProvider,
-            fit: BoxFit.cover,
           ),
         ),
         placeholder: (context, url) => Card(
@@ -223,8 +225,7 @@ class ExpansionTile2 extends StatefulWidget {
     this.children = const <Widget>[],
     this.trailing,
     this.initiallyExpanded = false,
-  })  : assert(initiallyExpanded != null),
-        super(key: key);
+  })  : super(key: key);
 
   /// A widget to display before the title.
   ///
@@ -303,7 +304,7 @@ class _ExpansionTile2State extends State<ExpansionTile2>
         _controller.drive(_backgroundColorTween.chain(_easeOutTween));
 
     _isExpanded =
-        PageStorage.of(context)?.readState(context) ?? widget.initiallyExpanded;
+        PageStorage.of(context).readState(context) ?? widget.initiallyExpanded;
     if (_isExpanded) _controller.value = 1.0;
   }
 
@@ -326,10 +327,9 @@ class _ExpansionTile2State extends State<ExpansionTile2>
           });
         });
       }
-      PageStorage.of(context)?.writeState(context, _isExpanded);
+      PageStorage.of(context).writeState(context, _isExpanded);
     });
-    if (widget.onExpansionChanged != null)
-      widget.onExpansionChanged(_isExpanded);
+    widget.onExpansionChanged(_isExpanded);
   }
 
   Widget _buildChildren(BuildContext context, Widget child) {
@@ -383,14 +383,14 @@ class _ExpansionTile2State extends State<ExpansionTile2>
   @override
   void didChangeDependencies() {
     final ThemeData theme = Theme.of(context);
-    _borderColorTween..end = theme.dividerColor;
+    _borderColorTween.end = theme.dividerColor;
     _headerColorTween
-      ..begin = theme.textTheme.subtitle1.color
-      ..end = theme.accentColor;
+      ..begin = theme.textTheme.titleMedium.color
+      ..end = theme.colorScheme.secondary;
     _iconColorTween
       ..begin = theme.unselectedWidgetColor
-      ..end = theme.accentColor;
-    _backgroundColorTween..end = widget.backgroundColor;
+      ..end = theme.colorScheme.secondary;
+    _backgroundColorTween.end = widget.backgroundColor;
     super.didChangeDependencies();
   }
 

@@ -31,9 +31,7 @@ const systemLocaleOption = Locale('system');
 Locale _deviceLocale;
 Locale get deviceLocale => _deviceLocale;
 set deviceLocale(Locale locale) {
-  if (_deviceLocale == null) {
-    _deviceLocale = locale;
-  }
+  _deviceLocale ??= locale;
 }
 
 class GalleryOptions {
@@ -77,7 +75,7 @@ class GalleryOptions {
   TextDirection textDirection() {
     switch (customTextDirection) {
       case CustomTextDirection.localeBased:
-        final language = locale?.languageCode?.toLowerCase();
+        final language = locale.languageCode.toLowerCase();
         if (language == null) return null;
         return rtlLanguages.contains(language)
             ? TextDirection.rtl
@@ -99,7 +97,7 @@ class GalleryOptions {
   }) {
     return GalleryOptions(
       themeMode: themeMode ?? this.themeMode,
-      textScaleFactor: textScaleFactor ?? this._textScaleFactor,
+      textScaleFactor: textScaleFactor ?? _textScaleFactor,
       locale: locale ?? this.locale,
       platform: platform ?? this.platform,
     );
@@ -261,12 +259,11 @@ class GalleryOptions {
 // See https://medium.com/flutter/managing-flutter-application-state-with-inheritedwidgets-1140452befe1
 
 class _ModelBindingScope extends InheritedWidget {
-  _ModelBindingScope({
-    Key key,
+  const _ModelBindingScope({
+    Key super.key,
     @required this.modelBindingState,
-    Widget child,
-  })  : assert(modelBindingState != null),
-        super(key: key, child: child);
+    super.child,
+  })  : assert(modelBindingState != null);
 
   final _ModelBindingState modelBindingState;
 
@@ -275,22 +272,22 @@ class _ModelBindingScope extends InheritedWidget {
 }
 
 class ModelBinding extends StatefulWidget {
-  ModelBinding({
+  const ModelBinding({
     Key key,
     this.initialModel = const GalleryOptions(),
     this.child,
-  })  : assert(initialModel != null),
-        super(key: key);
+  })  : super(key: key);
 
   final GalleryOptions initialModel;
   final Widget child;
 
+  @override
   _ModelBindingState createState() => _ModelBindingState();
 }
 
 // Applies text GalleryOptions to a widget
 class ApplyTextOptions extends StatelessWidget {
-  const ApplyTextOptions({@required this.child});
+  const ApplyTextOptions({super.key, @required this.child});
 
   final Widget child;
 
@@ -301,7 +298,7 @@ class ApplyTextOptions extends StatelessWidget {
 
     Widget widget = MediaQuery(
       data: MediaQuery.of(context).copyWith(
-        textScaleFactor: textScaleFactor,
+        textScaler: TextScaler.linear(textScaleFactor),
       ),
       child: child,
     );
@@ -321,7 +318,7 @@ class _ModelBindingState extends State<ModelBinding> {
 
   @override
   void dispose() {
-    _timeDilationTimer?.cancel();
+    _timeDilationTimer.cancel();
     _timeDilationTimer = null;
     super.dispose();
   }

@@ -7,7 +7,7 @@ class AttributeBloc {
   List<ProductAttribute>? attributes;
   List<AttributeTerms>? terms;
 
-  static WooCommerceAPI wc_api = new WooCommerceAPI();
+  static WooCommerceAPI wc_api = WooCommerceAPI();
 
   final _attributeFetcher = BehaviorSubject<List<ProductAttribute>>();
   final _termsFetcher = BehaviorSubject<List<AttributeTerms>>();
@@ -26,7 +26,7 @@ class AttributeBloc {
 
   fetchAllTerms(String id) async {
     final response =
-        await wc_api.getAsync("products/attributes/" + id + "/terms");
+        await wc_api.getAsync("products/attributes/$id/terms");
 
     terms = attributeTermsFromJson(response.body);
 

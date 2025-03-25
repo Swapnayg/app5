@@ -126,50 +126,50 @@ class Product {
   });
 
   factory Product.fromJson(Map<String, dynamic> json) => Product(
-    id: json["id"] == null ? null : json["id"],
-    name: json["name"] == null ? null : json["name"],
-    type: json["type"] == null ? null : json["type"],
-    status: json["status"] == null ? null : json["status"],
-    featured: json["featured"] == null ? null : json["featured"],
-    catalogVisibility: json["catalog_visibility"] == null ? null : json["catalog_visibility"],
-    description: json["description"] == null ? null : json["description"],
-    shortDescription: json["short_description"] == null ? null : json["short_description"],
-    permalink: json["permalink"] == null ? null : json["permalink"],
-    sku: json["sku"] == null ? null : json["sku"],
-    formattedPrice: json["formated_price"] == null ? null : json["formated_price"],
-    formattedSalesPrice: json["formated_sales_price"] == null ? null : json["formated_sales_price"],
-    price: json["price"] == null ? null : json["price"].toDouble(),
-    regularPrice: json["regular_price"] == null ? null : json["regular_price"].toDouble(),
-    salePrice: json["sale_price"] == null ? null : json["sale_price"].toDouble(),
+    id: json["id"],
+    name: json["name"],
+    type: json["type"],
+    status: json["status"],
+    featured: json["featured"],
+    catalogVisibility: json["catalog_visibility"],
+    description: json["description"],
+    shortDescription: json["short_description"],
+    permalink: json["permalink"],
+    sku: json["sku"],
+    formattedPrice: json["formated_price"],
+    formattedSalesPrice: json["formated_sales_price"],
+    price: json["price"]?.toDouble(),
+    regularPrice: json["regular_price"]?.toDouble(),
+    salePrice: json["sale_price"]?.toDouble(),
     //dateOnSaleFromGmt: json["date_on_sale_from_gmt"] == null ? null : DateTime.parse(json["date_on_sale_from_gmt"]),
     //dateOnSaleToGmt: json["date_on_sale_to_gmt"] == null ? null : DateTime.parse(json["date_on_sale_to_gmt"]),
-    onSale: json["on_sale"] == null ? null : json["on_sale"],
-    purchasable: json["purchasable"] == null ? null : json["purchasable"],
-    totalSales: json["total_sales"] == null ? null : json["total_sales"],
-    virtual: json["virtual"] == null ? null : json["virtual"],
-    downloadable: json["downloadable"] == null ? null : json["downloadable"],
-    externalUrl: json["external_url"] == null ? null : json["external_url"],
-    buttonText: json["button_text"] == null ? null : json["button_text"],
-    manageStock: json["manage_stock"] == null ? null : json["manage_stock"],
-    stockQuantity: json["stock_quantity"] == null ? null : json["stock_quantity"],
-    stockStatus: json["stock_status"] == null ? null : json["stock_status"],
-    backorders: json["backorders"] == null ? null : json["backorders"],
-    backordersAllowed: json["backorders_allowed"] == null ? null : json["backorders_allowed"],
-    backordered: json["backordered"] == null ? null : json["backordered"],
-    soldIndividually: json["sold_individually"] == null ? null : json["sold_individually"],
-    weight: json["weight"] == null ? null : json["weight"],
+    onSale: json["on_sale"],
+    purchasable: json["purchasable"],
+    totalSales: json["total_sales"],
+    virtual: json["virtual"],
+    downloadable: json["downloadable"],
+    externalUrl: json["external_url"],
+    buttonText: json["button_text"],
+    manageStock: json["manage_stock"],
+    stockQuantity: json["stock_quantity"],
+    stockStatus: json["stock_status"],
+    backorders: json["backorders"],
+    backordersAllowed: json["backorders_allowed"],
+    backordered: json["backordered"],
+    soldIndividually: json["sold_individually"],
+    weight: json["weight"],
     dimensions: json["dimensions"] == null ? null : Dimensions.fromJson(json["dimensions"]),
     //shippingRequired: json["shipping_required"] == null ? null : json["shipping_required"],
     //shippingTaxable: json["shipping_taxable"] == null ? null : json["shipping_taxable"],
     //shippingClass: json["shipping_class"] == null ? null : json["shipping_class"],
-    reviewsAllowed: json["reviews_allowed"] == null ? null : json["reviews_allowed"],
-    averageRating: json["average_rating"] == null ? null : json["average_rating"],
-    ratingCount: json["rating_count"] == null ? null : json["rating_count"],
+    reviewsAllowed: json["reviews_allowed"],
+    averageRating: json["average_rating"],
+    ratingCount: json["rating_count"],
     relatedIds: json["related_ids"] == null ? null : List<int>.from(json["related_ids"].map((x) => x)),
     upsellIds: json["upsell_ids"] == null ? null : List<int>.from(json["upsell_ids"].map((x) => x)),
     crossSellIds: json["cross_sell_ids"] == null ? null : List<int>.from(json["cross_sell_ids"].map((x) => x)),
     //parentId: json["parent_id"] == null ? null : json["parent_id"],
-    purchaseNote: json["purchase_note"] == null ? null : json["purchase_note"],
+    purchaseNote: json["purchase_note"],
     categories: json["categories"] == null ? [] :  List<int>.from(json["categories"].map((x) => x)),
     tags: json["tags"] == null ? null : List<dynamic>.from(json["tags"].map((x) => x)),
     images: json["images"] == null ? null : List<Mage>.from(json["images"].map((x) => Mage.fromJson(x))),
@@ -200,14 +200,14 @@ class Vendor {
 
   factory Vendor.fromJson(Map<String, dynamic> json) => Vendor(
     id: json["id"],
-    name: json["name"] == null ? null : json["name"],
+    name: json["name"],
     icon: json["icon"] == null || json["icon"] == false ? null : json["icon"],
   );
 
   Map<String, dynamic> toJson() => {
     "id": id,
-    "name": name == null ? null : name,
-    "icon": icon == null ? null : icon,
+    "name": name,
+    "icon": icon,
   };
 }
 
@@ -229,20 +229,20 @@ class Attribute {
   });
 
   factory Attribute.fromJson(Map<String, dynamic> json) => Attribute(
-    id: json["id"] == null ? null : json["id"],
-    name: json["name"] == null ? null : json["name"],
-    position: json["position"] == null ? null : json["position"],
-    visible: json["visible"] == null ? null : json["visible"],
-    variation: json["variation"] == null ? null : json["variation"],
+    id: json["id"],
+    name: json["name"],
+    position: json["position"],
+    visible: json["visible"],
+    variation: json["variation"],
     options: json["options"] == null ? null : List<String>.from(json["options"].map((x) => x)),
   );
 
   Map<String, dynamic> toJson() => {
-    "id": id == null ? null : id,
-    "name": name == null ? null : name,
-    "position": position == null ? null : position,
-    "visible": visible == null ? null : visible,
-    "variation": variation == null ? null : variation,
+    "id": id,
+    "name": name,
+    "position": position,
+    "visible": visible,
+    "variation": variation,
     "options": options == null ? null : List<dynamic>.from(options.map((x) => x)),
   };
 }
@@ -259,15 +259,15 @@ class ProductCategory {
   });
 
   factory ProductCategory.fromJson(Map<String, dynamic> json) => ProductCategory(
-    id: json["id"] == null ? null : json["id"],
-    name: json["name"] == null ? null : json["name"],
-    slug: json["slug"] == null ? null : json["slug"],
+    id: json["id"],
+    name: json["name"],
+    slug: json["slug"],
   );
 
   Map<String, dynamic> toJson() => {
-    "id": id == null ? null : id,
-    "name": name == null ? null : name,
-    "slug": slug == null ? null : slug,
+    "id": id,
+    "name": name,
+    "slug": slug,
   };
 }
 
@@ -283,15 +283,15 @@ class Dimensions {
   });
 
   factory Dimensions.fromJson(Map<String, dynamic> json) => Dimensions(
-    length: json["length"] == null ? null : json["length"],
-    width: json["width"] == null ? null : json["width"],
-    height: json["height"] == null ? null : json["height"],
+    length: json["length"],
+    width: json["width"],
+    height: json["height"],
   );
 
   Map<String, dynamic> toJson() => {
-    "length": length == null ? null : length,
-    "width": width == null ? null : width,
-    "height": height == null ? null : height,
+    "length": length,
+    "width": width,
+    "height": height,
   };
 }
 
@@ -317,25 +317,25 @@ class Mage {
   });
 
   factory Mage.fromJson(Map<String, dynamic> json) => Mage(
-    id: json["id"] == null ? null : json["id"],
+    id: json["id"],
     dateCreated: json["date_created"] == null ? null : DateTime.parse(json["date_created"]),
     dateCreatedGmt: json["date_created_gmt"] == null ? null : DateTime.parse(json["date_created_gmt"]),
     dateModified: json["date_modified"] == null ? null : DateTime.parse(json["date_modified"]),
     dateModifiedGmt: json["date_modified_gmt"] == null ? null : DateTime.parse(json["date_modified_gmt"]),
-    src: json["src"] == null ? null : json["src"],
-    name: json["name"] == null ? null : json["name"],
-    alt: json["alt"] == null ? null : json["alt"],
+    src: json["src"],
+    name: json["name"],
+    alt: json["alt"],
   );
 
   Map<String, dynamic> toJson() => {
-    "id": id == null ? null : id,
-    "date_created": dateCreated == null ? null : dateCreated.toIso8601String(),
-    "date_created_gmt": dateCreatedGmt == null ? null : dateCreatedGmt.toIso8601String(),
-    "date_modified": dateModified == null ? null : dateModified.toIso8601String(),
-    "date_modified_gmt": dateModifiedGmt == null ? null : dateModifiedGmt.toIso8601String(),
-    "src": src == null ? null : src,
-    "name": name == null ? null : name,
-    "alt": alt == null ? null : alt,
+    "id": id,
+    "date_created": dateCreated?.toIso8601String(),
+    "date_created_gmt": dateCreatedGmt?.toIso8601String(),
+    "date_modified": dateModified?.toIso8601String(),
+    "date_modified_gmt": dateModifiedGmt?.toIso8601String(),
+    "src": src,
+    "name": name,
+    "alt": alt,
   };
 }
 
@@ -351,14 +351,14 @@ class MetaDatum {
   });
 
   factory MetaDatum.fromJson(Map<String, dynamic> json) => MetaDatum(
-    id: json["id"] == null ? null : json["id"],
-    key: json["key"] == null ? null : json["key"],
+    id: json["id"],
+    key: json["key"],
     value: json["value"],
   );
 
   Map<String, dynamic> toJson() => {
-    "id": id == null ? null : id,
-    "key": key == null ? null : key,
+    "id": id,
+    "key": key,
     "value": value,
   };
 }
@@ -423,31 +423,31 @@ class AvailableVariation {
   factory AvailableVariation.fromJson(Map<String, dynamic> json) {
     return AvailableVariation(
     //availabilityHtml: json["availability_html"] == null ? null : json["availability_html"],
-    backordersAllowed: json["backorders_allowed"] == null ? null : json["backorders_allowed"],
+    backordersAllowed: json["backorders_allowed"],
     dimensions: json["dimensions"] == null ? null : Dimensions.fromJson(json["dimensions"]),
     //dimensionsHtml: json["dimensions_html"] == null ? null : json["dimensions_html"],
-    displayPrice: json["display_price"] == null ? null : json["display_price"].toDouble(),
-    displayRegularPrice: json["display_regular_price"] == null ? null : json["display_regular_price"].toDouble(),
+    displayPrice: json["display_price"]?.toDouble(),
+    displayRegularPrice: json["display_regular_price"]?.toDouble(),
     image: json['image'] is Map<String, dynamic> ? AvailableVariationImage.fromJson(json["image"]) : null,
     //imageId: json["image_id"] == null ? null : json["image_id"],
     //isDownloadable: json["is_downloadable"] == null ? null : json["is_downloadable"],
-    isInStock: json["is_in_stock"] == null ? null : json["is_in_stock"],
-    isPurchasable: json["is_purchasable"] == null ? null : json["is_purchasable"],
+    isInStock: json["is_in_stock"],
+    isPurchasable: json["is_purchasable"],
     //isSoldIndividually: json["is_sold_individually"] == null ? null : json["is_sold_individually"],
     //isVirtual: json["is_virtual"] == null ? null : json["is_virtual"],
     //maxQty: (json["max_qty"] == null || json["max_qty"] == '') ? null : json["max_qty"],
     //minQty: json["min_qty"] == null ? null : json["min_qty"],
     //priceHtml: json["price_html"] == null ? null : json["price_html"],
-    sku: json["sku"] == null ? null : json["sku"],
-    variationDescription: json["variation_description"] == null ? null : json["variation_description"],
-    variationId: json["variation_id"] == null ? null : json["variation_id"],
+    sku: json["sku"],
+    variationDescription: json["variation_description"],
+    variationId: json["variation_id"],
     //variationIsActive: json["variation_is_active"] == null ? null : json["variation_is_active"],
     //variationIsVisible: json["variation_is_visible"] == null ? null : json["variation_is_visible"],
     //weight: json["weight"] == null ? null : json["weight"],
     //weightHtml: json["weight_html"] == null ? null : json["weight_html"],
     option: json["option"] == null ? null : List<Option>.from(json["option"].map((x) => Option.fromJson(x))),
-    formattedPrice: json["formated_price"] == null ? null : json["formated_price"],
-    formattedSalesPrice: json["formated_sales_price"] == null ? null : json["formated_sales_price"],
+    formattedPrice: json["formated_price"],
+    formattedSalesPrice: json["formated_sales_price"],
   );
   }
 }
@@ -462,13 +462,13 @@ class Option {
   });
 
   factory Option.fromJson(Map<String, dynamic> json) => Option(
-    key: json["key"] == null ? null : json["key"],
-    value: json["value"] == null ? null : json["value"],
+    key: json["key"],
+    value: json["value"],
   );
 
   Map<String, dynamic> toJson() => {
-    "key": key == null ? null : key,
-    "value": value == null ? null : value,
+    "key": key,
+    "value": value,
   };
 }
 
@@ -514,20 +514,20 @@ class AvailableVariationImage {
   });
 
   factory AvailableVariationImage.fromJson(Map<String, dynamic> json) => AvailableVariationImage(
-    title: json["title"] == null ? null : json["title"],
+    title: json["title"],
     //caption: json["caption"] == null ? null : json["caption"],
-    url: json["url"] == null ? null : json["url"],
+    url: json["url"],
     //alt: json["alt"] == null ? null : json["alt"],
-    src: json["src"] == null ? null : json["src"],
+    src: json["src"],
     //srcset: json["srcset"] == null ? null : json["srcset"],
     //sizes: json["sizes"] == null ? null : json["sizes"],
-    fullSrc: json["full_src"] == null ? null : json["full_src"],
+    fullSrc: json["full_src"],
     //fullSrcW: json["full_src_w"] == null ? null : json["full_src_w"],
     //fullSrcH: json["full_src_h"] == null ? null : json["full_src_h"],
-    galleryThumbnailSrc: json["gallery_thumbnail_src"] == null ? null : json["gallery_thumbnail_src"],
+    galleryThumbnailSrc: json["gallery_thumbnail_src"],
     //galleryThumbnailSrcW: json["gallery_thumbnail_src_w"] == null ? null : json["gallery_thumbnail_src_w"],
     //galleryThumbnailSrcH: json["gallery_thumbnail_src_h"] == null ? null : json["gallery_thumbnail_src_h"],
-    thumbSrc: json["thumb_src"] == null ? null : json["thumb_src"],
+    thumbSrc: json["thumb_src"],
     //thumbSrcW: json["thumb_src_w"] == null ? null : json["thumb_src_w"],
     //thumbSrcH: json["thumb_src_h"] == null ? null : json["thumb_src_h"],
     //srcW: json["src_w"] == null ? null : json["src_w"],
@@ -549,9 +549,9 @@ class VariationOption {
   });
 
   factory VariationOption.fromJson(Map<String, dynamic> json) => VariationOption(
-    name: json["name"] == null ? null : json["name"],
+    name: json["name"],
     options: json["options"] == null ? null : List<String>.from(json["options"].map((x) => x)),
-    attribute: json["attribute"] == null ? null : json["attribute"],
+    attribute: json["attribute"],
     selected: null,
   );
 }

@@ -10,6 +10,8 @@ import '../../models/category_model.dart';
 import '../products/products.dart';
 
 class Categories8 extends StatefulWidget {
+  const Categories8({super.key});
+
   @override
   _Categories8State createState() => _Categories8State();
 }
@@ -23,7 +25,7 @@ class _Categories8State extends State<Categories8> {
   AppStateModel appStateModel = AppStateModel();
 
   void onCategoryClick(Category category) {
-    var filter = new Map<String, dynamic>();
+    var filter = <String, dynamic>{};
     filter['id'] = category.id.toString();
     Navigator.push(
         context,
@@ -84,7 +86,7 @@ class CategoryRow extends StatelessWidget {
   final Category category;
   final void Function(Category category) onCategoryClick;
 
-  CategoryRow({this.category, this.onCategoryClick});
+  const CategoryRow({super.key, this.category, this.onCategoryClick});
 
   @override
   Widget build(BuildContext context) {
@@ -115,22 +117,22 @@ class CategoryRow extends StatelessWidget {
       elevation: 0,
       child: InkWell(
         onTap: () => _detail(category, context),
-        child: new Column(
+        child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Column(
               children: [
-                Container(
+                SizedBox(
                   height: height - 40,
                   child: featuredImage,
                 ),
-                Container(
+                SizedBox(
                   height: 35,
                   child: Center(
-                    child: new Text(parseHtmlString(category.name),
+                    child: Text(parseHtmlString(category.name),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
-                        style: new TextStyle(
+                        style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 14.0)),
                   ),
@@ -144,7 +146,7 @@ class CategoryRow extends StatelessWidget {
   }
 
   _detail(Category, BuildContext context) {
-    var filter = new Map<String, dynamic>();
+    var filter = <String, dynamic>{};
     filter['id'] = category.id.toString();
     Navigator.push(
         context,

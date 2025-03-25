@@ -9,38 +9,38 @@ class CloudStorageService {
   FirebaseStorage _storage;
   StorageReference _baseRef;
 
-  String _profileImages = "profile_images";
-  String _messages = "messages";
-  String _images = "images";
+  final String _profileImages = "profile_images";
+  final String _messages = "messages";
+  final String _images = "images";
 
   CloudStorageService() {
     _storage = FirebaseStorage.instance;
     _baseRef = _storage.ref();
   }
 
-  Future<StorageTaskSnapshot> uploadUserImage(String _uid, File _image) {
+  Future<StorageTaskSnapshot> uploadUserImage(String uid, File image) {
     try {
       return _baseRef
           .child(_profileImages)
-          .child(_uid)
-          .putFile(_image)
+          .child(uid)
+          .putFile(image)
           .onComplete;
     } catch (e) {
       print(e);
     }
   }
 
-  Future<StorageTaskSnapshot> uploadMediaMessage(String _uid, File _file) {
-    var _timestamp = DateTime.now();
-    var _fileName = basename(_file.path);
-    _fileName += "_${_timestamp.toString()}";
+  Future<StorageTaskSnapshot> uploadMediaMessage(String uid, File file) {
+    var timestamp = DateTime.now();
+    var fileName = basename(file.path);
+    fileName += "_${timestamp.toString()}";
     try {
       return _baseRef
           .child(_messages)
-          .child(_uid)
+          .child(uid)
           .child(_images)
-          .child(_fileName)
-          .putFile(_file)
+          .child(fileName)
+          .putFile(file)
           .onComplete;
     } catch (e) {
       print(e);

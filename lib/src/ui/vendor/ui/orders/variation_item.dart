@@ -15,7 +15,7 @@ class VariationItem extends StatefulWidget {
   final Order order;
   final ProductVariation variation;
 
-  VariationItem(
+  const VariationItem(
       {Key key, this.product, this.vendorBloc, this.order, this.variation})
       : super(key: key);
 
@@ -24,7 +24,7 @@ class VariationItem extends StatefulWidget {
 }
 
 class _VariationItemState extends State<VariationItem> {
-  AppStateModel _appStateModel = AppStateModel();
+  final AppStateModel _appStateModel = AppStateModel();
   NumberFormat formatter;
 
   var qty = 0;
@@ -39,18 +39,18 @@ class _VariationItemState extends State<VariationItem> {
     print(widget.variation.stockStatus);
     var name = '';
 
-    widget.variation.attributes.forEach((value) {
-      name = name + ' ' + value.option;
-    });
+    for (var value in widget.variation.attributes) {
+      name = '$name ${value.option}';
+    }
 
-    if (widget.order.lineItems != null && widget.order.lineItems.any((lineItems) => lineItems.productId == widget.product.id && lineItems.variationId == widget.variation.id)) {
+    if (widget.order.lineItems.any((lineItems) => lineItems.productId == widget.product.id && lineItems.variationId == widget.variation.id)) {
       qty = widget.order.lineItems.singleWhere((lineItems) => lineItems.productId == widget.product.id && lineItems.variationId == widget.variation.id).quantity;
     }
 
     return Card(
       child: Row(
         children: <Widget>[
-          Container(
+          SizedBox(
             width: 120,
             height: 120,
             child: CachedNetworkImage(
@@ -152,8 +152,9 @@ class _VariationItemState extends State<VariationItem> {
       setState(() {
         qty = qty + 1;
       });
-    } else
+    } else {
       _addProduct();
+    }
   }
 
   void _decreaseQty() {

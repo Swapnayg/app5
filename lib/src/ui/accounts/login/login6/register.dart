@@ -9,6 +9,8 @@ import './../../../../ui/color_override.dart';
 import 'theme_override.dart';
 
 class Register extends StatefulWidget {
+  const Register({super.key});
+
   @override
   _RegisterState createState() => _RegisterState();
 }
@@ -17,9 +19,9 @@ class _RegisterState extends State<Register> {
 
   final _formKey = GlobalKey<FormState>();
   final appStateModel = AppStateModel();
-  var formData = new Map<String, dynamic>();
+  var formData = <String, dynamic>{};
   final RoundedLoadingButtonController _btnController =
-  new RoundedLoadingButtonController();
+  RoundedLoadingButtonController();
 
   final LinearGradient lightGradient = LinearGradient(
       begin: Alignment.centerLeft, end: Alignment.centerRight,
@@ -112,14 +114,14 @@ class _RegisterState extends State<Register> {
                           SizedBox(
                             height: height * 0.050,
                           ),
-                          Text('Hearty Welcome !', style: Theme.of(context).textTheme.headline6.copyWith(
+                          Text('Hearty Welcome !', style: Theme.of(context).textTheme.titleLarge.copyWith(
                             //color: Colors.white,
                               fontSize: 16,color: Colors.white70
                           )),
                           SizedBox(
                             height: 10,
                           ),
-                          Text('Sign Up', style: Theme.of(context).textTheme.caption.copyWith(
+                          Text('Sign Up', style: Theme.of(context).textTheme.bodySmall.copyWith(
                             //color: Colors.white,
                               fontSize: 32,color: Colors.white, fontWeight: FontWeight.w700
                           )),
@@ -202,6 +204,15 @@ class _RegisterState extends State<Register> {
                             color: Theme.of(context).brightness == Brightness.light ? Color(0xff041F5F) : Color(0xffbdbdbd),
                             elevation: 3,
                             valueColor: Colors.white,
+                            controller: _btnController,
+                            onPressed: () {
+                              if(_formKey.currentState.validate()) {
+                                _formKey.currentState.save();
+                                _submit(context);
+                              }
+                            },
+                            animateOnTap: false,
+                            width: MediaQuery.of(context).size.width - 34,
                             child: Container(
                               alignment: Alignment.center,
                               height: 50,
@@ -217,15 +228,6 @@ class _RegisterState extends State<Register> {
                                 textAlign: TextAlign.center,
                               ),
                             ),
-                            controller: _btnController,
-                            onPressed: () {
-                              if(_formKey.currentState.validate()) {
-                                _formKey.currentState.save();
-                                _submit(context);
-                              }
-                            },
-                            animateOnTap: false,
-                            width: MediaQuery.of(context).size.width - 34,
                           ),
                           SizedBox(height: 10.0),
                           FlatButton(
@@ -238,7 +240,7 @@ class _RegisterState extends State<Register> {
                                 children: [
                                   Text(
                                       'Already registered?',
-                                      style: Theme.of(context).textTheme.bodyText2.copyWith(
+                                      style: Theme.of(context).textTheme.bodyMedium.copyWith(
                                           fontSize: 15,
                                       )),
                                   Padding(
@@ -246,7 +248,7 @@ class _RegisterState extends State<Register> {
                                     const EdgeInsets.symmetric(horizontal: 8.0),
                                     child: Text(
                                         'Sign In',
-                                        style: Theme.of(context).textTheme.subtitle1.copyWith(
+                                        style: Theme.of(context).textTheme.titleMedium.copyWith(
                                             color: Color(0xff02A4E6),
                                             fontWeight: FontWeight.w500)),
                                   ),
@@ -295,7 +297,7 @@ class _RegisterState extends State<Register> {
 
   onValidate(String value, String label) {
     if (value.isEmpty) {
-      return label + ' ' + appStateModel.blocks.localeText.isRequired;
+      return '$label ${appStateModel.blocks.localeText.isRequired}';
     }
     return null;
   }

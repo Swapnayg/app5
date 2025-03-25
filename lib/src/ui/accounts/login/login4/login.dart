@@ -21,6 +21,8 @@ import 'register.dart';
 
 
 class Login4 extends StatefulWidget {
+  const Login4({super.key});
+
   @override
   _Login4State createState() => _Login4State();
 }
@@ -33,10 +35,10 @@ class _Login4State extends State<Login4> {
   bool _obscureText = true;
   bool isLoading = false;
   final _formKey = GlobalKey<FormState>();
-  TextEditingController usernameController = new TextEditingController();
-  TextEditingController passwordController = new TextEditingController();
+  TextEditingController usernameController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
 
-  final RoundedLoadingButtonController _btnController = new RoundedLoadingButtonController();
+  final RoundedLoadingButtonController _btnController = RoundedLoadingButtonController();
 
   @override
   Widget build(BuildContext context) {
@@ -105,7 +107,7 @@ class _Login4State extends State<Login4> {
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.only( top:30, left: 20.0),
-                                  child: Container(
+                                  child: SizedBox(
                                     height: 140,
                                     width: 180,
                                     child: Column(
@@ -188,11 +190,11 @@ class _Login4State extends State<Login4> {
                               color: Colors.white,
                               elevation: 0,
                               valueColor: Colors.black,
-                              child: Text(appStateModel.blocks.localeText.signIn, style: TextStyle(color: Color(0xFF00363a),fontSize: 20)),
                               controller: _btnController,
                               onPressed: () => _submit(context),
                               animateOnTap: false,
                               width: 200,
+                              child: Text(appStateModel.blocks.localeText.signIn, style: TextStyle(color: Color(0xFF00363a),fontSize: 20)),
                             ),
                             SizedBox(height: 30.0),
                             FlatButton(
@@ -203,7 +205,7 @@ class _Login4State extends State<Login4> {
                                 },
                                 child: Text(
                                     appStateModel.blocks.localeText.forgotPassword,
-                                    style: Theme.of(context).textTheme.bodyText2.copyWith(
+                                    style: Theme.of(context).textTheme.bodyMedium.copyWith(
                                         fontSize: 15,
                                         color: Colors.white.withOpacity(0.6)
                                     ))),
@@ -219,7 +221,7 @@ class _Login4State extends State<Login4> {
                                     Text(
                                         appStateModel.blocks.localeText
                                             .dontHaveAnAccount,
-                                        style: Theme.of(context).textTheme.bodyText2.copyWith(
+                                        style: Theme.of(context).textTheme.bodyMedium.copyWith(
                                             fontSize: 15,
                                             color: Colors.white.withOpacity(0.6)
                                         )),
@@ -230,7 +232,7 @@ class _Login4State extends State<Login4> {
                                           appStateModel.blocks.localeText.signUp,
                                           style: Theme.of(context)
                                               .textTheme
-                                              .bodyText2
+                                              .bodyMedium
                                               .copyWith(
                                               color:
                                               Colors.white)),
@@ -244,14 +246,14 @@ class _Login4State extends State<Login4> {
                                 children: <Widget>[
                                   Padding(
                                     padding: const EdgeInsets.all(8.0),
-                                    child: Container(
+                                    child: SizedBox(
                                       height: 50.0, // height of the button
                                       width: 50.0,
                                       child: Card(
                                         shape: StadiumBorder(),
                                         margin: EdgeInsets.all(0),
                                         color: Color(0xFFEA4335),
-                                        child: Container(
+                                        child: SizedBox(
                                           height: 50,
                                           width: 50,
                                           child: Center(
@@ -278,7 +280,7 @@ class _Login4State extends State<Login4> {
                                       shape: StadiumBorder(),
                                       margin: EdgeInsets.all(0),
                                       color: Color(0xFF3b5998),
-                                      child: Container(
+                                      child: SizedBox(
                                         height: 50,
                                         width: 50,
                                         child: IconButton(
@@ -301,7 +303,7 @@ class _Login4State extends State<Login4> {
                                       shape: StadiumBorder(),
                                       margin: EdgeInsets.all(0),
                                       color: Theme.of(context).brightness == Brightness.dark ? Color(0xFFFFFFFF) : Color(0xFF000000),
-                                      child: Container(
+                                      child: SizedBox(
                                         height: 50,
                                         width: 50,
                                         child: IconButton(
@@ -325,7 +327,7 @@ class _Login4State extends State<Login4> {
                                       shape: StadiumBorder(),
                                       margin: EdgeInsets.all(0),
                                       color: Color(0xFF34B7F1),
-                                      child: Container(
+                                      child: SizedBox(
                                         height: 50,
                                         width: 50,
                                         child: IconButton(
@@ -360,15 +362,15 @@ class _Login4State extends State<Login4> {
                               padding: EdgeInsets.all(24),
                               child: Wrap(
                                 children: [
-                                  new Row(
+                                  Row(
                                     mainAxisSize: MainAxisSize.min,
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      new CircularProgressIndicator(),
+                                      CircularProgressIndicator(),
                                       SizedBox(
                                         width: 24,
                                       ),
-                                      new Text(appStateModel.blocks.localeText.pleaseWait),
+                                      Text(appStateModel.blocks.localeText.pleaseWait),
                                     ],
                                   ),
                                 ],
@@ -388,7 +390,7 @@ class _Login4State extends State<Login4> {
   }
 
   _submit(BuildContext context) async {
-    var login = new Map<String, dynamic>();
+    var login = Map<String, dynamic>();
     if (_formKey.currentState.validate()) {
       login["username"] = usernameController.text;
       login["password"] = passwordController.text;
@@ -410,7 +412,7 @@ class _Login4State extends State<Login4> {
 
   _loginGoogleUser(String idToken, GoogleSignInAccount googleUser,
       BuildContext context) async {
-    var login = new Map<String, dynamic>();
+    var login = <String, dynamic>{};
     login["type"] = 'google';
     login["token"] = idToken;
     login["name"] = googleUser.displayName;
@@ -469,29 +471,26 @@ class _Login4State extends State<Login4> {
       ),
     );
 
-    if(credential.authorizationCode != null) {
-
-      var login = new Map<String, dynamic>();
-      login["userIdentifier"] = credential.userIdentifier;
-      if(credential.authorizationCode != null)
-        login["authorizationCode"] = credential.authorizationCode;
-      if(credential.email != null) {
-        login["email"] = credential.email;
-      } else {
-        //await _showDialog(context);
-        //TODO If email and name is empty Request Email and Name
-      }
-      if(credential.userIdentifier != null)
-        login["email"] = credential.userIdentifier;
-      if(credential.givenName != null)
-        login["name"] = credential.givenName;
-      else login["name"] = '';
-      login["useBundleId"] = Platform.isIOS || Platform.isMacOS ? 'true' : 'false';
-      bool status = await appStateModel.appleLogin(login);
-      if (status) {
-        Navigator.of(context).pop();
-      }
+    var login = new Map<String, dynamic>();
+    login["userIdentifier"] = credential.userIdentifier;
+    if(credential.authorizationCode != null)
+      login["authorizationCode"] = credential.authorizationCode;
+    if(credential.email != null) {
+      login["email"] = credential.email;
+    } else {
+      //await _showDialog(context);
+      //TODO If email and name is empty Request Email and Name
     }
-  }
+    if(credential.userIdentifier != null)
+      login["email"] = credential.userIdentifier;
+    if(credential.givenName != null)
+      login["name"] = credential.givenName;
+    else login["name"] = '';
+    login["useBundleId"] = Platform.isIOS || Platform.isMacOS ? 'true' : 'false';
+    bool status = await appStateModel.appleLogin(login);
+    if (status) {
+      Navigator.of(context).pop();
+    }
+    }
 
 }

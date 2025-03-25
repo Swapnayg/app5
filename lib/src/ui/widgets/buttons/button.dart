@@ -8,7 +8,7 @@ class AccentButton extends StatelessWidget {
   final bool showProgress;
   AppStateModel appStateModel = AppStateModel();
 
-  AccentButton({
+  AccentButton({super.key, 
     @required this.onPressed,
     @required this.text,
     this.showProgress = false,

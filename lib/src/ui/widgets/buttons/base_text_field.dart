@@ -11,7 +11,7 @@ class BaseTextField extends StatelessWidget {
   final TextEditingController controller;
   final String initialValue;
 
-  BaseTextField({
+  const BaseTextField({super.key, 
     this.suffix,
     this.labelText,
     this.hintText,
@@ -20,7 +20,7 @@ class BaseTextField extends StatelessWidget {
     this.validator,
     this.controller,
     this.initialValue,
-  }) : super();
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -32,12 +32,12 @@ class BaseTextField extends StatelessWidget {
       maxLines: 1,
       initialValue: initialValue,
       keyboardType: TextInputType.number,
-      decoration: new InputDecoration(
+      decoration: InputDecoration(
         labelText: labelText,
         labelStyle: const TextStyle(color: Colors.grey, fontSize: 14.0),
         suffixIcon: suffix == null
             ? null
-            : new Padding(
+            : Padding(
           padding: const EdgeInsetsDirectional.only(end: 12.0),
           child: suffix,
         ),
@@ -48,7 +48,7 @@ class BaseTextField extends StatelessWidget {
             borderSide: const BorderSide(color: Colors.grey, width: 0.5)),
         focusedBorder: OutlineInputBorder(
             borderSide:
-            BorderSide(color: Theme.of(context).accentColor, width: 1.0)),
+            BorderSide(color: Theme.of(context).colorScheme.secondary, width: 1.0)),
         hintText: hintText,
       ),
     );

@@ -13,14 +13,14 @@ class ProductItem extends StatefulWidget {
   final VendorProduct product;
   final Order order;
   final ProductVariation variation;
-  ProductItem({Key key, this.vendorBloc, this.product, this.order,this.variation})
+  const ProductItem({Key key, this.vendorBloc, this.product, this.order,this.variation})
       : super(key: key);
   @override
   _ProductItemState createState() => _ProductItemState();
 }
 
 class _ProductItemState extends State<ProductItem> {
-  AppStateModel _appStateModel = AppStateModel();
+  final AppStateModel _appStateModel = AppStateModel();
   NumberFormat formatter;
   var qty = 0;
 
@@ -34,8 +34,7 @@ class _ProductItemState extends State<ProductItem> {
   Widget build(BuildContext context) {
 
 
-    if (widget.order.lineItems != null &&
-        widget.order.lineItems
+    if (widget.order.lineItems
             .any((lineItems) => lineItems.productId == widget.product.id)) {
 
       if(widget.product.type != 'variable') {
@@ -52,7 +51,7 @@ class _ProductItemState extends State<ProductItem> {
           Container(
             padding: EdgeInsets.all(10.0),
             height: 130,
-            child: new ListTile(
+            child: ListTile(
                 leading: AspectRatio(
                   aspectRatio: 18.0 / 20,
                   child: Image.network(
@@ -62,7 +61,7 @@ class _ProductItemState extends State<ProductItem> {
                 ),
                 //TODO ADD Plus minus button if product is already there in order lineitems
 
-                title: new Text(
+                title: Text(
                   widget.product.name,
                 ),
                 subtitle: Column(
@@ -159,8 +158,9 @@ class _ProductItemState extends State<ProductItem> {
       setState(() {
         qty = qty + 1;
       });
-    } else
+    } else {
       _addProduct();
+    }
     // print(qty);
   }
 

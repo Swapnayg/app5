@@ -11,8 +11,8 @@ class VendorDetailStateModel extends Model {
   VendorDetailsModel? vendorDetails;
   int page = 1;
   int reviewPage = 1;
-  var reviewsFilter = new Map<String, dynamic>();
-  var filter = new Map<String, String>();
+  var reviewsFilter = <String, dynamic>{};
+  var filter = <String, String>{};
   bool hasMoreItems = false;
 
   final apiProvider = ApiProvider();
@@ -34,7 +34,7 @@ class VendorDetailStateModel extends Model {
     page = page + 1;
     filter['page'] = page.toString();
     List<Product> moreProducts = await apiProvider.fetchProductList(filter);
-    if (moreProducts.length != 0) {
+    if (moreProducts.isNotEmpty) {
       vendorDetails.recentProducts.addAll(moreProducts);
       hasMoreItems = moreProducts.length > 9;
       notifyListeners();

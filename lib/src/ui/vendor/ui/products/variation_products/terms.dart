@@ -10,7 +10,7 @@ class TermsPage extends StatefulWidget {
   final ProductAttribute productAttribute;
   final ProductVariation variationProduct;
 
-  TermsPage(
+  const TermsPage(
       {Key key,
       this.productAttribute,
       this.variationProduct,
@@ -21,7 +21,7 @@ class TermsPage extends StatefulWidget {
 }
 
 class _TermsPageState extends State<TermsPage> {
-  AppStateModel _appStateModel = AppStateModel();
+  final AppStateModel _appStateModel = AppStateModel();
 
   @override
   void initState() {
@@ -52,8 +52,7 @@ class _TermsPageState extends State<TermsPage> {
       onTap: () => _onAttributesTermsTap(attributesTerm),
       title: Text(attributesTerm.name),
       trailing: Checkbox(
-        value: widget.variationProduct.attributes != null &&
-            widget.variationProduct.attributes
+        value: widget.variationProduct.attributes
                 .any((item) => item.option == attributesTerm.name),
         onChanged: (bool value) {
           setState(() {
@@ -65,7 +64,7 @@ class _TermsPageState extends State<TermsPage> {
   }
 
   _onAttributesTermsTap(AttributeTerms term) {
-    VariationAttribute attribute = new VariationAttribute();
+    VariationAttribute attribute = VariationAttribute();
     attribute.id = widget.productAttribute.id;
     attribute.name = widget.productAttribute.name;
     attribute.option = term.name;

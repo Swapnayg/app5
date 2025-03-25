@@ -12,73 +12,73 @@ class DBService {
     _db = FirebaseFirestore.instance;
   }
 
-  String _conversationsCollection = "Conversations";
+  final String _conversationsCollection = "Conversations";
 
-  Future<void> updateChatTimeStamp(String _conversationID) {
-    var _ref = _db.collection(_conversationsCollection).doc(_conversationID);
-    return _ref.update({"timestamp": Timestamp.now()});
+  Future<void> updateChatTimeStamp(String conversationID) {
+    var ref = _db.collection(_conversationsCollection).doc(conversationID);
+    return ref.update({"timestamp": Timestamp.now()});
   }
 
-  Future<void> sendMessage(String _conversationID, Message _message) {
-    var _ref =
-        _db.collection(_conversationsCollection).doc(_conversationID);
-    var _messageType = "";
-    switch (_message.type) {
+  Future<void> sendMessage(String conversationID, Message message) {
+    var ref =
+        _db.collection(_conversationsCollection).doc(conversationID);
+    var messageType = "";
+    switch (message.type) {
       case MessageType.Text:
-        _messageType = "text";
+        messageType = "text";
         break;
       case MessageType.Image:
-        _messageType = "image";
+        messageType = "image";
         break;
       default:
     }
-    return _ref.update({
+    return ref.update({
       "messages": FieldValue.arrayUnion(
         [
           {
-            "message": _message.content,
-            "senderID": _message.senderID,
-            "timestamp": _message.timestamp,
-            "type": _messageType,
+            "message": message.content,
+            "senderID": message.senderID,
+            "timestamp": message.timestamp,
+            "type": messageType,
           },
         ],
       ),
-    }).then((value) => updateChatTimeStamp(_conversationID));
+    }).then((value) => updateChatTimeStamp(conversationID));
   }
 
-  Stream<Conversation> getConversation(String _conversationID) {
-    var _ref =
-        _db.collection(_conversationsCollection).doc(_conversationID);
-    return _ref.snapshots().map(
-      (_doc) {
-        return Conversation.fromFirestore(_doc);
+  Stream<Conversation> getConversation(String conversationID) {
+    var ref =
+        _db.collection(_conversationsCollection).doc(conversationID);
+    return ref.snapshots().map(
+      (doc) {
+        return Conversation.fromFirestore(doc);
       },
     );
   }
 
   Stream<List<Conversation>> getConversations(String id) {
-    var _ref = _db
+    var ref = _db
         .collection(_conversationsCollection)
         .orderBy("timestamp", descending: true) //Uncomment this line after creating indexes in firebase other will this query will not work
         .where("members", arrayContains: id);
     //Don't delete this, uncommenting this will give and erro in console with url to create indexes in firebase console.
     //click the url and create indexs
-    _ref.get().catchError((e) => print(e));
-    return _ref.get().asStream().map((_snapshot) {
-      return _snapshot.docs.map((_doc) {
-        return Conversation.fromFirestore(_doc);
+    ref.get().catchError((e) => print(e));
+    return ref.get().asStream().map((snapshot) {
+      return snapshot.docs.map((doc) {
+        return Conversation.fromFirestore(doc);
       }).toList();
     });
   }
 
   Future<String> getConversationId(String chatId, String userId, String userName, String userAvatar, String vendorId, String vendorName, String vendorAvatar, bool isVendor) async {
-    var _ref = _db.collection(_conversationsCollection);
+    var ref = _db.collection(_conversationsCollection);
     try {
-      var conversation = await _ref.doc(chatId).get();
+      var conversation = await ref.doc(chatId).get();
       if (conversation.data() != null) {
         return chatId;//conversation.data["conversationID"];
       } else {
-        await _ref.doc(chatId).set(
+        await ref.doc(chatId).set(
           {
             "members": [userId, vendorId],
             'messages': [],

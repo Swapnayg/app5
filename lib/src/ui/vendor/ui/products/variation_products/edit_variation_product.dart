@@ -13,14 +13,14 @@ class EditVariationProduct extends StatefulWidget {
   final VendorProduct product;
   final ProductVariation variationProduct;
 
-  EditVariationProduct({Key key, this.vendorBloc, this.product, this.variationProduct}) : super(key: key);
+  const EditVariationProduct({Key key, this.vendorBloc, this.product, this.variationProduct}) : super(key: key);
   @override
   _EditVariationProductState createState() => _EditVariationProductState();
 }
 
 class _EditVariationProductState extends State<EditVariationProduct> {
 
-  AppStateModel _appStateModel = AppStateModel();
+  final AppStateModel _appStateModel = AppStateModel();
 
   final _formKey = GlobalKey<FormState>();
 
@@ -29,7 +29,7 @@ class _EditVariationProductState extends State<EditVariationProduct> {
   @override
   void initState() {
     super.initState();
-    if (widget.variationProduct.attributes == null) widget.variationProduct.attributes = [];
+    widget.variationProduct.attributes ??= [];
 
   }
 
@@ -53,9 +53,9 @@ class _EditVariationProductState extends State<EditVariationProduct> {
   }
 
   _buildList() {
-    List<Widget> list = new List<Widget>();
+    List<Widget> list = List<Widget>();
 
-    widget.product.attributes.forEach((attribute) {
+    for (var attribute in widget.product.attributes) {
       if (attribute.variation) {
         String selected = attribute.options.first;
         if (widget.variationProduct.attributes
@@ -67,7 +67,7 @@ class _EditVariationProductState extends State<EditVariationProduct> {
         list.add(SliverToBoxAdapter(
           child: Container(
             child: Text(attribute.name,
-                style: Theme.of(context).textTheme.subtitle1),
+                style: Theme.of(context).textTheme.titleMedium),
           ),
         ));
         list.add(
@@ -83,7 +83,7 @@ class _EditVariationProductState extends State<EditVariationProduct> {
               ),
               onChanged: (String newValue) {
                 VariationAttribute variationAttribute =
-                new VariationAttribute();
+                VariationAttribute();
                 variationAttribute.id = attribute.id;
                 variationAttribute.name = attribute.name;
                 variationAttribute.option = newValue;
@@ -114,7 +114,7 @@ class _EditVariationProductState extends State<EditVariationProduct> {
           ),
         );
       }
-    });
+    }
     list.add(SliverToBoxAdapter(
       child: Form(
         key: _formKey,
@@ -128,8 +128,10 @@ class _EditVariationProductState extends State<EditVariationProduct> {
               ),
               validator: (value) {
                 if (value.isEmpty) {
-                  return _appStateModel.blocks.localeText.pleaseEnter + ' ' + _appStateModel.blocks.localeText.sku;
-                } else return null;
+                  return '${_appStateModel.blocks.localeText.pleaseEnter} ${_appStateModel.blocks.localeText.sku}';
+                } else {
+                  return null;
+                }
               },
               onSaved: (val) => setState(() => widget.variationProduct.sku = val),
             ),
@@ -144,8 +146,10 @@ class _EditVariationProductState extends State<EditVariationProduct> {
               decoration: InputDecoration(labelText: _appStateModel.blocks.localeText.regularPrice),
               validator: (value) {
                 if (value.isEmpty) {
-                  return _appStateModel.blocks.localeText.pleaseEnter + ' ' + _appStateModel.blocks.localeText.regularPrice;
-                } else return null;
+                  return '${_appStateModel.blocks.localeText.pleaseEnter} ${_appStateModel.blocks.localeText.regularPrice}';
+                } else {
+                  return null;
+                }
               },
               onSaved: (val) =>
                   setState(() => widget.variationProduct.regularPrice = val),
@@ -155,8 +159,10 @@ class _EditVariationProductState extends State<EditVariationProduct> {
               decoration: InputDecoration(labelText: _appStateModel.blocks.localeText.salesPrice),
               validator: (value) {
                 if (value.isEmpty) {
-                  return _appStateModel.blocks.localeText.pleaseEnter + ' ' + _appStateModel.blocks.localeText.salesPrice;
-                } else return null;
+                  return '${_appStateModel.blocks.localeText.pleaseEnter} ${_appStateModel.blocks.localeText.salesPrice}';
+                } else {
+                  return null;
+                }
               },
               onSaved: (val) =>
                   setState(() => widget.variationProduct.salePrice = val),
@@ -165,7 +171,7 @@ class _EditVariationProductState extends State<EditVariationProduct> {
             Text(_appStateModel.blocks.localeText.stockStatus, style: Theme
                 .of(context)
                 .textTheme
-                .subtitle2),
+                .titleSmall),
             Row(
               children: <Widget>[
                 Radio<String>(
@@ -173,18 +179,18 @@ class _EditVariationProductState extends State<EditVariationProduct> {
                   groupValue: widget.variationProduct.stockStatus,
                   onChanged: handleStockStatusValueChanged,
                 ),
-                new Text(
+                Text(
                   _appStateModel.blocks.localeText.inStock,
-                  style: new TextStyle(fontSize: 16.0),
+                  style: TextStyle(fontSize: 16.0),
                 ),
                 Radio<String>(
                   value: 'outofstock',
                   groupValue: widget.variationProduct.stockStatus,
                   onChanged: handleStockStatusValueChanged,
                 ),
-                new Text(
+                Text(
                   _appStateModel.blocks.localeText.outOfStock,
-                  style: new TextStyle(fontSize: 16.0),
+                  style: TextStyle(fontSize: 16.0),
                 ),
               ],
             ),
@@ -195,9 +201,9 @@ class _EditVariationProductState extends State<EditVariationProduct> {
                   groupValue: widget.variationProduct.stockStatus,
                   onChanged: handleStockStatusValueChanged,
                 ),
-                new Text(
+                Text(
                   _appStateModel.blocks.localeText.backOrder,
-                  style: new TextStyle(fontSize: 16.0),
+                  style: TextStyle(fontSize: 16.0),
                 ),
               ],
             ),

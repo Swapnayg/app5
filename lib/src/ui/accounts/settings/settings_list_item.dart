@@ -19,7 +19,7 @@ class DisplayOption {
 }
 
 class SettingsListItem<T> extends StatefulWidget {
-  SettingsListItem({
+  const SettingsListItem({
     Key key,
     @required this.title,
     @required this.options,
@@ -146,21 +146,20 @@ class _SettingsListItemState<T> extends State<SettingsListItem<T>>
             children: [
               Text(
                 optionDisplay.title,
-                style: theme.textTheme.bodyText1.copyWith(
+                style: theme.textTheme.bodyLarge.copyWith(
                   color: Theme.of(context).colorScheme.onSurface,
                 ),
               ),
-              if (optionDisplay.subtitle != null)
-                Text(
-                  optionDisplay.subtitle,
-                  style: theme.textTheme.bodyText1.copyWith(
-                    fontSize: 12,
-                    color: Theme.of(context)
-                        .colorScheme
-                        .onPrimary
-                        .withOpacity(0.8),
-                  ),
+              Text(
+                optionDisplay.subtitle,
+                style: theme.textTheme.bodyText1.copyWith(
+                  fontSize: 12,
+                  color: Theme.of(context)
+                      .colorScheme
+                      .onPrimary
+                      .withOpacity(0.8),
                 ),
+              ),
             ],
           ),
           groupValue: widget.selectedOption,
@@ -234,7 +233,7 @@ class _CategoryHeader extends StatelessWidget {
                     children: [
                       Text(
                         title,
-                        style: textTheme.subtitle1.apply(
+                        style: textTheme.titleMedium.apply(
                           color: colorScheme.onSurface,
                         ),
                       ),
@@ -244,7 +243,7 @@ class _CategoryHeader extends StatelessWidget {
                           subtitle,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
-                          style: textTheme.overline.apply(
+                          style: textTheme.labelSmall.apply(
                             color: colorScheme.onSurface,
                           ),
                         ),

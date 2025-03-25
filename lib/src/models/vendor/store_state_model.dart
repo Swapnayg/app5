@@ -5,7 +5,7 @@ import 'store_model.dart';
 
 class StoreStateModel extends Model {
 
-  static final StoreStateModel _storeStateModel = new StoreStateModel._internal();
+  static final StoreStateModel _storeStateModel = StoreStateModel._internal();
 
   factory StoreStateModel() {
     return _storeStateModel;
@@ -15,7 +15,7 @@ class StoreStateModel extends Model {
   final apiProvider = ApiProvider();
   List<StoreModel> stores;
   int page = 1;
-  var filter = new Map<String, String>();
+  var filter = <String, String>{};
   bool hasMoreItems = false;
 
   getAllStores() async {

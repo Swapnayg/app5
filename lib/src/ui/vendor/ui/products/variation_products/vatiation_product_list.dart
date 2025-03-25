@@ -14,7 +14,7 @@ class VariationProductList extends StatefulWidget {
   final VendorBloc vendorBloc;
   final VendorProduct product;
 
-  VariationProductList({
+  const VariationProductList({
     Key key,
     this.vendorBloc,
     this.product,
@@ -25,8 +25,8 @@ class VariationProductList extends StatefulWidget {
 }
 
 class _VariationProductListState extends State<VariationProductList> {
-  ScrollController _scrollController = new ScrollController();
-  AppStateModel _appStateModel = AppStateModel();
+  final ScrollController _scrollController = ScrollController();
+  final AppStateModel _appStateModel = AppStateModel();
   @override
   void initState() {
     super.initState();
@@ -77,9 +77,9 @@ class _VariationProductListState extends State<VariationProductList> {
         name: _appStateModel.selectedCurrency);
     var name = '';
 
-    variationProduct.attributes.forEach((value) {
-      name = name + ' ' + value.option;
-    });
+    for (var value in variationProduct.attributes) {
+      name = '$name ${value.option}';
+    }
 
     return MergeSemantics(
       child: ListTile(
@@ -90,7 +90,7 @@ class _VariationProductListState extends State<VariationProductList> {
           ),
           title: Text(name),
           subtitle: Text(formatter
-              .format((double.parse('${variationProduct.regularPrice}')))),
+              .format((double.parse(variationProduct.regularPrice)))),
           trailing: Row(
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.end,
@@ -143,14 +143,14 @@ class _VariationProductListState extends State<VariationProductList> {
   }
 
   buildList(AsyncSnapshot<List<ProductVariation>> snapshot) {
-    List<Widget> list = new List<Widget>();
+    List<Widget> list = List<Widget>();
     list.add(buildItemList(snapshot));
     if (snapshot.data != null) {
       list.add(SliverPadding(
           padding: EdgeInsets.all(0.0),
           sliver: SliverList(
               delegate: SliverChildListDelegate([
-            Container(
+            SizedBox(
                 height: 60,
                 child: StreamBuilder(
                     // stream: widget.vendorBloc.hasMoreProducts,

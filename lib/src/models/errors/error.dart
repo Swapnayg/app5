@@ -17,14 +17,14 @@ class WpErrors {
     this.data,
   });
 
-  factory WpErrors.fromJson(Map<String, dynamic> json) => new WpErrors(
+  factory WpErrors.fromJson(Map<String, dynamic> json) => WpErrors(
     success: json["success"],
-    data: new List<Datum>.from(json["data"].map((x) => Datum.fromJson(x))),
+    data: List<Datum>.from(json["data"].map((x) => Datum.fromJson(x))),
   );
 
   Map<String, dynamic> toJson() => {
     "success": success,
-    "data": new List<dynamic>.from(data.map((x) => x.toJson())),
+    "data": List<dynamic>.from(data.map((x) => x.toJson())),
   };
 }
 
@@ -37,9 +37,9 @@ class Datum {
     this.message,
   });
 
-  factory Datum.fromJson(Map<String, dynamic> json) => new Datum(
-    code: json["code"] != null ? json["code"].toString() : null,
-    message: json["message"] != null ? json["message"] : null,
+  factory Datum.fromJson(Map<String, dynamic> json) => Datum(
+    code: json["code"]?.toString(),
+    message: json["message"],
   );
 
   Map<String, dynamic> toJson() => {
@@ -63,12 +63,12 @@ class Notice {
   List<Messages> data;
 
   factory Notice.fromJson(Map<String, dynamic> json) => Notice(
-    success: json["success"] == null ? null : json["success"],
+    success: json["success"],
     data: json["data"] == null ? null : List<Messages>.from(json["data"].map((x) => Messages.fromJson(x))),
   );
 
   Map<String, dynamic> toJson() => {
-    "success": success == null ? null : success,
+    "success": success,
     "data": data == null ? null : List<dynamic>.from(data.map((x) => x.toJson())),
   };
 }
@@ -83,12 +83,12 @@ class Messages {
   List<dynamic> data;
 
   factory Messages.fromJson(Map<String, dynamic> json) => Messages(
-    notice: json["notice"] == null ? null : json["notice"],
+    notice: json["notice"],
     data: json["data"] == null ? null : List<dynamic>.from(json["data"].map((x) => x)),
   );
 
   Map<String, dynamic> toJson() => {
-    "notice": notice == null ? null : notice,
+    "notice": notice,
     "data": data == null ? null : List<dynamic>.from(data.map((x) => x)),
   };
 }
