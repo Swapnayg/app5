@@ -30,20 +30,20 @@ class ReviewModel {
   });
 
   factory ReviewModel.fromJson(Map<String, dynamic> json) => ReviewModel(
-    id: json["id"],
-    author: json["author"],
-    email: json["email"],
-    content: json["content"],
+    id: json["id"] == null ? null : json["id"],
+    author: json["author"] == null ? null : json["author"],
+    email: json["email"] == null ? null : json["email"],
+    content: json["content"] == null ? null : json["content"],
     rating: (json["rating"] == null || json["rating"] == '') ? '0' : json["rating"],
-    avatar: json["avatar"],
+    avatar: json["avatar"] == null ? null : json["avatar"],
     date: json["date"] == null ? null : DateTime.parse(json["date"]),
   );
 
   Map<String, dynamic> toJson() => {
-    "id": id,
-    "author": author,
-    "email": email,
-    "content": content,
-    "avatar": avatar,
+    "id": id == null ? null : id,
+    "author": author == null ? null : author,
+    "email": email == null ? null : email,
+    "content": content == null ? null : content,
+    "avatar": avatar == null ? null : avatar,
   };
 }

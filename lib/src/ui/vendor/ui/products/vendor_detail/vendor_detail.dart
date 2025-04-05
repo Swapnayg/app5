@@ -1,9 +1,9 @@
+// ignore_for_file: library_private_types_in_public_api, prefer_typing_uninitialized_variables, unused_field, unnecessary_null_comparison, curly_braces_in_flow_control_structures, deprecated_member_use
+
 import 'dart:async';
 
 import 'package:fab_circular_menu/fab_circular_menu.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -27,7 +27,7 @@ class VendorDetails extends StatefulWidget {
   final VendorDetailStateModel vendorDetailModel = VendorDetailStateModel();
   final vendorId;
 
-  VendorDetails({Key key, this.vendorId}) : super(key: key);
+  VendorDetails({required Key key, this.vendorId}) : super(key: key);
 
   @override
   _VendorDetailsState createState() => _VendorDetailsState();
@@ -40,7 +40,7 @@ class _VendorDetailsState extends State<VendorDetails>
   final textStyle = TextStyle(
       fontFamily: 'Lexend_Deca', fontSize: 16, fontWeight: FontWeight.w400);
   var _isVisible;
-  TabController _tabController;
+  late TabController _tabController;
 
   final ScrollController _homeScrollController = ScrollController();
   final ScrollController _allProductsScrollController = ScrollController();
@@ -152,7 +152,7 @@ class _VendorDetailsState extends State<VendorDetails>
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.start,
                                               children: <Widget>[
-                                                SizedBox(
+                                                Container(
                                                   width:
                                                       MediaQuery.of(context)
                                                               .size
@@ -164,7 +164,7 @@ class _VendorDetailsState extends State<VendorDetails>
                                                       maxLines: 1,
                                                       style: Theme.of(context)
                                                           .primaryTextTheme
-                                                          .bodyLarge
+                                                          .bodyLarge!
                                                           .copyWith(
                                                             fontFamily:
                                                                 'Lexend_Deca',
@@ -191,7 +191,7 @@ class _VendorDetailsState extends State<VendorDetails>
                                                         style: Theme.of(
                                                                 context)
                                                             .primaryTextTheme
-                                                            .bodyLarge
+                                                            .bodyLarge!
                                                             .copyWith(
                                                               fontFamily:
                                                                   'Lexend_Deca',
@@ -223,8 +223,8 @@ class _VendorDetailsState extends State<VendorDetails>
                                 indicatorHeight: 5,
                                 indicatorColor: Theme.of(context)
                                     .primaryTextTheme
-                                    .bodyLarge
-                                    .color, //Theme.of(context).primaryColor,//Colors.white,//Theme.of(context).primaryColor,
+                                    .bodyLarge!
+                                    .color ?? Colors.black, // Provide a default color if null
                                 indicatorSize: MD2IndicatorSize
                                     .full //3 different modes tiny-normal-full
                                 ),
@@ -312,41 +312,40 @@ class _VendorDetailsState extends State<VendorDetails>
             Positioned(
               child: ScopedModelDescendant<VendorDetailStateModel>(
                   builder: (context, child, model) {
-                if (model.vendorDetails?.store.phone != null) {
+                if (model.vendorDetails.store.phone != null)
                   return FabCircularMenu(
                     fabOpenColor:
-                        Theme.of(context).buttonTheme.colorScheme.primary,
+                        Theme.of(context).buttonTheme.colorScheme?.primary,
                     fabCloseColor:
-                        Theme.of(context).buttonTheme.colorScheme.primary,
+                        Theme.of(context).buttonTheme.colorScheme?.primary,
                     fabOpenIcon: Icon(
                       Icons.chat_bubble,
                       color:
-                          Theme.of(context).buttonTheme.colorScheme.onPrimary,
+                          Theme.of(context).buttonTheme.colorScheme?.onPrimary,
                     ),
                     fabCloseIcon: Icon(
                       Icons.close,
                       color:
-                          Theme.of(context).buttonTheme.colorScheme.onPrimary,
+                          Theme.of(context).buttonTheme.colorScheme?.onPrimary,
                     ),
-                    child: Container(),
                     ringColor:
-                        Theme.of(context).buttonTheme.colorScheme.primary,
+                        Theme.of(context).buttonTheme.colorScheme?.primary,
                     ringDiameter: 250.0,
                     ringWidth: 100.0,
-                    options: <Widget>[
+                    children: <Widget>[
                       IconButton(
                           icon: Icon(
                             Icons.chat_bubble,
                             color: Theme.of(context)
                                 .buttonTheme
                                 .colorScheme
-                                .onPrimary,
+                                ?.onPrimary,
                           ),
                           onPressed: () {
                             if (appStateModel.user.id != null &&
-                                appStateModel.user.id > 0) {
-                              _chatWithVendor(appStateModel.user.id.toString() + model.vendorDetails.store.id.toString(), model.vendorDetails.store.id.toString(), model.vendorDetails.store.name, model.vendorDetails.store.icon);
-                            } else {
+                                appStateModel.user.id > 0)
+                            _chatWithVendor(appStateModel.user.id.toString() + model.vendorDetails.store.id.toString(), model.vendorDetails.store.id.toString(), model.vendorDetails.store.name, model.vendorDetails.store.icon);
+                            else {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
@@ -355,27 +354,26 @@ class _VendorDetailsState extends State<VendorDetails>
                           },
                           iconSize: 20.0,
                           color: Colors.black),
-                      model.vendorDetails?.store.email != null
-                          ? IconButton(
-                              icon: Icon(
-                                Icons.mail,
-                                color: Theme.of(context)
-                                    .buttonTheme
-                                    .colorScheme
-                                    .onPrimary,
-                              ),
-                              onPressed: () {
-                                openLink(model.vendorDetails.store.email);
-                              },
-                              iconSize: 20.0,
-                              color: Colors.black)
-                          : null,
+                      if (model.vendorDetails.store.email != null)
+                        IconButton(
+                          icon: Icon(
+                            Icons.mail,
+                            color: Theme.of(context)
+                                .buttonTheme
+                                .colorScheme!
+                                .onPrimary,
+                          ),
+                          onPressed: () {
+                            openLink(model.vendorDetails.store.email);
+                          },
+                          iconSize: 20.0,
+                          color: Colors.black),
                       IconButton(
                           icon: Icon(
                             FontAwesomeIcons.whatsapp,
                             color: Theme.of(context)
                                 .buttonTheme
-                                .colorScheme
+                                .colorScheme!
                                 .onPrimary,
                           ),
                           onPressed: () {
@@ -389,7 +387,7 @@ class _VendorDetailsState extends State<VendorDetails>
                             Icons.message,
                             color: Theme.of(context)
                                 .buttonTheme
-                                .colorScheme
+                                .colorScheme!
                                 .onPrimary,
                           ),
                           onPressed: () {
@@ -403,7 +401,7 @@ class _VendorDetailsState extends State<VendorDetails>
                             Icons.call,
                             color: Theme.of(context)
                                 .buttonTheme
-                                .colorScheme
+                                .colorScheme!
                                 .onPrimary,
                           ),
                           onPressed: () {
@@ -414,9 +412,8 @@ class _VendorDetailsState extends State<VendorDetails>
                           color: Colors.black),
                     ],
                   );
-                } else {
+                else
                   return Container();
-                }
               }),
             )
           ],
@@ -426,10 +423,10 @@ class _VendorDetailsState extends State<VendorDetails>
   }
 
   List<Widget> buildLisOfBlocks(AsyncSnapshot<List<Product>> snapshot) {
-    List<Widget> list = List<Widget>();
+    List<Widget> list = List<Widget>.empty(growable: true);
 
     if (snapshot.data != null) {
-      list.add(ProductGrid(products: snapshot.data));
+      list.add(ProductGrid(products: snapshot.data ?? []));
       list.add(SliverPadding(
           padding: EdgeInsets.all(0.0),
           sliver: SliverList(
@@ -456,7 +453,11 @@ class _VendorDetailsState extends State<VendorDetails>
   _chatWithVendor(String chatId, String id, String name, String icon,) {
     Navigator.push(context, MaterialPageRoute(builder: (context) {
       return ChatPage(
-          chatId: chatId, vendorId: id, vendorName: name, vendorAvatar: icon
+          key: UniqueKey(),
+          chatId: chatId, 
+          vendorId: id, 
+          vendorName: name, 
+          vendorAvatar: icon
       );
     }));
   }

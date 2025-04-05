@@ -1,4 +1,7 @@
+// ignore_for_file: no_leading_underscores_for_local_identifiers, unused_local_variable, deprecated_member_use
+
 import 'dart:async';
+import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +20,7 @@ import '../../ui/widgets/image_view.dart';
 
 class AdminChatPage extends StatefulWidget {
   final String userId;
-  const AdminChatPage({Key key, this.userId}) : super(key: key);
+  const AdminChatPage({required Key key, required this.userId}) : super(key: key);
   @override
   State<StatefulWidget> createState() {
     return _AdminChatPageState();
@@ -25,18 +28,18 @@ class AdminChatPage extends StatefulWidget {
 }
 
 class _AdminChatPageState extends State<AdminChatPage> {
-  double _deviceHeight;
-  double _deviceWidth;
+  late double _deviceHeight;
+  late double _deviceWidth;
 
-  String _conversationID;
-  String _userID;
+  late String _conversationID;
+  late String _userID;
 
-  GlobalKey<FormState> _formKey;
-  ScrollController _listViewController;
+  late GlobalKey<FormState> _formKey;
+  late ScrollController _listViewController;
   final appStateModel = AppStateModel();
   final config = Config();
   bool notify = true;
-  String _messageText;
+  late String _messageText;
 
   @override
   void initState() {
@@ -91,15 +94,16 @@ class _AdminChatPageState extends State<AdminChatPage> {
       builder: (BuildContext _context, _snapshot) {
         Timer(
           Duration(milliseconds: 50),
-          () => {
-            if(_listViewController.hasClients)
-            _listViewController
-                .jumpTo(_listViewController.position.maxScrollExtent),
+          () {
+            if(_listViewController.hasClients) {
+              _listViewController
+                .jumpTo(_listViewController.position.maxScrollExtent);
+            }
           },
         );
         var _conversationData = _snapshot.data;
         if (_conversationData != null) {
-          if (_conversationData.messages.length != 0) {
+          if (_conversationData.messages.isNotEmpty) {
             return ListView.builder(
               controller: _listViewController,
               padding: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
@@ -124,28 +128,28 @@ class _AdminChatPageState extends State<AdminChatPage> {
   );
     }
 
-  Widget _messageListViewChild(bool isOwnMessage, Message message) {
+  Widget _messageListViewChild(bool _isOwnMessage, Message _message) {
     return Padding(
       padding: EdgeInsets.only(bottom: 4),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.end,
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment:
-            isOwnMessage ? MainAxisAlignment.end : MainAxisAlignment.start,
+            _isOwnMessage ? MainAxisAlignment.end : MainAxisAlignment.start,
         children: <Widget>[
           SizedBox(width: _deviceWidth * 0.02),
-          message.type == MessageType.Text
+          _message.type == MessageType.Text
               ? _textMessageCard(
-                  isOwnMessage, message.content, message.timestamp)
+                  _isOwnMessage, _message.content, _message.timestamp)
               : _imageMessageCard(
-                  isOwnMessage, message.content, message.timestamp),
+                  _isOwnMessage, _message.content, _message.timestamp),
         ],
       ),
     );
   }
 
   Widget _textMessageCard(
-      bool isOwnMessage, String message, Timestamp timestamp) {
+      bool _isOwnMessage, String _message, Timestamp _timestamp) {
 
     final DateTime now = DateTime.now();
     final DateFormat formatter = DateFormat('yyyy-MM-dd');
@@ -166,11 +170,11 @@ class _AdminChatPageState extends State<AdminChatPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
-              Text(message),
+              Text(_message),
               Align(
                 alignment: Alignment.bottomRight,
                 child: Text(
-                  timeago.format(timestamp.toDate(), locale: appStateModel.appLocale.languageCode),
+                  timeago.format(_timestamp.toDate(), locale: appStateModel.appLocale.languageCode),
                   textAlign: TextAlign.right,
                   style: TextStyle(color: Theme.of(context).hintColor, fontSize: 12),
                 ),
@@ -183,9 +187,9 @@ class _AdminChatPageState extends State<AdminChatPage> {
   }
 
   Widget _imageMessageCard(
-      bool isOwnMessage, String imageURL, Timestamp timestamp) {
-    DecorationImage image =
-        DecorationImage(image: NetworkImage(imageURL), fit: BoxFit.cover);
+      bool _isOwnMessage, String _imageURL, Timestamp _timestamp) {
+    DecorationImage _image =
+        DecorationImage(image: NetworkImage(_imageURL), fit: BoxFit.cover);
     return Card(
       clipBehavior: Clip.antiAlias,
       child: Column(
@@ -198,7 +202,7 @@ class _AdminChatPageState extends State<AdminChatPage> {
               InkWell(
                 onTap: () {
                   Navigator.push(context, MaterialPageRoute(builder: (context) {
-                    return ImageView(url: imageURL);
+                    return ImageView(url: _imageURL);
                   }));
                 },
                 child: Stack(
@@ -208,7 +212,7 @@ class _AdminChatPageState extends State<AdminChatPage> {
                       width: _deviceWidth * 0.40,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(4),
-                        image: image,
+                        image: _image,
                       ),
                     ),
                     Container(
@@ -231,7 +235,7 @@ class _AdminChatPageState extends State<AdminChatPage> {
                 left: 10,
                 bottom: 10,
                 child: Text(
-                timeago.format(timestamp.toDate(), locale: appStateModel.appLocale.languageCode),
+                timeago.format(_timestamp.toDate(), locale: appStateModel.appLocale.languageCode),
                 style: TextStyle(color: Colors.white, fontSize: 12),
               ),)
             ],
@@ -241,7 +245,7 @@ class _AdminChatPageState extends State<AdminChatPage> {
     );
   }
 
-  Widget _messageField(BuildContext context) {
+  Widget _messageField(BuildContext _context) {
     return Container(
       decoration: BoxDecoration(
         border: Border(
@@ -270,8 +274,8 @@ class _AdminChatPageState extends State<AdminChatPage> {
                       Icons.send,
                     ),
                     onPressed: () {
-                      _formKey.currentState.save();
-                      if (_formKey.currentState.validate()) {
+                      _formKey.currentState?.save();
+                      if (_formKey.currentState!.validate()) {
                         DBService.instance.sendMessage(_conversationID,
                           Message(
                               content: _messageText,
@@ -279,8 +283,8 @@ class _AdminChatPageState extends State<AdminChatPage> {
                               senderID: _userID,
                               type: MessageType.Text),
                         );
-                        _formKey.currentState.reset();
-                        FocusScope.of(context).unfocus();
+                        _formKey.currentState?.reset();
+                        FocusScope.of(_context).unfocus();
                         if(notify) {
                           ApiProvider().post('/wp-admin/admin-ajax.php?action=mstore_flutter_new_chat_message', {'message': _messageText});
                           notify = false;
@@ -289,25 +293,23 @@ class _AdminChatPageState extends State<AdminChatPage> {
                     }),
                 IconButton(
                   onPressed: () async {
-                    var image = await MediaService.instance.getImageFromLibrary();
-                    if (image != null) {
-                      var result = await CloudStorageService.instance
-                          .uploadMediaMessage(_userID, image);
-                      var imageURL = await result.ref.getDownloadURL();
-                      await DBService.instance.sendMessage(
-                        _conversationID,
-                        Message(
-                            content: imageURL,
-                            senderID: _userID,
-                            timestamp: Timestamp.now(),
-                            type: MessageType.Image),
-                      );
-                      if(notify) {
-                        ApiProvider().post('/wp-admin/admin-ajax.php?action=mstore_flutter_new_chat_message', {'message': _messageText});
-                        notify = false;
-                      }
+                    var _image = await MediaService.instance.getImageFromLibrary();
+                    var _result = await CloudStorageService.instance
+                        .uploadMediaMessage(_userID, _image as File);
+                    var _imageURL = await _result.ref.getDownloadURL();
+                    await DBService.instance.sendMessage(
+                      _conversationID,
+                      Message(
+                          content: _imageURL,
+                          senderID: _userID,
+                          timestamp: Timestamp.now(),
+                          type: MessageType.Image),
+                    );
+                    if(notify) {
+                      ApiProvider().post('/wp-admin/admin-ajax.php?action=mstore_flutter_new_chat_message', {'message': _messageText});
+                      notify = false;
                     }
-                  },
+                                    },
                   icon: Icon(Icons.attach_file),
                 )
               ],
@@ -322,15 +324,16 @@ class _AdminChatPageState extends State<AdminChatPage> {
 
   Widget _messageTextField() {
     return TextFormField(
-      validator: (input) {
-        if (input.length == 0) {
+      validator: (_input) {
+        // ignore: prefer_is_empty
+        if (_input?.length == 0) {
           return appStateModel.blocks.localeText.pleaseEnterMessage;
         }
         return null;
       },
-      onSaved: (input) {
+      onSaved: (_input) {
         setState(() {
-          _messageText = input;
+          _messageText = _input!;
         });
       },
       decoration: InputDecoration(
@@ -349,9 +352,9 @@ class _AdminChatPageState extends State<AdminChatPage> {
     var vendorName = 'Admin';
     var vendorAvatar = '${this.config.url}/wp-content/wp-content/uploads/icon.png';
     bool isVendor = appStateModel.isVendor.contains(appStateModel.user.role);
-    String conversationID = await DBService.instance.getConversationId(chatId, userID, userName, userAvatar, vendorID, vendorName, vendorAvatar, isVendor);
+    String? conversationID = await DBService.instance.getConversationId(chatId, userID, userName, userAvatar, vendorID, vendorName, vendorAvatar, isVendor);
     setState(() {
-      _conversationID = conversationID;
+      _conversationID = conversationID!;
     });
   }
 }

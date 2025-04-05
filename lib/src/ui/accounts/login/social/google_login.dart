@@ -19,7 +19,7 @@ class GoogleLoginWidget extends StatelessWidget {
       shape: StadiumBorder(),
       margin: EdgeInsets.all(0),
       color: Color(0xFFEA4335),
-      child: SizedBox(
+      child: Container(
         height: 50,
         width: 50,
         child: Center(
@@ -48,7 +48,7 @@ class GoogleLoginWidget extends StatelessWidget {
 
   _loginGoogleUser(String idToken, GoogleSignInAccount googleUser,
       BuildContext context) async {
-    var login = <String, dynamic>{};
+    var login = new Map<String, dynamic>();
     login["type"] = 'google';
     login["token"] = idToken;
     login["name"] = googleUser.displayName;

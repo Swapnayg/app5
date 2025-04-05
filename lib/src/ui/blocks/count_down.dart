@@ -33,7 +33,7 @@ class _CountdownState extends State<Countdown> {
 
   @override
   void dispose() {
-    _timer.cancel();
+    _timer?.cancel();
     super.dispose();
   }
 
@@ -45,7 +45,7 @@ class _CountdownState extends State<Countdown> {
     setState(() {
       if (_duration.inSeconds == 0) {
         timer.cancel();
-        widget.onFinish();
+        if (widget.onFinish != null) widget.onFinish();
       } else {
         _duration = Duration(seconds: _duration.inSeconds - 1);
       }
@@ -78,7 +78,7 @@ class CountdownFormatted extends StatelessWidget {
   final Widget Function(BuildContext context, String remaining) builder;
 
   Function(Duration) _formatter() {
-    return formatter;
+    if (formatter != null) return formatter;
     if (duration.inHours >= 1) return formatByHours;
     if (duration.inMinutes >= 1) return formatByMinutes;
 

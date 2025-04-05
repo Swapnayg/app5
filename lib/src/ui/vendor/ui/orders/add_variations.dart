@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:flutter/material.dart';
 
 import '../../../../blocs/vendor/vendor_bloc.dart';
@@ -11,7 +13,7 @@ class AddVariations extends StatefulWidget {
   final VendorBloc vendorBloc;
   final VendorProduct product;
   final Order order;
-  const AddVariations({Key key, this.product, this.vendorBloc, this.order}) : super(key: key);
+  const AddVariations({super.key, required this.product, required this.vendorBloc, required this.order});
 
   @override
   _AddVariationsState createState() => _AddVariationsState();
@@ -70,7 +72,7 @@ class _AddVariationsState extends State<AddVariations> {
       name = '$name ${value.option}';
     }
 
-    return VariationItem(vendorBloc: widget.vendorBloc, product: widget.product, order: widget.order);
+    return VariationItem(vendorBloc: widget.vendorBloc, product: widget.product, order: widget.order, variation: ProductVariation(),);
   }
 
   Widget buildItemList(AsyncSnapshot<List<ProductVariation>> snapshot) {
@@ -79,26 +81,27 @@ class _AddVariationsState extends State<AddVariations> {
               (BuildContext context, int index) {
             return Column(
               children: <Widget>[
-            VariationItem(vendorBloc: widget.vendorBloc, product: widget.product, order: widget.order, variation: snapshot.data[index]),
+            VariationItem(vendorBloc: widget.vendorBloc, product: widget.product, order: widget.order, variation: snapshot.data![index]),
                 Divider(height: 0.0),
               ],
             );
           },
-          childCount: snapshot.data.length,
+          childCount: snapshot.data?.length,
         ));
   }
 
   buildList(AsyncSnapshot<List<ProductVariation>> snapshot) {
-    List<Widget> list = List<Widget>();
+    List<Widget> list = [];
     list.add(buildItemList(snapshot));
     if (snapshot.data != null) {
       list.add(SliverPadding(
           padding: EdgeInsets.all(0.0),
           sliver: SliverList(
               delegate: SliverChildListDelegate([
-                SizedBox(
+                Container(
                     height: 60,
-                    child: StreamBuilder(
+                    child: StreamBuilder<bool>(
+                        stream: widget.vendorBloc.hasMoreProductsStream,
                         builder: (context, AsyncSnapshot<bool> snapshot) {
                           return snapshot.hasData && snapshot.data == false
                               ? Center(child: Text('No more products!'))

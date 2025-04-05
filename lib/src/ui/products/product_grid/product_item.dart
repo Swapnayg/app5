@@ -67,7 +67,7 @@ class ProductItem extends StatefulWidget {
   final containerWidth;
   final void Function(Product category) onProductClick;
 
-  const ProductItem({
+  ProductItem({
     Key key,
     this.product,
     this.onProductClick,
@@ -89,7 +89,7 @@ class _ProductItemState extends State<ProductItem> {
 
     int percentOff = 0;
 
-    if ((widget.product.salePrice != 0)) {
+    if ((widget.product.salePrice != null && widget.product.salePrice != 0)) {
       percentOff = (((widget.product.regularPrice - widget.product.salePrice / widget.product.regularPrice)).round());
     }
     bool onSale = false;
@@ -118,7 +118,7 @@ class _ProductItemState extends State<ProductItem> {
                 child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
-                      SizedBox(
+                      Container(
                             height: widget.containerWidth/widget.crossAxisCount,
                             child: Stack(
                               children: <Widget>[
@@ -137,7 +137,7 @@ class _ProductItemState extends State<ProductItem> {
                                     top: 0.0,
                                     right: 0.0,
                                     child: IconButton(
-                                        icon: model.wishListIds.contains(widget.product.id) ? Icon(Icons.favorite, color: Theme.of(context).colorScheme.secondary) :
+                                        icon: model.wishListIds.contains(widget.product.id) ? Icon(Icons.favorite, color: Theme.of(context).accentColor) :
                                         Icon(Icons.favorite_border, color: Colors.black87),
                                         onPressed: () {
                                           if (!model.loggedIn) {
@@ -166,9 +166,9 @@ class _ProductItemState extends State<ProductItem> {
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               textAlign: TextAlign.center,
-                              style: Theme.of(context).textTheme.subtitle2.copyWith(
+                              style: Theme.of(context).textTheme.subtitle.copyWith(
                                   fontSize: 12,
-                                color: Theme.of(context).textTheme.bodySmall.color
+                                color: Theme.of(context).textTheme.caption.color
                               ),
                             ),
                             SizedBox(height: 4.0),
@@ -186,9 +186,9 @@ class _ProductItemState extends State<ProductItem> {
                                   },
                                 ),
                                 isLoading ? SizedBox(
+                                  child: CircularProgressIndicator(strokeWidth: 2),
                                   height: 20.0,
                                   width: 20.0,
-                                  child: CircularProgressIndicator(strokeWidth: 2),
                                 ) :  SizedBox(
                                   width: 20.0,
                                   child: Text(getQty(model).toString(), textAlign: TextAlign.center,),
@@ -226,7 +226,7 @@ class _ProductItemState extends State<ProductItem> {
   }
 
   addToCart(BuildContext context) async {
-    var data = <String, dynamic>{};
+    var data = new Map<String, dynamic>();
     data['product_id'] = widget.product.id.toString();
     data['quantity'] = '1';
     setState(() {
@@ -239,7 +239,7 @@ class _ProductItemState extends State<ProductItem> {
   }
 
   decreaseQty() async {
-    if (appStateModel.shoppingCart.cartContents != null) {
+    if (appStateModel.shoppingCart?.cartContents != null) {
       if (appStateModel.shoppingCart.cartContents
           .any((cartContent) => cartContent.productId == widget.product.id)) {
         final cartContent = appStateModel.shoppingCart.cartContents
@@ -256,7 +256,7 @@ class _ProductItemState extends State<ProductItem> {
   }
 
   increaseQty() async {
-    if (appStateModel.shoppingCart.cartContents != null) {
+    if (appStateModel.shoppingCart?.cartContents != null) {
       if (appStateModel.shoppingCart.cartContents
           .any((cartContent) => cartContent.productId == widget.product.id)) {
         final cartContent = appStateModel.shoppingCart.cartContents
@@ -275,9 +275,7 @@ class _ProductItemState extends State<ProductItem> {
   getQty(AppStateModel model) {
     if(model.shoppingCart.cartContents.any((element) => element.productId == widget.product.id)) {
       return model.shoppingCart.cartContents.firstWhere((element) => element.productId == widget.product.id).quantity;
-    } else {
-      return 0;
-    }
+    } else return 0;
   }
 }
 
@@ -298,12 +296,13 @@ class PriceWidget extends StatelessWidget {
       textBaseline: TextBaseline.ideographic,
       children: <Widget>[
         Text(onSale ? parseHtmlString(product.formattedSalesPrice)
-            : '', textAlign: TextAlign.left, style: Theme.of(context).textTheme.bodyMedium.copyWith(
+            : '', textAlign: TextAlign.left, style: Theme.of(context).textTheme.bodyText2.copyWith(
           fontSize: 14,
           fontWeight: FontWeight.w600,
         )),
         onSale ? SizedBox(width: 4.0) : SizedBox(width: 0.0),
-        Text((product.formattedPrice.isNotEmpty)
+        Text((product.formattedPrice !=
+            null && product.formattedPrice.isNotEmpty)
             ? parseHtmlString(product.formattedPrice)
             : '', textAlign: TextAlign.left, style: TextStyle(
           fontWeight: onSale ? FontWeight.w400 : FontWeight.w600,

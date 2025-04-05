@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api, avoid_unnecessary_containers, deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:photo_view/photo_view.dart';
@@ -5,7 +7,7 @@ import 'package:photo_view/photo_view_gallery.dart';
 
 class ImageView extends StatefulWidget {
   final String url;
-  const ImageView({Key key, this.url}) : super(key: key);
+  const ImageView({required Key key, required this.url}) : super(key: key);
   @override
   _ImageViewState createState() => _ImageViewState();
 }
@@ -49,15 +51,15 @@ class _ImageViewState extends State<ImageView> {
 class PhotoGalleryView extends StatefulWidget {
   final List<String> images;
 
-  const PhotoGalleryView({Key key, this.images}) : super(key: key);
+  const PhotoGalleryView({required Key key, required this.images}) : super(key: key);
   @override
   _PhotoGalleryViewState createState() => _PhotoGalleryViewState();
 }
 
 class _PhotoGalleryViewState extends State<PhotoGalleryView> {
 
-  PhotoViewController controller;
-  double scaleCopy;
+  late PhotoViewController controller;
+  late double scaleCopy;
 
   @override
   Widget build(BuildContext context) {

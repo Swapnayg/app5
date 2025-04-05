@@ -16,7 +16,7 @@ class FilterProduct extends StatefulWidget {
   final List<Category> categories;
   final Function onSelectSubcategory;
 
-  const FilterProduct(
+  FilterProduct(
       {Key key,
       this.productsBloc,
       this.categories,
@@ -28,9 +28,9 @@ class FilterProduct extends StatefulWidget {
 }
 
 class _FilterProductState extends State<FilterProduct> {
-  final ScrollController _scrollController = ScrollController();
+  ScrollController _scrollController = new ScrollController();
 
-  var filter = Map<String, dynamic>();
+  var filter = new Map<String, dynamic>();
   final appStateModel = AppStateModel();
 
   @override
@@ -91,7 +91,7 @@ class _FilterProductState extends State<FilterProduct> {
   }
 
   buildFilterList(AsyncSnapshot<List<AttributesModel>> snapshot) {
-    List<Widget> list = List<Widget>();
+    List<Widget> list = new List<Widget>();
 
     /*if (widget.subcategories.length != 0) {
       list.add(buildHeader('Categories'));
@@ -102,7 +102,7 @@ class _FilterProductState extends State<FilterProduct> {
     list.add(priceSlider());
 
     for (var i = 0; i < snapshot.data.length; i++) {
-      if (snapshot.data[i].terms.isNotEmpty) {
+      if (snapshot.data[i].terms.length != 0) {
         list.add(buildHeader(snapshot.data[i].name));
         list.add(buildFilter(snapshot, i));
       }
@@ -128,7 +128,7 @@ class _FilterProductState extends State<FilterProduct> {
                 max: appStateModel.blocks.maxPrice.toDouble(),
                 divisions: appStateModel.maxPrice.toInt(),
                 values: appStateModel.selectedRange,
-                labels: RangeLabels(formatter.format(appStateModel.selectedRange.start), formatter.format(appStateModel.selectedRange.end)),
+                labels: RangeLabels('${formatter.format(appStateModel.selectedRange.start)}', '${formatter.format(appStateModel.selectedRange.end)}'),
                 onChanged: (RangeValues newRange) {
                   appStateModel.updateRangeValue(newRange);
                   setState(() {
@@ -141,8 +141,8 @@ class _FilterProductState extends State<FilterProduct> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  Text(formatter.format(appStateModel.selectedRange.start)),
-                  Text(formatter.format(appStateModel.selectedRange.end)),
+                  Text('${formatter.format(appStateModel.selectedRange.start)}'),
+                  Text('${formatter.format(appStateModel.selectedRange.end)}'),
                 ],
               ),
             )
@@ -178,14 +178,14 @@ class _FilterProductState extends State<FilterProduct> {
     return SliverPadding(
       padding: EdgeInsets.all(16.0),
       sliver: SliverGrid(
-        gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+        gridDelegate: new SliverGridDelegateWithMaxCrossAxisExtent(
           maxCrossAxisExtent: 110.0,
           mainAxisSpacing: 10.0,
           crossAxisSpacing: 10.0,
           childAspectRatio: 3.5,
         ),
         delegate:
-            SliverChildBuilderDelegate((BuildContext context, int index) {
+            new SliverChildBuilderDelegate((BuildContext context, int index) {
           return Container(
             child: RaisedButton(
               onPressed: () {

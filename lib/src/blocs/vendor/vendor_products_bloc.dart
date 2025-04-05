@@ -9,7 +9,7 @@ class VendorProductsBloc {
   List<Product> products = [];
   int page = 1;
 
-  var filter = <String, dynamic>{};
+  var filter = new Map<String, dynamic>();
   var selectedRange;
 
   final apiProvider = ApiProvider();
@@ -23,9 +23,9 @@ class VendorProductsBloc {
   ValueStream<List<Product>> get allProducts => _productsFetcher.stream;
   ValueStream<List<AttributesModel>> get allAttributes => _attributesFetcher.stream;
 
-  List<AttributesModel> attributes;
+  late List<AttributesModel> attributes;
 
-  fetchAllProducts([String query]) async {
+  fetchAllProducts([String? query]) async {
     filter['page'] = page.toString();
     products = await apiProvider.fetchProductList(filter);
     hasMoreItems = products.length > 9;
@@ -57,14 +57,14 @@ class VendorProductsBloc {
   }
 
   void applyFilter(double minPrice, double maxPrice) {
-    filter = <String, dynamic>{};
+    filter = new Map<String, dynamic>();
     filter['min_price'] = minPrice.toString();
     filter['max_price'] = maxPrice.toString();
     for(var i = 0; i < attributes.length; i++) {
       for(var j = 0; j < attributes[i].terms.length; j++) {
         if(attributes[i].terms[j].selected) {
-          filter['attribute_term$j'] = attributes[i].terms[j].termId.toString();
-          filter['attributes$j'] = attributes[i].terms[j].taxonomy;
+          filter['attribute_term' + j.toString()] = attributes[i].terms[j].termId.toString();
+          filter['attributes' + j.toString()] = attributes[i].terms[j].taxonomy;
         }
       }
     }

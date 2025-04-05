@@ -6,7 +6,7 @@ import '../resources/api_provider.dart';
 
 class WishListBloc {
 
-  var filter = <String, dynamic>{};
+  var filter = new Map<String, dynamic>();
   bool hasMoreWishList = false;
   int wishListPage = 0;
   List<Product> wishListProducts = [];
@@ -31,7 +31,7 @@ class WishListBloc {
 
   getWishList() async {
     final response = await apiProvider.post(
-        '/wp-admin/admin-ajax.php?action=mstore_flutter-get_wishlist', {});
+        '/wp-admin/admin-ajax.php?action=mstore_flutter-get_wishlist', Map());
     wishListProducts = productModelFromJson(response.body);
     _wishListFetcher.sink.add(wishListProducts);
     appStateModel.wishListIds =
@@ -52,7 +52,7 @@ class WishListBloc {
     _wishListFetcher.sink.add(wishListProducts);
     appStateModel.wishListIds =
         wishListProducts.map((item) => item.id).toList();
-    if (products.isEmpty || products.length < 10) {
+    if (products.length == 0 || products.length < 10) {
       hasMoreWishList = false;
       _hasMoreWishListFetcher.sink.add(hasMoreWishList);
     }

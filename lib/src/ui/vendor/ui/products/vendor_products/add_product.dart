@@ -15,13 +15,13 @@ import 'select_categories.dart';
 
 class AddVendorProduct extends StatefulWidget {
   final VendorBloc vendorBloc;
-  const AddVendorProduct({Key key, this.vendorBloc}) : super(key: key);
+  AddVendorProduct({Key key, this.vendorBloc}) : super(key: key);
   @override
   _AddVendorProductState createState() => _AddVendorProductState();
 }
 
 class _AddVendorProductState extends State<AddVendorProduct> {
-  VendorProduct product = VendorProduct();
+  VendorProduct product = new VendorProduct();
   AppStateModel appStateModel = AppStateModel();
   final _formKey = GlobalKey<FormState>();
   Config config = Config();
@@ -90,13 +90,18 @@ class _AddVendorProductState extends State<AddVendorProduct> {
                   children: <Widget>[
                     TextFormField(
                       decoration: InputDecoration(
-                        labelText: '${appStateModel.blocks.localeText.product} ${appStateModel.blocks.localeText.name}',
+                        labelText: appStateModel.blocks.localeText.product +
+                            ' ' +
+                            appStateModel.blocks.localeText.name,
                       ),
                       validator: (value) {
                         if (value.isEmpty) {
-                          return '${appStateModel.blocks.localeText.pleaseEnter} ${appStateModel.blocks.localeText.product} ${appStateModel.blocks.localeText.name}';
+                          return appStateModel.blocks.localeText.pleaseEnter +
+                              ' ' +
+                              appStateModel.blocks.localeText.product +
+                              ' ' +
+                              appStateModel.blocks.localeText.name;
                         }
-                        return null;
                       },
                       onSaved: (val) => setState(() => product.name = val),
                     ),
@@ -118,12 +123,12 @@ class _AddVendorProductState extends State<AddVendorProduct> {
                             ),
                           ),
                         ),
-                        product.images.length >= 0
+                        product.images != null && product.images.length >= 0
                             ? GridView.builder(
                                 shrinkWrap: true,
                                 itemCount: product.images.length + 1,
                                 gridDelegate:
-                                    SliverGridDelegateWithFixedCrossAxisCount(
+                                    new SliverGridDelegateWithFixedCrossAxisCount(
                                         crossAxisCount: 4),
                                 itemBuilder: (BuildContext context, int index) {
                                   if (product.images.length != index) {
@@ -152,7 +157,7 @@ class _AddVendorProductState extends State<AddVendorProduct> {
                     _buildAttributesTile(),
                     const SizedBox(height: 16.0),
                     Text(appStateModel.blocks.localeText.type,
-                        style: Theme.of(context).textTheme.titleMedium),
+                        style: Theme.of(context).textTheme.subtitle1),
                     Row(
                       children: <Widget>[
                         Radio<String>(
@@ -160,18 +165,18 @@ class _AddVendorProductState extends State<AddVendorProduct> {
                           groupValue: product.type,
                           onChanged: handleTypeValueChanged,
                         ),
-                        Text(
+                        new Text(
                           appStateModel.blocks.localeText.simple,
-                          style: TextStyle(fontSize: 16.0),
+                          style: new TextStyle(fontSize: 16.0),
                         ),
                         Radio<String>(
                           value: 'grouped',
                           groupValue: product.type,
                           onChanged: handleTypeValueChanged,
                         ),
-                        Text(
+                        new Text(
                           appStateModel.blocks.localeText.grouped,
-                          style: TextStyle(fontSize: 16.0),
+                          style: new TextStyle(fontSize: 16.0),
                         ),
                       ],
                     ),
@@ -181,23 +186,23 @@ class _AddVendorProductState extends State<AddVendorProduct> {
                         groupValue: product.type,
                         onChanged: handleTypeValueChanged,
                       ),
-                      Text(
+                      new Text(
                         appStateModel.blocks.localeText.external,
-                        style: TextStyle(fontSize: 16.0),
+                        style: new TextStyle(fontSize: 16.0),
                       ),
                       Radio<String>(
                         value: 'variable',
                         groupValue: product.type,
                         onChanged: handleTypeValueChanged,
                       ),
-                      Text(
+                      new Text(
                         appStateModel.blocks.localeText.variable,
-                        style: TextStyle(fontSize: 16.0),
+                        style: new TextStyle(fontSize: 16.0),
                       ),
                     ]),
                     const SizedBox(height: 16.0),
                     Text(appStateModel.blocks.localeText.status,
-                        style: Theme.of(context).textTheme.titleMedium),
+                        style: Theme.of(context).textTheme.subtitle1),
                     Row(
                       children: <Widget>[
                         Radio<String>(
@@ -205,18 +210,18 @@ class _AddVendorProductState extends State<AddVendorProduct> {
                           groupValue: product.status,
                           onChanged: handleStatusTypeValueChanged,
                         ),
-                        Text(
+                        new Text(
                           appStateModel.blocks.localeText.draft,
-                          style: TextStyle(fontSize: 16.0),
+                          style: new TextStyle(fontSize: 16.0),
                         ),
                         Radio<String>(
                           value: 'pending',
                           groupValue: product.status,
                           onChanged: handleStatusTypeValueChanged,
                         ),
-                        Text(
+                        new Text(
                           appStateModel.blocks.localeText.pending,
-                          style: TextStyle(fontSize: 16.0),
+                          style: new TextStyle(fontSize: 16.0),
                         ),
                       ],
                     ),
@@ -227,24 +232,24 @@ class _AddVendorProductState extends State<AddVendorProduct> {
                           groupValue: product.status,
                           onChanged: handleStatusTypeValueChanged,
                         ),
-                        Text(
+                        new Text(
                           appStateModel.blocks.localeText.private,
-                          style: TextStyle(fontSize: 16.0),
+                          style: new TextStyle(fontSize: 16.0),
                         ),
                         Radio<String>(
                           value: 'publish',
                           groupValue: product.status,
                           onChanged: handleStatusTypeValueChanged,
                         ),
-                        Text(
+                        new Text(
                           appStateModel.blocks.localeText.publish,
-                          style: TextStyle(fontSize: 16.0),
+                          style: new TextStyle(fontSize: 16.0),
                         ),
                       ],
                     ),
                     const SizedBox(height: 16.0),
                     Text(appStateModel.blocks.localeText.catalogVisibility,
-                        style: Theme.of(context).textTheme.titleMedium),
+                        style: Theme.of(context).textTheme.subtitle1),
                     Row(
                       children: <Widget>[
                         Radio<String>(
@@ -252,18 +257,18 @@ class _AddVendorProductState extends State<AddVendorProduct> {
                           groupValue: product.catalogVisibility,
                           onChanged: handleCatalogVisibilityTypeValueChanged,
                         ),
-                        Text(
+                        new Text(
                           appStateModel.blocks.localeText.visible,
-                          style: TextStyle(fontSize: 16.0),
+                          style: new TextStyle(fontSize: 16.0),
                         ),
                         Radio<String>(
                           value: 'catalog',
                           groupValue: product.catalogVisibility,
                           onChanged: handleCatalogVisibilityTypeValueChanged,
                         ),
-                        Text(
+                        new Text(
                           appStateModel.blocks.localeText.catalog,
-                          style: TextStyle(fontSize: 16.0),
+                          style: new TextStyle(fontSize: 16.0),
                         ),
                       ],
                     ),
@@ -274,24 +279,24 @@ class _AddVendorProductState extends State<AddVendorProduct> {
                           groupValue: product.catalogVisibility,
                           onChanged: handleCatalogVisibilityTypeValueChanged,
                         ),
-                        Text(
+                        new Text(
                           appStateModel.blocks.localeText.search,
-                          style: TextStyle(fontSize: 16.0),
+                          style: new TextStyle(fontSize: 16.0),
                         ),
                         Radio<String>(
                           value: 'hidden',
                           groupValue: product.catalogVisibility,
                           onChanged: handleCatalogVisibilityTypeValueChanged,
                         ),
-                        Text(
+                        new Text(
                           appStateModel.blocks.localeText.hidden,
-                          style: TextStyle(fontSize: 16.0),
+                          style: new TextStyle(fontSize: 16.0),
                         ),
                       ],
                     ),
                     const SizedBox(height: 16.0),
                     Text(appStateModel.blocks.localeText.stockStatus,
-                        style: Theme.of(context).textTheme.titleMedium),
+                        style: Theme.of(context).textTheme.subtitle1),
                     Row(
                       children: <Widget>[
                         Radio<String>(
@@ -299,18 +304,18 @@ class _AddVendorProductState extends State<AddVendorProduct> {
                           groupValue: product.stockStatus,
                           onChanged: handleStockStatusValueChanged,
                         ),
-                        Text(
+                        new Text(
                           appStateModel.blocks.localeText.inStock,
-                          style: TextStyle(fontSize: 16.0),
+                          style: new TextStyle(fontSize: 16.0),
                         ),
                         Radio<String>(
                           value: 'outofstock',
                           groupValue: product.stockStatus,
                           onChanged: handleStockStatusValueChanged,
                         ),
-                        Text(
+                        new Text(
                           appStateModel.blocks.localeText.outOfStock,
-                          style: TextStyle(fontSize: 16.0),
+                          style: new TextStyle(fontSize: 16.0),
                         ),
                       ],
                     ),
@@ -329,7 +334,7 @@ class _AddVendorProductState extends State<AddVendorProduct> {
                     ),*/
                     const SizedBox(height: 16.0),
                     Text(appStateModel.blocks.localeText.backOrder,
-                        style: Theme.of(context).textTheme.titleMedium),
+                        style: Theme.of(context).textTheme.subtitle1),
                     Row(
                       children: <Widget>[
                         Radio<String>(
@@ -337,27 +342,27 @@ class _AddVendorProductState extends State<AddVendorProduct> {
                           groupValue: product.backOrders,
                           onChanged: handleBackOrdersValueChanged,
                         ),
-                        Text(
+                        new Text(
                           appStateModel.blocks.localeText.no,
-                          style: TextStyle(fontSize: 16.0),
+                          style: new TextStyle(fontSize: 16.0),
                         ),
                         Radio<String>(
                           value: 'notify ',
                           groupValue: product.backOrders,
                           onChanged: handleBackOrdersValueChanged,
                         ),
-                        Text(
+                        new Text(
                           appStateModel.blocks.localeText.notify,
-                          style: TextStyle(fontSize: 16.0),
+                          style: new TextStyle(fontSize: 16.0),
                         ),
                         Radio<String>(
                           value: 'yes',
                           groupValue: product.backOrders,
                           onChanged: handleBackOrdersValueChanged,
                         ),
-                        Text(
+                        new Text(
                           appStateModel.blocks.localeText.yes,
-                          style: TextStyle(fontSize: 16.0),
+                          style: new TextStyle(fontSize: 16.0),
                         ),
                       ],
                     ),
@@ -386,7 +391,9 @@ class _AddVendorProductState extends State<AddVendorProduct> {
                     ),
                     TextFormField(
                       decoration: InputDecoration(
-                          labelText: '${appStateModel.blocks.localeText.long} ${appStateModel.blocks.localeText.description}'),
+                          labelText: appStateModel.blocks.localeText.long +
+                              ' ' +
+                              appStateModel.blocks.localeText.description),
                       onSaved: (val) =>
                           setState(() => product.description = val),
                     ),
@@ -442,8 +449,10 @@ class _AddVendorProductState extends State<AddVendorProduct> {
     // set state image uploading true
     //imageFile = await ImagePicker.pickImage(source: ImageSource.camera);
     imageFile = await ImagePicker.pickImage(source: ImageSource.gallery);
-    _upload();
+    if (imageFile != null) {
+      _upload();
     }
+  }
 
   void _upload() async {
     setState(() {
@@ -451,7 +460,8 @@ class _AddVendorProductState extends State<AddVendorProduct> {
     });
     var request = http.MultipartRequest(
         "POST",
-        Uri.parse("${config.url}/wp-admin/admin-ajax.php?action=mstoreapp_upload_image"));
+        Uri.parse(config.url +
+            "/wp-admin/admin-ajax.php?action=mstoreapp_upload_image"));
     var pic = await http.MultipartFile.fromPath("file", imageFile.path);
     request.files.add(pic);
     var response = await request.send();
@@ -464,17 +474,20 @@ class _AddVendorProductState extends State<AddVendorProduct> {
     FileUploadResponse uploadedFile = FileUploadResponse.fromJson(fileUpload);
 
 
-    ProductImage picture = ProductImage();
-    picture.src = uploadedFile.url;
-    setState(() {
-      product.images.add(picture);
-      isImageUploading = false;
-    });
+    if (uploadedFile.url != null) {
+      ProductImage picture = ProductImage();
+      picture.src = uploadedFile.url;
+      setState(() {
+        product.images.add(picture);
+        isImageUploading = false;
+      });
     }
+  }
 
   _buildCategoryTile() {
     String option = '';
-    product.categories.forEach((value) {option = option.isEmpty ? value.name : '$option, ${value.name}';});
+    product.categories.forEach((value) =>
+        {option = option.isEmpty ? value.name : option + ', ' + value.name});
     return ListTile(
       contentPadding: EdgeInsets.all(0.0),
       onTap: () async {
@@ -495,11 +508,11 @@ class _AddVendorProductState extends State<AddVendorProduct> {
 
   _buildAttributesTile() {
     String option = '';
-    for (var value in product.attributes) {
-      if(value.options.isNotEmpty) {
-        option = option.isEmpty ? value.name : '$option, ${value.name}';
+    product.attributes.forEach((value) {
+      if(value.options.length != 0) {
+        option = option.isEmpty ? value.name : option + ', ' + value.name;
       }
-    }
+    });
     return ListTile(
         contentPadding: EdgeInsets.all(0.0),
         title: Text(appStateModel.blocks.localeText.attributes),

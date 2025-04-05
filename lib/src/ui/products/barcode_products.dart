@@ -31,68 +31,86 @@ class _FindBarCodeProductState extends State<FindBarCodeProduct> {
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
-      content: ListTile(
-        contentPadding: EdgeInsets.all(0),
-        leading: Container(
-          width: 60,
-          height: 60,
-          child: CachedNetworkImage(
-            imageUrl: product.images[0].src,
-            imageBuilder: (context, imageProvider) => Card(
-              clipBehavior: Clip.antiAlias,
-              elevation: 0.5,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(0.0),
-              ),
-              child: Ink.image(
-                child: InkWell(
-                  onTap: () {
-                    Navigator.of(context).pop();
-                    Navigator.push(context, MaterialPageRoute(builder: (context) {
-                      return ProductDetail(product: product);
-                    }));
-                  },
+    if (product.name != null) {
+      return AlertDialog(
+        content: ListTile(
+          contentPadding: EdgeInsets.all(0),
+          leading: Container(
+            width: 60,
+            height: 60,
+            child: CachedNetworkImage(
+              imageUrl: product.images[0].src,
+              imageBuilder: (context, imageProvider) => Card(
+                clipBehavior: Clip.antiAlias,
+                elevation: 0.5,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(0.0),
                 ),
-                image: imageProvider,
-                fit: BoxFit.cover,
+                child: Ink.image(
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.of(context).pop();
+                      Navigator.push(context, MaterialPageRoute(builder: (context) {
+                        return ProductDetail(product: product);
+                      }));
+                    },
+                  ),
+                  image: imageProvider,
+                  fit: BoxFit.cover,
+                ),
               ),
-            ),
-            placeholder: (context, url) => Card(
-              clipBehavior: Clip.antiAlias,
-              elevation: 0.0,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(5.0),
+              placeholder: (context, url) => Card(
+                clipBehavior: Clip.antiAlias,
+                elevation: 0.0,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(5.0),
+                ),
               ),
-            ),
-            errorWidget: (context, url, error) => Container(
-              color: Colors.black12,
+              errorWidget: (context, url, error) => Container(
+                color: Colors.black12,
+              ),
             ),
           ),
+          title: Text(product.name),
         ),
-        title: Text(product.name),
-      ),
-      actions: [
-        FlatButton(
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-          child: Text("CANCEL"),
-          //color: const Color(0xFF1BC0C5),
-        ),
-        RaisedButton(
-          onPressed: () {
-            Navigator.of(context).pop();
-            Navigator.push(context, MaterialPageRoute(builder: (context) {
-              return ProductDetail(product: product);
-            }));
-          },
-          child: Text("VIEW"),
-          //color: const Color(0xFF1BC0C5),
-        ),
-      ],
-    );
+        actions: [
+          FlatButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: Text("CANCEL"),
+            //color: const Color(0xFF1BC0C5),
+          ),
+          RaisedButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                return ProductDetail(product: product);
+              }));
+            },
+            child: Text("VIEW"),
+            //color: const Color(0xFF1BC0C5),
+          ),
+        ],
+      );
+    } else {
+      return AlertDialog(
+        content: loading
+            ? Container(
+            height: 100, child: Center(child: CircularProgressIndicator()))
+            : Text('Product not found!'),
+        actions: [
+          FlatButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: Text("CANCEL"),
+            //color: const Color(0xFF1BC0C5),
+          ),
+        ],
+      );
     }
+  }
 
   _getProduct() async {
     setState(() {
@@ -100,10 +118,12 @@ class _FindBarCodeProductState extends State<FindBarCodeProduct> {
     });
     Product newProduct =
     await productDetailBloc.getProductBySKU(widget.result);
-    setState(() {
-      product = newProduct;
-    });
+    if (newProduct.name != null) {
       setState(() {
+        product = newProduct;
+      });
+    }
+    setState(() {
       loading = false;
     });
   }

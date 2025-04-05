@@ -33,7 +33,7 @@ class _GalleryViewState extends State<GalleryView> {
                   },
                   itemCount: widget.images.length,
                   loadingBuilder: (context, event) => Center(
-                    child: SizedBox(
+                    child: Container(
                       width: 20.0,
                       height: 20.0,
                       child: CircularProgressIndicator(

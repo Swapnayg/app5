@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api, avoid_print
+
 import 'package:flutter/material.dart';
 
 import '../../../../blocs/vendor/vendor_bloc.dart';
@@ -11,7 +13,7 @@ import '../../../../ui/color_override.dart';
 class AddCustomer extends StatefulWidget {
   final VendorBloc vendorBloc;
 final Order order;
-   const AddCustomer({Key key, this.vendorBloc,this.order}) : super(key: key);
+   const AddCustomer({super.key, required this.vendorBloc,required this.order});
 
   @override
   _AddCustomerState createState() => _AddCustomerState();
@@ -23,7 +25,7 @@ class _AddCustomerState extends State<AddCustomer> {
 
   final billing = Address();
   final shipping = Address();
-  List<Region> regions;
+  late List<Region> regions;
 
 
 
@@ -53,15 +55,15 @@ class _AddCustomerState extends State<AddCustomer> {
 
 
   Widget buildListView(BuildContext context, AsyncSnapshot<CheckoutFormModel> snapshot) {
-    if (snapshot.data.countries.indexWhere((country) =>
+    if (snapshot.data?.countries.indexWhere((country) =>
     country.value == widget.order.billing.country) != -1) {
-      regions = snapshot.data.countries
+      regions = snapshot.data!.countries
           .singleWhere((country) =>
       country.value == widget.order.billing.country)
           .regions;
-    } else if (snapshot.data.countries.indexWhere((country) => country.value ==
+    } else if (snapshot.data?.countries.indexWhere((country) => country.value ==
         widget.order.billing.country) == -1) {
-      widget.order.billing.country = snapshot.data.countries.first.value;
+      widget.order.billing.country = snapshot.data!.countries.first.value;
     }
     if (regions.isNotEmpty) {
       widget.order.billing.state =
@@ -91,12 +93,12 @@ class _AddCustomerState extends State<AddCustomer> {
                       "FirstName",
                     ),
                     validator: (value) {
-                      if (value.isEmpty) {
+                      if (value!.isEmpty) {
                         return "please enter firstname";
                       }
                       return null;
                     },
-                    onSaved: (val) => setState(() => widget.order.billing.firstName = val),
+                    onSaved: (val) => setState(() => widget.order.billing.firstName = val!),
                   ),
                   TextFormField(
                     decoration: InputDecoration(
@@ -104,12 +106,12 @@ class _AddCustomerState extends State<AddCustomer> {
                         "LastName"
                     ),
                     validator: (value) {
-                      if (value.isEmpty) {
+                      if (value!.isEmpty) {
                         return "please enter last name";
                       }
                       return null;
                     },
-                    onSaved: (val) => setState(() => widget.order.billing.lastName = val),
+                    onSaved: (val) => setState(() => widget.order.billing.lastName = val!),
                   ),
                   TextFormField(
                     decoration: InputDecoration(
@@ -117,7 +119,7 @@ class _AddCustomerState extends State<AddCustomer> {
                       "Company",
                     ),
 
-                    onSaved: (val) => setState(() =>  widget.order.billing.company = val),
+                    onSaved: (val) => setState(() =>  widget.order.billing.company = val!),
                   ),
                   TextFormField(
                     decoration: InputDecoration(
@@ -125,7 +127,7 @@ class _AddCustomerState extends State<AddCustomer> {
                       "Address1",
                     ),
 
-                    onSaved: (val) => setState(() =>  widget.order.billing.address1 = val),
+                    onSaved: (val) => setState(() =>  widget.order.billing.address1 = val!),
                   ),
                   TextFormField(
                     decoration: InputDecoration(
@@ -133,14 +135,14 @@ class _AddCustomerState extends State<AddCustomer> {
                       "Address2",
                     ),
 
-                    onSaved: (val) => setState(() =>  widget.order.billing.address2 = val),
+                    onSaved: (val) => setState(() =>  widget.order.billing.address2 = val!),
                   ),
                   TextFormField(
                     decoration: InputDecoration(
                       labelText: "City",
                     ),
 
-                    onSaved: (val) => setState(() =>  widget.order.billing.city = val),
+                    onSaved: (val) => setState(() =>  widget.order.billing.city = val!),
                   ),
 
 
@@ -150,7 +152,7 @@ class _AddCustomerState extends State<AddCustomer> {
                       "Postcode",
                     ),
 
-                    onSaved: (val) => setState(() =>  widget.order.billing.postcode = val),
+                    onSaved: (val) => setState(() =>  widget.order.billing.postcode = val!),
                   ),
                   TextFormField(
                     decoration: InputDecoration(
@@ -158,19 +160,19 @@ class _AddCustomerState extends State<AddCustomer> {
                         "Email"
                     ),
                     validator: (value) {
-                      if (value.isEmpty) {
+                      if (value!.isEmpty) {
                         return "Please enter email";
                       }
                       return null;
                     },
-                    onSaved: (val) => setState(() =>  widget.order.billing.email = val),
+                    onSaved: (val) => setState(() =>  widget.order.billing.email = val!),
                   ),
                   TextFormField(
                     decoration: InputDecoration(
                         labelText:
                         "Phonenumber"
                     ),
-                    onSaved: (val) => setState(() =>  widget.order.billing.phone = val),
+                    onSaved: (val) => setState(() =>  widget.order.billing.phone = val!),
                   ),
 
 
@@ -188,16 +190,16 @@ class _AddCustomerState extends State<AddCustomer> {
                       height: 2,
                       color: Theme.of(context).dividerColor,
                     ),
-                    onChanged: (String newValue) {
+                    onChanged: (String? newValue) {
                       setState(() {
-                        widget.order.billing.country = newValue;
+                        widget.order.billing.country = newValue ?? '';
                       });
                     },
-                    items: snapshot.data.countries
+                    items: snapshot.data?.countries
                         .map<DropdownMenuItem<String>>(
                             (value) {
                           return DropdownMenuItem<String>(
-                            value: value.value ?? '',
+                            value: value.value,
                             child: Text(parseHtmlString(value.label)),
                           );
                         }).toList(),
@@ -216,33 +218,35 @@ class _AddCustomerState extends State<AddCustomer> {
                           height: 2,
                           color: Theme.of(context).dividerColor,
                         ),
-                        onChanged: (String newValue) {
+                        onChanged: (String? newValue) {
                           setState(() {
                             widget.order.billing.state =
-                                newValue;
+                                newValue ?? '';
                           });
                         },
                         items: regions
                             .map<DropdownMenuItem<String>>(
                                 (value) {
                               return DropdownMenuItem<String>(
-                                value: value.value ?? '',
+                                value: value.value,
                                 child: Text(parseHtmlString(value.label)),
                               );
                             }).toList(),
                       ),
                     ],
                   ) : PrimaryColorOverride(
+                      key: UniqueKey(),
                     child: TextFormField(
+                      key: UniqueKey(),
                       initialValue: widget.order.billing.state,
                       decoration: InputDecoration(labelText: 'State'),
                       validator: (value) {
-                        if (value.isEmpty) {
+                        if (value!.isEmpty) {
                           return "Please Enter State";
                         }
                         return null;
                       },
-                      onSaved: (val) => setState(() => widget.vendorBloc.formData['billing_state'] = val),
+                      onSaved: (val) => setState(() => widget.vendorBloc.formData['billing_state'] = val!),
                     ),
                   ),
 
@@ -260,7 +264,7 @@ class _AddCustomerState extends State<AddCustomer> {
                         "FirstName"
                     ),
 
-                    onSaved: (val) => setState(() =>  widget.order.shipping.firstName = val),
+                    onSaved: (val) => setState(() =>  widget.order.shipping.firstName = val!),
                   ),
                   TextFormField(
                     decoration: InputDecoration(
@@ -268,7 +272,7 @@ class _AddCustomerState extends State<AddCustomer> {
                         "LastName"
                     ),
 
-                    onSaved: (val) => setState(() =>  widget.order.shipping.lastName = val),
+                    onSaved: (val) => setState(() =>  widget.order.shipping.lastName = val!),
                   ),
                   TextFormField(
                     decoration: InputDecoration(
@@ -276,7 +280,7 @@ class _AddCustomerState extends State<AddCustomer> {
                         "Company"
                     ),
 
-                    onSaved: (val) => setState(() =>  widget.order.shipping.company = val),
+                    onSaved: (val) => setState(() =>  widget.order.shipping.company = val!),
                   ),
                   TextFormField(
                     decoration: InputDecoration(
@@ -284,7 +288,7 @@ class _AddCustomerState extends State<AddCustomer> {
                         "Address1"
                     ),
 
-                    onSaved: (val) => setState(() => widget.order.shipping.address1 = val),
+                    onSaved: (val) => setState(() => widget.order.shipping.address1 = val!),
                   ),
                   TextFormField(
                     decoration: InputDecoration(
@@ -292,14 +296,14 @@ class _AddCustomerState extends State<AddCustomer> {
                         "Address2"
                     ),
 
-                    onSaved: (val) => setState(() =>  widget.order.shipping.address2 = val),
+                    onSaved: (val) => setState(() =>  widget.order.shipping.address2 = val!),
                   ),
                   TextFormField(
                     decoration: InputDecoration(
                         labelText: "City"
                     ),
 
-                    onSaved: (val) => setState(() => widget.order.shipping.city = val),
+                    onSaved: (val) => setState(() => widget.order.shipping.city = val!),
                   ),
 
                   TextFormField(
@@ -308,7 +312,7 @@ class _AddCustomerState extends State<AddCustomer> {
                         "Postcode"
                     ),
 
-                    onSaved: (val) => setState(() => widget.order.shipping.postcode = val),
+                    onSaved: (val) => setState(() => widget.order.shipping.postcode = val!),
                   ),
 
 
@@ -327,16 +331,16 @@ class _AddCustomerState extends State<AddCustomer> {
                       height: 2,
                       color: Theme.of(context).dividerColor,
                     ),
-                    onChanged: (String newValue) {
+                    onChanged: (String? newValue) {
                       setState(() {
-                        widget.order.shipping.country = newValue;
+                        widget.order.shipping.country = newValue ?? '';
                       });
                     },
-                    items: snapshot.data.countries
+                    items: snapshot.data?.countries
                         .map<DropdownMenuItem<String>>(
                             (value) {
                           return DropdownMenuItem<String>(
-                            value: value.value ?? '',
+                            value: value.value,
                             child: Text(parseHtmlString(value.label)),
                           );
                         }).toList(),
@@ -355,33 +359,34 @@ class _AddCustomerState extends State<AddCustomer> {
                           height: 2,
                           color: Theme.of(context).dividerColor,
                         ),
-                        onChanged: (String newValue) {
+                        onChanged: (String? newValue) {
                           setState(() {
                             widget.order.shipping.state =
-                                newValue;
+                                newValue ?? '';
                           });
                         },
                         items: regions
                             .map<DropdownMenuItem<String>>(
                                 (value) {
                               return DropdownMenuItem<String>(
-                                value: value.value ?? '',
+                                value: value.value,
                                 child: Text(parseHtmlString(value.label)),
                               );
                             }).toList(),
                       ),
                     ],
                   ) : PrimaryColorOverride(
+                    key: UniqueKey(),
                     child: TextFormField(
                       initialValue: widget.order.shipping.state,
                       decoration: InputDecoration(labelText: 'State'),
                       validator: (value) {
-                        if (value.isEmpty) {
+                        if (value!.isEmpty) {
                           return "Please Enter State";
                         }
                         return null;
                       },
-                      onSaved: (val) => setState(() => widget.vendorBloc.formData['billing_state'] = val),
+                      onSaved: (val) => setState(() => widget.vendorBloc.formData['billing_state'] = val!),
                     ),
                   ),
 
@@ -394,12 +399,12 @@ class _AddCustomerState extends State<AddCustomer> {
                     padding: const EdgeInsets.symmetric(vertical: 24.0),
                     child: SizedBox(
                       width: double.maxFinite,
-                      child: RaisedButton(
+                      child: ElevatedButton(
                         onPressed: () {
                           print(widget.order);
                           //_formKey.currentState.validate()
                           if (true) {
-                            _formKey.currentState.save();
+                            _formKey.currentState?.save();
                             //widget.order.billing = billing;
                             //widget.order.shipping = shipping;
                            // shipping.country = '';

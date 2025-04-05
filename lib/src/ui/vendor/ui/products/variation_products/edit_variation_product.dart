@@ -1,5 +1,6 @@
 
-import 'package:flutter/cupertino.dart';
+// ignore_for_file: use_super_parameters, library_private_types_in_public_api, avoid_unnecessary_containers
+
 import 'package:flutter/material.dart';
 
 import '../../../../../blocs/vendor/vendor_bloc.dart';
@@ -13,7 +14,7 @@ class EditVariationProduct extends StatefulWidget {
   final VendorProduct product;
   final ProductVariation variationProduct;
 
-  const EditVariationProduct({Key key, this.vendorBloc, this.product, this.variationProduct}) : super(key: key);
+  const EditVariationProduct({Key? key, required this.vendorBloc, required this.product, required this.variationProduct}) : super(key: key);
   @override
   _EditVariationProductState createState() => _EditVariationProductState();
 }
@@ -29,14 +30,15 @@ class _EditVariationProductState extends State<EditVariationProduct> {
   @override
   void initState() {
     super.initState();
-    widget.variationProduct.attributes ??= [];
 
   }
 
-  void handleStockStatusValueChanged(String value) {
-    setState(() {
-      widget.variationProduct.stockStatus = value;
-    });
+  void handleStockStatusValueChanged(String? value) {
+    if (value != null) {
+      setState(() {
+        widget.variationProduct.stockStatus = value;
+      });
+    }
   }
 
   @override
@@ -53,7 +55,7 @@ class _EditVariationProductState extends State<EditVariationProduct> {
   }
 
   _buildList() {
-    List<Widget> list = List<Widget>();
+    List<Widget> list = List<Widget>.empty(growable: true);
 
     for (var attribute in widget.product.attributes) {
       if (attribute.variation) {
@@ -81,26 +83,28 @@ class _EditVariationProductState extends State<EditVariationProduct> {
               underline: Container(
                 height: 1,
               ),
-              onChanged: (String newValue) {
-                VariationAttribute variationAttribute =
-                VariationAttribute();
-                variationAttribute.id = attribute.id;
-                variationAttribute.name = attribute.name;
-                variationAttribute.option = newValue;
+              onChanged: (String? newValue) {
+                if (newValue != null) {
+                  VariationAttribute variationAttribute =
+                      VariationAttribute();
+                  variationAttribute.id = attribute.id;
+                  variationAttribute.name = attribute.name;
+                  variationAttribute.option = newValue;
 
-                if (widget.variationProduct.attributes
-                    .any((item) => item.id == attribute.id)) {
-                  setState(() {
-                    widget.variationProduct.attributes
-                        .removeWhere((item) => item.id == attribute.id);
-                  });
-                  setState(() {
-                    widget.variationProduct.attributes.add(variationAttribute);
-                  });
-                } else {
-                  setState(() {
-                    widget.variationProduct.attributes.add(variationAttribute);
-                  });
+                  if (widget.variationProduct.attributes
+                      .any((item) => item.id == attribute.id)) {
+                    setState(() {
+                      widget.variationProduct.attributes
+                          .removeWhere((item) => item.id == attribute.id);
+                    });
+                    setState(() {
+                      widget.variationProduct.attributes.add(variationAttribute);
+                    });
+                  } else {
+                    setState(() {
+                      widget.variationProduct.attributes.add(variationAttribute);
+                    });
+                  }
                 }
               },
               items: attribute.options
@@ -127,45 +131,45 @@ class _EditVariationProductState extends State<EditVariationProduct> {
                 labelText: _appStateModel.blocks.localeText.sku,
               ),
               validator: (value) {
-                if (value.isEmpty) {
+                if (value!.isEmpty) {
                   return '${_appStateModel.blocks.localeText.pleaseEnter} ${_appStateModel.blocks.localeText.sku}';
                 } else {
                   return null;
                 }
               },
-              onSaved: (val) => setState(() => widget.variationProduct.sku = val),
+              onSaved: (val) => setState(() => widget.variationProduct.sku = val!),
             ),
             TextFormField(
             initialValue:  widget.variationProduct.description,
               decoration: InputDecoration(labelText: _appStateModel.blocks.localeText.description),
               onSaved: (val) =>
-                  setState(() => widget.variationProduct.description = val),
+                  setState(() => widget.variationProduct.description = val!),
             ),
             TextFormField(
               initialValue: widget.variationProduct.regularPrice,
               decoration: InputDecoration(labelText: _appStateModel.blocks.localeText.regularPrice),
               validator: (value) {
-                if (value.isEmpty) {
+                if (value!.isEmpty) {
                   return '${_appStateModel.blocks.localeText.pleaseEnter} ${_appStateModel.blocks.localeText.regularPrice}';
                 } else {
                   return null;
                 }
               },
               onSaved: (val) =>
-                  setState(() => widget.variationProduct.regularPrice = val),
+                  setState(() => widget.variationProduct.regularPrice = val!),
             ),
             TextFormField(
               initialValue: widget.variationProduct.salePrice,
               decoration: InputDecoration(labelText: _appStateModel.blocks.localeText.salesPrice),
               validator: (value) {
-                if (value.isEmpty) {
+                if (value!.isEmpty) {
                   return '${_appStateModel.blocks.localeText.pleaseEnter} ${_appStateModel.blocks.localeText.salesPrice}';
                 } else {
                   return null;
                 }
               },
               onSaved: (val) =>
-                  setState(() => widget.variationProduct.salePrice = val),
+                  setState(() => widget.variationProduct.salePrice = val!),
             ),
             const SizedBox(height: 16.0),
             Text(_appStateModel.blocks.localeText.stockStatus, style: Theme
@@ -211,10 +215,10 @@ class _EditVariationProductState extends State<EditVariationProduct> {
               padding: const EdgeInsets.symmetric(vertical: 16.0),
               child: SizedBox(
                 width: double.maxFinite,
-                child: RaisedButton(
+                child: ElevatedButton(
                   onPressed: () {
-                    if (_formKey.currentState.validate()) {
-                      _formKey.currentState.save();
+                    if (_formKey.currentState!.validate()) {
+                      _formKey.currentState?.save();
                       widget.vendorBloc.editVariationProduct(widget.product.id, widget.variationProduct);
 
                       Navigator.pop(context);

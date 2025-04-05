@@ -20,14 +20,14 @@ class CountryModel {
   });
 
   factory CountryModel.fromJson(Map<String, dynamic> json) => CountryModel(
-    label: json["label"],
-    value: json["value"],
+    label: json["label"] == null ? null : json["label"],
+    value: json["value"] == null ? null : json["value"],
     regions: json["regions"] == null ? null : List<Region>.from(json["regions"].map((x) => Region.fromJson(x))),
   );
 
   Map<String, dynamic> toJson() => {
-    "label": label,
-    "value": value,
+    "label": label == null ? null : label,
+    "value": value == null ? null : value,
     "regions": regions == null ? null : List<dynamic>.from(regions.map((x) => x.toJson())),
   };
 }
@@ -42,12 +42,12 @@ class Region {
   });
 
   factory Region.fromJson(Map<String, dynamic> json) => Region(
-    label: json["label"],
-    value: json["value"],
+    label: json["label"] == null ? null : json["label"],
+    value: json["value"] == null ? null : json["value"],
   );
 
   Map<String, dynamic> toJson() => {
-    "label": label,
-    "value": value,
+    "label": label == null ? null : label,
+    "value": value == null ? null : value,
   };
 }

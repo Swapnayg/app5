@@ -9,7 +9,7 @@ class SearchBloc with ChangeNotifier {
   int page = 1;
   bool moreItems = true;
   final apiProvider = ApiProvider();
-  List<Product> products;
+  late List<Product> products;
 
   final _hasMoreSearchItemsFetcher = BehaviorSubject<bool>();
   final _searchLoadingFetcher = BehaviorSubject<bool>();
@@ -56,9 +56,10 @@ class SearchBloc with ChangeNotifier {
   }
 
   @override
-  dispose() {
+  void dispose() {
     _hasMoreSearchItemsFetcher.close();
     _searchFetcher.close();
     _searchLoadingFetcher.close();
+    super.dispose();
   }
 }

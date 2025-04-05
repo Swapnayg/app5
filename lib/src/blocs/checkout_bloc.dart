@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'dart:convert';
 
 import 'package:http/http.dart';
@@ -20,11 +22,11 @@ import '../models/product_model.dart';
 import '../resources/api_provider.dart';
 
 class CheckoutBloc {
-  var filter = Map<String, dynamic>();
+  var filter = <String, dynamic>{};
   int searchPage = 1;
   String initialSelectedCountry = 'US';
   var formData = <String, String>{};
-  OrderReviewModel orderReviewData;
+  late OrderReviewModel orderReviewData;
   List<Category> categories = [];
 
   Client client = Client();
@@ -53,7 +55,7 @@ class CheckoutBloc {
   void getCheckoutForm() async {
     final response = await apiProvider.post(
         '/wp-admin/admin-ajax.php?action=mstore_flutter-get_checkout_form',
-        {}); //formData.toJson();
+        Map()); //formData.toJson();
     if (response.statusCode == 200) {
       CheckoutFormModel checkoutForm =
           CheckoutFormModel.fromJson(json.decode(response.body));
@@ -91,21 +93,17 @@ class CheckoutBloc {
   }
 
   Future<OrderResult> placeOrder() async {
-    formData['shipping_first_name'] = formData['billing_first_name'];
-    formData['shipping_last_name'] = formData['billing_last_name'];
-    formData['shipping_address_1'] = formData['billing_address_1'];
-    formData['shipping_address_2'] = formData['billing_address_2'];
-    formData['shipping_city'] = formData['billing_city'];
-    formData['shipping_postcode'] = formData['billing_postcode'];
-    formData['shipping_country'] = formData['billing_country'];
-    formData['shipping_state'] = formData['billing_state'];
+    formData['shipping_first_name'] = formData['billing_first_name']!;
+    formData['shipping_last_name'] = formData['billing_last_name']!;
+    formData['shipping_address_1'] = formData['billing_address_1']!;
+    formData['shipping_address_2'] = formData['billing_address_2']!;
+    formData['shipping_city'] = formData['billing_city']!;
+    formData['shipping_postcode'] = formData['billing_postcode']!;
+    formData['shipping_country'] = formData['billing_country']!;
+    formData['shipping_state'] = formData['billing_state']!;
 
-    if(appStateModel.oneSignalPlayerId != null) {
-      formData['onesignal_user_id'] = appStateModel.oneSignalPlayerId;
-    }
-    if(appStateModel.fcmToken != null) {
-      formData['fcm_token'] = appStateModel.fcmToken;
-    }
+    formData['onesignal_user_id'] = appStateModel.oneSignalPlayerId;
+    formData['fcm_token'] = appStateModel.fcmToken;
 
     _placingOrderFetcher.sink.add(true);
     for (var i = 0; i < orderReviewData.shipping.length; i++) {
@@ -122,12 +120,10 @@ class CheckoutBloc {
       formData['wcfmmp_user_location'] = appStateModel.customerLocation['address'];
     }
 
-    if(appStateModel.selectedDate != null && appStateModel.selectedTime != null) {
-      formData['jckwds-delivery-date'] = appStateModel.selectedDateFormatted;
-      formData['jckwds-delivery-date-ymd'] = appStateModel.selectedDate;
-      formData['jckwds-delivery-time'] = appStateModel.selectedTime;
-    }
-
+    formData['jckwds-delivery-date'] = appStateModel.selectedDateFormatted;
+    formData['jckwds-delivery-date-ymd'] = appStateModel.selectedDate;
+    formData['jckwds-delivery-time'] = appStateModel.selectedTime;
+  
     //*** USE this If you have error in checkout. Usually when permalink not working ***//
     //final response = await apiProvider.post('/index.php/checkout?wc-ajax=checkout', formData);
     final response =
@@ -181,19 +177,19 @@ class CheckoutBloc {
 
   void updateOrderReview2() async {
     print(formData['shipping_postcode']);
-    formData['s_country'] = formData['shipping_country'];
-    formData['s_state'] = formData['shipping_state'];
-    formData['s_postcode'] = formData['shipping_postcode'];
-    formData['postcode'] = formData['shipping_postcode'];
-    formData['s_city'] = formData['shipping_city'];
-    formData['s_address'] = formData['shipping_address_1'];
-    formData['s_address_2'] = formData['shipping_address_2'];
+    formData['s_country'] = formData['shipping_country']!;
+    formData['s_state'] = formData['shipping_state']!;
+    formData['s_postcode'] = formData['shipping_postcode']!;
+    formData['postcode'] = formData['shipping_postcode']!;
+    formData['s_city'] = formData['shipping_city']!;
+    formData['s_address'] = formData['shipping_address_1']!;
+    formData['s_address_2'] = formData['shipping_address_2']!;
     formData['has_full_address'] = 'true';
-    formData['country'] = formData['shipping_country'];
-    formData['state'] = formData['shipping_state'];
-    formData['city'] = formData['shipping_city'];
-    formData['address'] = formData['shipping_address_1'];
-    formData['address_2'] = formData['shipping_address_2'];
+    formData['country'] = formData['shipping_country']!;
+    formData['state'] = formData['shipping_state']!;
+    formData['city'] = formData['shipping_city']!;
+    formData['address'] = formData['shipping_address_1']!;
+    formData['address_2'] = formData['shipping_address_2']!;
     formData['sameForShipping'] = 'true';
     formData['wc-ajax'] = 'update_order_review';
     formData['post_data'] = getQueryString(formData);
@@ -238,13 +234,13 @@ class CheckoutBloc {
   }
 
   void addAddToCarErrorMessage(String message) {
-    AddToCartErrorModel addToCartError = AddToCartErrorModel();
-    addToCartError.data = AddToCartErrorData();
+    AddToCartErrorModel addToCartError = new AddToCartErrorModel();
+    addToCartError.data = new AddToCartErrorData();
     addToCartError.data.notice = message;
     //_addToCartErrorFetcher.sink.add(addToCartError);
   }
 
-  List<Order> orders;
+  late List<Order> orders;
   bool hasMoreOrders = true;
   int ordersPage = 0;
   var addressFormData = <String, String>{};
@@ -267,7 +263,7 @@ class CheckoutBloc {
 
   getOrders() async {
     final response = await apiProvider.post(
-        '/wp-admin/admin-ajax.php?action=mstore_flutter-orders', {});
+        '/wp-admin/admin-ajax.php?action=mstore_flutter-orders', Map());
     orders = orderFromJson(response.body);
     _ordersFetcher.sink.add(orders);
     _hasMoreOrdersFetcher.sink.add(true);
@@ -281,7 +277,7 @@ class CheckoutBloc {
     List<Order> moreOrders = orderFromJson(response.body);
     orders.addAll(moreOrders);
     _ordersFetcher.sink.add(orders);
-    if (moreOrders.isEmpty) {
+    if (moreOrders.length == 0) {
       hasMoreOrders = false;
       _hasMoreOrdersFetcher.sink.add(false);
     }
@@ -318,7 +314,9 @@ class CheckoutBloc {
       StripeTokenModel stripeToken =
           StripeTokenModel.fromJson(json.decode(response.body));
       return stripeToken;
-    } else {}
+    } else {
+      throw Exception('Failed to fetch Stripe token');
+    }
   }
 
   Future<StripeSourceModel> getStripeSource(
@@ -329,11 +327,13 @@ class CheckoutBloc {
       StripeSourceModel stripeSource =
           StripeSourceModel.fromJson(json.decode(response.body));
       return stripeSource;
-    } else {}
+    } else {
+      throw Exception('Failed to fetch Stripe source');
+    }
   }
 
   final _orderFetcher = BehaviorSubject<Order>();
-  String currentOrder;
+  late String currentOrder;
   ValueStream<Order> get order => _orderFetcher.stream;
   getOrder() async {
     final response = await apiProvider.post(

@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable, unnecessary_null_comparison
+
 import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
@@ -13,7 +15,7 @@ const double _minWidthPerColumn = 350.0 + _scaffoldPadding * 2;
 
 class StoresList1 extends StatelessWidget {
   final List<StoreModel> stores;
-  const StoresList1({Key key, this.stores}) : super(key: key);
+  const StoresList1({required Key key, required this.stores}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
@@ -31,7 +33,7 @@ class StoresList1 extends StatelessWidget {
         ),
         delegate: SliverChildBuilderDelegate(
           (BuildContext context, int index) {
-            return StoreCard(store: stores[index], index: index);
+            return StoreCard(key: ValueKey(index), store: stores[index], index: index);
           },
           childCount: stores.length,
         ),
@@ -44,7 +46,7 @@ class StoreCard extends StatelessWidget {
   AppStateModel appStateModel = AppStateModel();
   final StoreModel store;
   final int index;
-  StoreCard({Key key, this.store, this.index}) : super(key: key);
+  StoreCard({required Key key, required this.store, required this.index}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     Widget featuredImage = store.banner != null
@@ -55,9 +57,9 @@ class StoreCard extends StatelessWidget {
                 image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
               ),
             ),
-            //TODO ADD AssetImage as placeholder
+
             placeholder: (context, url) => Container(color: Colors.black12),
-            //TODO ADD AssetImage as placeholder
+            
             errorWidget: (context, url, error) => Container(color: Colors.white),
           )
         : Container();
@@ -108,7 +110,7 @@ class StoreCard extends StatelessWidget {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      SizedBox(
+                      Container(
                         width: 340,
                         child: Text(store.name,
                             maxLines: 1,
@@ -156,7 +158,10 @@ class StoreCard extends StatelessWidget {
               width: 6.0,
             ),
             Text(
-              '(${store.ratingCount} ${appStateModel.blocks.localeText.reviews})',
+              '(' +
+                  store.ratingCount.toString() +
+                  ' ' + appStateModel.blocks.localeText.reviews +
+                  ')',
               style: TextStyle(
                   fontSize: 10, fontWeight: FontWeight.w300),
             ),
@@ -169,6 +174,7 @@ class StoreCard extends StatelessWidget {
   openDetails(StoreModel store, BuildContext context) {
     Navigator.push(context, MaterialPageRoute(builder: (context) {
       return VendorDetails(
+        key: ValueKey(store.id),
         vendorId: store.id.toString(),
       );
     }));

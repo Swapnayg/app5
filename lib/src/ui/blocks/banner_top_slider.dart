@@ -9,14 +9,14 @@ import 'hex_color.dart';
 class BannerTopSlider extends StatefulWidget {
   final Block block;
   final Function onBannerClick;
-  const BannerTopSlider({Key key, this.block, this.onBannerClick}) : super(key: key);
+  BannerTopSlider({Key key, this.block, this.onBannerClick}) : super(key: key);
   @override
   _BannerTopSliderState createState() => _BannerTopSliderState();
 }
 
 class _BannerTopSliderState extends State<BannerTopSlider> {
 
-  final bool _isVisible = false;
+  bool _isVisible = false;
 
   //*
 
@@ -28,7 +28,7 @@ class _BannerTopSliderState extends State<BannerTopSlider> {
         child: Stack(
           //overflow: Overflow.visible,
           children: [
-            SizedBox(
+            Container(
               height: 310,
               width: double.infinity,
               child: buildImagesSwiper(context),
@@ -41,7 +41,7 @@ class _BannerTopSliderState extends State<BannerTopSlider> {
                 filter:  ImageFilter.blur(sigmaX: 50, sigmaY: 50),
                 child: Stack(
                   children:  [
-                    SizedBox(
+                    Container(
                       height: 300,
                       //color: Colors.red ,
                       width: double.infinity,
@@ -50,7 +50,7 @@ class _BannerTopSliderState extends State<BannerTopSlider> {
                       ),),
                     Padding(
                       padding: EdgeInsets.symmetric(vertical: 0, horizontal: 15),
-                      child: SizedBox(
+                      child: Container(
                         //height: MediaQuery.of(context).size.height,
                         width: MediaQuery.of(context).size.width,
                         child: topImageSwiper(context),
@@ -74,14 +74,14 @@ class _BannerTopSliderState extends State<BannerTopSlider> {
             itemBuilder: (BuildContext context, int index) {
               return Stack(
                 children: [
-                  SizedBox(
+                  Container(
                     width: MediaQuery.of(context).size.width,
                     child: Image.network(
                       widget.block.children[index].image,
                       fit: BoxFit.fill,
                     ),
                   ),
-                  SizedBox(
+                  Container(
                     width: MediaQuery.of(context).size.width,
                     child: BackdropFilter(
                       filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
@@ -96,7 +96,7 @@ class _BannerTopSliderState extends State<BannerTopSlider> {
             itemCount:  widget.block.children.length,
             pagination: SwiperPagination(
               //margin: EdgeInsets.only(bottom:40),
-              builder: DotSwiperPaginationBuilder(
+              builder: new DotSwiperPaginationBuilder(
                   color: Color(0xffb0bec5),
                   activeColor: Colors.white,
                   size: 8,
@@ -118,7 +118,7 @@ class _BannerTopSliderState extends State<BannerTopSlider> {
     //TabController imagesController = TabController(length: 3, vsync: this );
     return Stack(
       children: <Widget>[
-        SizedBox(
+        Container(
           //alignment: Alignment.topCenter,
           width: double.infinity,
           height: 180,
@@ -130,7 +130,7 @@ class _BannerTopSliderState extends State<BannerTopSlider> {
               itemBuilder: (BuildContext context, int index) {
                 return InkWell(
                     splashColor: Theme.of(context).hintColor,
-                    onTap: () {},
+                    onTap: () => null,
                     child: Image.network(
                       widget.block.children[index].image,
                       fit: BoxFit.fill,
@@ -140,7 +140,7 @@ class _BannerTopSliderState extends State<BannerTopSlider> {
               itemCount:  widget.block.children.length,
               pagination: SwiperPagination(
                 //margin: EdgeInsets.only(bottom:40),
-                builder: DotSwiperPaginationBuilder(
+                builder: new DotSwiperPaginationBuilder(
                     color: Color(0xffb0bec5),
                     activeColor: Colors.white,
                     size: 8,

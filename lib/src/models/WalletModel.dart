@@ -34,28 +34,28 @@ class WalletModel {
   DateTime date;
 
   factory WalletModel.fromJson(Map<String, dynamic> json) => WalletModel(
-    transactionId: json["transaction_id"],
-    blogId: json["blog_id"],
-    userId: json["user_id"],
-    type: json["type"],
-    amount: json["amount"],
-    balance: json["balance"],
-    currency: json["currency"],
-    details: json["details"],
-    deleted: json["deleted"],
+    transactionId: json["transaction_id"] == null ? null : json["transaction_id"],
+    blogId: json["blog_id"] == null ? null : json["blog_id"],
+    userId: json["user_id"] == null ? null : json["user_id"],
+    type: json["type"] == null ? null : json["type"],
+    amount: json["amount"] == null ? null : json["amount"],
+    balance: json["balance"] == null ? null : json["balance"],
+    currency: json["currency"] == null ? null : json["currency"],
+    details: json["details"] == null ? null : json["details"],
+    deleted: json["deleted"] == null ? null : json["deleted"],
     date: json["date"] == null ? null : DateTime.parse(json["date"]),
   );
 
   Map<String, dynamic> toJson() => {
-    "transaction_id": transactionId,
-    "blog_id": blogId,
-    "user_id": userId,
-    "type": type,
-    "amount": amount,
-    "balance": balance,
-    "currency": currency,
-    "details": details,
-    "deleted": deleted,
-    "date": date?.toIso8601String(),
+    "transaction_id": transactionId == null ? null : transactionId,
+    "blog_id": blogId == null ? null : blogId,
+    "user_id": userId == null ? null : userId,
+    "type": type == null ? null : type,
+    "amount": amount == null ? null : amount,
+    "balance": balance == null ? null : balance,
+    "currency": currency == null ? null : currency,
+    "details": details == null ? null : details,
+    "deleted": deleted == null ? null : deleted,
+    "date": date == null ? null : date.toIso8601String(),
   };
 }

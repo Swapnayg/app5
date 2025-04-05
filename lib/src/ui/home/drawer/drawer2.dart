@@ -8,8 +8,6 @@ import '../../products/products.dart';
 import 'category_list.dart';
 
 class MyDrawer extends StatefulWidget {
-  const MyDrawer({super.key});
-
   @override
   _MyDrawerState createState() => _MyDrawerState();
 }
@@ -28,7 +26,7 @@ class _MyDrawerState extends State<MyDrawer> with TickerProviderStateMixin {
   AnimationController _controller;
   Animation<double> _drawerContentsOpacity;
   Animation<Offset> _drawerDetailsPosition;
-  final bool _showDrawerContents = true;
+  bool _showDrawerContents = true;
 
   @override
   Future initState() {
@@ -63,7 +61,7 @@ class _MyDrawerState extends State<MyDrawer> with TickerProviderStateMixin {
                         height: 50,
                       ),
                       ListTile(
-                        title: Text(ScopedModel.of<AppStateModel>(context).blocks.localeText.category, style: Theme.of(context).textTheme.titleMedium,),
+                        title: Text(ScopedModel.of<AppStateModel>(context).blocks.localeText.category, style: Theme.of(context).textTheme.subtitle1,),
                       ),
                       Expanded(child: buildList()),
                     ],
@@ -90,7 +88,7 @@ class _MyDrawerState extends State<MyDrawer> with TickerProviderStateMixin {
   }
 
   _onTap(Category category) {
-    var filter = <String, dynamic>{};
+    var filter = new Map<String, dynamic>();
     filter['id'] = category.id.toString();
     Navigator.push(
         context,

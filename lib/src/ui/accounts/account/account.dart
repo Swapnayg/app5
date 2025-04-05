@@ -8,8 +8,6 @@ import 'account9.dart';
 import 'account10.dart';
 
 class Account extends StatefulWidget {
-  const Account({super.key});
-
   @override
   _AccountState createState() => _AccountState();
 }

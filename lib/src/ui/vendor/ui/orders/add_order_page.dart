@@ -1,4 +1,5 @@
-import 'package:flutter/cupertino.dart';
+// ignore_for_file: library_private_types_in_public_api, sort_child_properties_last, avoid_print, unused_element, unrelated_type_equality_checks
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -13,7 +14,7 @@ class AddOrderPage extends StatefulWidget {
  final order = Order();
 
 
-  AddOrderPage({Key key, this.vendorBloc}) : super(key: key);
+  AddOrderPage({super.key, required this.vendorBloc});
 
   @override
   _AddOrderPageState createState() => _AddOrderPageState();
@@ -29,7 +30,7 @@ class _AddOrderPageState extends State<AddOrderPage> {
     super.initState();
     widget.vendorBloc.fetchAllProducts();
     widget.vendorBloc.getVendorOrderForm();
-    widget.order.lineItems = List<LineItem>();
+    widget.order.lineItems = List<LineItem>.empty(growable: true);
     widget.order.billing = Address();
     widget.order.shipping = Address();
   }
@@ -60,7 +61,7 @@ class _AddOrderPageState extends State<AddOrderPage> {
               left: 30.0,
               right: 30.0,
               child: Container(
-                child: RaisedButton(
+                child: ElevatedButton(
                   onPressed: () {
                     print(widget.order);
 
@@ -86,7 +87,7 @@ class _AddOrderPageState extends State<AddOrderPage> {
             padding: EdgeInsets.all(20),
             child: Column(
               children: <Widget>[
-                RaisedButton(
+                ElevatedButton(
                   onPressed: () => Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -118,7 +119,7 @@ class _AddOrderPageState extends State<AddOrderPage> {
                   ),
                 ),
                 SizedBox(height: 24),
-                RaisedButton(
+                ElevatedButton(
                   onPressed: () => Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -168,14 +169,12 @@ class _AddOrderPageState extends State<AddOrderPage> {
               children: <Widget>[
                 Container(
                   padding: EdgeInsets.all(10),
-                    height: 80,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       mainAxisSize: MainAxisSize.max,
                       children: <Widget>[
                         Expanded(
-                          child: Text(widget.order.lineItems[index].name
-                              + ' x ' + widget.order.lineItems[index].quantity.toString()
+                          child: Text('${widget.order.lineItems[index].name} x ${widget.order.lineItems[index].quantity}'
                           ),
                         ),
                         Text(formatter.format((double.parse(
@@ -191,7 +190,8 @@ class _AddOrderPageState extends State<AddOrderPage> {
                               });
                             })
                       ],
-                    )),
+                    ),
+                    height: 80),
                 Container(
                   padding: EdgeInsets.all(10),
                   child: Row(
@@ -275,7 +275,7 @@ class _AddOrderPageState extends State<AddOrderPage> {
                   children: <Widget>[
                     Text(
                       "Billing Details:",
-                      style: Theme.of(context).textTheme.subtitle2,
+                      style: Theme.of(context).textTheme.titleMedium,
                     ),
                     SizedBox(height: 10.0),
                     Text(
@@ -288,7 +288,7 @@ class _AddOrderPageState extends State<AddOrderPage> {
                   children: <Widget>[
                     Text(
                       "Shipping Details:",
-                      style: Theme.of(context).textTheme.subtitle2,
+                      style: Theme.of(context).textTheme.titleSmall,
                     ),
                     SizedBox(
                       height: 10.0,

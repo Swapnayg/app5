@@ -1,4 +1,5 @@
-import 'dart:ui';
+
+// ignore_for_file: unused_local_variable, must_be_immutable, use_super_parameters, unnecessary_null_comparison, avoid_unnecessary_containers, avoid_print
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -13,7 +14,7 @@ const double _minWidthPerColumn = 350.0 + _scaffoldPadding * 2;
 
 class StoresList4 extends StatelessWidget {
   final List<StoreModel> stores;
-  const StoresList4({Key key, this.stores}) : super(key: key);
+  const StoresList4({required Key key, required this.stores}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
@@ -38,24 +39,19 @@ class StoreCard extends StatelessWidget {
   AppStateModel appStateModel = AppStateModel();
   final StoreModel store;
   final int index;
-  StoreCard({Key key, this.store, this.index}) : super(key: key);
+  StoreCard({Key? key, required this.store, required this.index}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    Widget featuredImage = store.banner != null
-        ? CachedNetworkImage(
-            imageUrl: store.banner,
-            imageBuilder: (context, imageProvider) => Container(
-              decoration: BoxDecoration(
-                image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
-              ),
-            ),
-            //TODO ADD AssetImage as placeholder
-            placeholder: (context, url) => Container(color: Colors.black12),
-            //TODO ADD AssetImage as placeholder
-            errorWidget: (context, url, error) =>
-                Container(color: Colors.white),
-          )
-        : Container();
+    Widget featuredImage = CachedNetworkImage(
+      imageUrl: store.banner,
+      imageBuilder: (context, imageProvider) => Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
+        ),
+      ),
+      placeholder: (context, url) => Container(color: Colors.black12),
+      errorWidget: (context, url, error) => Container(color: Colors.white),
+    );
     return SizedBox(
       height: 80,
       child: InkWell(
@@ -150,6 +146,7 @@ class StoreCard extends StatelessWidget {
   openDetails(StoreModel store, BuildContext context) {
     Navigator.push(context, MaterialPageRoute(builder: (context) {
       return VendorDetails(
+        key: Key(store.id.toString()),
         vendorId: store.id.toString(),
       );
     }));

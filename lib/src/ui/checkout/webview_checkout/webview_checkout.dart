@@ -9,8 +9,6 @@ import '../../../resources/api_provider.dart';
 import '../order_summary.dart';
 
 class WebViewCheckout extends StatefulWidget {
-  const WebViewCheckout({super.key});
-
   @override
   _WebViewCheckoutState createState() => _WebViewCheckoutState();
 }
@@ -41,7 +39,7 @@ class _WebViewCheckoutState extends State<WebViewCheckout> {
               onPageStarted: (String url) {
                 onUrlChange(url);
               },
-              initialUrl: '${config.url}/checkout/',
+              initialUrl: config.url + '/checkout/',
               javascriptMode: JavascriptMode.unrestricted,
               onWebViewCreated: (WebViewController wvc) {
                 //
@@ -92,7 +90,7 @@ class _WebViewCheckoutState extends State<WebViewCheckout> {
       //Show WebView
     }
 
-    if (url.contains('type=success')) {
+    if (url.contains('type=success') && orderId != null) {
       //orderSummaryById();
     }
 

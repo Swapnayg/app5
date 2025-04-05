@@ -18,8 +18,6 @@ import '../../../color_override.dart';
 import 'theme_override.dart';
 
 class Login6 extends StatefulWidget {
-  const Login6({super.key});
-
   @override
   _Login6State createState() => _Login6State();
 }
@@ -29,11 +27,11 @@ class _Login6State extends State<Login6> {
   final GoogleSignIn _googleSignIn = GoogleSignIn();
   final appStateModel = AppStateModel();
   final _formKey = GlobalKey<FormState>();
-  var formData = <String, dynamic>{};
-  TextEditingController usernameController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
+  var formData = new Map<String, dynamic>();
+  TextEditingController usernameController = new TextEditingController();
+  TextEditingController passwordController = new TextEditingController();
   final RoundedLoadingButtonController _btnController =
-  RoundedLoadingButtonController();
+  new RoundedLoadingButtonController();
 
   /*@override
   void initState() {
@@ -72,7 +70,8 @@ class _Login6State extends State<Login6> {
           child: Scaffold(
             body: Builder(
                 builder: (context) => Stack(
-                  clipBehavior: Clip.none, children: [
+                  overflow: Overflow.visible,
+                children: [
                   Container(
                       height: MediaQuery.of(context).size.height *.1,
                       width: MediaQuery.of(context).size.width,
@@ -124,13 +123,13 @@ class _Login6State extends State<Login6> {
                           SizedBox(
                             height: height * 0.050,
                           ),
-                          Text('Welcome Back!', style: Theme.of(context).textTheme.titleLarge.copyWith(
+                          Text('Welcome Back!', style: Theme.of(context).textTheme.headline6.copyWith(
                               fontSize: 16,color: Colors.white70
                           )),
                           SizedBox(
                             height: 10,
                           ),
-                          Text('Sign In', style: Theme.of(context).textTheme.bodySmall.copyWith(
+                          Text('Sign In', style: Theme.of(context).textTheme.caption.copyWith(
                               fontSize: 32,color: Colors.white, fontWeight: FontWeight.w700
                           )),
                           SizedBox(
@@ -179,15 +178,6 @@ class _Login6State extends State<Login6> {
                               color: Theme.of(context).brightness == Brightness.light ? Color(0xff041F5F) : Color(0xffbdbdbd),
                             elevation: 3,
                             valueColor: Colors.white,
-                            controller: _btnController,
-                            onPressed: () {
-                              if(_formKey.currentState.validate()) {
-                                _formKey.currentState.save();
-                                _submit(context);
-                              }
-                            },
-                            animateOnTap: false,
-                            width: MediaQuery.of(context).size.width - 34,
                             child: Container(
                               alignment: Alignment.center,
                               height: 50,
@@ -203,6 +193,15 @@ class _Login6State extends State<Login6> {
                                 textAlign: TextAlign.center,
                               ),
                             ),
+                            controller: _btnController,
+                            onPressed: () {
+                              if(_formKey.currentState.validate()) {
+                                _formKey.currentState.save();
+                                _submit(context);
+                              }
+                            },
+                            animateOnTap: false,
+                            width: MediaQuery.of(context).size.width - 34,
                           ),
                           SizedBox(height: 10.0),
                           FlatButton(
@@ -217,7 +216,7 @@ class _Login6State extends State<Login6> {
                                   Text(
                                       appStateModel.blocks.localeText
                                           .dontHaveAnAccount,
-                                      style: Theme.of(context).textTheme.bodyMedium.copyWith(
+                                      style: Theme.of(context).textTheme.bodyText2.copyWith(
                                           fontSize: 15,
                                       )),
                                   Padding(
@@ -225,7 +224,7 @@ class _Login6State extends State<Login6> {
                                     const EdgeInsets.symmetric(horizontal: 8.0),
                                     child: Text(
                                         appStateModel.blocks.localeText.signUp,
-                                        style: Theme.of(context).textTheme.titleMedium.copyWith(color: Color(0xff02A4E6),fontWeight: FontWeight.w500)),
+                                        style: Theme.of(context).textTheme.subtitle1.copyWith(color: Color(0xff02A4E6),fontWeight: FontWeight.w500)),
                                   ),
                                 ],
                               )),
@@ -240,7 +239,7 @@ class _Login6State extends State<Login6> {
                                 children: [
                                   Text(
                                       appStateModel.blocks.localeText.forgotPassword,
-                                      style: Theme.of(context).textTheme.titleMedium.copyWith(
+                                      style: Theme.of(context).textTheme.subtitle1.copyWith(
                                           color: Color(0xff02A4E6),
                                           fontWeight: FontWeight.w500
                                       )),
@@ -253,14 +252,14 @@ class _Login6State extends State<Login6> {
                               children: <Widget>[
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
-                                  child: SizedBox(
+                                  child: Container(
                                     height: 50.0, // height of the button
                                     width: 50.0,
                                     child: Card(
                                       shape: StadiumBorder(),
                                       margin: EdgeInsets.all(0),
                                       color: Color(0xFFEA4335),
-                                      child: SizedBox(
+                                      child: Container(
                                         height: 50,
                                         width: 50,
                                         child: Center(
@@ -287,7 +286,7 @@ class _Login6State extends State<Login6> {
                                     shape: StadiumBorder(),
                                     margin: EdgeInsets.all(0),
                                     color: Color(0xFF3b5998),
-                                    child: SizedBox(
+                                    child: Container(
                                       height: 50,
                                       width: 50,
                                       child: IconButton(
@@ -310,7 +309,7 @@ class _Login6State extends State<Login6> {
                                     shape: StadiumBorder(),
                                     margin: EdgeInsets.all(0),
                                     color: Theme.of(context).brightness == Brightness.dark ? Color(0xFFFFFFFF) : Color(0xFF000000),
-                                    child: SizedBox(
+                                    child: Container(
                                       height: 50,
                                       width: 50,
                                       child: IconButton(
@@ -334,7 +333,7 @@ class _Login6State extends State<Login6> {
                                     shape: StadiumBorder(),
                                     margin: EdgeInsets.all(0),
                                     color: Color(0xFF34B7F1),
-                                    child: SizedBox(
+                                    child: Container(
                                       height: 50,
                                       width: 50,
                                       child: IconButton(
@@ -385,15 +384,15 @@ class _Login6State extends State<Login6> {
                                 padding: EdgeInsets.all(24),
                                 child: Wrap(
                                   children: [
-                                    Row(
+                                    new Row(
                                       mainAxisSize: MainAxisSize.min,
                                       mainAxisAlignment: MainAxisAlignment.center,
                                       children: [
-                                        CircularProgressIndicator(),
+                                        new CircularProgressIndicator(),
                                         SizedBox(
                                           width: 24,
                                         ),
-                                        Text(appStateModel.blocks.localeText.pleaseWait),
+                                        new Text(appStateModel.blocks.localeText.pleaseWait),
                                       ],
                                     ),
                                   ],
@@ -431,7 +430,7 @@ class _Login6State extends State<Login6> {
 
   _loginGoogleUser(String idToken, GoogleSignInAccount googleUser,
       BuildContext context) async {
-    var login = <String, dynamic>{};
+    var login = new Map<String, dynamic>();
     login["type"] = 'google';
     login["token"] = idToken;
     login["name"] = googleUser.displayName;
@@ -491,27 +490,29 @@ class _Login6State extends State<Login6> {
       ),
     );
 
-    var login = new Map<String, dynamic>();
-    login["userIdentifier"] = credential.userIdentifier;
-    if(credential.authorizationCode != null)
-      login["authorizationCode"] = credential.authorizationCode;
-    if(credential.email != null) {
-      login["email"] = credential.email;
-    } else {
-      //await _showDialog(context);
-      //TODO If email and name is empty Request Email and Name
+    if(credential.authorizationCode != null) {
+      var login = new Map<String, dynamic>();
+      login["userIdentifier"] = credential.userIdentifier;
+      if(credential.authorizationCode != null)
+        login["authorizationCode"] = credential.authorizationCode;
+      if(credential.email != null) {
+        login["email"] = credential.email;
+      } else {
+        //await _showDialog(context);
+        //TODO If email and name is empty Request Email and Name
+      }
+      if(credential.userIdentifier != null)
+        login["email"] = credential.userIdentifier;
+      if(credential.givenName != null)
+        login["name"] = credential.givenName;
+      else login["name"] = '';
+      login["useBundleId"] = Platform.isIOS || Platform.isMacOS ? 'true' : 'false';
+      bool status = await appStateModel.appleLogin(login);
+      if (status) {
+        Navigator.of(context).pop();
+      }
     }
-    if(credential.userIdentifier != null)
-      login["email"] = credential.userIdentifier;
-    if(credential.givenName != null)
-      login["name"] = credential.givenName;
-    else login["name"] = '';
-    login["useBundleId"] = Platform.isIOS || Platform.isMacOS ? 'true' : 'false';
-    bool status = await appStateModel.appleLogin(login);
-    if (status) {
-      Navigator.of(context).pop();
-    }
-    }
+  }
 
 }
 

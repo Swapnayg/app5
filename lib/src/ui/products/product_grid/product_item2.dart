@@ -62,15 +62,15 @@ class ProductItem extends StatelessWidget {
 
     int percentOff = 0;
 
-    if ((product.salePrice != 0)) {
+    if ((product.salePrice != null && product.salePrice != 0)) {
       percentOff = (((product.regularPrice - product.salePrice / product.regularPrice)).round());
     }
     bool onSale = false;
-    if(product.regularPrice.isNaN) {
+    if(product.regularPrice == null || product.regularPrice.isNaN) {
       product.regularPrice = product.price;
     }
 
-    if(product.salePrice != 0) {
+    if(product.salePrice != null && product.salePrice != 0) {
       onSale = true;
     }
 
@@ -92,7 +92,7 @@ class ProductItem extends StatelessWidget {
             children: <Widget>[
               Stack(
                 children: <Widget>[
-                  SizedBox(
+                  Container(
                     height: 150,
                     child: CachedNetworkImage(
                       imageUrl: product.images[0].src,
@@ -172,16 +172,18 @@ class ProductItem extends StatelessWidget {
                         SizedBox(
                           width: 4.0,
                         ),
-                        (product.formattedPrice.isNotEmpty)
+                        (product.formattedPrice !=
+                            null && product.formattedPrice.isNotEmpty)
                             ? Text(
-                          (product.formattedPrice.isNotEmpty)
+                          (product.formattedPrice !=
+                              null && product.formattedPrice.isNotEmpty)
                               ? parseHtmlString(product.formattedPrice)
                               : '',
                           style: TextStyle(
                               fontSize: onSale ? 12 : 16,
                               fontWeight: onSale ? FontWeight.w300 : FontWeight.w400,
                               decoration: onSale ? TextDecoration.lineThrough : TextDecoration.none,
-                              color: onSale ? Theme.of(context).textTheme.bodySmall.color : Theme.of(context).colorScheme.onSurface),
+                              color: onSale ? Theme.of(context).textTheme.caption.color : Theme.of(context).colorScheme.onSurface),
                         ) : Container(),
                         percentOff != 0 ? Row(
                           children: <Widget>[
@@ -189,11 +191,11 @@ class ProductItem extends StatelessWidget {
                               width: 2.0,
                             ),
                             Text(
-                              '$percentOff% OFF',
+                              percentOff.toString() + '% OFF',
                               style: TextStyle(
                                   fontSize: 12,
                                   fontWeight: FontWeight.w300,
-                                  color: Theme.of(context).textTheme.bodySmall.color),
+                                  color: Theme.of(context).textTheme.caption.color),
                             ),
                           ],
                         ) : Container(),
@@ -223,7 +225,7 @@ class ProductItem extends StatelessWidget {
                           },
                         ),
                         Text(
-                          '(${product.ratingCount})',
+                          '(' + product.ratingCount.toString() + ')',
                           style: TextStyle(
                               fontSize: 12,
                               fontWeight: FontWeight.bold,

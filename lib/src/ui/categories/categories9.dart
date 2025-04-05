@@ -11,8 +11,6 @@ import '../../models/category_model.dart';
 import '../products/products.dart';
 
 class Categories9 extends StatefulWidget {
-  const Categories9({super.key});
-
   @override
   _Categories9State createState() => _Categories9State();
 }
@@ -64,7 +62,7 @@ class _CategoryListState extends State<CategoryList> {
   }
 
   _onTap(Category category) {
-    var filter = <String, dynamic>{};
+    var filter = new Map<String, dynamic>();
     filter['id'] = category.id.toString();
     Navigator.push(
         context,
@@ -102,7 +100,7 @@ class _CategoryListState extends State<CategoryList> {
           parseHtmlString(category.name),
           style: menuItemStyle(),
         ),
-        subtitle: category.description != '' ? Text(parseHtmlString(category.description), maxLines: 2, style: Theme.of(context).textTheme.bodySmall,) : null,
+        subtitle: category.description != '' ? Text(parseHtmlString(category.description), maxLines: 2, style: Theme.of(context).textTheme.caption,) : null,
         children: subCategories.map(_buildCard).toList(),
       );
     }
@@ -154,7 +152,7 @@ class _CategoryListState extends State<CategoryList> {
                       ),
                       category.description != '' ? Text(
                         parseHtmlString(category.description),
-                        style: Theme.of(context).textTheme.bodySmall,
+                        style: Theme.of(context).textTheme.caption,
                         maxLines: 2,
                       ) : Container(),
                     ],
@@ -193,24 +191,24 @@ class _CategoryListState extends State<CategoryList> {
   }
 
   Container leadingIcon(Category category) {
-    return SizedBox(
+    return Container(
       width: 80,
       height: 80,
       child: CachedNetworkImage(
-        imageUrl: category.image ?? '',
+        imageUrl: category.image != null ? category.image : '',
         imageBuilder: (context, imageProvider) => Card(
           clipBehavior: Clip.antiAlias,
           margin: EdgeInsets.all(0.0),
           elevation: 0.0,
           //shape: StadiumBorder(),
           child: Ink.image(
-            image: imageProvider,
-            fit: BoxFit.cover,
             child: InkWell(
               onTap: () {
                 onCategoryClick(category);
               },
             ),
+            image: imageProvider,
+            fit: BoxFit.cover,
           ),
         ),
         placeholder: (context, url) => Card(
@@ -235,20 +233,20 @@ class _CategoryListState extends State<CategoryList> {
       width: 80,
       height: 80,
       child: CachedNetworkImage(
-        imageUrl: category.image ?? '',
+        imageUrl: category.image != null ? category.image : '',
         imageBuilder: (context, imageProvider) => Card(
           clipBehavior: Clip.antiAlias,
           margin: EdgeInsets.all(0.0),
           elevation: 0.0,
           //shape: StadiumBorder(),
           child: Ink.image(
-            image: imageProvider,
-            fit: BoxFit.cover,
             child: InkWell(
               onTap: () {
                 onCategoryClick(category);
               },
             ),
+            image: imageProvider,
+            fit: BoxFit.cover,
           ),
         ),
         placeholder: (context, url) => Card(
@@ -299,7 +297,8 @@ class ExpansionTile2 extends StatefulWidget {
     this.children = const <Widget>[],
     this.trailing,
     this.initiallyExpanded = false,
-  })  : super(key: key);
+  })  : assert(initiallyExpanded != null),
+        super(key: key);
 
   /// A widget to display before the title.
   ///
@@ -378,7 +377,7 @@ class _ExpansionTile2State extends State<ExpansionTile2>
         _controller.drive(_backgroundColorTween.chain(_easeOutTween));
 
     _isExpanded =
-        PageStorage.of(context).readState(context) ?? widget.initiallyExpanded;
+        PageStorage.of(context)?.readState(context) ?? widget.initiallyExpanded;
     if (_isExpanded) _controller.value = 1.0;
   }
 
@@ -401,9 +400,10 @@ class _ExpansionTile2State extends State<ExpansionTile2>
           });
         });
       }
-      PageStorage.of(context).writeState(context, _isExpanded);
+      PageStorage.of(context)?.writeState(context, _isExpanded);
     });
-    widget.onExpansionChanged(_isExpanded);
+    if (widget.onExpansionChanged != null)
+      widget.onExpansionChanged(_isExpanded);
   }
 
   Widget _buildChildren(BuildContext context, Widget child) {
@@ -435,7 +435,7 @@ class _ExpansionTile2State extends State<ExpansionTile2>
                       padding: EdgeInsets.fromLTRB(16,16,16,16),
                       child: InkWell(
                         onTap: _handleTap,
-                        child: SizedBox(
+                        child: Container(
                           width: MediaQuery.of(context).size.width - 32,
                           child: Row(
                             children: [
@@ -453,24 +453,25 @@ class _ExpansionTile2State extends State<ExpansionTile2>
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
                                           widget.title,
+                                          if(widget.subtitle != null)
                                           Column(
-                                          children: [
-                                            SizedBox(height: 4,),
-                                            widget.subtitle,
-                                          ],
-                                        )
+                                            children: [
+                                              SizedBox(height: 4,),
+                                              widget.subtitle,
+                                            ],
+                                          )
                                         ],
                                       ),
                                     ),
                                     _isExpanded
-                                        ? SizedBox(
+                                        ? Container(
                                       height: 60,
                                       child: RotationTransition(
                                         turns: _iconTurns,
                                         child: const Icon(Icons.keyboard_arrow_down),
                                       ),
                                     )
-                                        : SizedBox(
+                                        : Container(
                                       height: 60,
                                       child: RotationTransition(
                                         turns: _iconTurns,
@@ -508,14 +509,14 @@ class _ExpansionTile2State extends State<ExpansionTile2>
   @override
   void didChangeDependencies() {
     final ThemeData theme = Theme.of(context);
-    _borderColorTween.end = theme.dividerColor;
+    _borderColorTween..end = theme.dividerColor;
     _headerColorTween
-      ..begin = theme.textTheme.titleMedium.color
-      ..end = theme.colorScheme.secondary;
+      ..begin = theme.textTheme.subtitle1.color
+      ..end = theme.accentColor;
     _iconColorTween
       ..begin = theme.unselectedWidgetColor
-      ..end = theme.colorScheme.secondary;
-    _backgroundColorTween.end = widget.backgroundColor;
+      ..end = theme.accentColor;
+    _backgroundColorTween..end = widget.backgroundColor;
     super.didChangeDependencies();
   }
 

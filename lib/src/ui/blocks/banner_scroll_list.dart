@@ -9,7 +9,7 @@ class BannerScrollList extends StatefulWidget {
 
   final Block block;
   final Function onBannerClick;
-  const BannerScrollList({Key key, this.block, this.onBannerClick}) : super(key: key);
+  BannerScrollList({Key key, this.block, this.onBannerClick}) : super(key: key);
 
   @override
   _BannerScrollListState createState() => _BannerScrollListState();
@@ -78,8 +78,6 @@ class _BannerScrollListState extends State<BannerScrollList> {
                                     imageUrl: widget.block
                                         .children[index].image,
                                     imageBuilder: (context, imageProvider) => Ink.image(
-                                      image: imageProvider,
-                                      fit: BoxFit.cover,
                                       child: InkWell(
                                         splashColor: HexColor(widget.block.bgColor).withOpacity(0.1),
                                         onTap: () {
@@ -87,6 +85,8 @@ class _BannerScrollListState extends State<BannerScrollList> {
                                               .children[index]);
                                         },
                                       ),
+                                      image: imageProvider,
+                                      fit: BoxFit.cover,
                                     ),
                                     placeholder: (context, url) =>
                                         Container(color: HexColor(widget.block.bgColor).withOpacity(0.5)),

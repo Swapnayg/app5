@@ -1,10 +1,12 @@
+// ignore_for_file: avoid_print
+
 import 'package:rxdart/rxdart.dart';
 
 import './../models/WalletModel.dart';
 import './../resources/api_provider.dart';
 
 class WalletBloc {
-  List<WalletModel> transaction;
+  late List<WalletModel> transaction;
   var filter = <String, dynamic>{};
   int page = 1;
   bool hasMoreItems = true;
@@ -14,7 +16,7 @@ class WalletBloc {
 
   ValueStream<List<WalletModel>> get allTransactions => _walletFetcher.stream;
 
-  load([String query]) async {
+  load([String? query]) async {
     page = 1;
     filter['page'] = page.toString();
     dynamic response = await apiProvider.postWithCookies('/wp-admin/admin-ajax.php?action=mstore_flutter_wallet', filter);

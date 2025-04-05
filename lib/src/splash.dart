@@ -19,26 +19,26 @@ const homePeekMobile = 0.0;
 
 class SplashPageAnimation extends InheritedWidget {
   const SplashPageAnimation({
-    Key super.key,
-    @required this.isFinished,
-    @required super.child,
-  })  : assert(child != null);
+    required Key super.key,
+    required this.isFinished,
+    required super.child,
+  });
 
   final bool isFinished;
 
-  static SplashPageAnimation of(BuildContext context) {
+  static SplashPageAnimation? of(BuildContext context) {
     return context.dependOnInheritedWidgetOfExactType();
   }
 
   @override
-  bool updateShouldNotify(SplashPageAnimation old) => true;
+  bool updateShouldNotify(SplashPageAnimation oldWidget) => true;
 }
 
 class SplashPage extends StatefulWidget {
   const SplashPage({
-    Key key,
+    required Key key,
     this.isAnimated = true,
-    @required this.child,
+    required this.child,
   }) : super(key: key);
 
   final bool isAnimated;
@@ -50,9 +50,9 @@ class SplashPage extends StatefulWidget {
 
 class _SplashPageState extends State<SplashPage>
     with SingleTickerProviderStateMixin {
-  AnimationController _controller;
-  Timer _launchTimer;
-  int _effect;
+  late AnimationController _controller;
+  late Timer? _launchTimer;
+  late int _effect;
   final _random = Random();
 
   // A map of the effect index to its duration. This duration is used to
@@ -95,7 +95,7 @@ class _SplashPageState extends State<SplashPage>
       });
     if (widget.isAnimated) {
       _launchTimer = Timer(
-        Duration(seconds: _effectDurations[_effect]),
+        Duration(seconds: _effectDurations[_effect] ?? 0),
         () {
           _controller.fling(velocity: -1);
         },
@@ -108,7 +108,7 @@ class _SplashPageState extends State<SplashPage>
   @override
   void dispose() {
     _controller.dispose();
-    _launchTimer.cancel();
+    _launchTimer?.cancel();
     _launchTimer = null;
     super.dispose();
   }
@@ -128,6 +128,7 @@ class _SplashPageState extends State<SplashPage>
   @override
   Widget build(BuildContext context) {
     return SplashPageAnimation(
+      key: widget.key!,
       isFinished: _controller.status == AnimationStatus.dismissed,
       child: LayoutBuilder(
         builder: (context, constraints) {
@@ -164,6 +165,7 @@ class _SplashPageState extends State<SplashPage>
           return Stack(
             children: [
               _SplashBackLayer(
+                key: ValueKey('SplashBackLayer'), // Provide a unique key
                 isSplashCollapsed: !_isSplashVisible,
                 effect: _effect,
                 onTap: () {
@@ -184,10 +186,10 @@ class _SplashPageState extends State<SplashPage>
 
 class _SplashBackLayer extends StatelessWidget {
   const _SplashBackLayer({
-    Key key,
-    @required this.isSplashCollapsed,
-    this.effect,
-    this.onTap,
+    required Key key,
+    required this.isSplashCollapsed,
+    required this.effect,
+    required this.onTap,
   }) : super(key: key);
 
   final bool isSplashCollapsed;
@@ -201,7 +203,7 @@ class _SplashBackLayer extends StatelessWidget {
 
     Widget child;
     if (isSplashCollapsed) {
-      child = isDisplayDesktop(context)
+      child = (isDisplayDesktop(context)
           ? Padding(
               padding: const EdgeInsets.only(top: 50),
               child: Align(
@@ -212,7 +214,7 @@ class _SplashBackLayer extends StatelessWidget {
                 ),
               ),
             )
-          : null;
+          : null)!;
     } else {
       child = Stack(
         children: [

@@ -2,6 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+// ignore_for_file: library_private_types_in_public_api, no_leading_underscores_for_local_identifiers, deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -10,12 +12,12 @@ import 'package:flutter/services.dart';
 /// Wrap your widget as [child] of a [HighlightFocus] widget.
 class HighlightFocus extends StatefulWidget {
   const HighlightFocus({super.key, 
-    @required this.onPressed,
-    @required this.child,
-    this.highlightColor,
-    this.borderColor,
+    required this.onPressed,
+    required this.child,
+    required this.highlightColor,
+    required this.borderColor,
     this.hasFocus = true,
-    this.debugLabel,
+    required this.debugLabel,
   });
 
   /// [onPressed] is called when you press space, enter, or numpad-enter
@@ -45,7 +47,7 @@ class HighlightFocus extends StatefulWidget {
 }
 
 class _HighlightFocusState extends State<HighlightFocus> {
-  bool isFocused;
+  late bool isFocused;
 
   @override
   void initState() {
@@ -55,15 +57,14 @@ class _HighlightFocusState extends State<HighlightFocus> {
 
   @override
   Widget build(BuildContext context) {
-    Color highlightColor = widget.highlightColor ??
-        Theme.of(context).colorScheme.primary.withOpacity(0.5);
-    Color borderColor =
-        widget.borderColor ?? Theme.of(context).colorScheme.onPrimary;
+    Color _highlightColor = widget.highlightColor;
+    Color _borderColor =
+        widget.borderColor;
 
-    BoxDecoration highlightedDecoration = BoxDecoration(
-      color: highlightColor,
+    BoxDecoration _highlightedDecoration = BoxDecoration(
+      color: _highlightColor,
       border: Border.all(
-        color: borderColor,
+        color: _borderColor,
         width: 2,
       ),
     );
@@ -82,13 +83,13 @@ class _HighlightFocusState extends State<HighlightFocus> {
                 event.logicalKey == LogicalKeyboardKey.enter ||
                 event.logicalKey == LogicalKeyboardKey.numpadEnter)) {
           widget.onPressed();
-          return true;
+          return KeyEventResult.handled;
         } else {
-          return false;
+          return KeyEventResult.ignored;
         }
       },
       child: Container(
-        foregroundDecoration: isFocused ? highlightedDecoration : null,
+        foregroundDecoration: isFocused ? _highlightedDecoration : null,
         child: widget.child,
       ),
     );

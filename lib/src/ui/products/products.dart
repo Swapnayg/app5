@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:scoped_model/scoped_model.dart';
 import '../../../src/ui/widgets/MD5Indicator.dart';
@@ -31,7 +30,7 @@ class ProductsWidget extends StatefulWidget {
 
 class _ProductsWidgetState extends State<ProductsWidget>
     with SingleTickerProviderStateMixin {
-  final ScrollController _scrollController = ScrollController();
+  ScrollController _scrollController = new ScrollController();
   TabController _tabController;
   Category selectedCategory;
   List<Category> subCategories;
@@ -49,7 +48,7 @@ class _ProductsWidgetState extends State<ProductsWidget>
         .where(
             (cat) => cat.parent.toString() == widget.productsBloc.productsFilter['id'])
         .toList();
-    if (subCategories.isNotEmpty) {
+    if (subCategories.length != 0) {
       subCategories.insert(
           0, Category(name: 'All', id: int.parse(widget.filter['id'])));
     }
@@ -94,6 +93,7 @@ class _ProductsWidgetState extends State<ProductsWidget>
       //backgroundColor: Colors.grey.withOpacity(.5),
       backgroundColor: Theme.of(context).brightness == Brightness.light ? Color(0xFFf2f3f7) : Colors.black,
       appBar: AppBar(
+        brightness: Brightness.dark,
         leading: IconButton(
           onPressed: (){
             Navigator.of(context).pop();
@@ -101,7 +101,7 @@ class _ProductsWidgetState extends State<ProductsWidget>
             icon:Icon(Icons.arrow_back,color: Theme.of(context).brightness == Brightness.light ? Colors.white : Colors.white,)
         ),
         backgroundColor: Theme.of(context).primaryColor,
-        bottom: subCategories.isNotEmpty
+        bottom: subCategories.length != 0
             ? PreferredSize(
                 preferredSize: Size.fromHeight(50),
                 child: Align(
@@ -122,7 +122,7 @@ class _ProductsWidgetState extends State<ProductsWidget>
                     tabs: subCategories
                         .map<Widget>((Category category) => Tab(
                             text: category.name
-                                .replaceAll(RegExp(r'&amp;'), '&')))
+                                .replaceAll(new RegExp(r'&amp;'), '&')))
                         .toList(),
                   ),
                 ),
@@ -208,19 +208,19 @@ class _ProductsWidgetState extends State<ProductsWidget>
                                     color: Colors.black,
                                 ),
                               ))));
-                    } else {
+                    } else
                       return Container();
-                    }
                   }),
                 ),
               )
             ],
           ),
-        ], systemOverlayStyle: SystemUiOverlayStyle.light,
+        ],
       ),
       body: Stack(
-        clipBehavior: Clip.none, children: [
-          SizedBox(
+        overflow: Overflow.visible,
+        children: [
+          Container(
               height: 180,
               width: double.infinity,
               child: CustomPaint(
@@ -241,7 +241,7 @@ class _ProductsWidgetState extends State<ProductsWidget>
                         builder: (context, snapshot) {
                           if (snapshot.hasData && snapshot.data == true) {
                             return Center(child: CircularProgressIndicator());
-                          } else {
+                          } else
                             return Center(
                               child: Icon(
                                 FlutterIcons.smile_o_faw,
@@ -249,7 +249,6 @@ class _ProductsWidgetState extends State<ProductsWidget>
                                 color: Theme.of(context).focusColor,
                               ),
                             );
-                          }
                         });
                   }
                 } else if (snapshot.hasError) {
@@ -263,7 +262,7 @@ class _ProductsWidgetState extends State<ProductsWidget>
   }
 
   List<Widget> buildLisOfBlocks(AsyncSnapshot<List<Product>> snapshot) {
-    List<Widget> list = List<Widget>();
+    List<Widget> list = new List<Widget>();
 
     /// UnComment this if you use rounded corner category list in body.
     //list.add(buildSubcategories());
@@ -274,7 +273,7 @@ class _ProductsWidgetState extends State<ProductsWidget>
           padding: EdgeInsets.all(0.0),
           sliver: SliverList(
               delegate: SliverChildListDelegate([
-            SizedBox(
+            Container(
                 height: 60,
                 child: StreamBuilder(
                     stream: widget.productsBloc.hasMoreItems,
@@ -311,7 +310,7 @@ class _ProductsWidgetState extends State<ProductsWidget>
   }
 
   Widget buildSubcategories() {
-    return subCategories.isNotEmpty
+    return subCategories.length != 0
         ? SliverToBoxAdapter(
             child: Container(
               padding: EdgeInsets.fromLTRB(0.0, 16.0, 0.0, 0.0),
@@ -334,7 +333,7 @@ class _ProductsWidgetState extends State<ProductsWidget>
                             elevation: 0.5,
                             child: InkWell(
                               onTap: () {
-                                var filter = <String, dynamic>{};
+                                var filter = new Map<String, dynamic>();
                                 filter['id'] =
                                     subCategories[index].id.toString();
                                 Navigator.push(
@@ -362,7 +361,7 @@ class _ProductsWidgetState extends State<ProductsWidget>
                           SizedBox(height: 10.0),
                           InkWell(
                             onTap: () {
-                              var filter = <String, dynamic>{};
+                              var filter = new Map<String, dynamic>();
                               filter['id'] = subCategories[index].id.toString();
                               Navigator.push(
                                   context,
@@ -394,30 +393,23 @@ class _ProductsWidgetState extends State<ProductsWidget>
       position: RelativeRect.fromLTRB(150, 100, 50, 100),
       items: [
         PopupMenuItem<List>(
-            value: ['date', 'ASC'],
-            child: Text(widget.model.blocks.localeText.date)
+            child: Text(widget.model.blocks.localeText.date), value: ['date', 'ASC']
         ),
         PopupMenuItem<List>(
-            value: ['price', 'DESC'],
-            child: Text(widget.model.blocks.localeText.priceHighToLow)),
+            child: Text(widget.model.blocks.localeText.priceHighToLow), value: ['price', 'DESC']),
         PopupMenuItem<List>(
-            value: ['price', 'ASC'],
-            child: Text(widget.model.blocks.localeText.priceLowToHigh)),
+            child: Text(widget.model.blocks.localeText.priceLowToHigh), value: ['price', 'ASC']),
         PopupMenuItem<List>(
-            value: ['date', 'DESC'],
-            child: Text(widget.model.blocks.localeText.newArrivals)),
+            child: Text(widget.model.blocks.localeText.newArrivals), value: ['date', 'DESC']),
         PopupMenuItem<List>(
-            value: ['popularity', 'ASC'],
-            child: Text(widget.model.blocks.localeText.popular)),
+            child: Text(widget.model.blocks.localeText.popular), value: ['popularity', 'ASC']),
         PopupMenuItem<List>(
-            value: ['rating', 'ASC'],
-            child: Text(widget.model.blocks.localeText.rating)),
+            child: Text(widget.model.blocks.localeText.rating), value: ['rating', 'ASC']),
       ],
       elevation: 4.0,
     );
-    if(result != null) {
-      _sort(result[0], result[1]);
-    }
+    if(result != null)
+    _sort(result[0], result[1]);
   }
 
   _sort(String orderBy, String order) {

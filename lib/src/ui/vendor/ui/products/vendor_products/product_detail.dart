@@ -70,7 +70,7 @@ class _VendorProductDetailState extends State<VendorProductDetail> {
               subtitle: GridView.builder(
                   shrinkWrap: true,
                   itemCount: products.images.length + 1,
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 4),
                   itemBuilder: (BuildContext context, int index) {
                     if (products.images.length != index) {
@@ -120,7 +120,7 @@ class _VendorProductDetailState extends State<VendorProductDetail> {
             subtitle: Html(data: products.shortDescription),
           ),
           ListTile(
-            title: Text('${appStateModel.blocks.localeText.description} ${appStateModel.blocks.localeText.description}'),
+            title: Text(appStateModel.blocks.localeText.description + ' ' + appStateModel.blocks.localeText.description),
             subtitle: Html(data: products.description),
           ),
           widget.product.type == "variable"

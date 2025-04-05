@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api, no_leading_underscores_for_local_identifiers, deprecated_member_use, avoid_print
+
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
@@ -24,13 +26,14 @@ import 'ui/products/product_detail/product_detail.dart';
 class App extends StatefulWidget {
   //final ProductsBloc productsBloc = ProductsBloc();
 
-  const App({super.key});
+  const App({required Key key}) : super(key: key);
 
   @override
   _AppState createState() => _AppState();
 }
 
 class _AppState extends State<App> with TickerProviderStateMixin {
+
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
   AppStateModel model = AppStateModel();
   int _currentIndex = 0;
@@ -51,12 +54,15 @@ class _AppState extends State<App> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    List<Widget> children = [
+    List<Widget> _children = [
       Home(),
       Categories(),
       //ProductAddons(),
       //Deals(),
-      Stores(),
+      Stores(
+        key: Key('stores'),
+        filter: {}, // Provide an appropriate filter map here
+      ),
       CartPage(),
       Account(),
     ];
@@ -65,10 +71,10 @@ class _AppState extends State<App> with TickerProviderStateMixin {
       drawerDragStartBehavior: DragStartBehavior.start,
       floatingActionButton: ScopedModelDescendant<AppStateModel>(
           builder: (context, child, model) {
-        if (model.blocks!.settings.enableHomeChat == 1 && _currentIndex == 0) {
+        if (model.blocks.settings.enableHomeChat == 1 && _currentIndex == 0) {
           return FloatingActionButton(
             onPressed: () =>
-                _openWhatsApp(model.blocks!.settings.whatsappNumber.toString()),
+                _openWhatsApp(model.blocks.settings.whatsappNumber.toString()),
             tooltip: 'Chat',
             child: Icon(Icons.chat_bubble),
           );
@@ -76,10 +82,13 @@ class _AppState extends State<App> with TickerProviderStateMixin {
           return Container();
         }
       }),
-      body: children[_currentIndex],
+      body: _children[_currentIndex],
       bottomNavigationBar: buildBottomNavigationBar(context),
     );
+
+
   }
+
 
   onProductClick(product) {
     Navigator.push(context, MaterialPageRoute(builder: (context) {
@@ -109,12 +118,12 @@ class _AppState extends State<App> with TickerProviderStateMixin {
           backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
           icon: Icon(MStoreIcons.home_line),
           activeIcon: Icon(MStoreIcons.home_fill),
-          label: model.blocks!.localeText.home,
+          label: model.blocks.localeText.home,
         ),
         BottomNavigationBarItem(
           icon: Icon(MStoreIcons.layout_2_line),
           activeIcon: Icon(MStoreIcons.layout_2_fill),
-          label: model.blocks!.localeText.category,
+          label: model.blocks.localeText.category,
         ),
         /*BottomNavigationBarItem(
           icon: const Icon(IconData(0xf3e5,
@@ -126,86 +135,90 @@ class _AppState extends State<App> with TickerProviderStateMixin {
         BottomNavigationBarItem(
             icon: Icon(MStoreIcons.store_2_line),
             activeIcon: Icon(MStoreIcons.store_2_fill),
-            label: model.blocks!.localeText.stores),
+          label: model.blocks.localeText.stores
+        ),
         BottomNavigationBarItem(
-            icon: Stack(children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0),
-                child: Icon(MStoreIcons.shopping_basket_2_line),
-              ),
-              Positioned(
-                top: 0.0,
-                right: 0.0,
-                child: ScopedModelDescendant<AppStateModel>(
-                    builder: (context, child, model) {
-                  if (model.count != 0) {
-                    return Card(
-                        elevation: 0,
-                        clipBehavior: Clip.antiAlias,
-                        shape: StadiumBorder(),
-                        color: Colors.red,
-                        child: Container(
-                            padding: EdgeInsets.all(2),
-                            constraints: BoxConstraints(minWidth: 20.0),
-                            child: Center(
-                                child: Text(
-                              model.count.toString(),
-                              style: TextStyle(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w800,
-                                  color: Colors.white,
-                                  backgroundColor: Colors.red),
-                            ))));
-                  } else {
-                    return Container();
-                  }
-                }),
-              ),
-            ]),
-            activeIcon: Stack(children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0),
-                child: Icon(MStoreIcons.shopping_basket_2_fill),
-              ),
-              Positioned(
-                top: 0.0,
-                right: 0.0,
-                child: ScopedModelDescendant<AppStateModel>(
-                    builder: (context, child, model) {
-                  if (model.count != 0) {
-                    return Card(
-                        elevation: 0,
-                        clipBehavior: Clip.antiAlias,
-                        shape: StadiumBorder(),
-                        color: Colors.red,
-                        child: Container(
-                            padding: EdgeInsets.all(2),
-                            constraints: BoxConstraints(minWidth: 20.0),
-                            child: Center(
-                                child: Text(
-                              model.count.toString(),
-                              style: TextStyle(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w800,
-                                  color: Colors.white,
-                                  backgroundColor: Colors.red),
-                            ))));
-                  } else {
-                    return Container();
-                  }
-                }),
-              ),
-            ]),
-            label: model.blocks!.localeText.cart),
+          icon: Stack(children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0),
+              child: Icon(MStoreIcons.shopping_basket_2_line),
+            ),
+            new Positioned(
+              top: 0.0,
+              right: 0.0,
+              child: ScopedModelDescendant<AppStateModel>(
+                  builder: (context, child, model) {
+                if (model.count != 0) {
+                  return Card(
+                      elevation: 0,
+                      clipBehavior: Clip.antiAlias,
+                      shape: StadiumBorder(),
+                      color: Colors.red,
+                      child: Container(
+                          padding: EdgeInsets.all(2),
+                          constraints: BoxConstraints(minWidth: 20.0),
+                          child: Center(
+                              child: Text(
+                            model.count.toString(),
+                            style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w800,
+                                color: Colors.white,
+                                backgroundColor: Colors.red),
+                          ))));
+                } else {
+                  return Container();
+                }
+              }),
+            ),
+          ]),
+          activeIcon: Stack(children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0),
+              child: Icon(MStoreIcons.shopping_basket_2_fill),
+            ),
+            new Positioned(
+              top: 0.0,
+              right: 0.0,
+              child: ScopedModelDescendant<AppStateModel>(
+                  builder: (context, child, model) {
+                    if (model.count != 0) {
+                      return Card(
+                          elevation: 0,
+                          clipBehavior: Clip.antiAlias,
+                          shape: StadiumBorder(),
+                          color: Colors.red,
+                          child: Container(
+                              padding: EdgeInsets.all(2),
+                              constraints: BoxConstraints(minWidth: 20.0),
+                              child: Center(
+                                  child: Text(
+                                    model.count.toString(),
+                                    style: TextStyle(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w800,
+                                        color: Colors.white,
+                                        backgroundColor: Colors.red),
+                                  ))));
+                    } else {
+                      return Container();
+                    }
+                  }),
+            ),
+          ]),
+          label: model.blocks.localeText.cart
+        ),
         BottomNavigationBarItem(
-            icon: Icon(MStoreIcons.account_circle_line),
-            activeIcon: Icon(MStoreIcons.account_circle_fill),
-            label: model.blocks!.localeText.account),
+          icon: Icon(MStoreIcons.account_circle_line),
+          activeIcon: Icon(MStoreIcons.account_circle_fill),
+          label: model.blocks.localeText.account
+        ),
       ],
     );
   }
 
   Future<void> initOneSignal() async {
+
     /*OneSignal.shared.setInFocusDisplayType(OSNotificationDisplayType.notification);
 
     if(model.blocks.settings.onesignalAppId.isNotEmpty) {
@@ -240,50 +253,32 @@ class _AppState extends State<App> with TickerProviderStateMixin {
   }
 
   Future<void> configureFcm() async {
-    await Future.delayed(Duration(seconds: 10));
-    FirebaseMessaging.instance
-        .getInitialMessage()
-        .then((RemoteMessage? message) {
-      print('getInitialMessage data: ${message!.data}');
-      _onMessage(message);
-    });
-
-    // onMessage: When the app is open and it receives a push notification
+     await Future.delayed(Duration(seconds: 10));
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      print("onMessage data: ${message.data}");
+      print("onMessage: ${message.data}");
+      _onMessage(message.data);
     });
 
-    // replacement for onResume: When the app is in the background and opened directly from the push notification.
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-      print('onMessageOpenedApp data: ${message.data}');
-      _onMessage(message);
+      print("onMessageOpenedApp: ${message.data}");
+      _onMessage(message.data);
     });
 
-    // _firebaseMessaging.configure(
-    //   onMessage: (Map<String, dynamic> message) async {
-    //     print("onMessage: $message");
-    //     _onMessage(message['data']);
-    //   },
-    //   onLaunch: (Map<String, dynamic> message) async {
-    //     print("onLaunch: $message");
-    //     _onMessage(message['data']);
-    //   },
-    //   onResume: (Map<String, dynamic> message) async {
-    //     print("onResume: $message");
-    //     print(message);
-    //   },
-    // );
-    // _firebaseMessaging.requestNotificationPermissions(
-    //     const IosNotificationSettings(
-    //         sound: true, badge: true, alert: true, provisional: true));
-    // _firebaseMessaging.onIosSettingsRegistered
-    //     .listen((IosNotificationSettings settings) {});
-    // _firebaseMessaging.getToken().then((String token) {
-    //   model.fcmToken = token;
-    //   model.apiProvider.post(
-    //       '/wp-admin/admin-ajax.php?action=mstore_flutter_update_user_notification',
-    //       {'fcm_token': token});
-    // });
+    FirebaseMessaging.instance.getInitialMessage().then((RemoteMessage? message) {
+      if (message != null) {
+        print("getInitialMessage: ${message.data}");
+        _onMessage(message.data);
+      }
+    });
+    await _firebaseMessaging.requestPermission(
+        sound: true, badge: true, alert: true, provisional: true);
+    // Removed deprecated onIosSettingsRegistered as it is no longer supported.
+    _firebaseMessaging.getToken().then((String? token) {
+      if (token != null) {
+        model.fcmToken = token;
+        model.apiProvider.post('/wp-admin/admin-ajax.php?action=mstore_flutter_update_user_notification', {'fcm_token': token});
+      }
+    });
   }
 
   void _onMessage(message) {
@@ -301,11 +296,11 @@ class _AppState extends State<App> with TickerProviderStateMixin {
             context,
             MaterialPageRoute(
                 builder: (context) => ProductDetail(
-                      product: Product(
-                        id: message['product'],
-                        name: '',
-                      ),
-                    )));
+                  product: Product(
+                    id: message['product'],
+                    name: '',
+                  ),
+                )));
       } else if (message['page'] != null) {
         var post = Post();
         post.id = int.parse(message['page']);
@@ -326,7 +321,8 @@ class _AppState extends State<App> with TickerProviderStateMixin {
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => OrderSummary(id: message['order'])));
+                builder: (context) =>
+                    OrderSummary(id: message['order'])));
       }
     }
   }

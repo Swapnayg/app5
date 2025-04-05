@@ -13,37 +13,37 @@ class ConversationSnippet {
   final Timestamp timestamp;
 
   ConversationSnippet(
-      {this.conversationID,
-      this.id,
-      this.lastMessage,
-      this.unseenCount,
-      this.timestamp,
-      this.name,
-      this.image,
-      this.type});
+      {required this.conversationID,
+      required this.id,
+      required this.lastMessage,
+      required this.unseenCount,
+      required this.timestamp,
+      required this.name,
+      required this.image,
+      required this.type});
 
-  factory ConversationSnippet.fromFirestore(DocumentSnapshot snapshot) {
-    var data = snapshot.data();
-    var messageType = MessageType.Text;
-    if (data["type"] != null) {
-      switch (data["type"]) {
+  factory ConversationSnippet.fromFirestore(DocumentSnapshot _snapshot) {
+    var _data = _snapshot.data() as Map<String, dynamic>;
+    var _messageType = MessageType.Text;
+    if (_data["type"] != null) {
+      switch (_data["type"]) {
         case "text":
           break;
         case "image":
-          messageType = MessageType.Image;
+          _messageType = MessageType.Image;
           break;
         default:
       }
     }
     return ConversationSnippet(
-      id: snapshot.id,
-      conversationID: data["conversationID"],
-      lastMessage: data["lastMessage"] != null ? data["lastMessage"] : "",
-      unseenCount: data["unseenCount"],
-      timestamp: data["timestamp"] != null ? data["timestamp"] : null,
-      name: data["name"],
-      image: data["image"],
-      type: messageType,
+      id: _snapshot.id,
+      conversationID: _data["conversationID"],
+      lastMessage: _data["lastMessage"] ?? "",
+      unseenCount: _data["unseenCount"],
+      timestamp: _data["timestamp"],
+      name: _data["name"],
+      image: _data["image"],
+      type: _messageType,
     );
   }
 }
@@ -64,50 +64,46 @@ class Conversation {
   final DateTime userLastSeen;
 
   Conversation(
-      {this.id,
-      this.members,
-      this.userId,
-      this.messages,
-      this.userName,
-      this.userAvatar,
-      this.vendorId,
-      this.vendorName,
-      this.vendorAvatar,
-      this.chatId,
-      this.timeStamp,
-      this.vendorLastSeen,
-      this.userLastSeen});
+      {required this.id,
+      required this.members,
+      required this.userId,
+      required this.messages,
+      required this.userName,
+      required this.userAvatar,
+      required this.vendorId,
+      required this.vendorName,
+      required this.vendorAvatar,
+      required this.chatId,
+      required this.timeStamp,
+      required this.vendorLastSeen,
+      required this.userLastSeen});
 
-  factory Conversation.fromFirestore(DocumentSnapshot snapshot) {
-    var data = snapshot.data();
-    List messages = data["messages"];
-    if (messages != null) {
-      messages = messages.map(
-        (m) {
-          return Message(
-              type: m["type"] == "text" ? MessageType.Text : MessageType.Image,
-              content: m["message"],
-              timestamp: m["timestamp"],
-              senderID: m["senderID"]);
-        },
-      ).toList();
-    } else {
-      messages = [];
-    }
-    return Conversation(
-      id: snapshot.documentID,
-      members: data["members"],
-      userId: data["userId"],
-      messages: messages,
-      userName: data["userName"],
-      userAvatar: data["userAvatar"],
-      vendorId: data["vendorId"],
-      vendorName: data["vendorName"],
-      vendorAvatar: data["vendorAvatar"],
-      chatId: data["chatId"],
-      timeStamp: data["timeStamp"] == null ? null : data["timeStamp"],
-      vendorLastSeen: data["vendorLastSeen"] == null ? null : data["vendorLastSeen"],
-      userLastSeen: data["userLastSeen"] == null ? null : data["userLastSeen"],
+  factory Conversation.fromFirestore(DocumentSnapshot _snapshot) {
+    var _data = _snapshot.data() as Map<String, dynamic>?;
+    List<dynamic> _rawMessages = _data?["messages"] ?? [];
+    List<Message> _messages = _rawMessages.map(
+      (_m) {
+        return Message(
+            type: _m["type"] == "text" ? MessageType.Text : MessageType.Image,
+            content: _m["message"],
+            timestamp: _m["timestamp"],
+            senderID: _m["senderID"]);
+      },
+    ).toList();
+      return Conversation(
+      id: _snapshot.id,
+      members: _data!["members"],
+      userId: _data["userId"],
+      messages: _messages,
+      userName: _data["userName"],
+      userAvatar: _data["userAvatar"],
+      vendorId: _data["vendorId"],
+      vendorName: _data["vendorName"],
+      vendorAvatar: _data["vendorAvatar"],
+      chatId: _data["chatId"],
+      timeStamp: _data["timeStamp"],
+      vendorLastSeen: _data["vendorLastSeen"],
+      userLastSeen: _data["userLastSeen"],
     );
   }
 }

@@ -1,9 +1,8 @@
-import 'dart:ui';
+
+// ignore_for_file: library_private_types_in_public_api, unused_field, unnecessary_null_comparison
 
 import '../../../../blocs/vendor/vendor_detail_state_model.dart';
 import '../../../../functions.dart';
-import './../products/vendor_detail/vendor_detail_home.dart';
-import 'package:smooth_star_rating/smooth_star_rating.dart';
 
 import '../../../../models/app_state_model.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -17,7 +16,7 @@ const double _minWidthPerColumn = 350.0 + _scaffoldPadding * 2;
 
 class StoresList extends StatelessWidget {
   final List<StoreModel> stores;
-  const StoresList({Key key, this.stores}) : super(key: key);
+  const StoresList({required Key key, required this.stores}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
@@ -35,7 +34,7 @@ class StoresList extends StatelessWidget {
         ),
         delegate: SliverChildBuilderDelegate(
               (BuildContext context, int index) {
-            return StoreCard(store: stores[index], index: index);
+            return StoreCard(key: ValueKey(index), store: stores[index], index: index);
           },
           childCount: stores.length,
         ),
@@ -48,7 +47,7 @@ class StoreCard extends StatefulWidget {
   final VendorDetailStateModel vendorDetailModel = VendorDetailStateModel();
   final StoreModel store;
   final int index;
-  StoreCard({Key key, this.store, this.index}) : super(key: key);
+  StoreCard({required Key key, required this.store, required this.index}) : super(key: key);
 
   @override
   _StoreCardState createState() => _StoreCardState();
@@ -75,9 +74,8 @@ class _StoreCardState extends State<StoreCard> {
           image: DecorationImage(image: imageProvider, fit: BoxFit.contain),
         ),
       ),
-      //TODO ADD AssetImage as placeholder
+
       placeholder: (context, url) => Container(color: Colors.white),
-      //TODO ADD AssetImage as placeholder
       errorWidget: (context, url, error) => Container(color: Colors.white),
     )
         : Container();
@@ -91,7 +89,7 @@ class _StoreCardState extends State<StoreCard> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            SizedBox(
+            Container(
               height: 140,
               width: 100,
                 child: ClipRRect(
@@ -102,14 +100,14 @@ class _StoreCardState extends State<StoreCard> {
               flex: 6,
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(16,8,16,0),
-                child: SizedBox(
+                child: Container(
                   height: 140,
                   child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: <Widget>[
                         Text(widget.store.name,
-                            style: Theme.of(context).textTheme.titleSmall.copyWith(fontSize: 18)),
+                            style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 18)),
                         SizedBox(height: 3,),
                         widget.store.description != null ? Text(parseHtmlString((widget.store.description)),
                             //widget.store.address.city,
@@ -120,7 +118,7 @@ class _StoreCardState extends State<StoreCard> {
                             style: TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.w400,
-                              color: Theme.of(context).textTheme.bodySmall.color,
+                              color: Theme.of(context).textTheme.bodySmall?.color,
                             )) : Container(),
                         SizedBox(height: 5,),
                     Row(
@@ -135,7 +133,7 @@ class _StoreCardState extends State<StoreCard> {
                               //fontStyle: FontStyle.italic,
                               fontWeight: FontWeight.w700,
                               fontSize: 14,
-                              color: Theme.of(context).textTheme.bodySmall.color,
+                              color: Theme.of(context).textTheme.bodySmall?.color,
                             )),
                       ],
                     )
@@ -154,6 +152,7 @@ class _StoreCardState extends State<StoreCard> {
   openDetails(StoreModel store, BuildContext context) {
     Navigator.push(context, MaterialPageRoute(builder: (context) {
       return VendorDetails(
+        key: ValueKey(store.id),
         vendorId: store.id.toString(),
       );
     }));

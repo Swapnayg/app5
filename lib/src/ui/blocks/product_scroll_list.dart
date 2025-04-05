@@ -10,7 +10,7 @@ import 'list_header.dart';
 class ProductScrollList extends StatefulWidget {
   final Block block;
   final Function onProductClick;
-  const ProductScrollList({Key key, this.block, this.onProductClick})
+  ProductScrollList({Key key, this.block, this.onProductClick})
       : super(key: key);
   @override
   _ProductScrollListState createState() => _ProductScrollListState();
@@ -31,11 +31,11 @@ class _ProductScrollListState extends State<ProductScrollList> {
                     double.parse(widget.block.marginTop.toString()),
                     double.parse(widget.block.marginRight.toString()),
                     double.parse(widget.block.marginBottom.toString())),
-                decoration: BoxDecoration(
+                decoration: new BoxDecoration(
                   color: Theme.of(context).brightness != Brightness.dark
                       ? HexColor(widget.block.bgColor)
                       : Theme.of(context).scaffoldBackgroundColor,
-                  borderRadius: BorderRadius.all(
+                  borderRadius: new BorderRadius.all(
                     Radius.circular(0),
                   ),
                 ),
@@ -79,11 +79,11 @@ class _ProductScrollListState extends State<ProductScrollList> {
                     double.parse(widget.block.marginTop.toString()),
                     double.parse(widget.block.marginRight.toString()),
                     double.parse(widget.block.marginBottom.toString())),
-                decoration: BoxDecoration(
+                decoration: new BoxDecoration(
                   color: Theme.of(context).brightness != Brightness.dark
                       ? HexColor(widget.block.bgColor)
                       : Theme.of(context).scaffoldBackgroundColor,
-                  borderRadius: BorderRadius.all(
+                  borderRadius: new BorderRadius.all(
                     Radius.circular(0),
                   ),
                 ),
@@ -134,13 +134,13 @@ class _ProductScrollListState extends State<ProductScrollList> {
     TextStyle subhead = Theme.of(context).brightness != Brightness.dark
         ? Theme.of(context)
             .textTheme
-            .titleLarge
+            .headline6
             .copyWith(color: HexColor(widget.block.titleColor))
-        : Theme.of(context).textTheme.titleLarge;
+        : Theme.of(context).textTheme.headline6;
 
-    TextStyle textStyleCounter = Theme.of(context)
+    TextStyle _textStyleCounter = Theme.of(context)
         .textTheme
-        .bodyMedium
+        .bodyText2
         .copyWith(color: bgColor, fontSize: 12);
 
     if (widget.block.blockType == 'flash_sale_block') {
@@ -170,40 +170,40 @@ class _ProductScrollListState extends State<ProductScrollList> {
                       Container(
                         width: 24,
                         height: 24,
-                        decoration: BoxDecoration(
+                        decoration: new BoxDecoration(
                             color: HexColor(widget.block.titleColor),
                             borderRadius:
-                                BorderRadius.all(Radius.circular(2.0))),
+                                new BorderRadius.all(Radius.circular(2.0))),
                         margin: EdgeInsets.all(4),
                         child: Center(
                             child: Text('${remaining.inHours.clamp(0, 99)}',
-                                maxLines: 1, style: textStyleCounter)),
+                                maxLines: 1, style: _textStyleCounter)),
                       ),
                       Container(
                         width: 24,
                         height: 24,
                         margin: EdgeInsets.all(4),
-                        decoration: BoxDecoration(
+                        decoration: new BoxDecoration(
                             color: HexColor(widget.block.titleColor),
                             borderRadius:
-                                BorderRadius.all(Radius.circular(2.0))),
+                                new BorderRadius.all(Radius.circular(2.0))),
                         child: Center(
                             child: Text(
                                 '${remaining.inMinutes.remainder(60)}',
-                                style: textStyleCounter)),
+                                style: _textStyleCounter)),
                       ),
                       Container(
                         width: 24,
                         height: 24,
-                        decoration: BoxDecoration(
+                        decoration: new BoxDecoration(
                             color: HexColor(widget.block.titleColor),
                             borderRadius:
-                                BorderRadius.all(Radius.circular(2.0))),
+                                new BorderRadius.all(Radius.circular(2.0))),
                         margin: EdgeInsets.all(4),
                         child: Center(
                             child: Text(
                                 '${remaining.inSeconds.remainder(60)}',
-                                style: textStyleCounter)),
+                                style: _textStyleCounter)),
                       ),
                     ]),
               ],

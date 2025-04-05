@@ -62,15 +62,15 @@ class ProductItem extends StatelessWidget {
 
     int percentOff = 0;
 
-    if ((product.salePrice != 0)) {
+    if ((product.salePrice != null && product.salePrice != 0)) {
       percentOff = (((product.regularPrice - product.salePrice / product.regularPrice)).round());
     }
     bool onSale = false;
-    if(product.regularPrice.isNaN) {
+    if(product.regularPrice == null || product.regularPrice.isNaN) {
       product.regularPrice = product.price;
     }
 
-    if(product.salePrice != 0) {
+    if(product.salePrice != null && product.salePrice != 0) {
       onSale = true;
     }
 
@@ -88,7 +88,7 @@ class ProductItem extends StatelessWidget {
             children: <Widget>[
               Stack(
                 children: <Widget>[
-                  SizedBox(
+                  Container(
                     height: 180,
                     child: CachedNetworkImage(
                       imageUrl: product.images[0].src,
@@ -118,7 +118,7 @@ class ProductItem extends StatelessWidget {
                           child: Container(
                             padding: EdgeInsets.fromLTRB(15, 5, 15, 5),
                             child: Text(
-                              '$percentOff% Off',
+                              percentOff.toString() + '% Off',
                               style: TextStyle(color: Colors.white, fontSize: 12),
                             ),
                           )) : Container(),
@@ -175,9 +175,11 @@ class ProductItem extends StatelessWidget {
                     SizedBox(
                       height: 1.0,
                     ),
-                    (product.formattedPrice.isNotEmpty)
+                    (product.formattedPrice !=
+                        null && product.formattedPrice.isNotEmpty)
                         ? Text(
-                      (product.formattedPrice.isNotEmpty)
+                      (product.formattedPrice !=
+                          null && product.formattedPrice.isNotEmpty)
                           ? parseHtmlString(product.formattedPrice)
                           : '',
                       style: TextStyle(
@@ -209,7 +211,7 @@ class ProductItem extends StatelessWidget {
                           },
                         ),
                         Text(
-                          '(${product.ratingCount})',
+                          '(' + product.ratingCount.toString() + ')',
                           style: TextStyle(
                               fontSize: 10,
                               fontWeight: FontWeight.w300,

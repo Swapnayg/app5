@@ -2,6 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+// ignore_for_file: library_private_types_in_public_api
+
 import 'dart:async';
 import 'dart:io' show Platform;
 
@@ -28,19 +30,19 @@ const List<String> rtlLanguages = <String>[
 // Fake locale to represent the system Locale option.
 const systemLocaleOption = Locale('system');
 
-Locale _deviceLocale;
-Locale get deviceLocale => _deviceLocale;
-set deviceLocale(Locale locale) {
+Locale? _deviceLocale;
+Locale? get deviceLocale => _deviceLocale;
+set deviceLocale(Locale? locale) {
   _deviceLocale ??= locale;
 }
 
 class GalleryOptions {
   const GalleryOptions({
-    this.themeMode,
-    double textScaleFactor,
-    this.customTextDirection,
-    Locale locale,
-    this.platform,
+    required this.themeMode,
+    required double textScaleFactor,
+    required this.customTextDirection,
+    required Locale locale,
+    required this.platform,
   })  : _textScaleFactor = textScaleFactor,
         _locale = locale;
 
@@ -63,19 +65,15 @@ class GalleryOptions {
     }
   }
 
-  Locale get locale =>
-      _locale ??
-      deviceLocale ??
-      // TODO: When deviceLocale can be obtained on macOS, this won't be necessary
-      // https://github.com/flutter/flutter/issues/45343
-      (!kIsWeb && Platform.isMacOS ? Locale('en', 'US') : null);
+  Locale? get locale =>
+      _locale;
 
   /// Returns the text direction based on the [CustomTextDirection] setting.
   /// If the locale cannot be determined, returns null.
-  TextDirection textDirection() {
+  TextDirection? textDirection() {
     switch (customTextDirection) {
       case CustomTextDirection.localeBased:
-        final language = locale.languageCode.toLowerCase();
+        final language = locale?.languageCode.toLowerCase();
         if (language == null) return null;
         return rtlLanguages.contains(language)
             ? TextDirection.rtl
@@ -88,18 +86,18 @@ class GalleryOptions {
   }
 
   GalleryOptions copyWith({
-    ThemeMode themeMode,
-    double textScaleFactor,
-    CustomTextDirection customTextDirection,
-    Locale locale,
-    double timeDilation,
-    TargetPlatform platform,
+    required ThemeMode themeMode,
+    required double textScaleFactor,
+    required CustomTextDirection customTextDirection,
+    required Locale locale,
+    required double timeDilation,
+    required TargetPlatform platform,
   }) {
     return GalleryOptions(
-      themeMode: themeMode ?? this.themeMode,
-      textScaleFactor: textScaleFactor ?? _textScaleFactor,
-      locale: locale ?? this.locale,
-      platform: platform ?? this.platform,
+      themeMode: themeMode,
+      textScaleFactor: textScaleFactor,
+      locale: locale,
+      platform: platform, customTextDirection: customTextDirection,
     );
   }
 
@@ -113,23 +111,23 @@ class GalleryOptions {
       platform == other.platform;
 
   @override
-  int get hashCode => hashValues(
+  int get hashCode => Object.hash(
         themeMode,
         _textScaleFactor,
         locale,
         platform,
       );
 
-  static GalleryOptions of(BuildContext context) {
-    final _ModelBindingScope scope =
+  static GalleryOptions? of(BuildContext context) {
+    final _ModelBindingScope? scope =
         context.dependOnInheritedWidgetOfExactType<_ModelBindingScope>();
-    return scope.modelBindingState.currentModel;
+    return scope?.modelBindingState.currentModel;
   }
 
   static void update(BuildContext context, GalleryOptions newModel) {
-    final _ModelBindingScope scope =
+    final _ModelBindingScope? scope =
         context.dependOnInheritedWidgetOfExactType<_ModelBindingScope>();
-    scope.modelBindingState.updateModel(newModel);
+    scope?.modelBindingState.updateModel(newModel);
   }
 
   /// A list of this localizations delegate's supported locales.
@@ -260,10 +258,10 @@ class GalleryOptions {
 
 class _ModelBindingScope extends InheritedWidget {
   const _ModelBindingScope({
-    Key super.key,
-    @required this.modelBindingState,
-    super.child,
-  })  : assert(modelBindingState != null);
+    required Key super.key,
+    required this.modelBindingState,
+    required super.child,
+  });
 
   final _ModelBindingState modelBindingState;
 
@@ -273,9 +271,9 @@ class _ModelBindingScope extends InheritedWidget {
 
 class ModelBinding extends StatefulWidget {
   const ModelBinding({
-    Key key,
-    this.initialModel = const GalleryOptions(),
-    this.child,
+    required Key key,
+    required this.initialModel,
+    required this.child,
   })  : super(key: key);
 
   final GalleryOptions initialModel;
@@ -287,18 +285,18 @@ class ModelBinding extends StatefulWidget {
 
 // Applies text GalleryOptions to a widget
 class ApplyTextOptions extends StatelessWidget {
-  const ApplyTextOptions({super.key, @required this.child});
+  const ApplyTextOptions({super.key, required this.child});
 
   final Widget child;
 
   @override
   Widget build(BuildContext context) {
     final options = GalleryOptions.of(context);
-    final textScaleFactor = options.textScaleFactor(context);
+    final textScaleFactor = options?.textScaleFactor(context);
 
     Widget widget = MediaQuery(
       data: MediaQuery.of(context).copyWith(
-        textScaler: TextScaler.linear(textScaleFactor),
+        textScaler: TextScaler.linear(textScaleFactor!),
       ),
       child: child,
     );
@@ -307,8 +305,8 @@ class ApplyTextOptions extends StatelessWidget {
 }
 
 class _ModelBindingState extends State<ModelBinding> {
-  GalleryOptions currentModel;
-  Timer _timeDilationTimer;
+  late GalleryOptions currentModel;
+  late Timer? _timeDilationTimer;
 
   @override
   void initState() {
@@ -318,7 +316,7 @@ class _ModelBindingState extends State<ModelBinding> {
 
   @override
   void dispose() {
-    _timeDilationTimer.cancel();
+    _timeDilationTimer?.cancel();
     _timeDilationTimer = null;
     super.dispose();
   }
@@ -334,6 +332,7 @@ class _ModelBindingState extends State<ModelBinding> {
   @override
   Widget build(BuildContext context) {
     return _ModelBindingScope(
+      key: widget.key!,
       modelBindingState: this,
       child: widget.child,
     );

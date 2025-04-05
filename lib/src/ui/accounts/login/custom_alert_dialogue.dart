@@ -15,7 +15,8 @@ class CustomAlertDialog extends StatelessWidget {
     this.expanded = false,
     this.fullscreen = false,
     @required this.content,
-  })  : super(key: key);
+  })  : assert(content != null),
+        super(key: key);
 
   final Widget title;
   final EdgeInsetsGeometry titlePadding;
@@ -29,21 +30,21 @@ class CustomAlertDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     final List<Widget> children = <Widget>[];
 
-    if (titlePadding != null) {
-      children.add(Padding(
+    if (title != null && titlePadding != null) {
+      children.add(new Padding(
         padding: titlePadding,
-        child: DefaultTextStyle(
-          style: Theme.of(context).textTheme.headline6,
-          child: Semantics(namesRoute: true, child: title),
+        child: new DefaultTextStyle(
+          style: Theme.of(context).textTheme.title,
+          child: new Semantics(child: title, namesRoute: true),
         ),
       ));
     }
 
-    children.add(Flexible(
-      child: Padding(
+    children.add(new Flexible(
+      child: new Padding(
         padding: contentPadding,
-        child: DefaultTextStyle(
-          style: Theme.of(context).textTheme.titleMedium,
+        child: new DefaultTextStyle(
+          style: Theme.of(context).textTheme.subtitle1,
           child: content,
         ),
       ),
@@ -55,36 +56,36 @@ class CustomAlertDialog extends StatelessWidget {
   Widget buildContent(List<Widget> children) {
     Widget widget;
     if (fullscreen) {
-      widget = Material(
+      widget = new Material(
         //color: Colors.white,
-        child: Container(
+        child: new Container(
             child: onCancelPress == null
-                ? Padding(
+                ? new Padding(
               padding: const EdgeInsets.symmetric(
                 horizontal: 10.0,
                 vertical: 20.0,
               ),
-              child: Column(
+              child: new Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: children),
             )
-                : Column(
+                : new Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Align(
+                new Align(
                   alignment: Alignment.topRight,
-                  child: IconButton(
-                    icon: Icon(Icons.close),
+                  child: new IconButton(
+                    icon: new Icon(Icons.close),
                     onPressed: onCancelPress,
                     //color: Colors.black54,
                     padding: const EdgeInsets.all(15.0),
                     iconSize: 30.0,
                   ),
                 ),
-                Expanded(
-                    child: Padding(
+                new Expanded(
+                    child: new Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                      child: Column(
+                      child: new Column(
                         children: children,
                       ),
                     ))
@@ -92,27 +93,27 @@ class CustomAlertDialog extends StatelessWidget {
             )),
       );
     } else {
-      var body = Material(
+      var body = new Material(
         type: MaterialType.card,
-        borderRadius: BorderRadius.circular(10.0),
+        borderRadius: new BorderRadius.circular(10.0),
         //color: Colors.white,
-        child: Column(
+        child: new Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: children,
         ),
       );
-      var child = IntrinsicWidth(
+      var child = new IntrinsicWidth(
         child: onCancelPress == null
             ? body
-            : Column(
+            : new Column(
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.end,
           children: <Widget>[
-            Container(
+            new Container(
               margin: const EdgeInsets.all(10.0),
-              child: IconButton(
+              child: new IconButton(
                   highlightColor: Colors.white54,
                   splashColor: Colors.white54,
                   //color: Colors.white,
@@ -123,11 +124,11 @@ class CustomAlertDialog extends StatelessWidget {
                   ),
                   onPressed: onCancelPress),
             ),
-            Flexible(child: body),
+            new Flexible(child: body),
           ],
         ),
       );
-      widget = CustomDialog(expanded: expanded, child: child);
+      widget = new CustomDialog(child: child, expanded: expanded);
     }
     return widget;
   }
@@ -151,25 +152,25 @@ class CustomDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedPadding(
+    return new AnimatedPadding(
       padding: MediaQuery.of(context).viewInsets +
           const EdgeInsets.symmetric(horizontal: 20.0, vertical: 24.0),
       duration: insetAnimationDuration,
       curve: insetAnimationCurve,
-      child: MediaQuery.removeViewInsets(
+      child: new MediaQuery.removeViewInsets(
         removeLeft: true,
         removeTop: true,
         removeRight: true,
         removeBottom: true,
         context: context,
-        child: Center(
-          child: ConstrainedBox(
-            constraints: BoxConstraints(
+        child: new Center(
+          child: new ConstrainedBox(
+            constraints: new BoxConstraints(
                 minWidth: expanded
                     ? math.min(
                     (MediaQuery.of(context).size.width - 40.0), 332.0)
                     : 280.0),
-            child: Material(
+            child: new Material(
               elevation: 50.0,
               type: MaterialType.transparency,
               child: child,

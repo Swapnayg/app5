@@ -30,14 +30,13 @@ class UserAccount4 extends StatefulWidget {
 
 class _UserAccount4State extends State<UserAccount4> {
   @override
-  final int _cIndex = 0;
+  int _cIndex = 0;
   bool switchControl = false;
 
-  @override
   Widget build(BuildContext context) {
     var borderDecoration = BoxDecoration(
-        color: Theme.of(context).appBarTheme.backgroundColor,
-        borderRadius: BorderRadius.all(Radius.circular(4.0)));
+        color: Theme.of(context).appBarTheme.color,
+        borderRadius: new BorderRadius.all(Radius.circular(4.0)));
 
     var iconDecoration = BoxDecoration(
       color: Theme.of(context).iconTheme.color  .withOpacity(0.03),
@@ -75,7 +74,7 @@ class _UserAccount4State extends State<UserAccount4> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: <Widget>[
-                              SizedBox(
+                              Container(
                                 height: 70.0,
                                 width: 70.0,
                                 child: CircleAvatar(
@@ -90,7 +89,7 @@ class _UserAccount4State extends State<UserAccount4> {
                               SizedBox(width: 20.0),
                               ScopedModelDescendant<AppStateModel>(
                                   builder: (context, child, model) {
-                                    if(model.user.id != null &&
+                                    if(model.user?.id != null &&
                                         model.user.id > 0) {
                                       if(model.user.billing.firstName != '' ||
                                           model.user.billing.lastName != '') {
@@ -101,7 +100,7 @@ class _UserAccount4State extends State<UserAccount4> {
                                         children: <Widget>[
                                           (model.user.billing.firstName != '' ||
                                               model.user.billing.lastName != '') ? Text(
-                                          '${model.user.billing.firstName} ${model.user.billing.lastName}',
+                                          model.user.billing.firstName + ' ' + model.user.billing.lastName,
                                             style: TextStyle(
                                                 fontWeight: FontWeight.w600, fontSize: 18),
                                           ) : Text(
@@ -121,8 +120,8 @@ class _UserAccount4State extends State<UserAccount4> {
                                           ),
                                         ],
                                       );
-                                    } else {
-                                      return SizedBox(
+                                    } else
+                                    return Container(
                                       height: 70,
                                       child: Column(
                                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -142,7 +141,6 @@ class _UserAccount4State extends State<UserAccount4> {
                                         ],
                                       ),
                                     );
-                                    }
                                   }
                               )
                             ],
@@ -163,7 +161,7 @@ class _UserAccount4State extends State<UserAccount4> {
                 child: Column(
                   children: <Widget>[
                     Container(
-                      color: Theme.of(context).appBarTheme.backgroundColor,
+                      color: Theme.of(context).appBarTheme.color,
                       child: ListTile(
                         onTap: () => Navigator.push(
                             context,
@@ -185,7 +183,7 @@ class _UserAccount4State extends State<UserAccount4> {
                       thickness: 0.3,
                     ),
                     Container(
-                      color: Theme.of(context).appBarTheme.backgroundColor,
+                      color: Theme.of(context).appBarTheme.color,
                       child: ListTile(
                         leading: Container(
                             decoration: iconDecoration,
@@ -203,7 +201,7 @@ class _UserAccount4State extends State<UserAccount4> {
                       thickness: 0.3,
                     ),
                     Container(
-                      color: Theme.of(context).appBarTheme.backgroundColor,
+                      color: Theme.of(context).appBarTheme.color,
                       child: ListTile(
                         leading: Container(
                             decoration: iconDecoration,

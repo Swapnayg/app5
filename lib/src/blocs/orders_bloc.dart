@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print, unused_import
+
 import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
@@ -11,7 +13,7 @@ import 'package:rxdart/rxdart.dart';
 class OrdersBloc {
 
   final apiProvider = ApiProvider();
-  List<Order> orders;
+  late List<Order> orders;
   bool hasMoreOrders = true;
   int ordersPage = 0;
   var addressFormData = <String, String>{};
@@ -34,7 +36,7 @@ class OrdersBloc {
 
   getOrders() async {
     final response = await apiProvider.post(
-        '/wp-admin/admin-ajax.php?action=mstore_flutter-orders', {});
+        '/wp-admin/admin-ajax.php?action=mstore_flutter-orders', Map());
     orders = orderFromJson(response.body);
     _ordersFetcher.sink.add(orders);
     _hasMoreOrdersFetcher.sink.add(true);

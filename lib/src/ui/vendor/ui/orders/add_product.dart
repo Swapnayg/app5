@@ -1,3 +1,6 @@
+// ignore_for_file: library_private_types_in_public_api, unused_element, avoid_print
+
+import 'package:app5/src/models/vendor/product_variation_model.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../blocs/vendor/vendor_bloc.dart';
@@ -9,7 +12,7 @@ import 'product_item.dart';
 class AddProductList extends StatefulWidget {
   final VendorBloc vendorBloc;
 final Order order;
-   const AddProductList({Key key,this.vendorBloc, this.order}) : super(key: key);
+   const AddProductList({super.key,required this.vendorBloc, required this.order});
   @override
   _AddProductListState createState() => _AddProductListState();
 }
@@ -56,20 +59,19 @@ class _AddProductListState extends State<AddProductList> {
                 right: 30.0,
                 child: SizedBox(
                   width: double.maxFinite,
-                  child: RaisedButton(
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
                     shape: const BeveledRectangleBorder(
                       borderRadius: BorderRadius.all(Radius.circular(3.0)),
                     ),
-                    child: const Padding(
-                      padding:
-                      EdgeInsets.symmetric(vertical: 12.0, horizontal: 22),
-                      child: Text('Done'),
-                    ),
-                    onPressed: () {
-
-                 Navigator.pop(context);
-                    },
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 12.0, horizontal: 22),
                   ),
+                  child: const Text('Done'),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                ),
                 ),
               ),
             ]);
@@ -92,9 +94,9 @@ class _AddProductListState extends State<AddProductList> {
         delegate: SliverChildBuilderDelegate(
               (BuildContext context, int index) {
 
-            return ProductItem(vendorBloc: widget.vendorBloc, product: snapshot.data[index],order: widget.order,);
+            return ProductItem(vendorBloc: widget.vendorBloc, product: snapshot.data![index], order: widget.order, variation: ProductVariation());
           },
-          childCount: snapshot.data.length,
+          childCount: snapshot.data?.length,
         ));
   }
 

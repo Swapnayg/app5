@@ -1,25 +1,23 @@
+// ignore_for_file: unused_local_variable, unused_element, prefer_interpolation_to_compose_strings
+
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-import 'dart:typed_data';
 
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:http/http.dart' show Client;
 import 'package:http/http.dart' as http;
-import 'package:path/path.dart' as p;
+
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import './../config.dart';
-import '../models/blocks_model.dart';
 import '../models/product_model.dart';
 
-Directory _appDocsDir;
+Directory? _appDocsDir;
 
 class ApiProvider {
 
-  static final ApiProvider _apiProvider = ApiProvider._internal();
+  static final ApiProvider _apiProvider =  ApiProvider._internal();
 
   var filter = <String, String>{};
 
@@ -46,7 +44,7 @@ class ApiProvider {
 
   Future<http.Response> fetchBlocks() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    cookies = prefs.getString('cookies') != null ? json.decode(prefs.getString('cookies')) : {};
+    cookies = prefs.getString('cookies') != null ? json.decode(prefs.getString('cookies') ?? '') : {};
     headers['content-type'] =
     'application/x-www-form-urlencoded; charset=utf-8';
     headers['cookie'] = generateCookieHeader();
@@ -115,7 +113,7 @@ class ApiProvider {
   Future<dynamic> postWithCookies(String endPoint, Map data) async {
     data.addAll(filter);
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    cookies = prefs.getString('cookies') != null ? json.decode(prefs.getString('cookies')) : {};
+    cookies = prefs.getString('cookies') != null ? json.decode(prefs.getString('cookies') ?? '') : {};
     headers['cookie'] = generateCookieHeader();
     headers['content-type'] =
     'application/x-www-form-urlencoded; charset=utf-8';
@@ -155,16 +153,18 @@ class ApiProvider {
   }
 
   void _updateCookie(http.Response response) async {
-    String allSetCookie = response.headers['set-cookie'];
-    var setCookies = allSetCookie.split(',');
-    for (var setCookie in setCookies) {
-      var cookies = setCookie.split(';');
-      for (var cookie in cookies) {
-        _setCookie(cookie);
+    String? allSetCookie = response.headers['set-cookie'];
+    if (allSetCookie != null) {
+      var setCookies = allSetCookie.split(',');
+      for (var setCookie in setCookies) {
+        var cookies = setCookie.split(';');
+        for (var cookie in cookies) {
+          _setCookie(cookie);
+        }
       }
+      headers['cookie'] = generateCookieHeader();
     }
-    headers['cookie'] = generateCookieHeader();
-      SharedPreferences prefs = await SharedPreferences.getInstance();
+    SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString('cookies', json.encode(cookies));
   }
 
@@ -196,7 +196,7 @@ class ApiProvider {
           key.contains('wordpress')
       ) {
         if (cookie.isNotEmpty) cookie += "; ";
-        cookie += "$key=" + cookies[key];
+        cookie += key + "=" + cookies[key];
       }
     }
     return cookie;
@@ -205,7 +205,7 @@ class ApiProvider {
   List<Cookie> generateCookies() {
     //cookieList.clear();
     for (var key in cookies.keys) {
-      Cookie ck = Cookie(key, cookies[key]);
+      Cookie ck = new Cookie(key, cookies[key]);
       cookieList.add(ck);
     }
     return cookieList;

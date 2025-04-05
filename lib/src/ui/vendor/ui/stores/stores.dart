@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:scoped_model/scoped_model.dart';
@@ -12,7 +14,7 @@ class Stores extends StatefulWidget {
   final Map<String, dynamic> filter;
   final StoreStateModel model = StoreStateModel();
 
-  Stores({Key key, this.filter}) : super(key: key);
+  Stores({required Key key, required this.filter}) : super(key: key);
   @override
   _StoresState createState() => _StoresState();
 }
@@ -23,7 +25,7 @@ class _StoresState extends State<Stores> {
   @override
   void initState() {
     super.initState();
-    widget.model.filter = widget.filter;
+    widget.model.filter = widget.filter.cast<String, String>();
       widget.model.getAllStores();
     _scrollController.addListener(_loadMoreItems);
   }
@@ -56,12 +58,10 @@ class _StoresState extends State<Stores> {
             model: widget.model,
             child: ScopedModelDescendant<StoreStateModel>(
                 builder: (context, child, model) {
-              return model.stores != null
-                  ? CustomScrollView(
-                      controller: _scrollController,
-                      slivers: buildListOfBlocks(model.stores, model),
-                    )
-                  : Center(child: CircularProgressIndicator());
+              return CustomScrollView(
+                controller: _scrollController,
+                slivers: buildListOfBlocks(model.stores, model),
+              );
             })),
       ),
     );
@@ -69,14 +69,14 @@ class _StoresState extends State<Stores> {
 
   List<Widget> buildListOfBlocks(
       List<StoreModel> stores, StoreStateModel model) {
-    List<Widget> list = List<Widget>();
-    list.add(StoresList(stores: stores));
+    List<Widget> list = List<Widget>.empty(growable: true);
+    list.add(StoresList(key: UniqueKey(), stores: stores));
     list.add(SliverPadding(
         padding: EdgeInsets.all(0.0),
         sliver: SliverList(
             delegate: SliverChildListDelegate([
           model.hasMoreItems
-              ? SizedBox(
+              ? Container(
                   height: 60, child: Center(child: CircularProgressIndicator()))
               : Container()
         ]))));

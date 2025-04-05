@@ -13,8 +13,6 @@ import 'categories8.dart';
 import 'categories9.dart';
 
 class Categories extends StatelessWidget {
-  const Categories({super.key});
-
   @override
   Widget build(BuildContext context) {
     return ScopedModelDescendant<AppStateModel>(

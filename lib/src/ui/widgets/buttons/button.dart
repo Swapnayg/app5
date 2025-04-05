@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:flutter/material.dart';
 import './../../../models/app_state_model.dart';
 import 'button_text.dart';
@@ -9,8 +11,8 @@ class AccentButton extends StatelessWidget {
   AppStateModel appStateModel = AppStateModel();
 
   AccentButton({super.key, 
-    @required this.onPressed,
-    @required this.text,
+    required this.onPressed,
+    required this.text,
     this.showProgress = false,
   });
 
@@ -19,28 +21,30 @@ class AccentButton extends StatelessWidget {
     if (appStateModel.blocks.widgets.button == 'button7') {
       return SizedBox(
         width: double.infinity,
-        child: RaisedButton(
-          elevation: 0,
+        child: ElevatedButton(
+          style: ElevatedButton.styleFrom(elevation: 0),
           onPressed: onPressed,
-          child: ButtonText(isLoading: showProgress, text: text),
+          child: ButtonText(isLoading: showProgress, text: text,),
         ),
       );
     } else if (appStateModel.blocks.widgets.button == 'button1') {
       return SizedBox(
         width: double.infinity,
-        child: RaisedButton(
-          shape: StadiumBorder(),
-          elevation: 0,
-          child: ButtonText(isLoading: showProgress, text: text),
+        child: ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            shape: StadiumBorder(),
+            elevation: 0,
+          ),
           onPressed: onPressed,
+          child: ButtonText(isLoading: showProgress, text: text,),
         ),
       );
     } else {
       return SizedBox(
         width: double.infinity,
-        child: RaisedButton(
+        child: ElevatedButton(
           onPressed: onPressed,
-          child: ButtonText(isLoading: showProgress, text: text),
+          child: ButtonText(isLoading: showProgress, text: text,),
         ),
       );
     }

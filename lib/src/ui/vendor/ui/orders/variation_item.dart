@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api, unused_field, avoid_print, avoid_unnecessary_containers
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -16,8 +18,7 @@ class VariationItem extends StatefulWidget {
   final ProductVariation variation;
 
   const VariationItem(
-      {Key key, this.product, this.vendorBloc, this.order, this.variation})
-      : super(key: key);
+      {super.key, required this.product, required this.vendorBloc, required this.order, required this.variation});
 
   @override
   _VariationItemState createState() => _VariationItemState();
@@ -25,7 +26,7 @@ class VariationItem extends StatefulWidget {
 
 class _VariationItemState extends State<VariationItem> {
   final AppStateModel _appStateModel = AppStateModel();
-  NumberFormat formatter;
+  late NumberFormat formatter;
 
   var qty = 0;
 
@@ -86,14 +87,14 @@ class _VariationItemState extends State<VariationItem> {
                           IconButton(
                               icon: Icon(Icons.remove_circle_outline),
                               onPressed: () {
-                                //TODO for decrease qty and if qty is 0 remove line item
+                                
                                 _decreaseQty();
                               }),
                           Text(qty.toString()),
                           IconButton(
                               icon: Icon(Icons.add_circle_outline),
                               onPressed: () {
-                                //TODO Containe? increase qty : Add line item
+                                
                                 _increaseQty();
                               }),
                         ],

@@ -12,7 +12,7 @@ import '../list_header.dart';
 
 class StoreScrollList extends StatefulWidget {
   final Block block;
-  const StoreScrollList({Key key, this.block}) : super(key: key);
+  StoreScrollList({Key key, this.block}) : super(key: key);
   @override
   _StoreScrollListState createState() => _StoreScrollListState();
 }
@@ -87,12 +87,12 @@ class _StoreScrollListState extends State<StoreScrollList> {
                                             child: widget.block.stores[index].banner != null ? CachedNetworkImage(
                                               imageUrl: widget.block.stores[index].banner,
                                               imageBuilder: (context, imageProvider) => Ink.image(
-                                                image: imageProvider,
-                                                fit: BoxFit.cover,
                                                 child: InkWell(
                                                   splashColor: HexColor(widget.block.bgColor).withOpacity(0.1),
                                                   onTap: () => onStoreClick(widget.block.stores[index]),
                                                 ),
+                                                image: imageProvider,
+                                                fit: BoxFit.cover,
                                               ),
                                               placeholder: (context, url) =>
                                                   Container(color: HexColor(widget.block.bgColor).withOpacity(0.5)),
@@ -101,12 +101,12 @@ class _StoreScrollListState extends State<StoreScrollList> {
                                         ),
                                         Expanded(
                                           child: Center(
-                                            child: Text(
+                                            child: new Text(
                                               parseHtmlString(widget.block.stores[index].name),
                                               maxLines: 2,
                                               textAlign: TextAlign.center,
                                               overflow: TextOverflow.ellipsis,
-                                              style: Theme.of(context).textTheme.bodyMedium.copyWith(
+                                              style: Theme.of(context).textTheme.bodyText2.copyWith(
                                                   fontSize: 12
                                               ),
                                             ),
@@ -135,7 +135,7 @@ class _StoreScrollListState extends State<StoreScrollList> {
 
 class StoreScrollStadiumList extends StatefulWidget {
   final Block block;
-  const StoreScrollStadiumList({Key key, this.block}) : super(key: key);
+  StoreScrollStadiumList({Key key, this.block}) : super(key: key);
   @override
   _StoreScrollStadiumListState createState() => _StoreScrollStadiumListState();
 }
@@ -213,12 +213,12 @@ class _StoreScrollStadiumListState extends State<StoreScrollStadiumList> {
                                                 child: widget.block.stores[index].banner != null ? CachedNetworkImage(
                                                   imageUrl: widget.block.stores[index].banner,
                                                   imageBuilder: (context, imageProvider) => Ink.image(
-                                                    image: imageProvider,
-                                                    fit: BoxFit.cover,
                                                     child: InkWell(
                                                       splashColor: HexColor(widget.block.bgColor).withOpacity(0.1),
                                                       onTap: () => onStoreClick(widget.block.stores[index]),
                                                     ),
+                                                    image: imageProvider,
+                                                    fit: BoxFit.cover,
                                                   ),
                                                   placeholder: (context, url) =>
                                                       Container(color: HexColor(widget.block.bgColor).withOpacity(0.5)),
@@ -230,12 +230,12 @@ class _StoreScrollStadiumListState extends State<StoreScrollStadiumList> {
                                       )),
                                   Padding(
                                     padding: const EdgeInsets.all(8.0),
-                                    child: Text(
+                                    child: new Text(
                                       parseHtmlString(widget.block.stores[index].name),
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
                                       textAlign: TextAlign.center,
-                                      style: Theme.of(context).textTheme.bodyMedium,
+                                      style: Theme.of(context).textTheme.bodyText2,
                                     ),
                                   ),
                                 ],

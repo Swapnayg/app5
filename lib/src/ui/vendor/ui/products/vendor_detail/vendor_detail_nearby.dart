@@ -1,8 +1,9 @@
+// ignore_for_file: prefer_typing_uninitialized_variables, use_super_parameters, library_private_types_in_public_api, unused_field, deprecated_member_use
+
 import 'dart:async';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
+
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -21,7 +22,7 @@ class VendorDetails extends StatefulWidget {
   final VendorDetailStateModel vendorDetailModel = VendorDetailStateModel();
   final vendorId;
 
-  VendorDetails({Key key, this.vendorId}) : super(key: key);
+  VendorDetails({Key? key, this.vendorId}) : super(key: key);
 
   @override
   _VendorDetailsState createState() => _VendorDetailsState();
@@ -96,10 +97,10 @@ class _VendorDetailsState extends State<VendorDetails>
   }
 
   List<Widget> buildLisOfBlocks(AsyncSnapshot<List<Product>> snapshot) {
-    List<Widget> list = List<Widget>();
+    List<Widget> list = [];
 
     if (snapshot.data != null) {
-      list.add(ProductGrid(products: snapshot.data));
+      list.add(ProductGrid(products: snapshot.data ?? []));
       list.add(SliverPadding(
           padding: EdgeInsets.all(0.0),
           sliver: SliverList(

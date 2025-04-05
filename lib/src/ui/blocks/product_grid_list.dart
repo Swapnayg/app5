@@ -8,7 +8,7 @@ import '../../models/blocks_model.dart';
 class ProductGridList extends StatefulWidget {
   final Block block;
   final Function onProductClick;
-  const ProductGridList({Key key, this.block, this.onProductClick}) : super(key: key);
+  ProductGridList({Key key, this.block, this.onProductClick}) : super(key: key);
   @override
   _ProductGridListState createState() => _ProductGridListState();
 }

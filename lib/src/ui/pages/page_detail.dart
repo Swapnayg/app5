@@ -21,25 +21,25 @@ class PageDetail extends StatefulWidget {
 }
 
 class _PageDetailState extends State<PageDetail> {
-  final ScrollController _scrollController = ScrollController();
+  ScrollController _scrollController = new ScrollController();
 
   final Post post;
 
   _PageDetailState({this.post});
 
-  TextEditingController emailController = TextEditingController();
+  TextEditingController emailController = new TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    if (post.title != null) {
-      widget.bloc.addPost(post);
+    if (this.post.title != null) {
+      widget.bloc.addPost(this.post);
     }
-    widget.bloc.postId.add(post.id);
+    widget.bloc.postId.add(this.post.id);
     _scrollController.addListener(() {
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {
-        widget.bloc.fetchMoreComments(post.id);
+        widget.bloc.fetchMoreComments(this.post.id);
       }
     });
   }
@@ -58,14 +58,17 @@ class _PageDetailState extends State<PageDetail> {
       body: StreamBuilder<Post>(
           stream: widget.bloc.post,
           builder: (context, snapshot) {
-            double height;
+            var height;
             if (snapshot.hasData) {
               double width = MediaQuery.of(context).size.width;
               double aspectRatio = snapshot.data.featuredDetails != null
                   ? snapshot.data.featuredDetails.height /
                       snapshot.data.featuredDetails.width
                   : 1;
-              height = (aspectRatio * width);
+              if (snapshot.data.featuredUrl == null) {
+                height = 0.0;
+              } else
+                height = (aspectRatio * width);
             } else if(snapshot.hasError) {
               return Center(
                 child: Text('Nothing to show')
@@ -170,7 +173,7 @@ class _PageDetailState extends State<PageDetail> {
                   //style: Styles.title3
                   style: TextStyle(
                       fontSize: 12.0,
-                      color: Theme.of(context).textTheme.bodySmall.color),
+                      color: Theme.of(context).textTheme.caption.color),
                 ),
               ),
               Padding(
@@ -185,9 +188,8 @@ class _PageDetailState extends State<PageDetail> {
                       } else {
                         throw 'Could not launch $url';
                       }
-                    } else {
+                    } else
                       openWebView(url);
-                    }
                   },
                   onImageTap: (src) {
                     //
@@ -240,7 +242,7 @@ class _PageDetailState extends State<PageDetail> {
                       style: TextStyle(
                           fontSize: 16.0,
                           fontWeight: FontWeight.w500,
-                          color: Theme.of(context).textTheme.bodySmall.color),
+                          color: Theme.of(context).textTheme.caption.color),
                     ),
                   ],
                 ),
@@ -267,7 +269,7 @@ class _PageDetailState extends State<PageDetail> {
                     Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          Text('By ${snapshot.data.authorDetails.name}',
+                          Text('By ' + snapshot.data.authorDetails.name,
                               style: TextStyle(
                                   fontSize: 16.0, fontWeight: FontWeight.w400)),
                         ]),
@@ -296,9 +298,8 @@ class _PageDetailState extends State<PageDetail> {
                       } else {
                         throw 'Could not launch $url';
                       }
-                    } else {
+                    } else
                       openWebView(url);
-                    }
                   },
                   onImageTap: (src) {
                     //
@@ -332,7 +333,7 @@ class _PageDetailState extends State<PageDetail> {
         Column(
           children: listTiles.toList(),
         ),
-        SizedBox(
+        Container(
             height: 60,
             child: StreamBuilder(
                 stream: widget.bloc.hasMoreCommets,
@@ -371,7 +372,7 @@ class _PageDetailState extends State<PageDetail> {
                     Text(timeago.format(comment.date),
                         style: TextStyle(
                             fontSize: 12.0,
-                            color: Theme.of(context).textTheme.bodySmall.color))
+                            color: Theme.of(context).textTheme.caption.color))
                   ]),
             ],
           ),
@@ -395,7 +396,7 @@ class _PageDetailState extends State<PageDetail> {
     hexColor = hexColor.toUpperCase().replaceAll('#', '');
 
     if (hexColor.length == 6) {
-      hexColor = 'FF$hexColor';
+      hexColor = 'FF' + hexColor;
     }
 
     return Color(int.parse(hexColor, radix: 16));

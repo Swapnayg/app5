@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 
 class ButtonText extends StatelessWidget {
   const ButtonText({
-    Key key,
-    @required this.isLoading,
-    @required this.text,
-  }) : super(key: key);
+    super.key,
+    required this.isLoading,
+    required this.text,
+  });
 
   final bool isLoading;
   final String text;
@@ -17,7 +17,7 @@ class ButtonText extends StatelessWidget {
       height: 20.0,
       child: Theme(
           data: Theme.of(context)
-              .copyWith(colorScheme: ColorScheme.fromSwatch().copyWith(secondary: Theme.of(context).buttonTheme.colorScheme.onPrimary)),
+              .copyWith(hintColor: Theme.of(context).buttonTheme.colorScheme?.onPrimary),
           child: CircularProgressIndicator(
             strokeWidth: 2.0,
           )),

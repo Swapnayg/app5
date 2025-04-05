@@ -25,7 +25,7 @@ class PageDetailBloc {
   ValueStream<CommentsModel> get comments => _commentsFetcher.stream;
   ValueStream<bool> get hasMoreCommets => _hasMoreCommentsFetcher.stream;
 
-  final Map<int, CommentsModel> _comments;
+  Map<int, CommentsModel> _comments;
   final _post = <int, Post>{};
 
   PageDetailBloc() : _comments = <int, CommentsModel>{} {
@@ -39,7 +39,7 @@ class PageDetailBloc {
     if(!_post.containsKey(id)) {
       _post[id] = await _getPost(id);
     }
-    _postFetcher.sink.add(_post[id]);
+    _postFetcher.sink.add(_post[id]!);
   }
 
   addPost(Post post) {
@@ -52,7 +52,7 @@ class PageDetailBloc {
     if(!_comments.containsKey(id)) {
       _comments[id] = await _getComments(id);
     }
-    _commentsFetcher.sink.add(_comments[id]);
+    _commentsFetcher.sink.add(_comments[id]!);
   }
 
   fetchMoreComments(id) async {
@@ -61,14 +61,14 @@ class PageDetailBloc {
     if(comments.comments.isEmpty){
       _hasMoreCommentsFetcher.add(false);
     } else {
-      _comments[id].comments.addAll(comments.comments);
-      _commentsFetcher.sink.add(_comments[id]);
+      _comments[id]?.comments.addAll(comments.comments);
+      _commentsFetcher.sink.add(_comments[id]!);
     }
   }
 
   Future<CommentsModel> _getComments(id) async {
-    final url = '${config.url}/wp-json/wp/v2/comments?page=${_commentsPage[id]}&post=$id';
-    final response = await http.get(url);
+    final url = config.url + '/wp-json/wp/v2/comments?page=' + _commentsPage[id].toString() + '&post=' + id.toString();
+    final response = await http.get(url as Uri);
     if (response.statusCode == 200) {
       return CommentsModel.fromJson(json.decode(response.body));
     } else {
@@ -78,8 +78,8 @@ class PageDetailBloc {
   }
 
   Future<Post> _getPost(id) async {
-    final url = '${config.url}/wp-json/wp/v2/pages/$id';
-    final response = await http.get(url);
+    final url = config.url + '/wp-json/wp/v2/pages/' + id.toString();
+    final response = await http.get(url as Uri);
     if (response.statusCode == 200) {
       return Post.fromJson(json.decode(response.body));
     } else {

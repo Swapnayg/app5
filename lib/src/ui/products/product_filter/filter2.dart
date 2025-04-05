@@ -13,7 +13,7 @@ class FilterProduct2 extends StatefulWidget {
 }
 
 class _FilterProduct2State extends State<FilterProduct2> {
-  var filter = <String, dynamic>{};
+  var filter = new Map<String, dynamic>();
   final appStateModel = AppStateModel();
   String selectedAttribute;
 
@@ -71,7 +71,7 @@ class _FilterProduct2State extends State<FilterProduct2> {
                             left: BorderSide(
                               //                   <--- left side
                               color: selectedAttribute == 'price'
-                                  ? Theme.of(context).colorScheme.secondary
+                                  ? Theme.of(context).accentColor
                                   : backGroundColor,
                               width: 2.0,
                             ),
@@ -87,7 +87,7 @@ class _FilterProduct2State extends State<FilterProduct2> {
                           },
                         ),
                       );
-                    } else {
+                    } else
                       return Container(
                         decoration: BoxDecoration(
                           color: selectedAttribute ==
@@ -101,7 +101,7 @@ class _FilterProduct2State extends State<FilterProduct2> {
                               //                   <--- left side
                               color: selectedAttribute ==
                                       snapshot.data[index - 1].id
-                                  ? Theme.of(context).colorScheme.secondary
+                                  ? Theme.of(context).accentColor
                                   : backGroundColor,
                               width: 2.0,
                             ),
@@ -119,7 +119,6 @@ class _FilterProduct2State extends State<FilterProduct2> {
                           },
                         ),
                       );
-                    }
                   }),
             ),
             Expanded(
@@ -203,9 +202,9 @@ class _FilterProduct2State extends State<FilterProduct2> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     Text(
-                        formatter.format(appStateModel.selectedRange.start)),
+                        '${formatter.format(appStateModel.selectedRange.start)}'),
                     Text(
-                        formatter.format(appStateModel.selectedRange.end)),
+                        '${formatter.format(appStateModel.selectedRange.end)}'),
                   ],
                 ),
               ),
@@ -216,8 +215,8 @@ class _FilterProduct2State extends State<FilterProduct2> {
                     divisions: appStateModel.maxPrice.toInt(),
                     values: appStateModel.selectedRange,
                     labels: RangeLabels(
-                        formatter.format(appStateModel.selectedRange.start),
-                        formatter.format(appStateModel.selectedRange.end)),
+                        '${formatter.format(appStateModel.selectedRange.start)}',
+                        '${formatter.format(appStateModel.selectedRange.end)}'),
                     onChanged: (RangeValues newRange) {
                       appStateModel.updateRangeValue(newRange);
                       setState(() {

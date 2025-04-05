@@ -11,5 +11,5 @@ class Message {
   final Timestamp timestamp;
   final MessageType type;
 
-  Message({this.senderID, this.content, this.timestamp, this.type});
+  Message({required this.senderID, required this.content, required this.timestamp, required this.type});
 }

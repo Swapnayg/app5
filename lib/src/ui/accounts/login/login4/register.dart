@@ -9,8 +9,6 @@ import '../../../color_override.dart';
 
 
 class Register extends StatefulWidget {
-  const Register({super.key});
-
   @override
   _RegisterState createState() => _RegisterState();
 }
@@ -18,11 +16,11 @@ class Register extends StatefulWidget {
 class _RegisterState extends State<Register> {
 
   final appStateModel = AppStateModel();
-  final RegisterModel _register = RegisterModel();
+  RegisterModel _register = RegisterModel();
   bool _obscureText = true;
   var isLoading = false;
   final _formKey = GlobalKey<FormState>();
-  final RoundedLoadingButtonController _btnController = RoundedLoadingButtonController();
+  final RoundedLoadingButtonController _btnController = new RoundedLoadingButtonController();
 
   @override
   Widget build(BuildContext context) {
@@ -90,7 +88,7 @@ class _RegisterState extends State<Register> {
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.only( top:30, left: 20.0),
-                                  child: SizedBox(
+                                  child: Container(
                                     height: 140,
                                     width: 180,
                                     child: Column(
@@ -218,12 +216,12 @@ class _RegisterState extends State<Register> {
                             RoundedLoadingButton(
                               color: Colors.white,
                               elevation: 0,
+                              child: Text(appStateModel.blocks.localeText.signUp, style: TextStyle(color: Color(0xFF00363a),fontSize: 20)),
                               controller: _btnController,
                               valueColor: Colors.black,
                               onPressed: () => _submit(context),
                               animateOnTap: false,
                               width: 200,
-                              child: Text(appStateModel.blocks.localeText.signUp, style: TextStyle(color: Color(0xFF00363a),fontSize: 20)),
                             ),
                             SizedBox(height: 30.0),
                             FlatButton(
@@ -237,7 +235,7 @@ class _RegisterState extends State<Register> {
                                     Text(
                                         appStateModel.blocks.localeText
                                             .alreadyHaveAnAccount,
-                                        style: Theme.of(context).textTheme.bodyMedium.copyWith(
+                                        style: Theme.of(context).textTheme.bodyText2.copyWith(
                                             fontSize: 15,
                                             color: Colors.white.withOpacity(0.6))),
                                     Padding(
@@ -245,7 +243,7 @@ class _RegisterState extends State<Register> {
                                       const EdgeInsets.symmetric(horizontal: 8.0),
                                       child: Text(
                                           appStateModel.blocks.localeText.signIn,
-                                          style: Theme.of(context).textTheme.bodyMedium.copyWith(
+                                          style: Theme.of(context).textTheme.bodyText2.copyWith(
                                               color: Colors.white)),
                                     ),
                                   ],

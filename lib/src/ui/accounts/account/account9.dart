@@ -27,7 +27,7 @@ import '../wishlist.dart';
 class UserAccount9 extends StatefulWidget {
 
 
-  const UserAccount9({Key key})
+  UserAccount9({Key key})
       : super(key: key);
 
   @override
@@ -47,8 +47,9 @@ class _UserAccount9State extends State<UserAccount9> {
             return Padding(
               padding: EdgeInsets.only(left: 0.0, right: 0.0),
               child: Stack(
-                clipBehavior: Clip.none, children: [
-                  SizedBox(
+                overflow: Overflow.visible,
+                children: [
+                  Container(
                     height: (model.loggedIn &&
                         appStateModel.isVendor.contains(model.user.role)) ? 100: 600,
                     width: MediaQuery.of(context).size.width,),
@@ -57,7 +58,7 @@ class _UserAccount9State extends State<UserAccount9> {
                     top: MediaQuery.of(context).size.height/3-50.0,
                     left: 0.0,
                     right: 0.0,
-                    child: SizedBox(
+                    child: Container(
                       height: (model.loggedIn &&
                           appStateModel.isVendor.contains(model.user.role)) ? 400: MediaQuery.of(context).size.height - MediaQuery.of(context).size.height/3,
                       width: MediaQuery.of(context).size.width,
@@ -74,14 +75,14 @@ class _UserAccount9State extends State<UserAccount9> {
                           ScopedModelDescendant<AppStateModel>(
                               builder: (context, child, model) {
                                 if (model.blocks != null &&
-                                    model.blocks.pages.isNotEmpty &&
+                                    model.blocks.pages.length != 0 &&
                                     model.blocks.pages[0].url.isNotEmpty) {
                                   return buildPageList(model.blocks.pages);
                                 } else {
                                   return SliverToBoxAdapter(child: Container());
                                 }
                               }),
-                          (model.user.id != null && model.user.id > 0)
+                          (model.user?.id != null && model.user.id > 0)
                               ? buildLogoutList(context)
                               : SliverToBoxAdapter(child: Container()),
                           //buildOtherList(context),
@@ -119,7 +120,7 @@ class _UserAccount9State extends State<UserAccount9> {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            SizedBox(
+            Container(
               height: 70.0,
               width: 70.0,
               child: CircleAvatar(
@@ -127,12 +128,12 @@ class _UserAccount9State extends State<UserAccount9> {
                 child: Icon(
                   FlutterIcons.user_fea,
                   size: 40,
-                  color: Theme.of(context).textTheme.bodySmall.color.withOpacity(0.4),
+                  color: Theme.of(context).textTheme.caption.color.withOpacity(0.4),
                 ),
               ),
             ),
             SizedBox(height: 10,),
-            (model.user.id != null && model.user.id > 0)
+            (model.user?.id != null && model.user.id > 0)
                 ? Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -140,9 +141,9 @@ class _UserAccount9State extends State<UserAccount9> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     (model.user.billing.firstName != '' || model.user.billing.lastName != '') ? Text(
-                      '${model.user.billing.firstName[0].toUpperCase()}${model.user.billing.firstName.substring(1)} ${model.user.billing.lastName[0].toUpperCase()}${model.user.billing.lastName.substring(1)}',
-                      style: Theme.of(context).textTheme.titleLarge.copyWith(color: Colors.white,fontWeight: FontWeight.w700),
-                    ) : Container(child: Text('Welcome', style: Theme.of(context).textTheme.titleLarge,),),
+                      model.user.billing.firstName[0].toUpperCase() + model.user.billing.firstName.substring(1) + ' ' + model.user.billing.lastName[0].toUpperCase() + model.user.billing.lastName.substring(1),
+                      style: Theme.of(context).textTheme.headline6.copyWith(color: Colors.white,fontWeight: FontWeight.w700),
+                    ) : Container(child: Text('Welcome', style: Theme.of(context).textTheme.headline6,),),
                     model.user.billing.phone != '' ? Column(
                       children: [
                         SizedBox(height: 5.0),
@@ -171,7 +172,7 @@ class _UserAccount9State extends State<UserAccount9> {
                   context, MaterialPageRoute(builder: (context) => Login())),
               child: Text(
                 appStateModel.blocks.localeText.signIn,
-                style: Theme.of(context).textTheme.bodyLarge.copyWith(
+                style: Theme.of(context).textTheme.bodyText1.copyWith(
                     fontSize: 18,
                     fontWeight: FontWeight.w600,
                     color: Colors.white
@@ -207,7 +208,7 @@ class _UserAccount9State extends State<UserAccount9> {
           children: [
             ListTile(
               onTap: () {
-                if (model.user.id != null && model.user.id > 0) {
+                if (model.user?.id != null && model.user.id > 0) {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -233,7 +234,7 @@ class _UserAccount9State extends State<UserAccount9> {
             buildDivider(),
             ListTile(
               onTap: () {
-                if (model.user.id != null && model.user.id > 0) {
+                if (model.user?.id != null && model.user.id > 0) {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -259,7 +260,7 @@ class _UserAccount9State extends State<UserAccount9> {
             buildDivider(),
             ListTile(
               onTap: () {
-                if (model.user.id != null && model.user.id > 0) {
+                if (model.user?.id != null && model.user.id > 0) {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -285,7 +286,7 @@ class _UserAccount9State extends State<UserAccount9> {
             buildDivider(),
             ListTile(
               onTap: () {
-                if (model.user.id != null && model.user.id > 0) {
+                if (model.user?.id != null && model.user.id > 0) {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -356,7 +357,7 @@ class _UserAccount9State extends State<UserAccount9> {
             ScopedModelDescendant<AppStateModel>(
                 builder: (context, child, model) {
                   if (model.blocks?.languages != null &&
-                      model.blocks.languages.isNotEmpty) {
+                      model.blocks.languages.length > 0) {
                     return Column(
                       children: <Widget>[
                         ListTile(
@@ -387,7 +388,7 @@ class _UserAccount9State extends State<UserAccount9> {
             ScopedModelDescendant<AppStateModel>(
                 builder: (context, child, model) {
                   if (model.blocks?.currencies != null &&
-                      model.blocks.currencies.isNotEmpty) {
+                      model.blocks.currencies.length > 0) {
                     return Column(
                       children: <Widget>[
                         ListTile(
@@ -433,8 +434,8 @@ class _UserAccount9State extends State<UserAccount9> {
   }
 
   Widget buildVendorDashboard(BuildContext context) {
-    TextStyle itemTextStyle = Theme.of(context).textTheme.titleMedium;
-    TextStyle itemTextStyle2 = Theme.of(context).textTheme.bodyLarge;
+    TextStyle itemTextStyle = Theme.of(context).textTheme.subtitle1;
+    TextStyle itemTextStyle2 = Theme.of(context).textTheme.bodyText1;
     return  Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 0),
       child: Container(
@@ -506,9 +507,8 @@ class _UserAccount9State extends State<UserAccount9> {
                       ],
                     ),
                   ],
-                );} else {
+                );} else
                 return SliverToBoxAdapter(child: Container());
-              }
             }),
       ),
     );

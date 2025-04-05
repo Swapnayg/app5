@@ -59,28 +59,28 @@ class VendorReviews {
       );
 
   factory VendorReviews.fromJson(Map<String, dynamic> json) => VendorReviews(
-    id: json["ID"],
-    vendorId: json["vendor_id"],
-    authorId: json["author_id"],
-    authorName: json["author_name"],
-    authorEmail: json["author_email"],
-    reviewTitle: json["review_title"],
-    reviewDescription: json["review_description"],
-    reviewRating: json["review_rating"],
-    approved: json["approved"],
+    id: json["ID"] == null ? null : json["ID"],
+    vendorId: json["vendor_id"] == null ? null : json["vendor_id"],
+    authorId: json["author_id"] == null ? null : json["author_id"],
+    authorName: json["author_name"] == null ? null : json["author_name"],
+    authorEmail: json["author_email"] == null ? null : json["author_email"],
+    reviewTitle: json["review_title"] == null ? null : json["review_title"],
+    reviewDescription: json["review_description"] == null ? null : json["review_description"],
+    reviewRating: json["review_rating"] == null ? null : json["review_rating"],
+    approved: json["approved"] == null ? null : json["approved"],
     created: json["created"] == null ? null : DateTime.parse(json["created"]),
   );
 
   Map<String, dynamic> toJson() => {
-    "ID": id,
-    "vendor_id": vendorId,
-    "author_id": authorId,
-    "author_name": authorName,
-    "author_email": authorEmail,
-    "review_title": reviewTitle,
-    "review_description": reviewDescription,
-    "review_rating": reviewRating,
-    "approved": approved,
-    "created": created?.toIso8601String(),
+    "ID": id == null ? null : id,
+    "vendor_id": vendorId == null ? null : vendorId,
+    "author_id": authorId == null ? null : authorId,
+    "author_name": authorName == null ? null : authorName,
+    "author_email": authorEmail == null ? null : authorEmail,
+    "review_title": reviewTitle == null ? null : reviewTitle,
+    "review_description": reviewDescription == null ? null : reviewDescription,
+    "review_rating": reviewRating == null ? null : reviewRating,
+    "approved": approved == null ? null : approved,
+    "created": created == null ? null : created.toIso8601String(),
   };
 }

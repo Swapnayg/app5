@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names, avoid_print, prefer_interpolation_to_compose_strings
+
 import 'dart:convert';
 
 import 'package:rxdart/rxdart.dart';
@@ -10,13 +12,13 @@ import '../../resources/api_provider.dart';
 import '../../resources/wc_api.dart';
 
 class VendorBloc {
-  List<VendorProduct>? products;
-  List<ProductVariation>? variationProducts;
+  late List<VendorProduct> products;
+  late List<ProductVariation> variationProducts;
   var productFilter = <String, dynamic>{};
   var orderFilter = <String, dynamic>{};
   var variationFilter = <String, dynamic>{};
 
-  // final order = Order();
+ // final order = Order();
 
   int productPage = 0;
   String initialSelectedCountry = 'IN';
@@ -47,20 +49,17 @@ class VendorBloc {
     print(response.body);
     if (response.statusCode == 200) {
       products = productFromJson(response.body);
-      _vendorProductsFetcher.sink.add(products!);
+      _vendorProductsFetcher.sink.add(products);
     }
   }
 
   Future<bool> addProduct(VendorProduct product) async {
-    product.vendor = productFilter['vendor'];
+    product.vendor =  productFilter['vendor'];
     final response = await wc_api.postAsync("products", product.toJson());
 
     if (response.statusCode == 200 || response.statusCode == 201) {
-      VendorProduct newProduct =
-          VendorProduct.fromJson(json.decode(response.body));
-      apiProvider.post(
-          '/wp-admin/admin-ajax.php?action=mstore_flutter-update-vendor-product',
-          {'id': newProduct.id.toString()});
+      VendorProduct newProduct = VendorProduct.fromJson(json.decode(response.body));
+      apiProvider.post('/wp-admin/admin-ajax.php?action=mstore_flutter-update-vendor-product', {'id': newProduct.id.toString()});
       fetchAllProducts();
       return true;
     } else {
@@ -81,7 +80,7 @@ class VendorBloc {
   Future<VendorProduct> deleteProduct(VendorProduct product) async {
     final response =
         await wc_api.deleteAsync("products/${product.id}");
-
+    
     if (response.statusCode == 200 || response.statusCode == 201) {
       return VendorProduct.fromJson(json.decode(response.body));
     } else {
@@ -96,8 +95,8 @@ class VendorBloc {
     final response =
         await wc_api.getAsync('products${getQueryString(productFilter)}');
     List<VendorProduct> moreProducts = productFromJson(response.body);
-    products!.addAll(moreProducts);
-    _vendorProductsFetcher.sink.add(products!);
+    products.addAll(moreProducts);
+    _vendorProductsFetcher.sink.add(products);
     if (moreProducts.isEmpty) {
       return false;
     } else {
@@ -109,10 +108,13 @@ class VendorBloc {
 
   List<Order> orders = [];
 
+  get hasMoreProductsStream => null;
+
+  get hasMoreProducts => null;
+
   getOrders([String? query]) async {
     orderFilter['page'] = 1;
-    final response =
-        await wc_api.getAsync("orders${getQueryString(orderFilter)}");
+    final response = await wc_api.getAsync("orders${getQueryString(orderFilter)}");
 
     orders = orderFromJson(response.body);
     _ordersFetcher.sink.add(orders);
@@ -121,20 +123,18 @@ class VendorBloc {
 
   Future<bool> loadMoreOrders() async {
     orderFilter['page'] = orderFilter['page'] + 1;
-    final response =
-        await wc_api.getAsync("orders${getQueryString(orderFilter)}");
+    final response = await wc_api.getAsync("orders${getQueryString(orderFilter)}");
     List<Order> moreOrders = orderFromJson(response.body);
     orders.addAll(moreOrders);
     _ordersFetcher.sink.add(orders);
-    if (moreOrders.length < 10) {
+    if(moreOrders.length < 10) {
       return false;
-    }
-    return true;
+    } return true;
   }
 
   Future<Order> addOrder(Order order) async {
     final response = await wc_api.postAsync("orders", order.toJson());
-
+    
     if (response.statusCode == 200 || response.statusCode == 201) {
       return Order.fromJson(json.decode(response.body));
     } else {
@@ -152,19 +152,20 @@ class VendorBloc {
     }
   }
 
-  Future<Order?> deleteOrder(Order order) async {
-    final response = await wc_api.deleteAsync("orders/${order.id}");
-
+  Future<Order> deleteOrder(Order order) async {
+    final response = await wc_api.deleteAsync("orders/" + order.id.toString());
+    
     if (response.statusCode == 200 || response.statusCode == 201) {
       return Order.fromJson(json.decode(response.body));
+    } else {
+      throw Exception('Failed to delete order');
     }
-    return null;
   }
 
   void getVendorOrderForm() async {
     final response = await apiProvider.post(
         '/wp-admin/admin-ajax.php?action=mstore_flutter-get_checkout_form',
-        {}); //formData.toJson();
+        Map()); //formData.toJson();
     if (response.statusCode == 200) {
       CheckoutFormModel checkoutForm =
           CheckoutFormModel.fromJson(json.decode(response.body));
@@ -185,21 +186,19 @@ class VendorBloc {
 
   Future<void> getVariationProducts(int id) async {
     variationFilter['per_page'] = 100;
-    final response = await wc_api
-        .getAsync("products/$id/variations${getQueryString(variationFilter)}");
-
+    final response = await wc_api.getAsync("products/$id/variations${getQueryString(variationFilter)}");
+    
     if (response.statusCode == 200 || response.statusCode == 201) {
       variationProducts = productVariationFromJson(response.body);
-      _vendorVariationProductsFetcher.sink.add(variationProducts!);
+      _vendorVariationProductsFetcher.sink.add(variationProducts);
     } else {
       throw Exception('Failed to load product');
     }
   }
 
-  Future<ProductVariation> addVariationProduct(
-      int id, ProductVariation variationProduct) async {
+  Future<ProductVariation> addVariationProduct(int id, ProductVariation variationProduct) async {
     final response = await wc_api.postAsync(
-        "products/$id/variations", variationProduct.toJson());
+        "products/" + id.toString() + "/variations", variationProduct.toJson());
     if (response.statusCode == 200 || response.statusCode == 201) {
       return ProductVariation.fromJson(json.decode(response.body));
     } else {
@@ -207,11 +206,9 @@ class VendorBloc {
     }
   }
 
-  Future<ProductVariation> editVariationProduct(
-      int productId, ProductVariation variationProduct) async {
-    final response = await wc_api.putAsync(
-        "products/$productId/variations/${variationProduct.id}",
-        variationProduct.toJson());
+  Future<ProductVariation> editVariationProduct(int productId, ProductVariation variationProduct) async {
+
+    final response = await wc_api.putAsync("products/$productId/variations/${variationProduct.id}", variationProduct.toJson());
 
     if (response.statusCode == 200 || response.statusCode == 201) {
       return ProductVariation.fromJson(json.decode(response.body));
@@ -220,16 +217,10 @@ class VendorBloc {
     }
   }
 
-  Future<ProductVariation> deleteVariationProduct(
-      int id, int variationId) async {
-    // ignore: prefer_interpolation_to_compose_strings
-    final response = await wc_api.deleteAsync("products/" +
-        id.toString() +
-        // ignore: prefer_interpolation_to_compose_strings
-        "/variations/" +
-        variationId.toString() +
-        '?force=true');
+  Future<ProductVariation> deleteVariationProduct(int id, int variationId) async {
+    final response = await wc_api.deleteAsync("products/" + id.toString() + "/variations/" + variationId.toString() + '?force=true');
 
+    
     if (response.statusCode == 200 || response.statusCode == 201) {
       return ProductVariation.fromJson(json.decode(response.body));
     } else {

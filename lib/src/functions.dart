@@ -1,3 +1,5 @@
+// ignore_for_file: dead_code
+
 import 'package:flutter/material.dart';
 import 'package:html/parser.dart';
 
@@ -6,7 +8,7 @@ import 'models/blocks_model.dart';
 String parseHtmlString(String htmlString) {
   var document = parse(htmlString);
 
-  String parsedString = parse(document.body.text).documentElement.text;
+  String parsedString = parse(document.body?.text).documentElement!.text;
 
   return parsedString;
 }
@@ -19,7 +21,7 @@ showSnackBarError(BuildContext context, String message) {
         message,
         style: TextStyle(color: Colors.white),
       ));
-  Scaffold.of(context).showSnackBar(snackBar);
+  ScaffoldMessenger.of(context).showSnackBar(snackBar);
 }
 
 String getOrderIdFromUrl(String str) {
@@ -59,10 +61,8 @@ String getOrderStatusText(String status, LocaleText localeText) {
   switch (status) {
     case "processing":
       return localeText.processing;
-      break;
     case "completed":
       return localeText.completed;
-      break;
     case "on-hold":
       return localeText.onHold;
       break;

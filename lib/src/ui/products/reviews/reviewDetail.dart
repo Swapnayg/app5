@@ -132,7 +132,7 @@ class _ReviewsDetailState extends State<ReviewsDetail> {
                       Text(timeago.format(comment.date),
                           style: TextStyle(
                               fontSize: 12.0,
-                              color: Theme.of(context).textTheme.bodySmall.color))
+                              color: Theme.of(context).textTheme.caption.color))
                     ]),
               ),
             ],
@@ -166,7 +166,7 @@ class _ReviewsDetailState extends State<ReviewsDetail> {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(
+              Container(
                 height: 150,
                 width: widthOfSummaryOverview,
                 child: Column(
@@ -176,12 +176,12 @@ class _ReviewsDetailState extends State<ReviewsDetail> {
                     RichText(
                       text: TextSpan(
                         text: widget.product.averageRating.toString(),
-                        style: Theme.of(context).textTheme.headlineSmall.copyWith(
+                        style: Theme.of(context).textTheme.headline5.copyWith(
                             fontSize: 28,
                             fontWeight: FontWeight.w800
                         ),
                         children: <TextSpan>[
-                          TextSpan(text: '/5', style: Theme.of(context).textTheme.titleMedium.copyWith(color: Colors.grey),),
+                          TextSpan(text: '/5', style: Theme.of(context).textTheme.subtitle1.copyWith(color: Colors.grey),),
                         ],
                       ),
                     ),
@@ -202,14 +202,14 @@ class _ReviewsDetailState extends State<ReviewsDetail> {
                     ),
                     Text(
                       '${snapshot.data.length} Ratings ',
-                      style: Theme.of(context).textTheme.titleMedium.copyWith(color: Colors.grey),),
+                      style: Theme.of(context).textTheme.subtitle1.copyWith(color: Colors.grey),),
                   ],
                 ),
               ),
               SizedBox(
                 width: 5,
               ),
-              SizedBox(
+              Container(
                   height: 120,
                   child: VerticalDivider(
                     thickness: 1,
@@ -278,19 +278,19 @@ class _ReviewsDetailState extends State<ReviewsDetail> {
                 children: [
                   Text(
                     '${fiveStars.floor()}',
-                    style: Theme.of(context).textTheme.titleSmall.copyWith(color: Colors.grey),),
+                    style: Theme.of(context).textTheme.subtitle2.copyWith(color: Colors.grey),),
                   Text(
                     '${fourStars.floor()}',
-                    style: Theme.of(context).textTheme.titleSmall.copyWith(color: Colors.grey),),
+                    style: Theme.of(context).textTheme.subtitle2.copyWith(color: Colors.grey),),
                   Text(
                     '${threeStars.floor()}',
-                    style: Theme.of(context).textTheme.titleSmall.copyWith(color: Colors.grey),),
+                    style: Theme.of(context).textTheme.subtitle2.copyWith(color: Colors.grey),),
                   Text(
                     '${twoStars.floor()}',
-                    style: Theme.of(context).textTheme.titleSmall.copyWith(color: Colors.grey),),
+                    style: Theme.of(context).textTheme.subtitle2.copyWith(color: Colors.grey),),
                   Text(
                     '${singleStars.floor()}',
-                    style: Theme.of(context).textTheme.titleSmall.copyWith(color: Colors.grey),),
+                    style: Theme.of(context).textTheme.subtitle2.copyWith(color: Colors.grey),),
                 ],
               ),
             ],
@@ -303,7 +303,8 @@ class _ReviewsDetailState extends State<ReviewsDetail> {
   Stack buildBarStack(int value, int count) {
     final width =MediaQuery.of(context).size.width-widthOfWholeSummary;
     return Stack(
-      clipBehavior: Clip.none, children: [
+      overflow: Overflow.visible,
+      children: [
         ClipRRect(
           borderRadius: BorderRadius.circular(4),
           child: Container(
@@ -329,7 +330,7 @@ class _ReviewsDetailState extends State<ReviewsDetail> {
   }
 
   Container buildStarRow(Color color1,Color color2,Color color3,Color color4,Color color5) {
-    return SizedBox(
+    return Container(
       width: widthOfStarRow,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,

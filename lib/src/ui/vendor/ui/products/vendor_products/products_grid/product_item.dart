@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api, must_be_immutable, deprecated_member_use
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -13,7 +15,7 @@ const double _minWidthPerColumn = 350.0 + _scaffoldPadding * 2;
 
 class ProductGrid extends StatefulWidget {
   final List<VendorProduct> products;
-  const ProductGrid({Key key, this.products}) : super(key: key);
+  const ProductGrid({super.key, required this.products});
   @override
   _ProductGridState createState() => _ProductGridState();
 }
@@ -64,9 +66,9 @@ class ProductItem extends StatelessWidget {
       decimalDigits: 2, name: AppStateModel().selectedCurrency);
 
   ProductItem({
-    Key key,
-    this.product,
-    this.onProductClick,
+    Key? key,
+    required this.product,
+    required this.onProductClick,
   }) : super(key: key);
 
   @override
@@ -160,8 +162,9 @@ class ProductItem extends StatelessWidget {
                               child: Text(
                                 '$percentOff% OFF',
                                 style: Theme.of(context)
-                                    .accentTextTheme
-                                    .body2
+                                    .textTheme
+                                    .bodyMedium
+                                    ?.copyWith(color: Theme.of(context).colorScheme.onSecondary)
                                     .copyWith(fontSize: 12.0),
                               ),
                             ),
@@ -171,7 +174,7 @@ class ProductItem extends StatelessWidget {
                 ],
               ),
             ),
-            SizedBox(
+            Container(
               width: detailsWidth,
               height: 160,
               child: Padding(
@@ -218,7 +221,8 @@ class ProductItem extends StatelessWidget {
                             Row(
                               children: <Widget>[
                                 Text(
-                                    (product.regularPrice.isNotEmpty)
+                                    (product.regularPrice != null &&
+                                            product.regularPrice.isNotEmpty)
                                         ? formatter
                                             .format(double.parse(product.regularPrice))
                                         : '',
@@ -262,7 +266,9 @@ class ProductItem extends StatelessWidget {
                                 children: <Widget>[
                                   SizedBox(width: 4.0),
                                   Text(
-                                      '(${product.ratingCount})',
+                                      '(' +
+                                          product.ratingCount.toString() +
+                                          ')',
                                       maxLines: 2,
                                       style: TextStyle(
                                         color: Theme.of(context)

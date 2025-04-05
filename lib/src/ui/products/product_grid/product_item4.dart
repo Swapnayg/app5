@@ -63,7 +63,7 @@ class ProductItem extends StatefulWidget {
   final crossAxisCount;
   final containerWidth;
 
-  const ProductItem({
+  ProductItem({
     Key key,
     this.product,
     this.crossAxisCount,
@@ -84,7 +84,7 @@ class _ProductItemState extends State<ProductItem> {
 
     int percentOff = 0;
 
-    if ((widget.product.salePrice != 0)) {
+    if ((widget.product.salePrice != null && widget.product.salePrice != 0)) {
       percentOff = (((widget.product.regularPrice - widget.product.salePrice) / widget.product.regularPrice) * 100).round();
     }
     bool onSale = false;
@@ -112,7 +112,7 @@ class _ProductItemState extends State<ProductItem> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
-                SizedBox(
+                Container(
                   height: widget.containerWidth/widget.crossAxisCount,
                   child: Stack(
                     children: <Widget>[
@@ -131,7 +131,7 @@ class _ProductItemState extends State<ProductItem> {
                         top: 0.0,
                         right: 0.0,
                         child: IconButton(
-                            icon: model.wishListIds.contains(widget.product.id) ? Icon(Icons.favorite, color: Theme.of(context).colorScheme.secondary) :
+                            icon: model.wishListIds.contains(widget.product.id) ? Icon(Icons.favorite, color: Theme.of(context).accentColor) :
                             Icon(Icons.favorite_border, color: Colors.black87),
                             onPressed: () {
                               if (!model.loggedIn) {
@@ -156,11 +156,11 @@ class _ProductItemState extends State<ProductItem> {
                           clipBehavior: Clip.antiAlias,
                           elevation: 0.0,
                           margin: EdgeInsets.all(0.0),
-                          color: Theme.of(context).colorScheme.secondary,
+                          color: Theme.of(context).accentColor,
                           child: percentOff != 0 ? Center(
                             child: Container(
                               padding: EdgeInsets.fromLTRB(8.0, 4.0, 8.0, 4.0),
-                              child: Text('-$percentOff%', style: Theme.of(context).accentTextTheme.bodyText1.copyWith(
+                              child: Text('-'+percentOff.toString() + '%', style: Theme.of(context).accentTextTheme.bodyText1.copyWith(
                                   fontSize: 12.0
                               ),),
                             ),
@@ -182,8 +182,8 @@ class _ProductItemState extends State<ProductItem> {
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                         textAlign: TextAlign.left,
-                        style: Theme.of(context).textTheme.bodyMedium.copyWith(
-                          color: Theme.of(context).textTheme.bodyMedium.color.withOpacity(0.6),
+                        style: Theme.of(context).textTheme.bodyText2.copyWith(
+                          color: Theme.of(context).textTheme.bodyText2.color.withOpacity(0.6),
                         ),
                       ),
                       SizedBox(height: 6.0),

@@ -1,6 +1,7 @@
+// ignore_for_file: use_super_parameters, library_private_types_in_public_api, avoid_print, deprecated_member_use, unused_local_variable
+
 import 'dart:async';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +15,7 @@ import '../../../../../models/vendor/vendor_details_model.dart';
 class VendorContacts1 extends StatefulWidget {
   final VendorDetailStateModel vendorDetailsBloc;
   final Store store;
-  const VendorContacts1({Key key, this.vendorDetailsBloc, this.store})
+  const VendorContacts1({Key? key, required this.vendorDetailsBloc, required this.store})
       : super(key: key);
   @override
   _VendorContacts1State createState() => _VendorContacts1State();
@@ -23,7 +24,7 @@ class VendorContacts1 extends StatefulWidget {
 class _VendorContacts1State extends State<VendorContacts1> {
   final Completer<GoogleMapController> _controller = Completer();
 
-  LatLng _lastMapPosition;
+  late LatLng _lastMapPosition;
   final Set<Marker> _markers = {};
   Config config = Config();
   AppStateModel appStateModel = AppStateModel();
@@ -34,7 +35,7 @@ class _VendorContacts1State extends State<VendorContacts1> {
     _controller.complete(controller);
   }
 
-  BitmapDescriptor pinLocationIcon;
+  late BitmapDescriptor pinLocationIcon;
   @override
   void initState() {
     super.initState();
@@ -53,7 +54,7 @@ class _VendorContacts1State extends State<VendorContacts1> {
     });
   }
 
-  Map contactData = Map<String, dynamic>();
+  Map contactData = <String, dynamic>{};
   final _formKey = GlobalKey<FormState>();
 
   TextEditingController nameController = TextEditingController();
@@ -89,7 +90,7 @@ class _VendorContacts1State extends State<VendorContacts1> {
                       target: _lastMapPosition,
                       zoom: 11.0,
                     ),
-                    gestureRecognizers: <dynamic>{}
+                    gestureRecognizers: Set()
                       ..add(Factory<PanGestureRecognizer>(
                               () => PanGestureRecognizer())),
                     scrollGesturesEnabled: true,
@@ -137,7 +138,7 @@ class _VendorContacts1State extends State<VendorContacts1> {
                         errorMaxLines: 1,
                       ),
                       validator: (value) {
-                        if (value.isEmpty) {
+                        if (value!.isEmpty) {
                           return '${appStateModel
                               .blocks.localeText.pleaseEnter} ${appStateModel.blocks.localeText.message}';
                         }
@@ -145,12 +146,12 @@ class _VendorContacts1State extends State<VendorContacts1> {
                       },
                     ),
                     SizedBox(height: 10.0),
-                    RaisedButton(
+                    ElevatedButton(
                       child: Text(appStateModel
                           .blocks.localeText.localeTextContinue),
                       onPressed: () {
-                        if (_formKey.currentState.validate()) {
-                          _formKey.currentState.save();
+                        if (_formKey.currentState!.validate()) {
+                          _formKey.currentState!.save();
                           contactData["name"] = nameController.text;
                           contactData["email"] = emailController.text;
                           contactData["phone"] = phoneController.text;
@@ -186,7 +187,7 @@ class _VendorContacts1State extends State<VendorContacts1> {
         labelText: name,
       ),
       validator: (value) {
-        if (value.isEmpty) {
+        if (value!.isEmpty) {
           return '${appStateModel.blocks.localeText.pleaseEnter} ${name.toLowerCase()}';
         }
         return null;
@@ -195,7 +196,7 @@ class _VendorContacts1State extends State<VendorContacts1> {
   }
 
   Container buildIcon(child) {
-    return SizedBox(
+    return Container(
       width: 30,
       height: 30,
       child: child,
@@ -204,11 +205,11 @@ class _VendorContacts1State extends State<VendorContacts1> {
 
   void _showThankYouDialogue() {
     showDialog(builder: (context) => AlertDialog(
-          title: new Text(appStateModel.blocks.localeText.thankYou),
-          content: new Text(appStateModel.blocks.localeText.thankYouForYourMessage),
+          title: Text(appStateModel.blocks.localeText.thankYou),
+          content: Text(appStateModel.blocks.localeText.thankYouForYourMessage),
           actions: <Widget>[
-            RaisedButton(
-                elevation: 0,
+            ElevatedButton(
+                style: ElevatedButton.styleFrom(elevation: 0),
                 child: Text(appStateModel.blocks.localeText.localeTextContinue),
                 onPressed: () {
                   Navigator.of(context).pop();

@@ -9,8 +9,6 @@ import './../../../../ui/color_override.dart';
 import 'theme_override.dart';
 
 class Register extends StatefulWidget {
-  const Register({super.key});
-
   @override
   _RegisterState createState() => _RegisterState();
 }
@@ -18,9 +16,9 @@ class Register extends StatefulWidget {
 class _RegisterState extends State<Register> {
   final _formKey = GlobalKey<FormState>();
   final appStateModel = AppStateModel();
-  var formData = Map<String, dynamic>();
+  var formData = new Map<String, dynamic>();
   final RoundedLoadingButtonController _btnController =
-      RoundedLoadingButtonController();
+      new RoundedLoadingButtonController();
 
   @override
   Widget build(BuildContext context) {
@@ -215,15 +213,6 @@ class _RegisterState extends State<Register> {
                             elevation: 0,
                             color: Color(0xfff7892b),
                             valueColor: Colors.white,
-                            controller: _btnController,
-                            onPressed: () {
-                              if (_formKey.currentState.validate()) {
-                                _formKey.currentState.save();
-                                _submit(context);
-                              }
-                            },
-                            animateOnTap: false,
-                            width: MediaQuery.of(context).size.width - 34,
                             child: Container(
                               alignment: Alignment.center,
                               height: 50,
@@ -252,6 +241,15 @@ class _RegisterState extends State<Register> {
                                 textAlign: TextAlign.center,
                               ),
                             ),
+                            controller: _btnController,
+                            onPressed: () {
+                              if (_formKey.currentState.validate()) {
+                                _formKey.currentState.save();
+                                _submit(context);
+                              }
+                            },
+                            animateOnTap: false,
+                            width: MediaQuery.of(context).size.width - 34,
                           ),
                           SizedBox(height: 10.0),
                           FlatButton(
@@ -265,7 +263,7 @@ class _RegisterState extends State<Register> {
                                   Text(appStateModel.blocks.localeText.alreadyHaveAnAccount,
                                       style: Theme.of(context)
                                           .textTheme
-                                          .bodyMedium
+                                          .bodyText2
                                           .copyWith(
                                             fontSize: 15,
                                           )),
@@ -275,7 +273,7 @@ class _RegisterState extends State<Register> {
                                     child: Text(appStateModel.blocks.localeText.signIn,
                                         style: Theme.of(context)
                                             .textTheme
-                                            .titleMedium
+                                            .subtitle1
                                             .copyWith(
                                                 color: Color(0xfff7892b),
                                                 fontWeight: FontWeight.w500)),
@@ -325,7 +323,7 @@ class _RegisterState extends State<Register> {
 
   onValidate(String value, String label) {
     if (value.isEmpty) {
-      return '$label ${appStateModel.blocks.localeText.isRequired}';
+      return label + ' ' + appStateModel.blocks.localeText.isRequired;
     }
     return null;
   }

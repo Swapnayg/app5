@@ -1,9 +1,11 @@
+// ignore_for_file: library_private_types_in_public_api, deprecated_member_use, avoid_unnecessary_containers
+
 import 'dart:async';
 import '../../../../models/app_state_model.dart';
 import '../../../../models/vendor/store_model.dart';
 import '../../../../models/vendor/search_store_state_model.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_icons/flutter_icons.dart';
+import 'package:flutter_font_icons/flutter_font_icons.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'store_list.dart';
@@ -42,7 +44,7 @@ class _SearchStoresState extends State<SearchStores> {
 
   _onSearchChanged() {
     widget.model.filter['search'] = inputController.text;
-    if (_debounce.isActive ?? false) _debounce.cancel();
+    if (_debounce.isActive) _debounce.cancel();
     _debounce = Timer(const Duration(milliseconds: 300), () {
       if(inputController.text.isNotEmpty) {
         widget.model.getAllStores();
@@ -52,7 +54,7 @@ class _SearchStoresState extends State<SearchStores> {
     });
   }
 
-  Timer _debounce;
+  late Timer _debounce;
 
   final ScrollController _scrollController = ScrollController();
   TextEditingController inputController = TextEditingController();
@@ -141,7 +143,7 @@ class _SearchStoresState extends State<SearchStores> {
                                 setState(() {});
                               },
                               child: Icon(
-                                FlutterIcons.ios_close_ion,
+                                Icons.close,
                                 size: 16,
                                 color: Theme.of(context).hintColor,
                               ))
@@ -159,7 +161,7 @@ class _SearchStoresState extends State<SearchStores> {
                 onTap: Navigator.of(context).pop,
                 child: Text(appStateModel.blocks.localeText.cancel,
                     style:
-                        Theme.of(context).primaryTextTheme.titleMedium.copyWith(
+                        Theme.of(context).primaryTextTheme.titleMedium?.copyWith(
                               color: Theme.of(context).primaryIconTheme.color,//Theme.of(context).hintColor,
                           )),
               ),
@@ -170,8 +172,8 @@ class _SearchStoresState extends State<SearchStores> {
 
   List<Widget> buildListOfBlocks(
       List<StoreModel> stores, SearchStoreStateModel model) {
-      List<Widget> list = List<Widget>();
-      list.add(StoresList(stores: stores));
+      List<Widget> list = [];
+      list.add(StoresList(key: UniqueKey(), stores: stores));
       list.add(SliverPadding(
           padding: EdgeInsets.all(0.0),
           sliver: SliverList(

@@ -18,7 +18,7 @@ class WishList extends StatefulWidget {
 
 class _WishListState extends State<WishList> {
   int index;
-  final ScrollController _scrollController = ScrollController();
+  ScrollController _scrollController = new ScrollController();
 
   @override
   void initState() {
@@ -44,7 +44,7 @@ class _WishListState extends State<WishList> {
             if (snapshot.hasData) {
               if (snapshot.data.length == 0) {
                 return Center(
-                  child: Text('${widget.appStateModel.blocks.localeText.noWishlist}!'),
+                  child: Text(widget.appStateModel.blocks.localeText.noWishlist+'!'),
                 );
               } else {
                 return CustomScrollView(
@@ -177,13 +177,13 @@ class _WishListState extends State<WishList> {
         padding: EdgeInsets.all(0.0),
         sliver: SliverList(
             delegate: SliverChildListDelegate([
-          SizedBox(
+          Container(
               height: 60,
               child: StreamBuilder(
                   stream: widget.wishListBloc.hasMoreWishlistItems,
                   builder: (context, AsyncSnapshot<bool> snapshot) {
                     return snapshot.hasData && snapshot.data == false
-                        ? Center(child: Text('${widget.appStateModel.blocks.localeText.noMoreWishlist}!'))
+                        ? Center(child: Text(widget.appStateModel.blocks.localeText.noMoreWishlist+'!'))
                         : Center(child: CircularProgressIndicator());
                   }
                   //child: Center(child: CircularProgressIndicator())
@@ -260,21 +260,21 @@ class ProductItem extends StatelessWidget {
         : screenWidth ~/ _minWidthPerColumn;
 
     double detailsWidth = (screenWidth / crossAxisCount) - 160;
-    if ((product.salePrice != 0)) {
+    if ((product.salePrice != null && product.salePrice != 0)) {
       percentOff = ((((product.regularPrice - product.salePrice) /
           product.regularPrice *
           100))
           .round());
     }
     bool onSale = false;
-    if (product.regularPrice.isNaN) {
+    if (product.regularPrice == null || product.regularPrice.isNaN) {
       product.regularPrice = product.price;
     }
-    if (product.salePrice != 0) {
+    if (product.salePrice != null && product.salePrice != 0) {
       onSale = true;
     }
     return InkWell(
-      splashColor: Theme.of(context).colorScheme.secondary.withOpacity(0.1),
+      splashColor: Theme.of(context).accentColor.withOpacity(0.1),
       onTap: () {
         onProductClick(product);
       },
@@ -328,14 +328,14 @@ class ProductItem extends StatelessWidget {
                       clipBehavior: Clip.antiAlias,
                       elevation: 0.0,
                       margin: EdgeInsets.all(0.0),
-                      color: Theme.of(context).colorScheme.secondary,
+                      color: Theme.of(context).accentColor,
                       child: percentOff != 0
                           ? Center(
                         child: Container(
                           padding: EdgeInsets.fromLTRB(
                               8.0, 4.0, 8.0, 4.0),
                           child: Text(
-                            '-$percentOff%',
+                            '-' + percentOff.toString() + '%',
                             style: Theme.of(context)
                                 .accentTextTheme
                                 .body2
@@ -350,7 +350,7 @@ class ProductItem extends StatelessWidget {
                 ],
               ),
             ),
-            SizedBox(
+            Container(
               width: detailsWidth,
               height: 130,
               child: Padding(
@@ -385,7 +385,7 @@ class ProductItem extends StatelessWidget {
                                     product.formattedSalesPrice)
                                     : '',
                                 style:
-                                Theme.of(context).textTheme.bodyText2.copyWith(
+                                Theme.of(context).textTheme.body1.copyWith(
                                   fontSize: 16,
                                   //fontWeight: FontWeight.w600,
                                   color: Theme.of(context)
@@ -396,7 +396,8 @@ class ProductItem extends StatelessWidget {
                                 ? SizedBox(width: 6.0)
                                 : SizedBox(width: 0.0),
                             Text(
-                                (product.formattedPrice.isNotEmpty)
+                                (product.formattedPrice != null &&
+                                    product.formattedPrice.isNotEmpty)
                                     ? parseHtmlString(product.formattedPrice)
                                     : '',
                                 style: TextStyle(

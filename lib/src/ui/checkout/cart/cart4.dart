@@ -25,7 +25,7 @@ class CartPage extends StatefulWidget {
 }
 
 class _CartPageState extends State<CartPage> {
-  final TextEditingController _couponCodeController = TextEditingController();
+  TextEditingController _couponCodeController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -53,7 +53,7 @@ class _CartPageState extends State<CartPage> {
       body: SafeArea(
         child: RefreshIndicator(
           onRefresh: () async {
-            widget.appStateModel.getCart();
+            await widget.appStateModel.getCart();
             widget.checkoutBloc.getCheckoutForm();
             return;
           },
@@ -62,11 +62,11 @@ class _CartPageState extends State<CartPage> {
               Expanded(
                 child: ScopedModelDescendant<AppStateModel>(
                     builder: (context, child, model) {
-                  if (model.shoppingCart.cartContents == null) {
+                  if (model.shoppingCart?.cartContents == null) {
                     return Center(
                       child: CircularProgressIndicator(),
                     );
-                  } else if (model.shoppingCart.cartContents.isNotEmpty) {
+                  } else if (model.shoppingCart.cartContents.length != 0) {
                     return buildCart(localTheme, model.shoppingCart);
                   } else {
                     return Stack(
@@ -85,6 +85,7 @@ class _CartPageState extends State<CartPage> {
                       ],
                     );
                   }
+                  ;
                 }),
               ),
             ],
@@ -115,7 +116,7 @@ class _CartPageState extends State<CartPage> {
                   key: _formKey,
                   child: TextFormField(
                     controller: _couponCodeController,
-                    decoration: InputDecoration(
+                    decoration: new InputDecoration(
                       errorStyle: TextStyle(
                         height: 0,
                       ),
@@ -197,11 +198,11 @@ class _CartPageState extends State<CartPage> {
                 Navigator.push(context,
                     MaterialPageRoute(builder: (context) => WebViewCheckout()));
               } else {
-                if(widget.appStateModel.blocks.settings.disableGuestCheckout == 1 && (widget.appStateModel.user.id == null || widget.appStateModel.user.id == 0)) {
+                if(widget.appStateModel.blocks.settings.disableGuestCheckout == 1 && (widget.appStateModel.user?.id == null || widget.appStateModel.user.id == 0)) {
                   await Navigator.push(context, MaterialPageRoute(builder: (context) =>
                       Login()
                   ));
-                  if(widget.appStateModel.user.id != null && widget.appStateModel.user.id > 0 ) {
+                  if(widget.appStateModel.user?.id != null && widget.appStateModel.user.id > 0 ) {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -224,25 +225,25 @@ class _CartPageState extends State<CartPage> {
   }
 
   setAddressCountry(CheckoutFormModel onData) {
-    if (onData.billingCountry.isNotEmpty) {
+    if (onData.billingCountry != null && onData.billingCountry.isNotEmpty) {
       widget.checkoutBloc.initialSelectedCountry = onData.billingCountry;
     }
-    if (onData.billingState.isNotEmpty) {
+    if (onData.billingState != null && onData.billingState.isNotEmpty) {
       List<CountryModel> countries =
           countryModelFromJson(JsonStrings.listOfSimpleObjects);
       CountryModel country =
           countries.singleWhere((item) => item.value == onData.billingCountry);
-      if (country.regions.any((item) => item.value == onData.billingState)) {
+      if (country.regions != null &&
+          country.regions.any((item) => item.value == onData.billingState)) {
         widget.checkoutBloc.formData['billing_state'] = onData.billingState;
-      } else {
+      } else
         widget.checkoutBloc.formData['billing_state'] = null;
-      }
     }
   }
 }
 
 class ShoppingCartSummary extends StatelessWidget {
-  const ShoppingCartSummary({super.key, 
+  const ShoppingCartSummary({
     @required this.cart,
     @required this.model,
   });
@@ -252,8 +253,8 @@ class ShoppingCartSummary extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final smallAmountStyle = Theme.of(context).textTheme.bodyMedium;
-    final largeAmountStyle = Theme.of(context).textTheme.titleLarge;
+    final smallAmountStyle = Theme.of(context).textTheme.bodyText2;
+    final largeAmountStyle = Theme.of(context).textTheme.headline6;
 
     var feeWidgets = List<Widget>();
     for (var fee in cart.cartFees) {
@@ -361,7 +362,7 @@ class ShoppingCartSummary extends StatelessWidget {
                     ),
                   ],
                 ),
-                feeWidgets.isNotEmpty
+                feeWidgets.length > 0
                     ? Column(
                         children: [
                           const SizedBox(height: 6.0),
@@ -371,7 +372,7 @@ class ShoppingCartSummary extends StatelessWidget {
                         ],
                       )
                     : Container(),
-                couponsWidgets.isNotEmpty
+                couponsWidgets.length > 0
                     ? Column(
                         children: [
                           const SizedBox(height: 6.0),
@@ -424,7 +425,7 @@ class ShoppingCartSummary extends StatelessWidget {
 }
 
 class ShoppingCartRow extends StatefulWidget {
-  ShoppingCartRow({super.key, @required this.product});
+  ShoppingCartRow({@required this.product});
 
   final CartContent product;
   final appStateModel = AppStateModel();
@@ -487,7 +488,7 @@ class _ShoppingCartRowState extends State<ShoppingCartRow> {
                 ],
               ),
             ),
-            SizedBox(
+            Container(
               width: detailsWidth,
               height: 120,
               child: Padding(
@@ -501,7 +502,7 @@ class _ShoppingCartRowState extends State<ShoppingCartRow> {
                       children: <Widget>[
                         Text(widget.product.name,
                             maxLines: 2,
-                            style: Theme.of(context).textTheme.bodyMedium),
+                            style: Theme.of(context).textTheme.bodyText2),
                         SizedBox(height: 4.0),
                         //TODO Product Oprions Or Variations
                         SizedBox(height: 4.0),
@@ -513,7 +514,7 @@ class _ShoppingCartRowState extends State<ShoppingCartRow> {
                                 parseHtmlString(
                                   widget.product.formattedPrice,
                                 ),
-                                style: Theme.of(context).textTheme.titleSmall)
+                                style: Theme.of(context).textTheme.subtitle2)
                           ],
                         ),
                         SizedBox(height: 4.0),
@@ -569,7 +570,7 @@ class _ShoppingCartRowState extends State<ShoppingCartRow> {
                                                     .toString(),
                                                 style: Theme.of(context)
                                                     .textTheme
-                                                    .titleSmall)),
+                                                    .subtitle2)),
                                     Container(
                                       width: 30,
                                       height: 30,

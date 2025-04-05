@@ -1,4 +1,6 @@
-import 'package:flutter/cupertino.dart';
+
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -15,10 +17,10 @@ class VariationProductList extends StatefulWidget {
   final VendorProduct product;
 
   const VariationProductList({
-    Key key,
-    this.vendorBloc,
-    this.product,
-  }) : super(key: key);
+    super.key,
+    required this.vendorBloc,
+    required this.product,
+  });
 
   @override
   _VariationProductListState createState() => _VariationProductListState();
@@ -77,9 +79,9 @@ class _VariationProductListState extends State<VariationProductList> {
         name: _appStateModel.selectedCurrency);
     var name = '';
 
-    for (var value in variationProduct.attributes) {
+    variationProduct.attributes.forEach((value) {
       name = '$name ${value.option}';
-    }
+    });
 
     return MergeSemantics(
       child: ListTile(
@@ -133,17 +135,17 @@ class _VariationProductListState extends State<VariationProductList> {
       (BuildContext context, int index) {
         return Column(
           children: <Widget>[
-            buildListTile(context, snapshot.data[index]),
+            buildListTile(context, snapshot.data![index]),
             Divider(height: 0.0),
           ],
         );
       },
-      childCount: snapshot.data.length,
+      childCount: snapshot.data?.length,
     ));
   }
 
   buildList(AsyncSnapshot<List<ProductVariation>> snapshot) {
-    List<Widget> list = List<Widget>();
+    List<Widget> list = [];
     list.add(buildItemList(snapshot));
     if (snapshot.data != null) {
       list.add(SliverPadding(
@@ -153,7 +155,7 @@ class _VariationProductListState extends State<VariationProductList> {
             SizedBox(
                 height: 60,
                 child: StreamBuilder(
-                    // stream: widget.vendorBloc.hasMoreProducts,
+                    stream: widget.vendorBloc.hasMoreProducts,
                     builder: (context, AsyncSnapshot<bool> snapshot) {
                   return snapshot.hasData && snapshot.data == false
                       ? Center(

@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api, unused_field, avoid_unnecessary_containers
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -13,20 +15,22 @@ class ProductItem extends StatefulWidget {
   final VendorProduct product;
   final Order order;
   final ProductVariation variation;
-  const ProductItem({Key key, this.vendorBloc, this.product, this.order,this.variation})
-      : super(key: key);
+  const ProductItem({super.key, required this.vendorBloc, required this.product, required this.order, required this.variation});
   @override
   _ProductItemState createState() => _ProductItemState();
 }
 
 class _ProductItemState extends State<ProductItem> {
   final AppStateModel _appStateModel = AppStateModel();
-  NumberFormat formatter;
+  late NumberFormat formatter;
   var qty = 0;
+  late ProductVariation variation;
 
   @override
   void initState() {
-    super.initState();
+    formatter = NumberFormat.currency(symbol: '\$', decimalDigits: 2); // Initialize formatter
+    variation = widget.variation ?? ProductVariation.empty;
+    formatter = NumberFormat.currency(symbol: '\$', decimalDigits: 2); // Initialize formatter
     widget.vendorBloc.getVariationProducts(widget.product.id);
   }
 
@@ -51,7 +55,7 @@ class _ProductItemState extends State<ProductItem> {
           Container(
             padding: EdgeInsets.all(10.0),
             height: 130,
-            child: ListTile(
+            child: new ListTile(
                 leading: AspectRatio(
                   aspectRatio: 18.0 / 20,
                   child: Image.network(
@@ -59,9 +63,9 @@ class _ProductItemState extends State<ProductItem> {
                     fit: BoxFit.cover,
                   ),
                 ),
-                //TODO ADD Plus minus button if product is already there in order lineitems
+                
 
-                title: Text(
+                title: new Text(
                   widget.product.name,
                 ),
                 subtitle: Column(
@@ -79,14 +83,14 @@ class _ProductItemState extends State<ProductItem> {
                                 IconButton(
                                     icon: Icon(Icons.remove_circle_outline),
                                     onPressed: () {
-                                      //TODO for decrease qty and if qty is 0 remove line item
+                                      
                                       _decreaseQty();
                                     }),
                                 Text(qty.toString()),
                                 IconButton(
                                     icon: Icon(Icons.add_circle_outline),
                                     onPressed: () {
-                                      //TODO Containe? increase qty : Add line item
+                                     
                                       _increaseQty();
                                     }),
                               ],

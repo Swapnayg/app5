@@ -24,16 +24,16 @@ class DeliveryTime {
   List<Slot> slots;
 
   factory DeliveryTime.fromJson(Map<String, dynamic> json) => DeliveryTime(
-    success: json["success"],
-    reservation: json["reservation"],
-    html: json["html"],
+    success: json["success"] == null ? null : json["success"],
+    reservation: json["reservation"] == null ? null : json["reservation"],
+    html: json["html"] == null ? null : json["html"],
     slots: json["slots"] == null ? null : List<Slot>.from(json["slots"].map((x) => Slot.fromJson(x))),
   );
 
   Map<String, dynamic> toJson() => {
-    "success": success,
-    "reservation": reservation,
-    "html": html,
+    "success": success == null ? null : success,
+    "reservation": reservation == null ? null : reservation,
+    "html": html == null ? null : html,
     "slots": slots == null ? null : List<dynamic>.from(slots.map((x) => x.toJson())),
   };
 }
@@ -72,33 +72,33 @@ class Slot {
   factory Slot.fromJson(Map<String, dynamic> json) => Slot(
     timefrom: json["timefrom"] == null ? null : Time.fromJson(json["timefrom"]),
     timeto: json["timeto"] == null ? null : Time.fromJson(json["timeto"]),
-    cutoff: json["cutoff"],
-    lockout: json["lockout"],
+    cutoff: json["cutoff"] == null ? null : json["cutoff"],
+    lockout: json["lockout"] == null ? null : json["lockout"],
     shippingMethods: json["shipping_methods"] == null ? null : List<String>.from(json["shipping_methods"].map((x) => x)),
     fee: json["fee"] == null ? null : Fee.fromJson(json["fee"]),
     days: json["days"] == null ? null : List<String>.from(json["days"].map((x) => x)),
-    id: json["id"],
-    timeId: json["time_id"],
-    formatted: json["formatted"],
-    formattedWithFee: json["formatted_with_fee"],
-    value: json["value"],
-    slotId: json["slot_id"],
+    id: json["id"] == null ? null : json["id"],
+    timeId: json["time_id"] == null ? null : json["time_id"],
+    formatted: json["formatted"] == null ? null : json["formatted"],
+    formattedWithFee: json["formatted_with_fee"] == null ? null : json["formatted_with_fee"],
+    value: json["value"] == null ? null : json["value"],
+    slotId: json["slot_id"] == null ? null : json["slot_id"],
   );
 
   Map<String, dynamic> toJson() => {
-    "timefrom": timefrom?.toJson(),
-    "timeto": timeto?.toJson(),
-    "cutoff": cutoff,
-    "lockout": lockout,
+    "timefrom": timefrom == null ? null : timefrom.toJson(),
+    "timeto": timeto == null ? null : timeto.toJson(),
+    "cutoff": cutoff == null ? null : cutoff,
+    "lockout": lockout == null ? null : lockout,
     "shipping_methods": shippingMethods == null ? null : List<dynamic>.from(shippingMethods.map((x) => x)),
-    "fee": fee?.toJson(),
+    "fee": fee == null ? null : fee.toJson(),
     "days": days == null ? null : List<dynamic>.from(days.map((x) => x)),
-    "id": id,
-    "time_id": timeId,
-    "formatted": formatted,
-    "formatted_with_fee": formattedWithFee,
-    "value": value,
-    "slot_id": slotId,
+    "id": id == null ? null : id,
+    "time_id": timeId == null ? null : timeId,
+    "formatted": formatted == null ? null : formatted,
+    "formatted_with_fee": formattedWithFee == null ? null : formattedWithFee,
+    "value": value == null ? null : value,
+    "slot_id": slotId == null ? null : slotId,
   };
 }
 
@@ -112,13 +112,13 @@ class Fee {
   String formatted;
 
   factory Fee.fromJson(Map<String, dynamic> json) => Fee(
-    value: json["value"],
-    formatted: json["formatted"],
+    value: json["value"] == null ? null : json["value"],
+    formatted: json["formatted"] == null ? null : json["formatted"],
   );
 
   Map<String, dynamic> toJson() => {
-    "value": value,
-    "formatted": formatted,
+    "value": value == null ? null : value,
+    "formatted": formatted == null ? null : formatted,
   };
 }
 
@@ -132,13 +132,13 @@ class Time {
   String stripped;
 
   factory Time.fromJson(Map<String, dynamic> json) => Time(
-    time: json["time"],
-    stripped: json["stripped"],
+    time: json["time"] == null ? null : json["time"],
+    stripped: json["stripped"] == null ? null : json["stripped"],
   );
 
   Map<String, dynamic> toJson() => {
-    "time": time,
-    "stripped": stripped,
+    "time": time == null ? null : time,
+    "stripped": stripped == null ? null : stripped,
   };
 }
 
@@ -156,12 +156,12 @@ class DeliveryDate {
   List<String> bookableDates;
 
   factory DeliveryDate.fromJson(Map<String, dynamic> json) => DeliveryDate(
-    success: json["success"],
+    success: json["success"] == null ? null : json["success"],
     bookableDates: json["bookable_dates"] == null ? null : List<String>.from(json["bookable_dates"].map((x) => x)),
   );
 
   Map<String, dynamic> toJson() => {
-    "success": success,
+    "success": success == null ? null : success,
     "bookable_dates": bookableDates == null ? null : List<dynamic>.from(bookableDates.map((x) => x)),
   };
 }

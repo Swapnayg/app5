@@ -45,23 +45,23 @@ class _GroupedProductState extends State<GroupedProduct> {
           children: <Widget>[
             IconButton(
               padding: EdgeInsets.all(0.0),
-              icon: Icon(Icons.add_circle_outline, color: Theme.of(context).textTheme.bodyLarge.color.withOpacity(0.6)),
+              icon: Icon(Icons.add_circle_outline, color: Theme.of(context).textTheme.bodyText1.color.withOpacity(0.6)),
               //tooltip: 'Increase quantity by 1',
               onPressed: () {
                 increaseQty();
               },
             ),
             isLoading ? SizedBox(
+              child: CircularProgressIndicator(strokeWidth: 2),
               height: 20.0,
               width: 20.0,
-              child: CircularProgressIndicator(strokeWidth: 2),
             ) :  SizedBox(
               width: 20.0,
               child: Text(getQty().toString(), textAlign: TextAlign.center,),
             ),
             IconButton(
               padding: EdgeInsets.all(0.0),
-              icon: Icon(Icons.remove_circle_outline, color: Theme.of(context).textTheme.bodyLarge.color.withOpacity(0.6)),
+              icon: Icon(Icons.remove_circle_outline, color: Theme.of(context).textTheme.bodyText1.color.withOpacity(0.6)),
               //tooltip: 'Decrease quantity by 1',
               onPressed: () {
                 decreaseQty();
@@ -83,24 +83,24 @@ class _GroupedProductState extends State<GroupedProduct> {
   }
 
   Container leadingIcon() {
-    return SizedBox(
+    return Container(
       width: 30,
       height: 30,
       child: CachedNetworkImage(
-        imageUrl: widget.product.images[0].src ?? '',
+        imageUrl: widget.product.images[0].src != null ? widget.product.images[0].src : '',
         imageBuilder: (context, imageProvider) => Card(
           clipBehavior: Clip.antiAlias,
           elevation: 0.0,
           margin: EdgeInsets.all(0.0),
           //shape: StadiumBorder(),
           child: Ink.image(
-            image: imageProvider,
-            fit: BoxFit.cover,
             child: InkWell(
               onTap: () {
                 //onCategoryClick(category);
               },
             ),
+            image: imageProvider,
+            fit: BoxFit.cover,
           ),
         ),
         placeholder: (context, url) => Card(
@@ -118,10 +118,10 @@ class _GroupedProductState extends State<GroupedProduct> {
   }
 
   addToCart(BuildContext context) async {
-    var data = <String, dynamic>{};
+    var data = new Map<String, dynamic>();
     data['product_id'] = widget.id.toString();
     data['add-to-cart'] = widget.id.toString();
-    data['quantity[${widget.product.id}]'] = '1';
+    data['quantity[' + widget.product.id.toString() + ']'] = '1';
     setState(() {
       isLoading = true;
     });
@@ -132,7 +132,7 @@ class _GroupedProductState extends State<GroupedProduct> {
   }
 
   decreaseQty() async {
-    if (widget.model.shoppingCart.cartContents != null) {
+    if (widget.model.shoppingCart?.cartContents != null) {
       if (widget.model.shoppingCart.cartContents
           .any((cartContent) => cartContent.productId == widget.product.id)) {
         final cartContent = widget.model.shoppingCart.cartContents
@@ -149,7 +149,7 @@ class _GroupedProductState extends State<GroupedProduct> {
   }
 
   increaseQty() async {
-    if (widget.model.shoppingCart.cartContents != null) {
+    if (widget.model.shoppingCart?.cartContents != null) {
       if (widget.model.shoppingCart.cartContents
           .any((cartContent) => cartContent.productId == widget.product.id)) {
         final cartContent = widget.model.shoppingCart.cartContents
@@ -169,17 +169,15 @@ class _GroupedProductState extends State<GroupedProduct> {
     var count = 0;
     if(widget.model.shoppingCart.cartContents.any((element) => element.productId == widget.product.id)) {
       return widget.model.shoppingCart.cartContents.firstWhere((element) => element.productId == widget.product.id).quantity;
-    } else {
-      return count;
-    }
+    } else return count;
   }
 
   _variationPrice() {
-    if(widget.product.formattedSalesPrice == null) {
+    if(widget.product.formattedPrice != null && widget.product.formattedSalesPrice == null) {
       return Text(parseHtmlString(widget.product.formattedPrice), style: TextStyle(
         fontWeight: FontWeight.bold,
       ));
-    } else if(widget.product.formattedSalesPrice != null) {
+    } else if(widget.product.formattedPrice != null && widget.product.formattedSalesPrice != null) {
       return Row(
         children: [
           Text(parseHtmlString(widget.product.formattedSalesPrice), style: TextStyle(

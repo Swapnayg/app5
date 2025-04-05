@@ -1,3 +1,5 @@
+// ignore_for_file: unnecessary_new
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -12,14 +14,14 @@ class BaseTextField extends StatelessWidget {
   final String initialValue;
 
   const BaseTextField({super.key, 
-    this.suffix,
-    this.labelText,
-    this.hintText,
-    this.inputFormatters,
-    this.onSaved,
-    this.validator,
-    this.controller,
-    this.initialValue,
+    required this.suffix,
+    required this.labelText,
+    required this.hintText,
+    required this.inputFormatters,
+    required this.onSaved,
+    required this.validator,
+    required this.controller,
+    required this.initialValue,
   });
 
   @override
@@ -32,12 +34,10 @@ class BaseTextField extends StatelessWidget {
       maxLines: 1,
       initialValue: initialValue,
       keyboardType: TextInputType.number,
-      decoration: InputDecoration(
+      decoration: new InputDecoration(
         labelText: labelText,
         labelStyle: const TextStyle(color: Colors.grey, fontSize: 14.0),
-        suffixIcon: suffix == null
-            ? null
-            : Padding(
+        suffixIcon: Padding(
           padding: const EdgeInsetsDirectional.only(end: 12.0),
           child: suffix,
         ),

@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 class SearchInput extends StatefulWidget {
   final ValueChanged<String> onSearchInput;
 
-  const SearchInput(this.onSearchInput, {super.key});
+  SearchInput(this.onSearchInput);
 
   @override
   State<StatefulWidget> createState() => SearchInputState();
@@ -24,30 +24,30 @@ class SearchInputState extends State<SearchInput> {
   @override
   void initState() {
     super.initState();
-    editController.addListener(onSearchInputChange);
+    this.editController.addListener(this.onSearchInputChange);
   }
 
   @override
   void dispose() {
-    editController.removeListener(onSearchInputChange);
-    editController.dispose();
+    this.editController.removeListener(this.onSearchInputChange);
+    this.editController.dispose();
 
     super.dispose();
   }
 
   void onSearchInputChange() {
-    if (editController.text.isEmpty) {
-      debouncer.cancel();
-      widget.onSearchInput(editController.text);
+    if (this.editController.text.isEmpty) {
+      this.debouncer?.cancel();
+      widget.onSearchInput(this.editController.text);
       return;
     }
 
-    if (debouncer.isActive ?? false) {
-      debouncer.cancel();
+    if (this.debouncer?.isActive ?? false) {
+      this.debouncer.cancel();
     }
 
-    debouncer = Timer(Duration(milliseconds: 500), () {
-      widget.onSearchInput(editController.text);
+    this.debouncer = Timer(Duration(milliseconds: 500), () {
+      widget.onSearchInput(this.editController.text);
     });
   }
 
@@ -55,10 +55,6 @@ class SearchInputState extends State<SearchInput> {
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 0),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(16),
-        color: Theme.of(context).canvasColor,
-      ),
       child: Row(
         children: <Widget>[
           //Icon(Icons.search, color: Theme.of(context).textTheme.body1.color),
@@ -89,6 +85,10 @@ class SearchInputState extends State<SearchInput> {
               },
             ),
         ],
+      ),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(16),
+        color: Theme.of(context).canvasColor,
       ),
     );
   }

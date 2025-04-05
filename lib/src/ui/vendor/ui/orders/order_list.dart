@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_typing_uninitialized_variables, use_super_parameters, library_private_types_in_public_api, prefer_interpolation_to_compose_strings
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -10,7 +12,7 @@ class VendorOrderList extends StatefulWidget {
  final vendorBloc = VendorBloc();
  final vendorId;
  final appStateModel = AppStateModel();
-  VendorOrderList({Key key, this.vendorId}) : super(key: key);
+  VendorOrderList({Key? key, this.vendorId}) : super(key: key);
   @override
   _VendorOrderListState createState() => _VendorOrderListState();
 }
@@ -60,7 +62,8 @@ class _VendorOrderListState extends State<VendorOrderList> {
           stream: widget.vendorBloc.allOrders,
           builder: (context, AsyncSnapshot<List<Order>> snapshot) {
             if (snapshot.hasData) {
-              if (snapshot.data.length == 0) {
+              // ignore: prefer_is_empty
+              if (snapshot.data?.length == 0) {
                 return Center(
                     child: Text(widget.appStateModel.blocks.localeText.noOrders));
               } else {
@@ -87,16 +90,16 @@ class _VendorOrderListState extends State<VendorOrderList> {
         delegate: SliverChildBuilderDelegate(
           (BuildContext context, int index) {
             final NumberFormat formatter = NumberFormat.currency(
-                decimalDigits: snapshot.data[index].decimals,
+                decimalDigits: snapshot.data?[index].decimals,
                 locale: Localizations.localeOf(context).toString(),
-                name: snapshot.data[index].currency);
+                name: snapshot.data?[index].currency);
             return Padding(
               padding: const EdgeInsets.symmetric(vertical: 4.0),
               child: Card(
                 elevation: 0.5,
                   child: InkWell(
                     borderRadius: BorderRadius.circular(4.0),
-                    onTap: () => openDetailPage(snapshot.data, index),
+                    onTap: () => openDetailPage(snapshot.data ?? [], index),
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: ListTile(
@@ -104,14 +107,15 @@ class _VendorOrderListState extends State<VendorOrderList> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
                              Text(
-                               "ORDER" '-' +
-                                    snapshot.data[index].number.toString(),
+                               "ORDER" +
+                                    '-' +
+                                    snapshot.data![index].number.toString(),
                                 style: Theme.of(context).textTheme.bodyLarge,
                               ),
 
                              Text(
                                 formatter.format(double.parse(
-                                  snapshot.data[index].total,
+                                  snapshot.data![index].total,
                                 )),
                                 style: Theme.of(context).textTheme.bodyLarge,
                               ),
@@ -123,21 +127,21 @@ class _VendorOrderListState extends State<VendorOrderList> {
                               SizedBox(
                                 height: 5,
                               ),
-                              Text(snapshot.data[index].status.toUpperCase(), style: Theme.of(context).textTheme.subtitle2.copyWith(
-                                color: getColor(snapshot.data[index].status)
+                              Text(snapshot.data![index].status.toUpperCase(), style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                                color: getColor(snapshot.data![index].status)
                               )),
                               SizedBox(
                                 height: 5,
                               ),
                               Text(formatter1
-                                  .format(snapshot.data[index].dateCreated)),
+                                  .format(snapshot.data![index].dateCreated)),
                             ],
                           )),
                     ),
                   )),
             );
           },
-          childCount: snapshot.data.length,
+          childCount: snapshot.data?.length,
         ),
       ),
     );
@@ -172,7 +176,6 @@ class _VendorOrderListState extends State<VendorOrderList> {
         return Colors.redAccent;
       case 'on-hold':
         return Colors.amber;
-      break;
     }
 
   }

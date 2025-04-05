@@ -7,7 +7,7 @@ import '../models/product_model.dart';
 class ProductsBloc {
   Map<String, List<Product>> products;
   var productsPage = <String, int>{};
-  List<AttributesModel> attributes;
+  late List<AttributesModel> attributes;
   var productsFilter = <String, dynamic>{};
 
   final apiProvider = ApiProvider();
@@ -16,7 +16,7 @@ class ProductsBloc {
   final _hasMoreItemsFetcher = BehaviorSubject<bool>();
   final _isLoadingProductsFetcher = BehaviorSubject<bool>();
 
-  ProductsBloc() : products = <String, List<Product>>{};
+  ProductsBloc() : products = Map() {}
 
   //String search="";
 
@@ -31,8 +31,8 @@ class ProductsBloc {
     productsPage[id] = 1;
     _hasMoreItemsFetcher.sink.add(true);
     if (products.containsKey(id) &&
-        products[id].isNotEmpty) {
-      _productsFetcher.sink.add(products[id]);
+        products[id]!.isNotEmpty) {
+      _productsFetcher.sink.add(products[id]!);
       _hasMoreItemsFetcher.sink.add(false);
     } else {
       _productsFetcher.sink.add([]);
@@ -41,9 +41,9 @@ class ProductsBloc {
       _isLoadingProductsFetcher.sink.add(true);
       List<Product> newProducts =
       await apiProvider.fetchProductList(productsFilter);
-      products[id].addAll(newProducts);
+      products[id]?.addAll(newProducts);
       if(productsFilter['id'] == id.toString()) {
-        _productsFetcher.sink.add(products[id]);
+        _productsFetcher.sink.add(products[id]!);
       }
       _isLoadingProductsFetcher.sink.add(false);
       if (newProducts.length < 10) {
@@ -57,12 +57,12 @@ class ProductsBloc {
   }
 
   loadMore(String id) async {
-    productsPage[id] = productsPage[id] + 1;
+    productsPage[id] = (productsPage[id] ?? 0) + 1;
     productsFilter['page'] = productsPage[id].toString();
     List<Product> moreProducts =
     await apiProvider.fetchProductList(productsFilter);
-    products[id].addAll(moreProducts);
-    _productsFetcher.sink.add(products[id]);
+    products[id]?.addAll(moreProducts);
+    _productsFetcher.sink.add(products[id]!);
     if (moreProducts.length < 10) {
       _hasMoreItemsFetcher.sink.add(false);
     }
@@ -99,7 +99,7 @@ class ProductsBloc {
 
   void applyFilter(int id, double minPrice, double maxPrice) {
     if (products[productsFilter['id']] != null) {
-      products[productsFilter['id']].clear();
+      products[productsFilter['id']]?.clear();
     }
 
     //filter = new Map<String, dynamic>();
@@ -110,9 +110,9 @@ class ProductsBloc {
     for (var i = 0; i < attributes.length; i++) {
       for (var j = 0; j < attributes[i].terms.length; j++) {
         if (attributes[i].terms[j].selected) {
-          productsFilter['attribute_term' + j.toString()] =
+          productsFilter['attribute_term$j'] =
               attributes[i].terms[j].termId.toString();
-          productsFilter['attributes' + j.toString()] =
+          productsFilter['attributes$j'] =
               attributes[i].terms[j].taxonomy;
         }
       }

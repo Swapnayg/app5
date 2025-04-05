@@ -28,7 +28,7 @@ class _OTPVerificationState extends State<OTPVerification> {
   final appStateModel = AppStateModel();
   final _formKey = GlobalKey<FormState>();
   var isLoading = false;
-  TextEditingController otpController = TextEditingController();
+  TextEditingController otpController = new TextEditingController();
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   StreamController<ErrorAnimationType> errorController;
@@ -55,9 +55,9 @@ class _OTPVerificationState extends State<OTPVerification> {
           children: [
             Container(
               margin: const EdgeInsets.only(left: 24.0, right: 24.0),
-              child: Form(
+              child: new Form(
                 key: _formKey,
-                child: Column(
+                child: new Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     SizedBox(
@@ -142,7 +142,7 @@ class _OTPVerificationState extends State<OTPVerification> {
                         },
                         child: Text(
                             appStateModel.blocks.localeText.resendOTP,
-                            style: Theme.of(context).textTheme.bodyMedium.copyWith(
+                            style: Theme.of(context).textTheme.bodyText2.copyWith(
                                 fontSize: 15,
                                 color: Colors.grey
                             ))),
@@ -163,7 +163,7 @@ class _OTPVerificationState extends State<OTPVerification> {
     });
 
     //Server end verification
-    var data = <String, dynamic>{};
+    var data = new Map<String, dynamic>();
     data["smsOTP"] = otpController.text;
     data["verificationId"] = widget.verificationId;
     data["phoneNumber"] = widget.phoneNumber;
@@ -247,11 +247,11 @@ class _OTPVerificationState extends State<OTPVerification> {
   handlePhoneNumberError(FirebaseAuthException error, BuildContext context) {
     switch (error.code) {
       case 'TOO_LONG':
-        FocusScope.of(context).requestFocus(FocusNode());
+        FocusScope.of(context).requestFocus(new FocusNode());
         showSnackBar(context, appStateModel.blocks.localeText.inValidNumber);
         break;
       case 'TOO_SHORT':
-        FocusScope.of(context).requestFocus(FocusNode());
+        FocusScope.of(context).requestFocus(new FocusNode());
         showSnackBar(context, appStateModel.blocks.localeText.inValidNumber);
         Navigator.of(context).pop();
         break;

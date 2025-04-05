@@ -1,3 +1,5 @@
+// ignore_for_file: unused_local_variable, must_be_immutable, unnecessary_null_comparison, avoid_print
+
 import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
@@ -13,7 +15,7 @@ const double _minWidthPerColumn = 350.0 + _scaffoldPadding * 2;
 
 class StoresList7 extends StatelessWidget {
   final List<StoreModel> stores;
-  const StoresList7({Key key, this.stores}) : super(key: key);
+  const StoresList7({ super.key, required this.stores});
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
@@ -38,7 +40,7 @@ class StoreCard extends StatelessWidget {
   AppStateModel appStateModel = AppStateModel();
   final StoreModel store;
   final int index;
-  StoreCard({Key key, this.store, this.index}) : super(key: key);
+  StoreCard({super.key, required this.store, required this.index});
   @override
   Widget build(BuildContext context) {
     Widget featuredImage = store.banner != null
@@ -148,6 +150,7 @@ class StoreCard extends StatelessWidget {
   openDetails(StoreModel store, BuildContext context) {
     Navigator.push(context, MaterialPageRoute(builder: (context) {
       return VendorDetails(
+        key: Key(store.id.toString()),
         vendorId: store.id.toString(),
       );
     }));

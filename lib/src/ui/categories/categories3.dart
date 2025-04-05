@@ -9,8 +9,6 @@ import '../../models/category_model.dart';
 import '../products/products.dart';
 
 class Categories3 extends StatefulWidget {
-  const Categories3({super.key});
-
   @override
   _Categories3State createState() => _Categories3State();
 }
@@ -25,7 +23,7 @@ class _Categories3State extends State<Categories3> {
   AppStateModel appStateModel = AppStateModel();
 
   void onCategoryClick(Category category) {
-    var filter = <String, dynamic>{};
+    var filter = new Map<String, dynamic>();
     filter['id'] = category.id.toString();
     Navigator.push(
         context,
@@ -76,7 +74,7 @@ class CategoryRow extends StatelessWidget {
   final Category category;
   final void Function(Category category) onCategoryClick;
 
-  const CategoryRow({super.key, this.category, this.onCategoryClick});
+  CategoryRow({this.category, this.onCategoryClick});
 
   @override
   Widget build(BuildContext context) {
@@ -87,7 +85,7 @@ class CategoryRow extends StatelessWidget {
       onTap: () {
         onCategoryClick(category);
       },
-      leading: SizedBox(
+      leading: Container(
         width: 60,
         height: 60,
         child: CachedNetworkImage(
@@ -99,13 +97,13 @@ class CategoryRow extends StatelessWidget {
               borderRadius: BorderRadius.circular(0.0),
             ),
             child: Ink.image(
-              image: imageProvider,
-              fit: BoxFit.cover,
               child: InkWell(
                 onTap: () {
                   onCategoryClick(category);
                 },
               ),
+              image: imageProvider,
+              fit: BoxFit.cover,
             ),
           ),
           placeholder: (context, url) => Card(

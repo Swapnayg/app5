@@ -1,3 +1,5 @@
+// ignore_for_file: no_leading_underscores_for_local_identifiers, avoid_print
+
 import 'dart:io';
 
 import 'package:firebase_storage/firebase_storage.dart';
@@ -6,8 +8,8 @@ import 'package:path/path.dart';
 class CloudStorageService {
   static CloudStorageService instance = CloudStorageService();
 
-  FirebaseStorage _storage;
-  StorageReference _baseRef;
+  late FirebaseStorage _storage;
+  late Reference _baseRef;
 
   final String _profileImages = "profile_images";
   final String _messages = "messages";
@@ -18,32 +20,34 @@ class CloudStorageService {
     _baseRef = _storage.ref();
   }
 
-  Future<StorageTaskSnapshot> uploadUserImage(String uid, File image) {
+  Future<TaskSnapshot> uploadUserImage(String _uid, File _image) {
     try {
       return _baseRef
           .child(_profileImages)
-          .child(uid)
-          .putFile(image)
-          .onComplete;
+          .child(_uid)
+          .putFile(_image)
+          .whenComplete(() => print("Upload complete"));
     } catch (e) {
       print(e);
+      throw Exception("Failed to upload user image: $e");
     }
   }
 
-  Future<StorageTaskSnapshot> uploadMediaMessage(String uid, File file) {
-    var timestamp = DateTime.now();
-    var fileName = basename(file.path);
-    fileName += "_${timestamp.toString()}";
+  Future<TaskSnapshot> uploadMediaMessage(String _uid, File _file) {
+    var _timestamp = DateTime.now();
+    var _fileName = basename(_file.path);
+    _fileName += "_${_timestamp.toString()}";
     try {
       return _baseRef
           .child(_messages)
-          .child(uid)
+          .child(_uid)
           .child(_images)
-          .child(fileName)
-          .putFile(file)
-          .onComplete;
+          .child(_fileName)
+          .putFile(_file)
+          .whenComplete(() => print("Upload complete"));
     } catch (e) {
       print(e);
+      throw Exception("Failed to upload media message: $e");
     }
   }
 }

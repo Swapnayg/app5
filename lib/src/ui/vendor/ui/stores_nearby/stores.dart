@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api, unnecessary_null_comparison, unnecessary_new
+
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../../../../models/app_state_model.dart';
 import 'store_list.dart';
@@ -12,7 +14,7 @@ class Stores extends StatefulWidget {
   final Map<String, dynamic> filter;
   final StoreStateModel model = StoreStateModel();
 
-  Stores({Key key, this.filter}) : super(key: key);
+  Stores({required Key key, required this.filter}) : super(key: key);
   @override
   _StoresState createState() => _StoresState();
 }
@@ -23,7 +25,7 @@ class _StoresState extends State<Stores> {
   @override
   void initState() {
     super.initState();
-    widget.model.filter = widget.filter;
+    widget.model.filter = widget.filter.cast<String, String>();
       widget.model.getAllStores();
     _scrollController.addListener(_loadMoreItems);
   }
@@ -70,10 +72,10 @@ class _StoresState extends State<Stores> {
 
   List<Widget> buildListOfBlocks(
       List<StoreModel> stores, StoreStateModel model) {
-    List<Widget> list = List<Widget>();
+    List<Widget> list = List<Widget>.empty(growable: true);
 
     if(stores.isNotEmpty) {
-      list.add(StoresList(stores: stores));
+      list.add(StoresList(key: UniqueKey(), stores: stores));
     }
 
     list.add(SliverPadding(
@@ -81,7 +83,7 @@ class _StoresState extends State<Stores> {
         sliver: SliverList(
             delegate: SliverChildListDelegate([
           model.hasMoreItems
-              ? SizedBox(
+              ? Container(
                   height: 60, child: Center(child: CircularProgressIndicator()))
               : Container()
         ]))));

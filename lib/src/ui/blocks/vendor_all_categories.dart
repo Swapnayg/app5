@@ -17,7 +17,7 @@ class VendorAllCategories extends StatefulWidget {
 class _VendorAllCategoriesState extends State<VendorAllCategories> {
 
   void onCategoryClick(Category category) {
-    var filter = <String, dynamic>{};
+    var filter = new Map<String, dynamic>();
     filter['id'] = category.id.toString();
     Navigator.push(
         context,
@@ -57,7 +57,7 @@ class CategoryRow extends StatelessWidget {
   final Category category;
   final void Function(Category category) onCategoryClick;
 
-  const CategoryRow({super.key, this.category, this.onCategoryClick});
+  CategoryRow({this.category, this.onCategoryClick});
 
   @override
   Widget build(BuildContext context) {
@@ -68,7 +68,7 @@ class CategoryRow extends StatelessWidget {
       onTap: () {
         onCategoryClick(category);
       },
-      leading: SizedBox(
+      leading: Container(
         width: 60,
         height: 60,
         child: CachedNetworkImage(
@@ -78,13 +78,13 @@ class CategoryRow extends StatelessWidget {
             elevation: 0,
             shape: StadiumBorder(),
             child: Ink.image(
-              image: imageProvider,
-              fit: BoxFit.cover,
               child: InkWell(
                 onTap: () {
                   onCategoryClick(category);
                 },
               ),
+              image: imageProvider,
+              fit: BoxFit.cover,
             ),
           ),
           placeholder: (context, url) => Card(
@@ -103,7 +103,7 @@ class CategoryRow extends StatelessWidget {
       ),
       title: Text(
         parseHtmlString(category.name),
-        style: Theme.of(context).textTheme.bodyLarge,
+        style: Theme.of(context).textTheme.bodyText1,
         maxLines: 2,
         overflow: TextOverflow.ellipsis,
       ),

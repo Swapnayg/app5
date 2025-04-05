@@ -29,9 +29,9 @@ class _OTPVerificationState extends State<OTPVerification> {
   final appStateModel = AppStateModel();
   final _formKey = GlobalKey<FormState>();
   var isLoading = false;
-  TextEditingController otpController = TextEditingController();
+  TextEditingController otpController = new TextEditingController();
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  final RoundedLoadingButtonController _btnController = RoundedLoadingButtonController();
+  final RoundedLoadingButtonController _btnController = new RoundedLoadingButtonController();
   StreamController<ErrorAnimationType> errorController;
 
   @override
@@ -71,9 +71,9 @@ class _OTPVerificationState extends State<OTPVerification> {
             ListView(
               shrinkWrap: true,
               children: [
-                Form(
+                new Form(
                   key: _formKey,
-                  child: Column(
+                  child: new Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
@@ -108,7 +108,7 @@ class _OTPVerificationState extends State<OTPVerification> {
                           ),
                           Padding(
                             padding: const EdgeInsets.only( top:30, left: 20.0),
-                            child: SizedBox(
+                            child: Container(
                               height: 200,
                               width: 180,
                               child: Column(
@@ -190,13 +190,13 @@ class _OTPVerificationState extends State<OTPVerification> {
                         color: Colors.white,
                         elevation: 0,
                         valueColor: Colors.black,
+                        child: Text(appStateModel.blocks.localeText.signIn, style: TextStyle(color: Color(0xFF00363a),fontSize: 20)),
                         controller: _btnController,
                         onPressed: () {
                           verifyOTP(context);
                         },
                         animateOnTap: false,
                         width: 200,
-                        child: Text(appStateModel.blocks.localeText.signIn, style: TextStyle(color: Color(0xFF00363a),fontSize: 20)),
                       ),
                       SizedBox(height: 30.0),
                       Align(
@@ -207,7 +207,7 @@ class _OTPVerificationState extends State<OTPVerification> {
                             },
                             child: Text(
                                 appStateModel.blocks.localeText.resendOTP,
-                                style: Theme.of(context).textTheme.bodyMedium.copyWith(
+                                style: Theme.of(context).textTheme.bodyText2.copyWith(
                                     fontSize: 15,
                                     color: Colors.white.withOpacity(0.6)
                                 ))),
@@ -228,7 +228,7 @@ class _OTPVerificationState extends State<OTPVerification> {
     _btnController.start();
 
     //Server end verification
-    var data = Map<String, dynamic>();
+    var data = new Map<String, dynamic>();
     data["smsOTP"] = otpController.text;
     data["verificationId"] = widget.verificationId;
     data["phoneNumber"] = widget.phoneNumber;
@@ -300,11 +300,11 @@ class _OTPVerificationState extends State<OTPVerification> {
   handlePhoneNumberError(FirebaseAuthException error, BuildContext context) {
     switch (error.code) {
       case 'TOO_LONG':
-        FocusScope.of(context).requestFocus(FocusNode());
+        FocusScope.of(context).requestFocus(new FocusNode());
         showSnackBar(context, appStateModel.blocks.localeText.inValidNumber);
         break;
       case 'TOO_SHORT':
-        FocusScope.of(context).requestFocus(FocusNode());
+        FocusScope.of(context).requestFocus(new FocusNode());
         showSnackBar(context, appStateModel.blocks.localeText.inValidNumber);
         Navigator.of(context).pop();
         break;

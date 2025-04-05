@@ -1,3 +1,5 @@
+// ignore_for_file: use_super_parameters, library_private_types_in_public_api
+
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -12,7 +14,7 @@ import 'write_review.dart';
 class VendorReviewsList extends StatefulWidget {
   final VendorDetailStateModel vendorDetailModel;
 
-  const VendorReviewsList({Key key, this.vendorDetailModel})
+  const VendorReviewsList({Key? key, required this.vendorDetailModel})
       : super(key: key);
   @override
   _VendorReviewsListState createState() => _VendorReviewsListState();
@@ -38,8 +40,7 @@ class _VendorReviewsListState extends State<VendorReviewsList> {
   Widget build(BuildContext context) {
     return ScopedModelDescendant<VendorDetailStateModel>(
       builder: (context, child, model) {
-        return model.reviews != null &&
-            model.reviews.length > 0
+        return model.reviews.length > 0
             ? CustomScrollView(
             controller: _reviewScrollController,
             slivers: buildList(model.reviews, context))
@@ -56,10 +57,10 @@ class _VendorReviewsListState extends State<VendorReviewsList> {
   }
 
   buildList(List<VendorReviews> reviews, BuildContext context) {
-    List<Widget> list = List<Widget>();
+    List<Widget> list = List<Widget>.empty(growable: true);
     list.add(writeReviewTile());
     list.add(buildReviewsList(reviews, context));
-    if(reviews.length < 10) {}
+    if(reviews.length < 10);
     return list;
   }
 
@@ -123,7 +124,7 @@ class _VendorReviewsListState extends State<VendorReviewsList> {
                       Text(timeago.format(comment.created),
                           style: TextStyle(
                               fontSize: 12.0,
-                              color: Theme.of(context).textTheme.bodySmall.color))
+                              color: Theme.of(context).textTheme.bodySmall!.color))
                     ]),
               ),
             ],

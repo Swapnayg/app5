@@ -18,13 +18,13 @@ class AddToCartErrorModel {
   });
 
   factory AddToCartErrorModel.fromJson(Map<String, dynamic> json) => AddToCartErrorModel(
-    success: json["success"],
+    success: json["success"] == null ? null : json["success"],
     data: json["data"] == null ? null : AddToCartErrorData.fromJson(json["data"]),
   );
 
   Map<String, dynamic> toJson() => {
-    "success": success,
-    "data": data?.toJson(),
+    "success": success == null ? null : success,
+    "data": data == null ? null : data.toJson(),
   };
 }
 
@@ -40,14 +40,14 @@ class AddToCartErrorData {
   });
 
   factory AddToCartErrorData.fromJson(Map<String, dynamic> json) => AddToCartErrorData(
-    error: json["error"],
+    error: json["error"] == null ? null : json["error"],
     //productUrl: json["product_url"] == null ? null : json["product_url"],
-    notice: json["notice"],
+    notice: json["notice"] == null ? null : json["notice"],
   );
 
   Map<String, dynamic> toJson() => {
-    "error": error,
-    "product_url": productUrl,
-    "notice": notice,
+    "error": error == null ? null : error,
+    "product_url": productUrl == null ? null : productUrl,
+    "notice": notice == null ? null : notice,
   };
 }

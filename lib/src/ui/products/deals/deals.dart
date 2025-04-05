@@ -18,7 +18,7 @@ class Deals extends StatefulWidget {
 }
 
 class _DealsState extends State<Deals> with SingleTickerProviderStateMixin {
-  final ScrollController _scrollController = ScrollController();
+  ScrollController _scrollController = new ScrollController();
 
   @override
   void initState() {
@@ -32,6 +32,10 @@ class _DealsState extends State<Deals> with SingleTickerProviderStateMixin {
     });
   }
 
+  @override
+  void dispose() {
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,41 +48,43 @@ class _DealsState extends State<Deals> with SingleTickerProviderStateMixin {
           model: widget.model,
           child: ScopedModelDescendant<DealsStateModel>(
               builder: (context, child, model) {
-            if (model.products.length != 0) {
-              return CustomScrollView(
-                controller: _scrollController,
-                slivers:
-                    buildLisOfBlocks(model.products, model.hasMoreItems),
-              );
-            } else {
-              return Stack(
-                children: <Widget>[
-                  ListView(
-                    children: <Widget>[
-                      Container(),
-                    ],
-                  ),
-                  Center(
-                    child: Text(
-                        widget.appStateModel.blocks.localeText.noProducts),
-                  )
-                ],
-              );
+            if (model.products != null) {
+              if (model.products.length != 0) {
+                return CustomScrollView(
+                  controller: _scrollController,
+                  slivers:
+                      buildLisOfBlocks(model.products, model.hasMoreItems),
+                );
+              } else {
+                return Stack(
+                  children: <Widget>[
+                    ListView(
+                      children: <Widget>[
+                        Container(),
+                      ],
+                    ),
+                    Center(
+                      child: Text(
+                          widget.appStateModel.blocks.localeText.noProducts),
+                    )
+                  ],
+                );
+              }
             }
-                      return Center(child: CircularProgressIndicator());
+            return Center(child: CircularProgressIndicator());
           }),
         ));
   }
 
   List<Widget> buildLisOfBlocks(List<Product> products, bool hasMoreItems) {
-    List<Widget> list = List<Widget>();
-    if (products.isNotEmpty) {
+    List<Widget> list = new List<Widget>();
+    if (products.length != 0) {
       list.add(ProductGrid(products: products));
       list.add(SliverPadding(
           padding: EdgeInsets.all(0.0),
           sliver: SliverList(
               delegate: SliverChildListDelegate([
-            SizedBox(
+            Container(
                 height: 60,
                 child: hasMoreItems
                     ? Center(child: CircularProgressIndicator())

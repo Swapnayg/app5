@@ -6,9 +6,9 @@ import '../../models/vendor/vendor_reviews_model.dart';
 import '../../resources/api_provider.dart';
 
 class VendorDetailStateModel extends Model {
-  List<Product>? products;
-  List<VendorReviews>? reviews;
-  VendorDetailsModel? vendorDetails;
+  late List<Product> products;
+  late List<VendorReviews> reviews;
+  late VendorDetailsModel vendorDetails;
   int page = 1;
   int reviewPage = 1;
   var reviewsFilter = <String, dynamic>{};
@@ -34,11 +34,13 @@ class VendorDetailStateModel extends Model {
     page = page + 1;
     filter['page'] = page.toString();
     List<Product> moreProducts = await apiProvider.fetchProductList(filter);
-    if (moreProducts.isNotEmpty) {
+    if (moreProducts.length != 0) {
       vendorDetails.recentProducts.addAll(moreProducts);
       hasMoreItems = moreProducts.length > 9;
       notifyListeners();
+      return true;
     }
+    return false;
   }
 
   void getReviews() async {
@@ -47,7 +49,7 @@ class VendorDetailStateModel extends Model {
     final response = await apiProvider.post(
         '/wp-admin/admin-ajax.php?action=mstore_flutter-vendor_reviews',
         reviewsFilter);
-
+    
     if (response.statusCode == 200) {
       reviews = vendorReviewsFromJson(response.body);
       notifyListeners();
@@ -74,6 +76,7 @@ class VendorDetailStateModel extends Model {
     print(data);
     final response = await apiProvider.post(
         '/wp-admin/admin-ajax.php?action=mstore_flutter-contact_vendor', data);
+    
   }
 
   Future<void> submitReview(Map reviewData) async {
@@ -82,4 +85,5 @@ class VendorDetailStateModel extends Model {
         '/wp-admin/admin-ajax.php?action=mstore_flutter_add_vendor_review',
         reviewData);
   }
+
 }

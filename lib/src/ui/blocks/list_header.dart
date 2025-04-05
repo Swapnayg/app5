@@ -6,7 +6,7 @@ import 'count_down.dart';
 import 'hex_color.dart';
 class ListHeader extends StatefulWidget {
   final Block block;
-  const ListHeader({Key key, this.block}) : super(key: key);
+  ListHeader({Key key, this.block}) : super(key: key);
 
   @override
   _ListHeaderState createState() => _ListHeaderState();
@@ -20,18 +20,18 @@ class _ListHeaderState extends State<ListHeader> {
     TextStyle subhead = Theme.of(context).brightness != Brightness.dark
         ? Theme.of(context)
             .textTheme
-            .titleLarge
+            .headline6
             .copyWith(color: HexColor(widget.block.titleColor))
-        : Theme.of(context).textTheme.titleLarge;
+        : Theme.of(context).textTheme.headline6;
 
-    if(widget.block.blockType == 'flash_sale_block') {
+    if(widget.block.blockType == 'flash_sale_block' && textAlign != null) {
       var dateTo = DateFormat('M/d/yyyy mm:ss').parse(widget.block.saleEnds);
       var dateFrom = DateTime.now();
       final difference = dateTo.difference(dateFrom).inSeconds;
 
-      TextStyle textStyleCounter = Theme.of(context)
+      TextStyle _textStyleCounter = Theme.of(context)
           .textTheme
-          .bodyMedium
+          .bodyText2
           .copyWith(color: bgColor, fontSize: 12);
 
       return !difference.isNegative ? Container(
@@ -67,41 +67,41 @@ class _ListHeaderState extends State<ListHeader> {
                         Container(
                           width: 24,
                           height: 24,
-                          decoration: BoxDecoration(
+                          decoration: new BoxDecoration(
                               color: HexColor(widget.block.titleColor),
                               borderRadius:
-                              BorderRadius.all(Radius.circular(2.0))),
+                              new BorderRadius.all(Radius.circular(2.0))),
                           margin: EdgeInsets.all(4),
                           child: Center(
                               child: Text('${remaining.inHours.clamp(0, 99)}',
                                   maxLines: 1,
-                                  style: textStyleCounter)),
+                                  style: _textStyleCounter)),
                         ),
                         Container(
                           width: 24,
                           height: 24,
                           margin: EdgeInsets.all(4),
-                          decoration: BoxDecoration(
+                          decoration: new BoxDecoration(
                               color: HexColor(widget.block.titleColor),
                               borderRadius:
-                              BorderRadius.all(Radius.circular(2.0))),
+                              new BorderRadius.all(Radius.circular(2.0))),
                           child: Center(
                               child: Text(
                                   '${remaining.inMinutes.remainder(60)}',
-                                  style: textStyleCounter)),
+                                  style: _textStyleCounter)),
                         ),
                         Container(
                           width: 24,
                           height: 24,
-                          decoration: BoxDecoration(
+                          decoration: new BoxDecoration(
                               color: HexColor(widget.block.titleColor),
                               borderRadius:
-                              BorderRadius.all(Radius.circular(2.0))),
+                              new BorderRadius.all(Radius.circular(2.0))),
                           margin: EdgeInsets.all(4),
                           child: Center(
                               child: Text(
                                   '${remaining.inSeconds.remainder(60)}',
-                                  style: textStyleCounter)),
+                                  style: _textStyleCounter)),
                         ),
                       ]),
                 ],
@@ -112,22 +112,36 @@ class _ListHeaderState extends State<ListHeader> {
       ) : Container();
     }
 
-    return Container(
+    if (textAlign != null) {
+      return Container(
+          padding: EdgeInsets.fromLTRB(
+              widget.block.paddingBetween + 4,
+              double.parse(widget.block.paddingTop.toString()),
+              widget.block.paddingBetween + 4,
+              16.0),
+          color: Theme.of(context).brightness != Brightness.dark
+              ? bgColor
+              : Theme.of(context).scaffoldBackgroundColor,
+          alignment: Alignment(textAlign, 0),
+          child: Text(
+            widget.block.title,
+            textAlign: TextAlign.start,
+            style: subhead,
+          ));
+    } else {
+      return Container(
+        margin: EdgeInsets.all(0),
         padding: EdgeInsets.fromLTRB(
-            widget.block.paddingBetween + 4,
+            widget.block.paddingBetween,
             double.parse(widget.block.paddingTop.toString()),
-            widget.block.paddingBetween + 4,
-            16.0),
+            widget.block.paddingBetween,
+            0.0),
         color: Theme.of(context).brightness != Brightness.dark
             ? bgColor
-            : Theme.of(context).scaffoldBackgroundColor,
-        alignment: Alignment(textAlign, 0),
-        child: Text(
-          widget.block.title,
-          textAlign: TextAlign.start,
-          style: subhead,
-        ));
+            : Theme.of(context).canvasColor,
+      );
     }
+  }
 
   double headerAlign(String align) {
     switch (align) {

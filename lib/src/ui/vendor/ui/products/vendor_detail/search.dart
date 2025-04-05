@@ -1,7 +1,10 @@
+// ignore_for_file: library_private_types_in_public_api, deprecated_member_use, avoid_unnecessary_containers, prefer_is_empty, curly_braces_in_flow_control_structures
+
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_icons/flutter_icons.dart';
+// Removed invalid import for flutter_launcher_icons
+import 'package:flutter_font_icons/flutter_font_icons.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../../../../blocs/search_bloc.dart';
@@ -12,7 +15,7 @@ import '../../../../products/product_grid/product_item4.dart';
 class Search extends StatefulWidget {
   final String vendorId;
   final SearchBloc searchBloc = SearchBloc();
-  Search({Key key, this.vendorId}) : super(key: key);
+  Search({super.key, required this.vendorId});
   @override
   _SearchState createState() => _SearchState();
 }
@@ -20,10 +23,10 @@ class Search extends StatefulWidget {
 class _SearchState extends State<Search> {
 
   final ScrollController _scrollController = ScrollController();
-  TextEditingController inputController = TextEditingController();
+  final TextEditingController inputController = TextEditingController();
   final appStateModel = AppStateModel();
 
-  Timer _debounce;
+  late Timer _debounce;
 
   @override
   void initState() {
@@ -38,7 +41,7 @@ class _SearchState extends State<Search> {
   }
 
   _onSearchChanged() {
-    if (_debounce.isActive ?? false) _debounce.cancel();
+    if (_debounce.isActive) _debounce.cancel();
     _debounce = Timer(const Duration(milliseconds: 300), () {
       if(inputController.text.isNotEmpty) {
         widget.searchBloc.fetchSearchResults(inputController.text);
@@ -98,7 +101,7 @@ class _SearchState extends State<Search> {
                           inputController.clear();
                           setState(() {});
                           },
-                          child: Icon(FlutterIcons.ios_close_ion, size: 16, color: Theme.of(context).hintColor,)
+                          child: Icon(Ionicons.close, size: 16, color: Theme.of(context).hintColor,)
                       ) : SizedBox(
                         width: 4,
                         height: 4,
@@ -114,7 +117,7 @@ class _SearchState extends State<Search> {
             Container(
               child: InkWell(
                 onTap: Navigator.of(context).pop,
-                child: Text(appStateModel.blocks.localeText.cancel, style: Theme.of(context).primaryTextTheme.bodyMedium.copyWith(
+                child: Text(appStateModel.blocks.localeText.cancel, style: Theme.of(context).primaryTextTheme.bodyMedium?.copyWith(
                   color: Theme.of(context).hintColor,//Theme.of(context).primaryIconTheme.color,//Theme.of(context).hintColor,
                 )),
               ),
@@ -128,15 +131,15 @@ class _SearchState extends State<Search> {
           return StreamBuilder<List<Product>>(
             stream: widget.searchBloc.searchResults,
             builder: (context, AsyncSnapshot<List<Product>> snapshot) {
-              if(snapshotLoading.hasData && snapshotLoading.data) {
+              if(snapshotLoading.hasData && snapshotLoading.data == true) {
                 return Center(child: CircularProgressIndicator());
               }
               else if(snapshot.hasData && inputController.text.isNotEmpty) {
-                if(snapshot.data.length == 0) {
+                if(snapshot.data?.length == 0) {
                   return Center(child: Text('NO RESULTS!'));
                 }
                 return buildProductList(snapshot, context);
-              } else if(snapshot.hasData && snapshot.data.length == 0) {
+              } else if(snapshot.hasData && snapshot.data?.length == 0) {
                 return Center(
                     child: Text('Please type something to search')
                 );

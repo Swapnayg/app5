@@ -15,7 +15,7 @@ class VendorProductList extends StatefulWidget {
 }
 
 class _VendorProductListState extends State<VendorProductList> {
-  final ScrollController _scrollController = ScrollController();
+  ScrollController _scrollController = new ScrollController();
   bool hasMoreProducts = true;
   AppStateModel appStateModel = AppStateModel();
 
@@ -76,14 +76,14 @@ class _VendorProductListState extends State<VendorProductList> {
   }
 
   List<Widget> buildLisOfBlocks(AsyncSnapshot<List<VendorProduct>> snapshot) {
-    List<Widget> list = List<Widget>();
+    List<Widget> list = new List<Widget>();
     if (snapshot.data != null) {
       list.add(ProductGrid(products: snapshot.data));
       list.add(SliverPadding(
           padding: EdgeInsets.all(0.0),
           sliver: SliverList(
               delegate: SliverChildListDelegate([
-            SizedBox(
+            Container(
                 height: 60,
                 child: hasMoreProducts
                     ? Center(child: CircularProgressIndicator())

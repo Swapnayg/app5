@@ -1,7 +1,6 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:scoped_model/scoped_model.dart';
@@ -12,7 +11,7 @@ import '../../ui/home/search.dart';
 
 class SearchBar extends StatefulWidget {
   final bool isVisible;
-  const SearchBar({Key key, this.isVisible}) : super(key: key);
+  SearchBar({Key key, this.isVisible}) : super(key: key);
   @override
   _SearchBarState createState() => _SearchBarState();
 }
@@ -23,8 +22,9 @@ class _SearchBarState extends State<SearchBar> {
     return Container(
         //height: 110,
         child: AppBar(
+          brightness: Brightness.light,
           backgroundColor: widget.isVisible ? Colors.amber : Colors.transparent,
-          title: buildAppbarSearch(context), systemOverlayStyle: SystemUiOverlayStyle.dark,
+          title: buildAppbarSearch(context),
         ));
   }
 }
@@ -120,7 +120,7 @@ Row buildAppbarSearch(BuildContext context) {
                 .primaryIconTheme
                 .color, //Theme.of(context).hintColor
           ),
-          Positioned(
+          new Positioned(
             top: -3.0,
             right: -3.0,
             child: ScopedModelDescendant<AppStateModel>(
@@ -144,9 +144,8 @@ Row buildAppbarSearch(BuildContext context) {
                             backgroundColor: Colors.red,
                           ),
                         ))));
-              } else {
+              } else
                 return Container();
-              }
             }),
           ),
         ]),

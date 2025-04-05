@@ -12,19 +12,19 @@ import 'store_list7.dart';
 
 class StoresList extends StatelessWidget {
   final List<StoreModel> stores;
-  const StoresList({Key key, this.stores}) : super(key: key);
+  const StoresList({required Key key, required this.stores}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return ScopedModelDescendant<AppStateModel>(
         builder: (context, child, model) {
           if (model.blocks.pageLayout.stores == 'layout1') {
-            return StoresList1(stores: stores);
+            return StoresList1(key: key!, stores: stores);
           } else if (model.blocks.pageLayout.stores == 'layout2') {
             return StoresList2(stores: stores);
           } else if (model.blocks.pageLayout.stores == 'layout3') {
             return StoresList3(stores: stores);
           } else if (model.blocks.pageLayout.stores == 'layout4') {
-            return StoresList4(stores: stores);
+            return StoresList4(key: key!, stores: stores);
           } else if (model.blocks.pageLayout.stores == 'layout5') {
             return StoresList5(stores: stores);
           } else if (model.blocks.pageLayout.stores == 'layout6') {
@@ -32,7 +32,7 @@ class StoresList extends StatelessWidget {
           } else if (model.blocks.pageLayout.stores == 'layout7') {
             return StoresList7(stores: stores);
           } else {
-            return StoresList1(stores: stores);
+            return StoresList1(key: key!, stores: stores);
           }
         });
   }

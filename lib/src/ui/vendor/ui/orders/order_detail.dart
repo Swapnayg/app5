@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api, no_logic_in_create_state, unused_field, unnecessary_null_comparison, sort_child_properties_last
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -10,7 +12,7 @@ class OrderDetail extends StatefulWidget {
   final Order order;
   final VendorBloc vendorBloc;
   final appStateModel = AppStateModel();
-  OrderDetail({super.key, this.order, this.vendorBloc});
+  OrderDetail({super.key, required this.order, required this.vendorBloc});
 
   @override
   _OrderDetailState createState() => _OrderDetailState(order: order);
@@ -19,7 +21,7 @@ class OrderDetail extends StatefulWidget {
 class _OrderDetailState extends State<OrderDetail> {
   final Order order;
 
-  _OrderDetailState({this.order});
+  _OrderDetailState({required this.order});
 
   final TextStyle _biggerFont = const TextStyle(fontSize: 18);
 
@@ -72,8 +74,8 @@ class _OrderDetailState extends State<OrderDetail> {
           children: <Widget>[
             SizedBox(height: 10.0),
             Text(
-              "Order" ' - ' + order.id.toString(),
-              style: Theme.of(context).textTheme.headline6,
+              "Order" + ' - ' + order.id.toString(),
+              style: Theme.of(context).textTheme.titleLarge,
             ),
             Divider(),
             SizedBox(height: 10.0),
@@ -82,7 +84,7 @@ class _OrderDetailState extends State<OrderDetail> {
                 children: <Widget>[
                   Text(
                     "Billing",
-                    style: Theme.of(context).textTheme.subtitle2,
+                    style: Theme.of(context).textTheme.titleSmall,
                   ),
                   SizedBox(height: 10.0),
                   Text(
@@ -95,7 +97,7 @@ class _OrderDetailState extends State<OrderDetail> {
                 children: <Widget>[
                   Text(
                     "Shipping",
-                    style: Theme.of(context).textTheme.subtitle2,
+                    style: Theme.of(context).textTheme.titleSmall,
                   ),
                   SizedBox(
                     height: 10.0,
@@ -110,7 +112,7 @@ class _OrderDetailState extends State<OrderDetail> {
                 children: <Widget>[
                   Text(
                     "Payment",
-                    style: Theme.of(context).textTheme.subtitle2,
+                    style: Theme.of(context).textTheme.titleSmall,
                   ),
                   SizedBox(
                     height: 10.0,
@@ -125,7 +127,7 @@ class _OrderDetailState extends State<OrderDetail> {
                     children: <Widget>[
                         Text(
                           "Items",
-                          style: Theme.of(context).textTheme.subtitle2,
+                          style: Theme.of(context).textTheme.titleSmall,
                         ),
                         SizedBox(
                           height: 10.0,
@@ -149,7 +151,7 @@ class _OrderDetailState extends State<OrderDetail> {
           SizedBox(height: 10.0),
           Text(
             "Total",
-            style: Theme.of(context).textTheme.subtitle2,
+            style: Theme.of(context).textTheme.titleSmall,
           ),
           SizedBox(height: 10.0),
           Row(
@@ -190,14 +192,14 @@ class _OrderDetailState extends State<OrderDetail> {
               Expanded(
                 child: Text(
                   widget.appStateModel.blocks.localeText.total,
-                  style: Theme.of(context).textTheme.headline6,
+                  style: Theme.of(context).textTheme.titleLarge,
                 ),
               ),
               Text(
                 formatter.format(
                   double.parse(order.total),
                 ),
-                style: Theme.of(context).textTheme.headline6,
+                style: Theme.of(context).textTheme.titleLarge,
               ),
             ],
           ),
@@ -215,19 +217,17 @@ class _OrderDetailState extends State<OrderDetail> {
             return Column(
               children: <Widget>[
                 SizedBox(
-                    height: 50,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
                         Expanded(
-                          child: Text(order.lineItems[index].name +
-                              ' x ' +
-                              order.lineItems[index].quantity.toString()),
+                          child: Text('${order.lineItems[index].name} x ${order.lineItems[index].quantity}'),
                         ),
                         Text(formatter.format(
-                            (double.parse('${order.lineItems[index].total}')))),
+                            (double.parse(order.lineItems[index].total)))),
                       ],
-                    )),
+                    ),
+                    height: 50),
               ],
             );
           },

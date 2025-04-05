@@ -24,18 +24,18 @@ class Picture {
   });
 
   factory Picture.fromJson(Map<String, dynamic> json) => Picture(
-    id: json["id"],
+    id: json["id"] == null ? null : json["id"],
     src: (json["src"] == null || json["src"] == false) ? null : json["src"],
-    name: json["name"],
-    alt: json["alt"],
-    position: json["position"],
+    name: json["name"] == null ? null : json["name"],
+    alt: json["alt"] == null ? null : json["alt"],
+    position: json["position"] == null ? null : json["position"],
   );
 
   Map<String, dynamic> toJson() => {
-    "id": id,
-    "src": src,
-    "name": name,
-    "alt": alt,
-    "position": position,
+    "id": id == null ? null : id,
+    "src": src == null ? null : src,
+    "name": name == null ? null : name,
+    "alt": alt == null ? null : alt,
+    "position": position == null ? null : position,
   };
 }

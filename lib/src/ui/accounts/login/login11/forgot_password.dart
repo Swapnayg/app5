@@ -11,20 +11,18 @@ import '../../../color_override.dart';
 import 'theme_override.dart';
 
 class ForgotPassword extends StatefulWidget {
-  const ForgotPassword({super.key});
-
   @override
   _ForgotPasswordState createState() => _ForgotPasswordState();
 }
 
 class _ForgotPasswordState extends State<ForgotPassword> {
   final appStateModel = AppStateModel();
-  TextEditingController emailController = TextEditingController();
+  TextEditingController emailController = new TextEditingController();
   final _formKey = GlobalKey<FormState>();
   var isLoading = false;
   final apiProvider = ApiProvider();
   final RoundedLoadingButtonController _btnController =
-      RoundedLoadingButtonController();
+      new RoundedLoadingButtonController();
 
   @override
   Widget build(BuildContext context) {
@@ -48,11 +46,11 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                       ),
                       Text('Forgot Password !',
                           style:
-                              Theme.of(context).textTheme.titleLarge.copyWith(
+                              Theme.of(context).textTheme.headline6.copyWith(
                                   //color: Colors.white,
                                   fontSize: 32)),
                       Text('Enter valid Email to get an OTP',
-                          style: Theme.of(context).textTheme.bodySmall.copyWith(
+                          style: Theme.of(context).textTheme.caption.copyWith(
                               //color: Colors.white,
                               fontSize: 14)),
                       SizedBox(
@@ -83,11 +81,11 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                             .buttonTheme
                             .colorScheme
                             .onPrimary,
+                        child: Text(appStateModel.blocks.localeText.sendOtp),
                         controller: _btnController,
                         onPressed: () => _sendOtp(context),
                         animateOnTap: false,
                         width: MediaQuery.of(context).size.width - 34,
-                        child: Text(appStateModel.blocks.localeText.sendOtp),
                       ),
                     ],
                   ),
@@ -119,7 +117,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
   }
 
   _sendOtp(BuildContext context) async {
-    var data = Map<String, dynamic>();
+    var data = new Map<String, dynamic>();
     if (_formKey.currentState.validate()) {
       data["email"] = emailController.text;
       _btnController.start();
@@ -144,7 +142,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
 }
 
 class ResetPassword extends StatefulWidget {
-  const ResetPassword({
+  ResetPassword({
     Key key,
     @required this.email,
   }) : super(key: key);
@@ -162,10 +160,10 @@ class _ResetPasswordState extends State<ResetPassword> {
   final apiProvider = ApiProvider();
   bool _obscureText = true;
 
-  TextEditingController otpController = TextEditingController();
-  TextEditingController newPasswordController = TextEditingController();
+  TextEditingController otpController = new TextEditingController();
+  TextEditingController newPasswordController = new TextEditingController();
   final RoundedLoadingButtonController _btnController =
-      RoundedLoadingButtonController();
+      new RoundedLoadingButtonController();
 
   @override
   Widget build(BuildContext context) {
@@ -180,9 +178,9 @@ class _ResetPasswordState extends State<ResetPassword> {
               children: [
                 Container(
                   padding: EdgeInsets.all(32),
-                  child: Form(
+                  child: new Form(
                     key: _formKey,
-                    child: ListView(
+                    child: new ListView(
                       children: <Widget>[
                         SizedBox(
                           height: height * 0.15,
@@ -190,13 +188,13 @@ class _ResetPasswordState extends State<ResetPassword> {
                         Text('Reset Password !',
                             style: Theme.of(context)
                                 .textTheme
-                                .titleLarge
+                                .headline6
                                 .copyWith(
                                     //color: Colors.white,
                                     fontSize: 32)),
                         Text('Reset your password by entering OTP',
                             style:
-                                Theme.of(context).textTheme.bodySmall.copyWith(
+                                Theme.of(context).textTheme.caption.copyWith(
                                     //color: Colors.white,
                                     fontSize: 14)),
                         SizedBox(
@@ -254,12 +252,12 @@ class _ResetPasswordState extends State<ResetPassword> {
                               .buttonTheme
                               .colorScheme
                               .onPrimary,
+                          child: Text(
+                              appStateModel.blocks.localeText.resetPassword),
                           controller: _btnController,
                           onPressed: () => _resetPassword(context),
                           animateOnTap: false,
                           width: MediaQuery.of(context).size.width - 34,
-                          child: Text(
-                              appStateModel.blocks.localeText.resetPassword),
                         ),
                       ],
                     ),
@@ -292,7 +290,7 @@ class _ResetPasswordState extends State<ResetPassword> {
   }
 
   _resetPassword(BuildContext context) async {
-    var data = <String, dynamic>{};
+    var data = new Map<String, dynamic>();
     if (_formKey.currentState.validate()) {
       data["email"] = widget.email;
       data["password"] = newPasswordController.text;

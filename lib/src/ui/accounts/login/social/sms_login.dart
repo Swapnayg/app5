@@ -14,7 +14,7 @@ class SmsLogin extends StatelessWidget {
       shape: StadiumBorder(),
       margin: EdgeInsets.all(0),
       color: Color(0xFF34B7F1),
-      child: SizedBox(
+      child: Container(
         height: 50,
         width: 50,
         child: IconButton(

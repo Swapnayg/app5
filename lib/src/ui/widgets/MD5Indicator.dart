@@ -12,13 +12,13 @@ class MD2Indicator extends Decoration {
   final MD2IndicatorSize indicatorSize;
 
   const MD2Indicator(
-      {@required this.indicatorHeight,
-        @required this.indicatorColor,
-        @required this.indicatorSize});
+      {required this.indicatorHeight,
+        required this.indicatorColor,
+        required this.indicatorSize});
 
   @override
-  _MD2Painter createBoxPainter([VoidCallback onChanged]) {
-    return _MD2Painter(this, onChanged);
+  _MD2Painter createBoxPainter([VoidCallback? onChanged]) {
+    return _MD2Painter(this, onChanged!);
   }
 }
 
@@ -32,23 +32,23 @@ class _MD2Painter extends BoxPainter {
   void paint(Canvas canvas, Offset offset, ImageConfiguration configuration) {
     assert(configuration.size != null);
 
-    Rect rect;
+    Rect rect = Rect.zero; // Default assignment to ensure rect is initialized.
     if (decoration.indicatorSize == MD2IndicatorSize.full) {
       rect = Offset(offset.dx,
-          (configuration.size.height - decoration.indicatorHeight ?? 3)) &
-      Size(configuration.size.width, decoration.indicatorHeight ?? 3);
+          (configuration.size!.height - decoration.indicatorHeight)) &
+      Size(configuration.size!.width, decoration.indicatorHeight);
     } else if (decoration.indicatorSize == MD2IndicatorSize.normal) {
       rect = Offset(offset.dx + 6,
-          (configuration.size.height - decoration.indicatorHeight ?? 3)) &
-      Size(configuration.size.width - 12, decoration.indicatorHeight ?? 3);
+          (configuration.size!.height - decoration.indicatorHeight)) &
+      Size(configuration.size!.width - 12, decoration.indicatorHeight);
     } else if (decoration.indicatorSize == MD2IndicatorSize.tiny) {
-      rect = Offset(offset.dx + configuration.size.width / 2 - 8,
-          (configuration.size.height - decoration.indicatorHeight ?? 3)) &
-      Size(16, decoration.indicatorHeight ?? 3);
+      rect = Offset(offset.dx + configuration.size!.width / 2 - 8,
+          (configuration.size!.height - decoration.indicatorHeight)) &
+      Size(16, decoration.indicatorHeight);
     }
 
     final Paint paint = Paint();
-    paint.color = decoration.indicatorColor ?? Color(0xff1967d2);
+    paint.color = decoration.indicatorColor;
     paint.style = PaintingStyle.fill;
     canvas.drawRRect(
         RRect.fromRectAndCorners(rect,

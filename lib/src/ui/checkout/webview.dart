@@ -44,13 +44,16 @@ class _WebViewPageState extends State<WebViewPage> {
       var pos1 = url.lastIndexOf("sessionId=");
       var pos2 = url.lastIndexOf("&order=");
       String sessionId = url.substring(pos1 + 10, pos2);
-      redirectUrl = 'https://credimax.gateway.mastercard.com/checkout/pay/$sessionId';
+      redirectUrl = 'https://credimax.gateway.mastercard.com/checkout/pay/' + sessionId;
     } else if(widget.selectedPaymentMethod == 'paypal' || widget.selectedPaymentMethod == 'wc-upi' || widget.selectedPaymentMethod == 'wpl_paylabs_paytm') {
       redirectUrl = url;
     } else if(widget.selectedPaymentMethod == 'paytmpay') {
-      redirectUrl = '${this.config.url}/index.php/checkout/order-pay/$orderId/?key=$orderKey';
-    } else    redirectUrl = this.config.url + '/checkout/order-pay/' + orderId + '/?key=' + orderKey;
-  
+      redirectUrl = this.config.url + '/index.php' + '/checkout/order-pay/' + orderId + '/?key=' + orderKey;
+    } else if(orderKey != null) {
+      redirectUrl = this.config.url + '/checkout/order-pay/' + orderId + '/?key=' + orderKey;
+    } else {
+      redirectUrl = url;
+    }
     _seCookies();
   }
 
@@ -99,7 +102,8 @@ class _WebViewPageState extends State<WebViewPage> {
   Future onUrlChange(String url) async {
     print(url);
     if (url.contains('/order-received/') &&
-        url.contains('key=wc_order_') && widget.selectedPaymentMethod != 'wc-upi') {
+        url.contains('key=wc_order_') &&
+        orderId != null && widget.selectedPaymentMethod != 'wc-upi') {
       orderSummaryById();
     } else if (url.contains('/order-received/') && widget.selectedPaymentMethod != 'wc-upi') {
       orderSummary(url);
@@ -140,7 +144,7 @@ class _WebViewPageState extends State<WebViewPage> {
       //Show WebView
     }
 
-    if (url.contains('type=success')) {
+    if (url.contains('type=success') && orderId != null) {
       orderSummaryById();
     }
 

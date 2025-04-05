@@ -1,3 +1,5 @@
+library network_to_file_image;
+
 import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
@@ -13,17 +15,17 @@ class NetworkToFileImage extends ImageProvider<NetworkToFileImage> {
     required this.file,
     required this.url,
     this.scale = 1.0,
-    required this.headers,
+    this.headers = const {},
     this.debug = false,
-    ProcessError? processError,
-    // ignore: unnecessary_null_comparison
-  }) : assert(file != null || url != null);
+    this.processError, // Callback for processing errors
+  });
 
   final File file;
   final String url;
   final double scale;
   final Map<String, String> headers;
   final bool debug;
+  final ProcessError? processError; // Field to handle error processing
 
   static final Map<String, Uint8List> _mockFiles = {};
   static final Map<String, Uint8List> _mockUrls = {};
@@ -61,13 +63,11 @@ class NetworkToFileImage extends ImageProvider<NetworkToFileImage> {
     return SynchronousFuture<NetworkToFileImage>(this);
   }
 
-  ImageStreamCompleter load(
-      NetworkToFileImage key, ImageDecoderCallback decode) {
+  ImageStreamCompleter load(NetworkToFileImage key, ImageDecoderCallback  decode) {
     // Ownership of this controller is handed off to [_loadAsync]; it is that
     // method's responsibility to close the controller's stream when the image
     // has been loaded or an error is thrown.
-    final StreamController<ImageChunkEvent> chunkEvents =
-        StreamController<ImageChunkEvent>();
+    final StreamController<ImageChunkEvent> chunkEvents = StreamController<ImageChunkEvent>();
 
     return MultiFrameImageStreamCompleter(
         codec: _loadAsync(key, chunkEvents, decode),
@@ -75,16 +75,16 @@ class NetworkToFileImage extends ImageProvider<NetworkToFileImage> {
         scale: key.scale,
         informationCollector: () sync* {
           yield ErrorDescription('Image provider: $this');
-          yield ErrorDescription('File: ${file.path}');
+          yield ErrorDescription('File: ${file?.path}');
           yield ErrorDescription('Url: $url');
         });
   }
 
   Future<ui.Codec> _loadAsync(
-    NetworkToFileImage key,
-    StreamController<ImageChunkEvent> chunkEvents,
-    ImageDecoderCallback decode,
-  ) async {
+      NetworkToFileImage key,
+      StreamController<ImageChunkEvent> chunkEvents,
+      ImageDecoderCallback decode,
+      ) async {
     try {
       assert(key == this);
       // ---
@@ -110,10 +110,11 @@ class NetworkToFileImage extends ImageProvider<NetworkToFileImage> {
       // Reads from the network and saves it to the local file.
       else if (url.isNotEmpty) {
         bytes = await _downloadFromTheNetworkAndSaveToTheLocalFile(chunkEvents);
-      } else if (url.isEmpty) {
+      }
+
+      else if(url.isEmpty) {
         final byteData = await rootBundle.load('lib/assets/images/splash.jpg');
-        bytes = byteData.buffer
-            .asUint8List(byteData.offsetInBytes, byteData.lengthInBytes);
+        bytes  = byteData.buffer.asUint8List(byteData.offsetInBytes, byteData.lengthInBytes);
       }
 
       // ---
@@ -133,13 +134,14 @@ class NetworkToFileImage extends ImageProvider<NetworkToFileImage> {
     if (debug) print("Reading image file: ${file.path}");
 
     final Uint8List bytes = await file.readAsBytes();
-    if (bytes.lengthInBytes != 0) return bytes;
-    return null;
+    if (bytes.lengthInBytes == 0) return null;
+
+    return bytes;
   }
 
   Future<Uint8List> _downloadFromTheNetworkAndSaveToTheLocalFile(
-    StreamController<ImageChunkEvent> chunkEvents,
-  ) async {
+      StreamController<ImageChunkEvent> chunkEvents,
+      ) async {
     assert(url.isNotEmpty);
     if (debug) print("Fetching image from: $url");
     // ---
@@ -151,15 +153,14 @@ class NetworkToFileImage extends ImageProvider<NetworkToFileImage> {
     });
     final HttpClientResponse response = await request.close();
     if (response.statusCode != HttpStatus.ok) {
-      throw NetworkImageLoadException(
-          statusCode: response.statusCode, uri: resolved);
+      throw NetworkImageLoadException(statusCode: response.statusCode, uri: resolved);
     }
 
     final Uint8List bytes = await consolidateHttpClientResponseBytes(
       response,
-      onBytesReceived: (int? cumulative, int? total) {
+      onBytesReceived: (int cumulative, int? total) {
         chunkEvents.add(ImageChunkEvent(
-          cumulativeBytesLoaded: cumulative!,
+          cumulativeBytesLoaded: cumulative,
           expectedTotalBytes: total,
         ));
       },
@@ -193,17 +194,17 @@ class NetworkToFileImage extends ImageProvider<NetworkToFileImage> {
     file.writeAsBytes(bytes, flush: true);
   }
 
-  // @override
-  // bool operator ==(Object other) {
-  //   if (other.runtimeType != runtimeType) return false;
-  //   final NetworkToFileImage typedOther = other;
-  //   return url == typedOther.url &&
-  //       file.path == typedOther.file.path &&
-  //       scale == typedOther.scale;
-  // }
+  @override
+  bool operator ==(Object other) {
+    if (other.runtimeType != runtimeType) return false;
+    final NetworkToFileImage typedOther = other as NetworkToFileImage;
+    return url == typedOther.url &&
+        file.path == typedOther.file.path &&
+        scale == typedOther.scale;
+  }
 
-  // @override
-  // int get hashCode => hashValues(url, file.path, scale);
+  @override
+  int get hashCode => Object.hash(url, file.path, scale);
 
   @override
   String toString() => '$runtimeType("${file.path}", "$url", scale: $scale)';

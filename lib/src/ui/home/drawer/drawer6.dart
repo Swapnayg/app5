@@ -35,7 +35,7 @@ class _MyDrawerState extends State<MyDrawer> with TickerProviderStateMixin {
   AnimationController _controller;
   Animation<double> _drawerContentsOpacity;
   Animation<Offset> _drawerDetailsPosition;
-  final bool _showDrawerContents = true;
+  bool _showDrawerContents = true;
 
   @override
   Future initState() {
@@ -146,7 +146,7 @@ class _MyDrawerState extends State<MyDrawer> with TickerProviderStateMixin {
                   top: 30,
                   left: -30,
                   child: RotationTransition(
-                    turns: AlwaysStoppedAnimation(38 / 360),
+                    turns: new AlwaysStoppedAnimation(38 / 360),
                     child: Container(
                       color: Theme.of(context).primaryColorLight.withOpacity(0.3),
                       height: 35,
@@ -158,7 +158,7 @@ class _MyDrawerState extends State<MyDrawer> with TickerProviderStateMixin {
                   top: 0,
                   left: -5,
                   child: RotationTransition(
-                    turns: AlwaysStoppedAnimation(127 / 360),
+                    turns: new AlwaysStoppedAnimation(127 / 360),
                     child: Container(
                       color: Theme.of(context).primaryColorDark.withOpacity(0.8),
                       height: 35,
@@ -170,7 +170,7 @@ class _MyDrawerState extends State<MyDrawer> with TickerProviderStateMixin {
                   bottom: 62,
                   right: -40,
                   child: RotationTransition(
-                    turns: AlwaysStoppedAnimation(125 / 360),
+                    turns: new AlwaysStoppedAnimation(125 / 360),
                     child: Container(
                       color: Theme.of(context).primaryColorDark.withOpacity(0.8),
                       height: 35,
@@ -182,7 +182,7 @@ class _MyDrawerState extends State<MyDrawer> with TickerProviderStateMixin {
                   bottom: 80,
                   right: -60,
                   child: RotationTransition(
-                    turns: AlwaysStoppedAnimation(125 / 360),
+                    turns: new AlwaysStoppedAnimation(125 / 360),
                     child: Container(
                       color: Theme.of(context).primaryColorLight.withOpacity(0.3),
                       height: 35,
@@ -246,7 +246,7 @@ class _MyDrawerState extends State<MyDrawer> with TickerProviderStateMixin {
                               trailing: Icon(CupertinoIcons.right_chevron,color: primaryIconThemeColor,),
                               title: Text(widget.appStateModel.blocks.localeText.sales),
                               onTap: () {
-                                var filter = Map<String, dynamic>();
+                                var filter = new Map<String, dynamic>();
                                 filter['featured'] = '1';
                                 Navigator.push(
                                     context,
@@ -261,7 +261,7 @@ class _MyDrawerState extends State<MyDrawer> with TickerProviderStateMixin {
                               trailing: Icon(CupertinoIcons.right_chevron,color: primaryIconThemeColor,),
                               title: Text(widget.appStateModel.blocks.localeText.sales),
                               onTap: () {
-                                var filter = Map<String, dynamic>();
+                                var filter = new Map<String, dynamic>();
                                 filter['on_sale'] = '1';
                                 Navigator.push(
                                     context,
@@ -276,7 +276,7 @@ class _MyDrawerState extends State<MyDrawer> with TickerProviderStateMixin {
                               trailing: Icon(CupertinoIcons.right_chevron,color: primaryIconThemeColor,),
                               title: Text(widget.appStateModel.blocks.localeText.localeTextNew),
                               onTap: () {
-                                var filter = <String, dynamic>{};
+                                var filter = new Map<String, dynamic>();
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
@@ -302,18 +302,18 @@ class _MyDrawerState extends State<MyDrawer> with TickerProviderStateMixin {
 
   String _getShippingAddress(Address shipping) {
     String address = '';
-    if(shipping.address1.isNotEmpty) {
-      address = '$address${shipping.address1}';
-    } if(shipping.address2.isNotEmpty) {
-      address = '$address ${shipping.address2}';
-    } if(shipping.city.isNotEmpty) {
-      address = '$address ${shipping.city}';
-    } if(shipping.postcode.isNotEmpty) {
-      address = '$address ${shipping.postcode}';
-    } if(shipping.state.isNotEmpty) {
-      address = '$address ${shipping.state}';
-    } if(shipping.country.isNotEmpty) {
-      address = '$address ${shipping.country}'; }
+    if(shipping.address1 != null && shipping.address1.isNotEmpty) {
+      address = address + '' + shipping.address1;
+    } if(shipping.address2 != null && shipping.address2.isNotEmpty) {
+      address = address + ' ' + shipping.address2;
+    } if(shipping.city != null && shipping.city.isNotEmpty) {
+      address = address + ' ' + shipping.city;
+    } if(shipping.postcode != null && shipping.postcode.isNotEmpty) {
+      address = address + ' ' + shipping.postcode;
+    } if(shipping.state != null && shipping.state.isNotEmpty) {
+      address = address + ' ' + shipping.state;
+    } if(shipping.country != null && shipping.country.isNotEmpty) {
+      address = address + ' ' + shipping.country; }
     return address;
   }
 

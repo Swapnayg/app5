@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api, dead_code, unnecessary_null_comparison, avoid_print
+
 import 'dart:async';
 import 'dart:io';
 
@@ -10,7 +12,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 //import 'package:path_provider/path_provider.dart';
 import 'package:scoped_model/scoped_model.dart';
 
-// import 'others/splash.dart';
+import 'others/splash.dart';
 import 'src/app.dart';
 import 'src/data/gallery_options.dart';
 import 'src/models/app_state_model.dart';
@@ -18,7 +20,7 @@ import 'src/resources/api_provider.dart';
 import 'src/themes/gallery_theme_data_material.dart';
 import 'src/ui/intro/intro_slider.dart';
 
-Directory? _appDocsDir;
+//Directory _appDocsDir;
 
 void setOverrideForDesktop() {
   if (kIsWeb) return;
@@ -42,19 +44,19 @@ void main() async {
   //SharedPreferences.setMockInitialValues({});
   //UnComment when Using Dynamic Splash
   //_appDocsDir = await getApplicationDocumentsDirectory();
-  runApp(MyApp());
+  runApp(MyApp(key: UniqueKey(),));
 }
 
 class MyApp extends StatefulWidget {
   final AppStateModel model = AppStateModel();
-  MyApp({super.key});
+  MyApp({required Key key}) : super(key: key);
   @override
   _MyAppState createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
   final apiProvider = ApiProvider();
-  Timer? _timer;
+  late Timer _timer;
   int _start = 0;
   var splashIndex = ['0', '1', '2', '3', '4', '5'];
 
@@ -67,8 +69,11 @@ class _MyAppState extends State<MyApp> {
     //startTimer();
   }
 
-  Future<File?> fileFromDocsDir(String filename) async {
-    return null;
+  File fileFromDocsDir(String filename) {
+    //TODO Uncomment when using dynamic splash
+    //String pathName = p.join(_appDocsDir.path, filename);
+    //return File(pathName);
+    throw UnimplementedError('fileFromDocsDir is not implemented yet.');
   }
 
   void apiProviderInt() async {
@@ -80,13 +85,13 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return ModelBinding(
-      key: UniqueKey(),
       initialModel: GalleryOptions(
-          platform: defaultTargetPlatform,
-          themeMode: ThemeMode.system,
-          customTextDirection: CustomTextDirection.localeBased,
-          textScaleFactor: 1,
-          locale: widget.model.appLocale),
+        themeMode: ThemeMode.system,
+        customTextDirection: CustomTextDirection.localeBased,
+        textScaleFactor: 1,
+        locale: widget.model.appLocale,
+        platform: defaultTargetPlatform,
+      ),
       child: Builder(
         builder: (context) {
           //print(GalleryOptions.of(context).locale.languageCode);
@@ -99,62 +104,70 @@ class _MyAppState extends State<MyApp> {
                     GlobalWidgetsLocalizations.delegate,
                   ],
                   supportedLocales: GalleryOptions.supportedLocales,
-                  locale: GalleryOptions.of(context)?.locale,
+                  locale: GalleryOptions.of(context).locale,
                   title: 'WooCommerce',
                   debugShowCheckedModeBanner: false,
-                  themeMode: GalleryOptions.of(context)?.themeMode,
-                  theme: GalleryOptions.of(context)?.locale == Locale('ar')
-                      ? GalleryThemeData.lightArabicThemeData.copyWith()
-                      : GalleryThemeData.lightThemeData.copyWith(),
-                  darkTheme: GalleryOptions.of(context)?.locale == Locale('ar')
-                      ? GalleryThemeData.darkArabicThemeData.copyWith()
-                      : GalleryThemeData.darkThemeData.copyWith(),
+                  themeMode: GalleryOptions.of(context).themeMode,
+                  theme: GalleryOptions.of(context).locale == Locale('ar')
+                      ? GalleryThemeData.lightArabicThemeData.copyWith(
+                          platform: GalleryOptions.of(context).platform,
+                        )
+                      : GalleryThemeData.lightThemeData.copyWith(
+                          platform: GalleryOptions.of(context).platform,
+                        ),
+                  darkTheme: GalleryOptions.of(context).locale == Locale('ar')
+                      ? GalleryThemeData.darkArabicThemeData.copyWith(
+                          platform: GalleryOptions.of(context).platform,
+                        )
+                      : GalleryThemeData.darkThemeData.copyWith(
+                          platform: GalleryOptions.of(context).platform,
+                        ),
                   home: ScopedModelDescendant<AppStateModel>(
                       builder: (context, child, model) {
                     if (_start == 0) {
-                      return App(key: UniqueKey()); /*ShrineApp()*/
-                    } else {
-                      return Material(
-                          child: Scaffold(
-                        body: AnnotatedRegion<SystemUiOverlayStyle>(
-                          value: SystemUiOverlayStyle.dark,
-                          child: Center(
-                            child: SizedBox(
-                                width: 200,
-                                child: Image.asset(
-                                  'lib/assets/images/logo.png',
-                                  fit: BoxFit.fitHeight,
-                                )),
+                    return App(key: UniqueKey()); /*ShrineApp()*/
+                  } else {
+                    return Material(
+                        child: Scaffold(
+                          body: AnnotatedRegion<SystemUiOverlayStyle>(
+                            value: SystemUiOverlayStyle.dark,
+                            child: Center(
+                              child: SizedBox(
+                                  width: 200,
+                                  child: Image.asset('lib/assets/images/logo.png', fit: BoxFit.fitHeight,)
+                              ),
+                            ),
                           ),
-                        ),
-                      ));
+                        )
+                    );
 
-                      //For dinamic splash not used because issues in pathprovider in recent flutter update
-                      // ignore: dead_code
-                      return Material(
-                        child: Stack(
-                          children: [
-                            SizedBox(
-                                height: MediaQuery.of(context).size.height,
-                                child: Image.network(
-                                  'https://images.pexels.com/photos/794212/pexels-photo-794212.jpeg',
+                    //For dinamic splash not used because issues in pathprovider in recent flutter update
+                    return Material(
+                      child: Stack(
+                        children: [
+                          SizedBox(
+                              height: MediaQuery.of(context).size.height,
+                              child: Image(
                                   fit: BoxFit.fitHeight,
-                                )),
-                            // ignore: unnecessary_null_comparison
-                            model.blocks != null
-                                ? Positioned(
-                                    top: 20,
-                                    right: 20,
-                                    child: TextButton(
-                                      child: Text('SKIP 0$_start'),
-                                      onPressed: () => cancelTimer(),
-                                    ),
-                                  )
-                                : Container()
-                          ],
-                        ),
-                      );
-                    }
+                                  image: NetworkToFileImage(
+                                      url: '',
+                                      file: fileFromDocsDir(
+                                          "splash${splashIndex[0]}.jpg"),
+                                      debug: true))),
+                          model.blocks != null
+                              ? Positioned(
+                                  top: 20,
+                                  right: 20,
+                                  child: TextButton(
+                                    child: Text('SKIP 0$_start'),
+                                    onPressed: () => cancelTimer(),
+                                  ),
+                                )
+                              : Container()
+                        ],
+                      ),
+                    );
+                  }
                   })));
         },
       ),
@@ -179,19 +192,18 @@ class _MyAppState extends State<MyApp> {
   }
 
   void cancelTimer() {
-    _timer!.cancel();
+    _timer.cancel();
     setState(() {
       _start = 0;
     });
   }
 }
 
-class MyHttpOverrides extends HttpOverrides {
+class MyHttpOverrides extends HttpOverrides{
   @override
-  HttpClient createHttpClient(SecurityContext? context) {
+  HttpClient createHttpClient(SecurityContext? context){
     return super.createHttpClient(context)
-      ..badCertificateCallback =
-          (X509Certificate cert, String host, int port) => true;
+      ..badCertificateCallback = (X509Certificate cert, String host, int port)=> true;
   }
 }
 

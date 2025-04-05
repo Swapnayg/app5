@@ -12,7 +12,7 @@ import '../../../../../models/vendor/vendor_product_model.dart';
 class SelectCategories extends StatefulWidget {
   final VendorProduct product;
 
-  const SelectCategories({Key key, this.product}) : super(key: key);
+  SelectCategories({Key key, this.product}) : super(key: key);
 
   @override
   _SelectCategoriesState createState() => _SelectCategoriesState();
@@ -24,7 +24,7 @@ class _SelectCategoriesState extends State<SelectCategories> {
   Category selectedCategory;
   int mainCategoryId = 0;
   int selectedCategoryIndex = 0;
-  final AppStateModel _appStateModel = AppStateModel();
+  AppStateModel _appStateModel = AppStateModel();
 
   @override
   Widget build(BuildContext context) {
@@ -62,11 +62,11 @@ class _CategoryListState extends State<CategoryList> {
   void initState() {
     super.initState();
     mainCategories = widget.categories.where((cat) => cat.parent == 0).toList();
-    if (mainCategories.isNotEmpty) selectedCategory = mainCategories[0];
+    if (mainCategories.length != 0) selectedCategory = mainCategories[0];
   }
 
   void onCategoryClick(Category category) {
-      ProductCategory productCategory= ProductCategory();
+      ProductCategory productCategory= new ProductCategory();
       productCategory.id = category.id;
       productCategory.name = category.name;
       if(!widget.product.categories.any((value) => value.id == category.id)) {
@@ -107,7 +107,7 @@ class _CategoryListState extends State<CategoryList> {
           value: widget.product.categories.any((item) => item.id == category.id),
           onChanged: (bool value) {
             if(value) {
-              ProductCategory productCategory= ProductCategory();
+              ProductCategory productCategory= new ProductCategory();
               productCategory.id = category.id;
               productCategory.name = category.name;
               if(!widget.product.categories.any((value) => value.id == category.id)) {
@@ -146,7 +146,7 @@ class _CategoryListState extends State<CategoryList> {
             value: widget.product.categories.any((item) => item.id == category.id),
             onChanged: (bool value) {
               if(value) {
-                ProductCategory productCategory= ProductCategory();
+                ProductCategory productCategory= new ProductCategory();
                 productCategory.id = category.id;
                 productCategory.name = category.name;
                 if(!widget.product.categories.any((value) => value.id == category.id)) {
@@ -179,7 +179,7 @@ class _CategoryListState extends State<CategoryList> {
   }
 
   TextStyle menuItemStyle() {
-    return Theme.of(context).textTheme.bodyLarge;
+    return Theme.of(context).textTheme.bodyText1;
   }
 
   _divider(BuildContext context) {
@@ -194,24 +194,24 @@ class _CategoryListState extends State<CategoryList> {
   }
 
   Container leadingIcon(Category category) {
-    return SizedBox(
+    return Container(
       width: 20,
       height: 20,
       child: CachedNetworkImage(
-        imageUrl: category.image ?? '',
+        imageUrl: category.image != null ? category.image : '',
         imageBuilder: (context, imageProvider) => Card(
           clipBehavior: Clip.antiAlias,
           margin: EdgeInsets.all(0.0),
           elevation: 0.0,
           //shape: StadiumBorder(),
           child: Ink.image(
-            image: imageProvider,
-            fit: BoxFit.cover,
             child: InkWell(
               onTap: () {
                 onCategoryClick(category);
               },
             ),
+            image: imageProvider,
+            fit: BoxFit.cover,
           ),
         ),
         placeholder: (context, url) => Card(
@@ -262,7 +262,8 @@ class ExpansionTile2 extends StatefulWidget {
     this.children = const <Widget>[],
     this.trailing,
     this.initiallyExpanded = false,
-  })  : super(key: key);
+  })  : assert(initiallyExpanded != null),
+        super(key: key);
 
   /// A widget to display before the title.
   ///
@@ -341,7 +342,7 @@ class _ExpansionTile2State extends State<ExpansionTile2>
         _controller.drive(_backgroundColorTween.chain(_easeOutTween));
 
     _isExpanded =
-        PageStorage.of(context).readState(context) ?? widget.initiallyExpanded;
+        PageStorage.of(context)?.readState(context) ?? widget.initiallyExpanded;
     if (_isExpanded) _controller.value = 1.0;
   }
 
@@ -364,9 +365,10 @@ class _ExpansionTile2State extends State<ExpansionTile2>
           });
         });
       }
-      PageStorage.of(context).writeState(context, _isExpanded);
+      PageStorage.of(context)?.writeState(context, _isExpanded);
     });
-    widget.onExpansionChanged(_isExpanded);
+    if (widget.onExpansionChanged != null)
+      widget.onExpansionChanged(_isExpanded);
   }
 
   Widget _buildChildren(BuildContext context, Widget child) {
@@ -420,14 +422,14 @@ class _ExpansionTile2State extends State<ExpansionTile2>
   @override
   void didChangeDependencies() {
     final ThemeData theme = Theme.of(context);
-    _borderColorTween.end = theme.dividerColor;
+    _borderColorTween..end = theme.dividerColor;
     _headerColorTween
-      ..begin = theme.textTheme.titleMedium.color
-      ..end = theme.colorScheme.secondary;
+      ..begin = theme.textTheme.subtitle1.color
+      ..end = theme.accentColor;
     _iconColorTween
       ..begin = theme.unselectedWidgetColor
-      ..end = theme.colorScheme.secondary;
-    _backgroundColorTween.end = widget.backgroundColor;
+      ..end = theme.accentColor;
+    _backgroundColorTween..end = widget.backgroundColor;
     super.didChangeDependencies();
   }
 

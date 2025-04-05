@@ -1,4 +1,6 @@
-library;
+// ignore_for_file: unused_local_variable, non_constant_identifier_names, prefer_interpolation_to_compose_strings
+
+library woocommerce_api;
 
 import 'dart:async';
 import "dart:collection";
@@ -13,10 +15,10 @@ import 'package:http/http.dart' as http;
 import '../config.dart';
 
 class WooCommerceAPI {
-  String url;
-  String consumerKey;
-  String consumerSecret;
-  bool isHttps;
+  late String url;
+  late String consumerKey;
+  late String consumerSecret;
+  late bool isHttps;
   Config config = Config();
 
   WooCommerceAPI(){
@@ -31,12 +33,12 @@ class WooCommerceAPI {
     }
   }
 
-  _getOAuthURL(String requestMethod, String endpoint) {
+  _getOAuthURL(String request_method, String endpoint) {
     var consumerKey = this.consumerKey;
     var consumerSecret = this.consumerSecret;
 
     var token = "";
-    var tokenSecret = "";
+    var token_secret = "";
     var url = "${this.url}/wp-json/wc/v2/$endpoint";
     var containsQueryParams = url.contains("?");
 
@@ -49,10 +51,10 @@ class WooCommerceAPI {
       return rand.nextInt(26) + 97;
     });
 
-    var nonce = String.fromCharCodes(codeUnits);
-    int timestamp = (DateTime.now().millisecondsSinceEpoch / 1000).toInt();
+    var nonce =  String.fromCharCodes(codeUnits);
+    int timestamp = ( DateTime.now().millisecondsSinceEpoch / 1000).toInt();
 
-    var method = requestMethod;
+    var method = request_method;
     var path = url.split("?")[0];
     var parameters = "oauth_consumer_key=$consumerKey&oauth_nonce=$nonce&oauth_signature_method=HMAC-SHA1&oauth_timestamp=$timestamp&oauth_token=$token&oauth_version=1.0&";
 
@@ -69,9 +71,7 @@ class WooCommerceAPI {
     String parameterString = "";
 
     for (var key in treeMap.keys) {
-      parameterString = "$parameterString${Uri.encodeQueryComponent(key)}=" +
-          treeMap[key] +
-          "&";
+      parameterString = "$parameterString${Uri.encodeQueryComponent(key)}=" + treeMap[key] +"&";
     }
 
     parameterString = parameterString.substring(0, parameterString.length - 1);
@@ -109,12 +109,12 @@ class WooCommerceAPI {
     return response;
   }
 
-  _getgetProductAddonsURL(String requestMethod, String endpoint) {
+  _getgetProductAddonsURL(String request_method, String endpoint) {
     var consumerKey = this.consumerKey;
     var consumerSecret = this.consumerSecret;
 
     var token = "";
-    var tokenSecret = "";
+    var token_secret = "";
     var url = "${this.url}/wp-json/wc-product-add-ons/v1/$endpoint";
     var containsQueryParams = url.contains("?");
 
@@ -130,7 +130,7 @@ class WooCommerceAPI {
     var nonce = String.fromCharCodes(codeUnits);
     int timestamp = (DateTime.now().millisecondsSinceEpoch / 1000).toInt();
 
-    var method = requestMethod;
+    var method = request_method;
     var path = url.split("?")[0];
     var parameters = "oauth_consumer_key=$consumerKey&oauth_nonce=$nonce&oauth_signature_method=HMAC-SHA1&oauth_timestamp=$timestamp&oauth_token=$token&oauth_version=1.0&";
 
@@ -186,25 +186,25 @@ class WooCommerceAPI {
           data.remove(key);
         }
       } else if (value is Map) {
-        data[key] = removeNullAndEmptyParams(value);
+        data[key] = removeNullAndEmptyParams(value.cast<String, Object>());
       } else if(value is List){
-        for (var item in value) {
+        value.forEach((item) {
           if(item is Map) {
-            item = removeNullAndEmptyParams(item);
+            item = removeNullAndEmptyParams(item.cast<String, Object>());
           } else if(item == null) {
             value.remove(item);
           } else if(item is String && item.isEmpty) {
             value.remove(item);
           }
-        }
+        });
       }
     }
     return data;
   }
 
   Future<http.Response> postAsync(String endPoint, Map data) async {
-    var url = _getOAuthURL("POST", endPoint);
-    data = removeNullAndEmptyParams(data);
+    var url = this._getOAuthURL("POST", endPoint);
+    data = removeNullAndEmptyParams(data.cast<String, Object>());
 
     final response = await http.post(Uri.parse(url),
         headers: {
@@ -217,7 +217,7 @@ class WooCommerceAPI {
 
   Future<http.Response> putAsync(String endPoint, Map data) async {
     var url = _getOAuthURL("PUT", endPoint);
-    data = removeNullAndEmptyParams(data);
+    data = removeNullAndEmptyParams(data.cast<String, Object>());
 
     final response = await http.put(Uri.parse(url),
         headers: {
@@ -248,7 +248,7 @@ class QueryString {
     decode(String s) => Uri.decodeComponent(s.replaceAll('+', ' '));
 
     for (Match match in search.allMatches(query)) {
-      result[decode(match.group(1))] = decode(match.group(2));
+      result[decode(match.group(1) ?? '')] = decode(match.group(2) ?? '');
     }
 
     return result;

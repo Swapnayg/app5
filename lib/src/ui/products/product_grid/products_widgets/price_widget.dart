@@ -18,25 +18,31 @@ class PriceWidget extends StatelessWidget {
       alignment: WrapAlignment.center,
       crossAxisAlignment: WrapCrossAlignment.center,
       children: <Widget>[
-        Text(onSale && (product.formattedSalesPrice.isNotEmpty)
+        Text(onSale && (product.formattedSalesPrice != null &&
+            product.formattedSalesPrice.isNotEmpty)
             ? parseHtmlString(product.formattedSalesPrice) : '',
-            style: Theme.of(context).textTheme.bodyLarge.copyWith(
+            style: Theme.of(context).textTheme.bodyText1.copyWith(
                   fontSize: 16,
                   fontWeight: FontWeight.w800,
                 )),
         onSale ? SizedBox(width: 4.0) : SizedBox(width: 0.0),
         Text(
-            (product.formattedPrice.isNotEmpty)
+            (product.formattedPrice != null &&
+                    product.formattedPrice.isNotEmpty)
                 ? parseHtmlString(product.formattedPrice)
                 : '',
             style: TextStyle(
-              fontWeight: onSale && (product.formattedSalesPrice.isNotEmpty) ? FontWeight.w400 : FontWeight.w800,
-              color: onSale && (product.formattedSalesPrice.isNotEmpty)
+              fontWeight: onSale && (product.formattedSalesPrice != null &&
+                  product.formattedSalesPrice.isNotEmpty) ? FontWeight.w400 : FontWeight.w800,
+              color: onSale && (product.formattedSalesPrice != null &&
+                  product.formattedSalesPrice.isNotEmpty)
                   ? Theme.of(context).hintColor
-                  : Theme.of(context).textTheme.bodyLarge.color,
-              fontSize: onSale && (product.formattedSalesPrice.isNotEmpty) ? 14 : 16,
+                  : Theme.of(context).textTheme.bodyText1.color,
+              fontSize: onSale && (product.formattedSalesPrice != null &&
+                  product.formattedSalesPrice.isNotEmpty) ? 14 : 16,
               decoration:
-                  onSale && (product.formattedSalesPrice.isNotEmpty) ? TextDecoration.lineThrough : TextDecoration.none,
+                  onSale && (product.formattedSalesPrice != null &&
+                      product.formattedSalesPrice.isNotEmpty) ? TextDecoration.lineThrough : TextDecoration.none,
             )),
       ],
     );

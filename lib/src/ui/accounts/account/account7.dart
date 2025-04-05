@@ -3,7 +3,6 @@ import 'dart:io' show Platform;
 import 'package:fab_circular_menu/fab_circular_menu.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:scoped_model/scoped_model.dart';
@@ -31,8 +30,6 @@ import '../wallet.dart';
 import '../wishlist.dart';
 
 class UserAccount7 extends StatefulWidget {
-  const UserAccount7({super.key});
-
   @override
   _UserAccount7State createState() => _UserAccount7State();
 }
@@ -42,7 +39,7 @@ class _UserAccount7State extends State<UserAccount7> {
 
   @override
   Widget build(BuildContext context) {
-    TextStyle menuTextStyle = Theme.of(context).textTheme.bodyLarge;
+    TextStyle menuTextStyle = Theme.of(context).textTheme.bodyText1;
     Color onPrimaryColor = Colors.white;
     Color headerBackgroundColor = Theme.of(context).primaryColor;
     return Scaffold(
@@ -85,7 +82,7 @@ class _UserAccount7State extends State<UserAccount7> {
                           color: Theme.of(context).colorScheme.onSecondary,
                         ),
                         onPressed: () {
-                          if (appStateModel.user.id != null &&
+                          if (appStateModel.user?.id != null &&
                               appStateModel.user.id > 0) {
                             Navigator.push(
                                 context,
@@ -111,7 +108,7 @@ class _UserAccount7State extends State<UserAccount7> {
                               color: Theme.of(context).colorScheme.onSecondary,
                             ),
                             onPressed: () {
-                              openLink('mailto:${model.blocks.settings.supportEmail}');
+                              openLink('mailto:'+model.blocks.settings.supportEmail);
                             },
                             iconSize: 20.0,
                             color: Colors.black)
@@ -122,7 +119,8 @@ class _UserAccount7State extends State<UserAccount7> {
                           color: Theme.of(context).colorScheme.onSecondary,
                         ),
                         onPressed: () {
-                          final url = 'https://wa.me/${model.blocks.settings.whatsappNumber}';
+                          final url = 'https://wa.me/' +
+                              model.blocks.settings.whatsappNumber;
                           openLink(url);
                         },
                         iconSize: 20.0,
@@ -134,7 +132,7 @@ class _UserAccount7State extends State<UserAccount7> {
                         ),
                         onPressed: () {
                           openLink(
-                              'tel:${model.blocks.settings.whatsappNumber}');
+                              'tel:' + model.blocks.settings.whatsappNumber);
                         },
                         iconSize: 20.0,
                         color: Colors.black),
@@ -161,7 +159,7 @@ class _UserAccount7State extends State<UserAccount7> {
                   children: [
                     ListTile(
                       onTap: () {
-                        if (appStateModel.user.id != null &&
+                        if (appStateModel.user?.id != null &&
                             appStateModel.user.id > 0) {
                           Navigator.push(
                               context,
@@ -185,7 +183,7 @@ class _UserAccount7State extends State<UserAccount7> {
                     Divider(height: 0.0),
                     ListTile(
                       onTap: () {
-                        if (appStateModel.user.id != null &&
+                        if (appStateModel.user?.id != null &&
                             appStateModel.user.id > 0) {
                           Navigator.push(
                               context,
@@ -210,7 +208,7 @@ class _UserAccount7State extends State<UserAccount7> {
                     Divider(height: 0.0),
                     ListTile(
                       onTap: () {
-                        if (appStateModel.user.id != null &&
+                        if (appStateModel.user?.id != null &&
                             appStateModel.user.id > 0) {
                           Navigator.push(
                               context,
@@ -235,7 +233,7 @@ class _UserAccount7State extends State<UserAccount7> {
                     Divider(height: 0.0),
                     ListTile(
                       onTap: () {
-                        if (appStateModel.user.id != null &&
+                        if (appStateModel.user?.id != null &&
                             appStateModel.user.id > 0) {
                           Navigator.push(
                               context,
@@ -278,7 +276,7 @@ class _UserAccount7State extends State<UserAccount7> {
                     ScopedModelDescendant<AppStateModel>(
                         builder: (context, child, model) {
                       if (model.blocks?.languages != null &&
-                          model.blocks.languages.isNotEmpty) {
+                          model.blocks.languages.length > 0) {
                         return Column(
                           children: <Widget>[
                             ListTile(
@@ -306,7 +304,7 @@ class _UserAccount7State extends State<UserAccount7> {
                     ScopedModelDescendant<AppStateModel>(
                         builder: (context, child, model) {
                       if (model.blocks?.currencies != null &&
-                          model.blocks.currencies.isNotEmpty) {
+                          model.blocks.currencies.length > 0) {
                         return Column(
                           children: <Widget>[
                             ListTile(
@@ -347,7 +345,7 @@ class _UserAccount7State extends State<UserAccount7> {
                     Divider(height: 0.0),
                     ListTile(
                       onTap: () {
-                        if (appStateModel.user.id != null &&
+                        if (appStateModel.user?.id != null &&
                             appStateModel.user.id > 0) {
                           Navigator.push(
                               context,
@@ -468,6 +466,7 @@ class _UserAccount7State extends State<UserAccount7> {
   SliverAppBar buildSliverAppBar(
       Color onPrimaryColor, BuildContext context, Color headerBackgroundColor) {
     return SliverAppBar(
+      brightness: Brightness.dark,
       floating: false,
       pinned: true,
       snap: false,
@@ -495,12 +494,14 @@ class _UserAccount7State extends State<UserAccount7> {
               ScopedModelDescendant<AppStateModel>(
                   builder: (context, child, model) {
                   return Container(
-                      child: (model.user.id != null &&
+                      child: (model.user?.id != null &&
                           model.user.id > 0)
                           ? (model.user.billing.firstName != '' ||
                           model.user.billing.lastName != '')
                               ? Text(
-                        '${model.user.billing.firstName} ${model.user.billing.lastName}',
+                        model.user.billing.firstName +
+                                      ' ' +
+                            model.user.billing.lastName,
                                   style: TextStyle(color: onPrimaryColor),
                                 )
                               : Container(
@@ -526,7 +527,7 @@ class _UserAccount7State extends State<UserAccount7> {
             ],
           ),
           background: buildAccountBackground2()),
-      backgroundColor: headerBackgroundColor, systemOverlayStyle: SystemUiOverlayStyle.light,
+      backgroundColor: headerBackgroundColor,
     );
   }
 
@@ -537,7 +538,7 @@ class _UserAccount7State extends State<UserAccount7> {
           top: 30,
           left: -30,
           child: RotationTransition(
-            turns: AlwaysStoppedAnimation(38 / 360),
+            turns: new AlwaysStoppedAnimation(38 / 360),
             child: Container(
               color: Theme.of(context).primaryColorLight.withOpacity(0.3),
               height: 35,
@@ -549,7 +550,7 @@ class _UserAccount7State extends State<UserAccount7> {
           top: 0,
           left: -5,
           child: RotationTransition(
-            turns: AlwaysStoppedAnimation(127 / 360),
+            turns: new AlwaysStoppedAnimation(127 / 360),
             child: Container(
               color: Theme.of(context).primaryColorDark.withOpacity(0.8),
               height: 35,
@@ -561,7 +562,7 @@ class _UserAccount7State extends State<UserAccount7> {
           bottom: 62,
           right: -40,
           child: RotationTransition(
-            turns: AlwaysStoppedAnimation(125 / 360),
+            turns: new AlwaysStoppedAnimation(125 / 360),
             child: Container(
               color: Theme.of(context).primaryColorDark.withOpacity(0.8),
               height: 35,
@@ -573,7 +574,7 @@ class _UserAccount7State extends State<UserAccount7> {
           bottom: 80,
           right: -60,
           child: RotationTransition(
-            turns: AlwaysStoppedAnimation(125 / 360),
+            turns: new AlwaysStoppedAnimation(125 / 360),
             child: Container(
               color: Theme.of(context).primaryColorLight.withOpacity(0.3),
               height: 35,
@@ -655,7 +656,7 @@ class _UserAccount7State extends State<UserAccount7> {
     return ScopedModelDescendant<AppStateModel>(
         builder: (context, child, model) {
       if (model.blocks != null &&
-          model.blocks.pages.isNotEmpty &&
+          model.blocks.pages.length != 0 &&
           model.blocks.pages[0].url.isNotEmpty) {
         return buildPageList(model.blocks.pages, menuTextStyle);
       } else {
@@ -713,10 +714,12 @@ class _UserAccount7State extends State<UserAccount7> {
   _shareApp() {
     if (Platform.isIOS) {
       //Add ios App link here
-      Share.share('Check out this app: ${appStateModel.blocks.settings.shareAppIosLink}');
+      Share.share('Check out this app: ' +
+          appStateModel.blocks.settings.shareAppIosLink);
     } else {
       //Add android app link here
-      Share.share('Check out this app: ${appStateModel.blocks.settings.shareAppAndroidLink}');
+      Share.share('Check out this app: ' +
+          appStateModel.blocks.settings.shareAppAndroidLink);
     }
   }
 

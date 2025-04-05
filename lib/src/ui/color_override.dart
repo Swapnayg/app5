@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class PrimaryColorOverride extends StatelessWidget {
-  const PrimaryColorOverride({Key key, this.child}) : super(key: key);
+  const PrimaryColorOverride({required Key key, required this.child}) : super(key: key);
 
   //final color = Theme.of(context).accentColor;
   final Widget child;
@@ -10,8 +10,8 @@ class PrimaryColorOverride extends StatelessWidget {
   Widget build(BuildContext context) {
     Color color = Colors.black;//Theme.of(context).accentColor;
     return Theme(
-      data: Theme.of(context).copyWith(primaryColor: color),
       child: child,
+      data: Theme.of(context).copyWith(primaryColor: color),
     );
   }
 }

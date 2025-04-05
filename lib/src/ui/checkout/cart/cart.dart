@@ -27,7 +27,7 @@ class CartPage extends StatefulWidget {
 }
 
 class _CartPageState extends State<CartPage> {
-  final TextEditingController _couponCodeController = TextEditingController();
+  TextEditingController _couponCodeController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -65,7 +65,7 @@ class _CartPageState extends State<CartPage> {
       body: SafeArea(
         child: RefreshIndicator(
           onRefresh: () async  {
-            widget.appStateModel.getCart();
+            await widget.appStateModel.getCart();
             widget.homeBloc.getCheckoutForm();
             return;
           },
@@ -90,7 +90,7 @@ class _CartPageState extends State<CartPage> {
                         SizedBox( width: 16,),
                         ScopedModelDescendant<AppStateModel>(
                             builder: (context, child, model) {
-                              if (model.shoppingCart.cartContents != null && model.shoppingCart.cartContents.isNotEmpty) {
+                              if (model.shoppingCart?.cartContents != null && model.shoppingCart.cartContents.length != 0) {
                                 return Text(
                                     '${model.shoppingCart.cartContents.length} ${widget.appStateModel.blocks.localeText.items}',
                                   //style: Theme.of(context).appBarTheme.textTheme.title,
@@ -106,11 +106,11 @@ class _CartPageState extends State<CartPage> {
               Expanded(
                 child: ScopedModelDescendant<AppStateModel>(
                     builder: (context, child, model) {
-                  if (model.shoppingCart.cartContents == null) {
+                  if (model.shoppingCart?.cartContents == null) {
                     return Center(
                       child: CircularProgressIndicator(),
                     );
-                  } else if (model.shoppingCart.cartContents.isNotEmpty) {
+                  } else if (model.shoppingCart.cartContents.length != 0) {
                     return buildCart(localTheme, model.shoppingCart);
                   } else {
                     return Stack(
@@ -124,6 +124,7 @@ class _CartPageState extends State<CartPage> {
                       ],
                     );
                   }
+                  ;
                 }),
               ),
             ],
@@ -147,7 +148,7 @@ class _CartPageState extends State<CartPage> {
                 SizedBox(
                   width: _leftColumnWidth,
                 ),
-                SizedBox(
+                Container(
                   width: MediaQuery.of(context).size.width - _leftColumnWidth,
                   child: Form(
                     key: _formKey,
@@ -282,25 +283,25 @@ class _CartPageState extends State<CartPage> {
   }
 
   setAddressCountry(CheckoutFormModel onData) {
-    if (onData.billingCountry.isNotEmpty) {
+    if (onData.billingCountry != null && onData.billingCountry.isNotEmpty) {
       widget.homeBloc.initialSelectedCountry = onData.billingCountry;
     }
-    if (onData.billingState.isNotEmpty) {
+    if (onData.billingState != null && onData.billingState.isNotEmpty) {
       List<CountryModel> countries =
           countryModelFromJson(JsonStrings.listOfSimpleObjects);
       CountryModel country =
           countries.singleWhere((item) => item.value == onData.billingCountry);
-      if (country.regions.any((item) => item.value == onData.billingState)) {
+      if (country.regions != null &&
+          country.regions.any((item) => item.value == onData.billingState)) {
         widget.homeBloc.formData['billing_state'] = onData.billingState;
-      } else {
+      } else
         widget.homeBloc.formData['billing_state'] = null;
-      }
     }
   }
 }
 
 class ShoppingCartSummary extends StatelessWidget {
-  const ShoppingCartSummary({super.key, 
+  const ShoppingCartSummary({
     @required this.cartTotals,
     @required this.currency,
     @required this.model,
@@ -312,8 +313,8 @@ class ShoppingCartSummary extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final smallAmountStyle = Theme.of(context).textTheme.bodyText2;
-    final largeAmountStyle = Theme.of(context).textTheme.headline6;
+    final smallAmountStyle = Theme.of(context).textTheme.body1;
+    final largeAmountStyle = Theme.of(context).textTheme.title;
 
     return Row(
       children: <Widget>[
@@ -394,7 +395,7 @@ class ShoppingCartSummary extends StatelessWidget {
 
 class ShoppingCartRow extends StatefulWidget {
    ShoppingCartRow(
-      {super.key, @required this.product,
+      {@required this.product,
       this.onPressed,
       this.onIncreaseQty,
       this.onDecreaseQty});
@@ -454,7 +455,7 @@ class _ShoppingCartRowState extends State<ShoppingCartRow> {
                           children: <Widget>[
                             Text(
                               widget.product.name,
-                              style: localTheme.textTheme.bodyLarge
+                              style: localTheme.textTheme.bodyText1
                                   .copyWith(fontWeight: FontWeight.w600),
                             ),
                             Text(parseHtmlString(widget.product.formattedPrice)),
@@ -466,13 +467,13 @@ class _ShoppingCartRowState extends State<ShoppingCartRow> {
                                   onPressed: _onDecreaseQty,
                                 ),
                                 isLoading
-                                    ? SizedBox(
+                                    ? Container(
                                         width: 20,
                                         height: 20,
                                         child: CircularProgressIndicator(
                                           strokeWidth: 2.0,
                                         ))
-                                    : SizedBox(
+                                    : Container(
                                         width: 20,
                                         height: 16,
                                         child: Center(

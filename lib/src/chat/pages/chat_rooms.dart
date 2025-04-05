@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api, no_leading_underscores_for_local_identifiers
+
 import 'package:flutter/material.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
@@ -9,15 +11,15 @@ import 'chat_page.dart';
 
 class ChatRoomList extends StatefulWidget {
   final String id;
-  const ChatRoomList({Key key, this.id}) : super(key: key);
+  const ChatRoomList({required Key key, required this.id}) : super(key: key);
   @override
   _ChatRoomListState createState() => _ChatRoomListState();
 }
 
 class _ChatRoomListState extends State<ChatRoomList> {
 
-  double _height;
-  double _width;
+  late double _height;
+  late double _width;
   final appStateModel = AppStateModel();
 
   @override
@@ -41,37 +43,37 @@ class _ChatRoomListState extends State<ChatRoomList> {
     return StreamBuilder<List<Conversation>>(
       stream: DBService.instance.getConversations(widget.id),
       builder: (context, snapshot) {
-        var data = snapshot.data;
-        if (data != null) {
-          return data.length != 0
+        var _data = snapshot.data;
+        if (_data != null) {
+          return _data.isNotEmpty
               ? ListView.builder(
-            itemCount: data.length,
-            itemBuilder: (context, index) {
+            itemCount: _data.length,
+            itemBuilder: (_context, _index) {
               return Column(
                 children: [
                   ListTile(
                     contentPadding: EdgeInsets.fromLTRB(16, 8, 16, 8),
                     onTap: () {
                       Navigator.push(context, MaterialPageRoute(builder: (context) {
-                        return ChatPage(chatId: data[index].chatId, vendorId: data[index].vendorId, vendorName: data[index].vendorName, vendorAvatar: data[index].vendorAvatar
+                        return ChatPage(key: Key(_data[_index].chatId), chatId: _data[_index].chatId, vendorId: _data[_index].vendorId, vendorName: _data[_index].vendorName, vendorAvatar: _data[_index].vendorAvatar,
                         );
                       }));
                     },
-                    title: appStateModel.user.id.toString() == data[index].userId ? Text(data[index].vendorName) : Text(data[index].userName),
+                    title: appStateModel.user.id.toString() == _data[_index].userId ? Text(_data[_index].vendorName) : Text(_data[_index].userName),
                     subtitle: Column(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         Align(
                           alignment: Alignment.topLeft,
                           child: Text(
-                              data[index].messages.last.type == MessageType.Text
-                                  ? data[index].messages.last.content
+                              _data[_index].messages.last.type == MessageType.Text
+                                  ? _data[_index].messages.last.content
                                   : "Attachment: Image", maxLines: 2,),
                         ),
                         Align(
                           alignment: Alignment.bottomRight,
                           child: Text(
-                            timeago.format(data[index].messages.last.timestamp.toDate()),
+                            timeago.format(_data[_index].messages.last.timestamp.toDate()),
                             style: TextStyle(fontSize: 15),
                           ),
                         ),
@@ -84,7 +86,7 @@ class _ChatRoomListState extends State<ChatRoomList> {
                         borderRadius: BorderRadius.circular(100),
                         image: DecorationImage(
                           fit: BoxFit.cover,
-                          image: appStateModel.user.id.toString() == data[index].userId ? NetworkImage(data[index].vendorAvatar) : NetworkImage(data[index].userAvatar),
+                          image: appStateModel.user.id.toString() == _data[_index].userId ? NetworkImage(_data[_index].vendorAvatar) : NetworkImage(_data[_index].userAvatar),
                         ),
                       ),
                     ),

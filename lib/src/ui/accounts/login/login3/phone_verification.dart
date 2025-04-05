@@ -15,7 +15,7 @@ class PhoneVerification extends StatefulWidget {
   final bool fullscreen;
   final appStateModel = AppStateModel();
 
-  PhoneVerification({super.key, 
+  PhoneVerification({
     @required this.fullscreen,
   });
 
@@ -29,14 +29,14 @@ class _PhoneVerificationState extends State<PhoneVerification>
   var _currentIndex = 0;
   var _showTabs = true;
   TabController _tabController;
-  final double _tabHeight = kFullTabHeight;
+  double _tabHeight = kFullTabHeight;
   AnimationController _animationController;
   final appStateModel = AppStateModel();
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   var loadingSendOtp = false;
-  final _formKey = GlobalKey<FormState>();
+  var _formKey = new GlobalKey<FormState>();
   var _loadingOtp = false;
   String prefixCode = '+91';
 
@@ -58,9 +58,9 @@ class _PhoneVerificationState extends State<PhoneVerification>
     _currentIndex = _getCurrentTab();
     _showTabs = true;
     _tabController =
-        TabController(vsync: this, length: 2, initialIndex: _currentIndex);
+        new TabController(vsync: this, length: 2, initialIndex: _currentIndex);
     _tabController.addListener(_indexChange);
-    _animationController = AnimationController(
+    _animationController = new AnimationController(
       duration: const Duration(milliseconds: 500),
       vsync: this,
     );
@@ -76,15 +76,15 @@ class _PhoneVerificationState extends State<PhoneVerification>
 
   @override
   Widget build(BuildContext context) {
-    return CustomAlertDialog(
+    return new CustomAlertDialog(
       expanded: true,
       fullscreen: widget.fullscreen,
       titlePadding: EdgeInsets.all(0.0),
       onCancelPress: _onCancelPress,
       title: _buildTitle(),
-      content: Container(
-        child: SingleChildScrollView(
-          child: Container(
+      content: new Container(
+        child: new SingleChildScrollView(
+          child: new Container(
               padding:
                   const EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
               child: Column(
@@ -103,18 +103,19 @@ class _PhoneVerificationState extends State<PhoneVerification>
 
   Container buildOtpEntryCard(BuildContext context) {
     return Container(
-      child: Form(
-        autovalidateMode: AutovalidateMode.disabled, key: _formKey,
-        child: Column(
+      child: new Form(
+        autovalidate: false,
+        key: _formKey,
+        child: new Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            SizedBox(
+            new SizedBox(
               height: 15.0,
             ),
-            BaseTextField(
+            new BaseTextField(
               labelText: widget.appStateModel.blocks.localeText.enterOtp,//'ENTER OTP(6 digits)',
               validator: (String value) {
-                if (value.trim().isEmpty) return widget.appStateModel.blocks.localeText.inValidCode;
+                if (value == null || value.trim().isEmpty) return widget.appStateModel.blocks.localeText.inValidCode;
                 return value.length == 6 ? null : widget.appStateModel.blocks.localeText.inValidCode;
               },
               onSaved: (String value) {
@@ -122,10 +123,10 @@ class _PhoneVerificationState extends State<PhoneVerification>
               },
               inputFormatters: [
                 WhitelistingTextInputFormatter.digitsOnly,
-                LengthLimitingTextInputFormatter(6),
+                new LengthLimitingTextInputFormatter(6),
               ],
             ),
-            SizedBox(
+            new SizedBox(
               height: 20.0,
             ),
             SizedBox(
@@ -146,7 +147,7 @@ class _PhoneVerificationState extends State<PhoneVerification>
       color: Theme.of(context).primaryColor.withOpacity(0.1),
       height: _tabHeight,
       alignment: Alignment.center,
-      child: Text(
+      child: new Text(
         widget.appStateModel.blocks.localeText.signIn,
         style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.w800),
       ),
@@ -175,7 +176,7 @@ class _PhoneVerificationState extends State<PhoneVerification>
     });
     //TODO VERIFY OTP
 
-    var login = Map<String, dynamic>();
+    var login = new Map<String, dynamic>();
     login["smsOTP"] = smsOTP;
     login["verificationId"] = verificationId;
     login["phoneNumber"] = _phoneNumber;
@@ -222,7 +223,7 @@ class _PhoneVerificationState extends State<PhoneVerification>
     print(error.code);
     switch (error.code) {
       case 'ERROR_INVALID_VERIFICATION_CODE':
-        FocusScope.of(context).requestFocus(FocusNode());
+        FocusScope.of(context).requestFocus(new FocusNode());
         Fluttertoast.showToast(msg: widget.appStateModel.blocks.localeText.inValidCode);
         Navigator.of(context).pop();
         break;
@@ -236,9 +237,9 @@ class _PhoneVerificationState extends State<PhoneVerification>
   _mobileNumberEntryCard() {
     return Container(
       alignment: Alignment.center,
-      child: Column(
+      child: new Column(
         children: <Widget>[
-          SizedBox(
+          new SizedBox(
             height: 15.0,
           ),
           Row(
@@ -255,7 +256,7 @@ class _PhoneVerificationState extends State<PhoneVerification>
                 // optional. aligns the flag and the Text left
                 alignLeft: false,
               ),
-              SizedBox(
+              new SizedBox(
                 width: 0.0,
               ),
               Expanded(
@@ -266,8 +267,8 @@ class _PhoneVerificationState extends State<PhoneVerification>
                     child: BaseTextField(
                       labelText: widget.appStateModel.blocks.localeText.phoneNumber,
                       validator: (String value) {
-                        if (value.trim().isEmpty) return widget.appStateModel.blocks.localeText.pleaseEnterPhoneNumber;
-                        return value.isEmpty ? null : widget.appStateModel.blocks.localeText.pleaseEnterPhoneNumber;
+                        if (value == null || value.trim().isEmpty) return widget.appStateModel.blocks.localeText.pleaseEnterPhoneNumber;
+                        return value.length == 0 ? null : widget.appStateModel.blocks.localeText.pleaseEnterPhoneNumber;
                       },
                       onSaved: (String value) {
                         _phoneNumber = value;
@@ -281,7 +282,7 @@ class _PhoneVerificationState extends State<PhoneVerification>
               ),
             ],
           ),
-          SizedBox(
+          new SizedBox(
             height: 20.0,
           ),
           SizedBox(
@@ -302,20 +303,20 @@ class _PhoneVerificationState extends State<PhoneVerification>
     setState(() {
       _loadingNumber = true;
     });
-    smsOTPSent(String verId, [int forceCodeResend]) {
-      verificationId = verId;
+    final PhoneCodeSent smsOTPSent = (String verId, [int forceCodeResend]) {
+      this.verificationId = verId;
       setState(() {
         _loadingNumber = false;
         _tabController.index = 1;
       });
-    }
+    };
     try {
       await _auth.verifyPhoneNumber(
           phoneNumber: prefixCode + _phoneNumber, // PHONE NUMBER TO SEND OTP
           codeAutoRetrievalTimeout: (String verId) {
             //Starts the phone number verification process for the given phone number.
             //Either sends an SMS with a 6 digit code to the phone number specified, or sign's the user in and [verificationCompleted] is called.
-            verificationId = verId;
+            this.verificationId = verId;
           },
           codeSent:
               smsOTPSent, // WHEN CODE SENT THEN WE OPEN DIALOG TO ENTER OTP.
@@ -339,12 +340,12 @@ class _PhoneVerificationState extends State<PhoneVerification>
   handlePhoneNumberError(PlatformException error) {
     switch (error.code) {
       case 'TOO_LONG':
-        FocusScope.of(context).requestFocus(FocusNode());
+        FocusScope.of(context).requestFocus(new FocusNode());
         Fluttertoast.showToast(msg: widget.appStateModel.blocks.localeText.inValidNumber);
         Navigator.of(context).pop();
         break;
       case 'TOO_SHORT':
-        FocusScope.of(context).requestFocus(FocusNode());
+        FocusScope.of(context).requestFocus(new FocusNode());
         Fluttertoast.showToast(msg: widget.appStateModel.blocks.localeText.inValidNumber);
         Navigator.of(context).pop();
         break;
@@ -367,4 +368,4 @@ class _PhoneVerificationState extends State<PhoneVerification>
 }
 
 
-typedef OnResponse<CheckoutResponse> = void Function(CheckoutResponse response);
+typedef void OnResponse<CheckoutResponse>(CheckoutResponse response);

@@ -4,7 +4,7 @@ import './../resources/api_provider.dart';
 import '../models/product_model.dart';
 
 class DealsBloc {
-  List<Product> dealsProducts;
+  late List<Product> dealsProducts;
   var dealsFilter = <String, dynamic>{};
   int dealsPage = 0;
 
@@ -18,7 +18,7 @@ class DealsBloc {
   ValueStream<bool> get hasMoreDealsItems => _hasMoreDealsFetcher.stream;
   ValueStream<bool> get isLoadingDealsProducts => _isLoadingDealsFetcher.stream;
 
-  fetchAllProducts([String query]) async {
+  fetchAllProducts([String? query]) async {
     dealsPage = dealsPage + 1;
     dealsFilter['on_sale'] = '1';
     dealsFilter['random'] = 'rand';

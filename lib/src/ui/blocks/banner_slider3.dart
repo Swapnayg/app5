@@ -9,7 +9,7 @@ import 'list_header.dart';
 class BannerSlider3 extends StatefulWidget {
   final Block block;
   final Function onBannerClick;
-  const BannerSlider3({Key key, this.block, this.onBannerClick}) : super(key: key);
+  BannerSlider3({Key key, this.block, this.onBannerClick}) : super(key: key);
   @override
   _BannerSlider3State createState() => _BannerSlider3State();
 }
@@ -47,14 +47,14 @@ class _BannerSlider3State extends State<BannerSlider3> {
                       elevation: widget.block.elevation.toDouble(),
                       clipBehavior: Clip.antiAlias,
                       child:  CachedNetworkImage(
-                        imageUrl: widget.block.children[index].image ?? '',
+                        imageUrl: widget.block.children[index].image != null ? widget.block.children[index].image : '',
                         imageBuilder: (context, imageProvider) => Ink.image(
-                          image: imageProvider,
-                          fit: BoxFit.cover,
                           child: InkWell(
                             splashColor: HexColor(widget.block.bgColor).withOpacity(0.1),
                             onTap: () => widget.onBannerClick(widget.block.children[index]),
                           ),
+                          image: imageProvider,
+                          fit: BoxFit.cover,
                         ),
                         placeholder: (context, url) =>
                             Container(color: Colors.black12),

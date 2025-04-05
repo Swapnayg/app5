@@ -1,3 +1,5 @@
+// ignore_for_file: no_leading_underscores_for_local_identifiers, avoid_print, invalid_return_type_for_catch_error
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../models/conversation.dart';
@@ -6,7 +8,7 @@ import '../models/message.dart';
 class DBService {
   static DBService instance = DBService();
 
-  FirebaseFirestore _db;
+  late FirebaseFirestore _db;
 
   DBService() {
     _db = FirebaseFirestore.instance;
@@ -14,71 +16,70 @@ class DBService {
 
   final String _conversationsCollection = "Conversations";
 
-  Future<void> updateChatTimeStamp(String conversationID) {
-    var ref = _db.collection(_conversationsCollection).doc(conversationID);
-    return ref.update({"timestamp": Timestamp.now()});
+  Future<void> updateChatTimeStamp(String _conversationID) {
+    var _ref = _db.collection(_conversationsCollection).doc(_conversationID);
+    return _ref.update({"timestamp": Timestamp.now()});
   }
 
-  Future<void> sendMessage(String conversationID, Message message) {
-    var ref =
-        _db.collection(_conversationsCollection).doc(conversationID);
-    var messageType = "";
-    switch (message.type) {
+  Future<void> sendMessage(String _conversationID, Message _message) {
+    var _ref =
+        _db.collection(_conversationsCollection).doc(_conversationID);
+    var _messageType = "";
+    switch (_message.type) {
       case MessageType.Text:
-        messageType = "text";
+        _messageType = "text";
         break;
       case MessageType.Image:
-        messageType = "image";
+        _messageType = "image";
         break;
-      default:
-    }
-    return ref.update({
+      }
+    return _ref.update({
       "messages": FieldValue.arrayUnion(
         [
           {
-            "message": message.content,
-            "senderID": message.senderID,
-            "timestamp": message.timestamp,
-            "type": messageType,
+            "message": _message.content,
+            "senderID": _message.senderID,
+            "timestamp": _message.timestamp,
+            "type": _messageType,
           },
         ],
       ),
-    }).then((value) => updateChatTimeStamp(conversationID));
+    }).then((value) => updateChatTimeStamp(_conversationID));
   }
 
-  Stream<Conversation> getConversation(String conversationID) {
-    var ref =
-        _db.collection(_conversationsCollection).doc(conversationID);
-    return ref.snapshots().map(
-      (doc) {
-        return Conversation.fromFirestore(doc);
+  Stream<Conversation> getConversation(String _conversationID) {
+    var _ref =
+        _db.collection(_conversationsCollection).doc(_conversationID);
+    return _ref.snapshots().map(
+      (_doc) {
+        return Conversation.fromFirestore(_doc);
       },
     );
   }
 
   Stream<List<Conversation>> getConversations(String id) {
-    var ref = _db
+    var _ref = _db
         .collection(_conversationsCollection)
         .orderBy("timestamp", descending: true) //Uncomment this line after creating indexes in firebase other will this query will not work
         .where("members", arrayContains: id);
     //Don't delete this, uncommenting this will give and erro in console with url to create indexes in firebase console.
     //click the url and create indexs
-    ref.get().catchError((e) => print(e));
-    return ref.get().asStream().map((snapshot) {
-      return snapshot.docs.map((doc) {
-        return Conversation.fromFirestore(doc);
+    _ref.get().catchError((e) => print(e));
+    return _ref.get().asStream().map((_snapshot) {
+      return _snapshot.docs.map((_doc) {
+        return Conversation.fromFirestore(_doc);
       }).toList();
     });
   }
 
-  Future<String> getConversationId(String chatId, String userId, String userName, String userAvatar, String vendorId, String vendorName, String vendorAvatar, bool isVendor) async {
-    var ref = _db.collection(_conversationsCollection);
+  Future<String?> getConversationId(String chatId, String userId, String userName, String userAvatar, String vendorId, String vendorName, String vendorAvatar, bool isVendor) async {
+    var _ref = _db.collection(_conversationsCollection);
     try {
-      var conversation = await ref.doc(chatId).get();
+      var conversation = await _ref.doc(chatId).get();
       if (conversation.data() != null) {
         return chatId;//conversation.data["conversationID"];
       } else {
-        await ref.doc(chatId).set(
+        await _ref.doc(chatId).set(
           {
             "members": [userId, vendorId],
             'messages': [],

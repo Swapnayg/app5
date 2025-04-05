@@ -1,3 +1,5 @@
+// ignore_for_file: unused_local_variable, unnecessary_null_comparison
+
 import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
@@ -13,7 +15,7 @@ const double _minWidthPerColumn = 350.0 + _scaffoldPadding * 2;
 
 class StoresList5 extends StatelessWidget {
   final List<StoreModel> stores;
-  const StoresList5({Key key, this.stores}) : super(key: key);
+  const StoresList5({super.key, required this.stores});
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
@@ -25,7 +27,11 @@ class StoresList5 extends StatelessWidget {
       sliver: SliverList(
         delegate: SliverChildBuilderDelegate(
           (BuildContext context, int index) {
-            return StoreCard(store: stores[index], index: index);
+            return StoreCard(
+              key: ValueKey(index),
+              store: stores[index],
+              index: index,
+            );
           },
           childCount: stores.length,
         ),
@@ -38,7 +44,7 @@ class StoreCard extends StatelessWidget {
   final AppStateModel appStateModel = AppStateModel();
   final StoreModel store;
   final int index;
-  StoreCard({Key key, this.store, this.index}) : super(key: key);
+  StoreCard({required Key key, required this.store, required this.index}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     Widget featuredImage = store.banner != null
@@ -57,10 +63,10 @@ class StoreCard extends StatelessWidget {
     return Card(
       child: InkWell(
         onTap: () => openDetails(store, context),
-        child: Column(
+        child: new Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            SizedBox(
+            Container(
               height: 170,
               child: featuredImage,
             ),
@@ -86,10 +92,10 @@ class StoreCard extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       Container(
-                        child: Text(store.name,
+                        child: new Text(store.name,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
+                            style: new TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 18.0,
                             )),
@@ -134,7 +140,10 @@ class StoreCard extends StatelessWidget {
               width: 6.0,
             ),
             Text(
-              '(${store.ratingCount} ${appStateModel.blocks.localeText.reviews})',
+              '(' +
+                  store.ratingCount.toString() +
+                  ' ' + appStateModel.blocks.localeText.reviews +
+                  ')',
               style: TextStyle(
                   fontSize: 10, fontWeight: FontWeight.w300),
             ),
@@ -147,6 +156,7 @@ class StoreCard extends StatelessWidget {
   openDetails(StoreModel store, BuildContext context) {
     Navigator.push(context, MaterialPageRoute(builder: (context) {
       return VendorDetails(
+        key: ValueKey(store.id),
         vendorId: store.id.toString(),
       );
     }));

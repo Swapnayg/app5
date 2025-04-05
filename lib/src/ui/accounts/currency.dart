@@ -6,7 +6,7 @@ import '../../../src/models/app_state_model.dart';
 import '../../models/blocks_model.dart';
 
 class CurrencyPage extends StatefulWidget {
-  const CurrencyPage({Key key}) : super(key: key);
+  CurrencyPage({Key key}) : super(key: key);
   @override
   _CurrencyPageState createState() => _CurrencyPageState();
 }
@@ -33,9 +33,8 @@ class _CurrencyPageState extends State<CurrencyPage> {
           builder: (context, child, model) {
             if (model.blocks?.currencies != null) {
               return buildCurrencyItems(model.blocks.currencies);
-            } else {
+            } else
               return Container();
-            }
           }));
   }
 

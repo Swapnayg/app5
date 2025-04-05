@@ -7,7 +7,7 @@ import './../../../resources/api_provider.dart';
 import '../../../data/gallery_options.dart';
 
 class LanguagePage extends StatefulWidget {
-  const LanguagePage(
+  LanguagePage(
       {Key key})
       : super(key: key);
   @override
@@ -37,9 +37,8 @@ class _LanguagePageState extends State<LanguagePage> {
             builder: (context, child, model) {
               if (model.blocks?.languages != null) {
                 return buildLanguageItems(model.blocks.languages);
-              } else {
+              } else
                 return Container();
-              }
             }));
   }
 
@@ -50,7 +49,7 @@ class _LanguagePageState extends State<LanguagePage> {
         itemBuilder: (BuildContext ctxt, int index) {
           return Column(
             children: <Widget>[
-              ListTile(
+              new ListTile(
                 trailing: Radio<String>(
                   value: languages[index].code,
                   groupValue: apiProvider.filter['lan'],
