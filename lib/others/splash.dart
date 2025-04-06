@@ -1,4 +1,4 @@
-library network_to_file_image;
+library;
 
 import 'dart:async';
 import 'dart:io';
@@ -75,7 +75,7 @@ class NetworkToFileImage extends ImageProvider<NetworkToFileImage> {
         scale: key.scale,
         informationCollector: () sync* {
           yield ErrorDescription('Image provider: $this');
-          yield ErrorDescription('File: ${file?.path}');
+          yield ErrorDescription('File: ${file.path}');
           yield ErrorDescription('Url: $url');
         });
   }

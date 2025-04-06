@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api, no_logic_in_create_state, unnecessary_null_comparison, avoid_unnecessary_containers, unused_local_variable, avoid_function_literals_in_foreach_calls, avoid_print
+
 import 'dart:async';
 import 'dart:io';
 import 'package:flutter/material.dart';
@@ -10,7 +12,7 @@ import '../../resources/api_provider.dart';
 class WebViewPage extends StatefulWidget {
   final String url;
   final String title;
-  const WebViewPage({Key key, this.url, this.title}) : super(key: key);
+  const WebViewPage({super.key, required this.url, required this.title});
 
   @override
   _WebViewPageState createState() => _WebViewPageState(url: url);
@@ -29,7 +31,7 @@ class _WebViewPageState extends State<WebViewPage> {
     super.initState();
   }
 
-  _WebViewPageState({this.url});
+  _WebViewPageState({required this.url});
 
   @override
   Widget build(BuildContext context) {
@@ -38,21 +40,22 @@ class _WebViewPageState extends State<WebViewPage> {
       body: Container(
         child: Stack(
           children: <Widget>[
-            injectCookies ? WebView(
-              onPageStarted: (String url) {
-                //
-              },
-              initialUrl: url,
-              javascriptMode: JavascriptMode.unrestricted,
-              onWebViewCreated: (WebViewController wvc) {
-                //
-              },
-              onPageFinished: (value) async {
-                setState(() {
-                  _isLoadingPage = false;
-                });
-              },
-            ) : Container(),
+            if (injectCookies) 
+            // WebView(
+            //   onPageStarted: (String url) {
+            //     //
+            //   },
+            //   initialUrl: url,
+            //   javascriptMode: JavascriptMode.unrestricted,
+            //   onWebViewCreated: (WebViewController wvc) {
+            //     //
+            //   },
+            //   onPageFinished: (value) async {
+            //     setState(() {
+            //       _isLoadingPage = false;
+            //     });
+            //   },
+            // ) else Container(),
             _isLoadingPage
                 ? Container(
                     color: Colors.white,
@@ -69,7 +72,7 @@ class _WebViewPageState extends State<WebViewPage> {
   _seCookies() async {
     Uri uri = Uri.parse(config.url);
     String domain = uri.host;
-    print('Domain: ' + domain);
+    print('Domain: $domain');
     ApiProvider apiProvider = ApiProvider();
     List<Cookie> cookies = apiProvider.generateCookies();
     apiProvider.cookieList.forEach((element) async {

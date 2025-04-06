@@ -228,7 +228,7 @@ class _VendorHomeState extends State<VendorHome> {
           vendorDetails.blocks[i].style == 'scroll' &&
           vendorDetails.blocks[i].products.length != 0) {
 
-        var filter = Map<String, dynamic>();
+        var filter = <String, dynamic>{};
         filter[vendorDetails.blocks[i].filterBy] = '1';
         list.add(ProductScroll(products: vendorDetails.blocks[i].products, context: context, title: vendorDetails.blocks[i].title, viewAllTitle: AppStateModel().blocks.localeText.viewAll, filter: filter));
       }
@@ -282,7 +282,7 @@ class _VendorHomeState extends State<VendorHome> {
             ScopedModelDescendant<VendorDetailStateModel>(
                 builder: (context, child, model) {
               return model.hasMoreItems
-                  ? Container(
+                  ? SizedBox(
                       height: 60,
                       child: Center(child: CircularProgressIndicator()))
                   : Container();
@@ -360,7 +360,7 @@ class _VendorHomeState extends State<VendorHome> {
     //Naviaget yo product or product list depend on type
     if (data.url.isNotEmpty) {
       if (data.description == 'category') {
-        var filter = Map<String, dynamic>();
+        var filter = <String, dynamic>{};
         filter['id'] = data.url;
         Navigator.push(
             context,
@@ -368,7 +368,6 @@ class _VendorHomeState extends State<VendorHome> {
                 builder: (context) =>
                     ProductsWidget(filter: filter, name: data.title)));
       }
-      ;
       if (data.description == 'product') {
         Navigator.push(
             context,
@@ -380,12 +379,11 @@ class _VendorHomeState extends State<VendorHome> {
                       ),
                     )));
       }
-      ;
     }
   }
 
   onCategoryClick(Category category, List<Category> categories) {
-    var filter = Map<String, dynamic>();
+    var filter = <String, dynamic>{};
     filter['id'] = category.id.toString();
     Navigator.push(
         context,
@@ -430,7 +428,7 @@ class _VendorHomeState extends State<VendorHome> {
                         return Container(
                             padding: EdgeInsets.symmetric(horizontal: 5.0),
                             width: 200,
-                            child: ProductItem(product: products[index]));
+                            child: ProductItem(product: products[index], onProductClick: (Product category) {  },));
                       })),
             ],
           ),
@@ -473,7 +471,7 @@ class _VendorHomeState extends State<VendorHome> {
                         return Container(
                             padding: EdgeInsets.symmetric(horizontal: 5.0),
                             width: 200,
-                            child: ProductItem(product: products[index]));
+                            child: ProductItem(product: products[index], onProductClick: (Product category) {  },));
                       })),
             ],
           ),
@@ -491,7 +489,7 @@ class HexColor extends Color {
   static int _getColorFromHex(String hexColor) {
     hexColor = hexColor.toUpperCase().replaceAll("#", "");
     if (hexColor.length == 6) {
-      hexColor = "FF" + hexColor;
+      hexColor = "FF$hexColor";
     }
     return int.parse(hexColor, radix: 16);
   }

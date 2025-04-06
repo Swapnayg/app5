@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
@@ -13,7 +15,7 @@ const double _minWidthPerColumn = 350.0 + _scaffoldPadding * 2;
 
 class ProductGrid extends StatefulWidget {
   final List<Product> products;
-  const ProductGrid({Key key, this.products}) : super(key: key);
+  const ProductGrid({super.key, required this.products});
   @override
   _ProductGridState createState() => _ProductGridState();
 }
@@ -55,10 +57,10 @@ class ProductItem extends StatelessWidget {
   int percentOff = 0;
 
   ProductItem({
-    Key key,
-    this.product,
-    this.onProductClick,
-  }) : super(key: key);
+    super.key,
+    required this.product,
+    required this.onProductClick,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -67,20 +69,20 @@ class ProductItem extends StatelessWidget {
     final crossAxisCount = screenWidth < _minWidthPerColumn ? 1 : screenWidth ~/ _minWidthPerColumn;
 
     double detailsWidth = (screenWidth / crossAxisCount ) - 150;
-    if ((product.salePrice != null && product.salePrice != 0)) {
+    if ((product.salePrice != 0)) {
       percentOff = ((((product.regularPrice - product.salePrice) / product.regularPrice * 100)).round());
     }
     bool onSale = false;
-    if(product.regularPrice == null || product.regularPrice.isNaN) {
+    if(product.regularPrice.isNaN) {
       product.regularPrice = product.price;
     }
 
-    if(product.salePrice != null && product.salePrice != 0) {
+    if(product.salePrice != 0) {
       onSale = true;
     }
 
     return InkWell(
-      splashColor: Theme.of(context).accentColor.withOpacity(0.1),
+      splashColor: Theme.of(context).colorScheme.secondary.withOpacity(0.1),
       onTap: () {
         onProductClick(product);
       },
@@ -123,10 +125,11 @@ class ProductItem extends StatelessWidget {
                       ),
                       elevation: 0.0,
                       margin: EdgeInsets.all(0.0),
-                      color: Theme.of(context).accentColor,
+                      color: Theme.of(context).colorScheme.secondary,
                       child: Container(
                         padding: EdgeInsets.fromLTRB(8.0, 4.0, 8.0, 4.0),
-                        child: Text(percentOff.toString() + '% OFF', style: Theme.of(context).accentTextTheme.bodyText1.copyWith(
+                        child: Text('$percentOff% OFF', style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                          color: Theme.of(context).colorScheme.onSecondary,
                             fontSize: 12.0
                         ),),
                       ),
@@ -137,7 +140,7 @@ class ProductItem extends StatelessWidget {
             ),
             Stack(
               children: <Widget>[
-                Container(
+                SizedBox(
                   width: detailsWidth,
                   height: 120,
                   child: Padding(
@@ -170,14 +173,13 @@ class ProductItem extends StatelessWidget {
                               textBaseline: TextBaseline.alphabetic,
                               children: <Widget>[
                                 Text(onSale ? parseHtmlString(product.formattedSalesPrice)
-                                    : '', style: Theme.of(context).textTheme.body1.copyWith(
+                                    : '', style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                                   fontSize: 14,
                                   fontWeight: FontWeight.w600,
                                   color: Theme.of(context).hintColor,
                                 )),
                                 onSale ? SizedBox(width: 4.0) : SizedBox(width: 0.0),
-                                Text((product.formattedPrice !=
-                                    null && product.formattedPrice.isNotEmpty)
+                                Text((product.formattedPrice.isNotEmpty)
                                     ? parseHtmlString(product.formattedPrice)
                                     : '', style: TextStyle(
                                   fontWeight: onSale ? FontWeight.w200 : FontWeight.w600,
@@ -225,7 +227,7 @@ class ProductItem extends StatelessWidget {
                     bottom: 0.0,
                     right: 0.0,
                     child: IconButton(
-                        icon: model.wishListIds.contains(product.id) ? Icon(Icons.favorite, color: Theme.of(context).accentColor) :
+                        icon: model.wishListIds.contains(product.id) ? Icon(Icons.favorite, color: Theme.of(context).colorScheme.secondary) :
                         Icon(Icons.favorite_border, color: Colors.black87),
                         onPressed: () {
                           if (!model.loggedIn) {
@@ -261,6 +263,8 @@ class ProductItem extends StatelessWidget {
       return Colors.amber;
     } if(rating >= 2.0) {
       return Colors.amber[300];
-    } else return Colors.amber[300];
+    } else {
+      return Colors.amber[300];
+    }
   }
 }

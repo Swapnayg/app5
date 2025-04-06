@@ -1,6 +1,9 @@
+// ignore_for_file: library_private_types_in_public_api, must_be_immutable, unnecessary_null_comparison
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_icons/flutter_icons.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_font_icons/flutter_font_icons.dart';
 import 'package:scoped_model/scoped_model.dart';
 import '../../../src/ui/widgets/MD5Indicator.dart';
 import './../../../assets/presentation/m_store_icons_icons.dart';
@@ -22,7 +25,7 @@ class ProductsWidget extends StatefulWidget {
   final String name;
   AppStateModel model = AppStateModel();
 
-  ProductsWidget({Key key, this.filter, this.name}) : super(key: key);
+  ProductsWidget({super.key, required this.filter, required this.name});
 
   @override
   _ProductsWidgetState createState() => _ProductsWidgetState();
@@ -30,10 +33,10 @@ class ProductsWidget extends StatefulWidget {
 
 class _ProductsWidgetState extends State<ProductsWidget>
     with SingleTickerProviderStateMixin {
-  ScrollController _scrollController = new ScrollController();
-  TabController _tabController;
-  Category selectedCategory;
-  List<Category> subCategories;
+  final ScrollController _scrollController = ScrollController();
+  late TabController _tabController;
+  late Category selectedCategory;
+  late List<Category> subCategories;
 
   @override
   void initState() {
@@ -93,7 +96,6 @@ class _ProductsWidgetState extends State<ProductsWidget>
       //backgroundColor: Colors.grey.withOpacity(.5),
       backgroundColor: Theme.of(context).brightness == Brightness.light ? Color(0xFFf2f3f7) : Colors.black,
       appBar: AppBar(
-        brightness: Brightness.dark,
         leading: IconButton(
           onPressed: (){
             Navigator.of(context).pop();
@@ -112,22 +114,23 @@ class _ProductsWidgetState extends State<ProductsWidget>
                     //unselectedLabelColor: Theme.of(context).hintColor,
                     labelStyle: TextStyle(fontSize: 16.0,fontWeight: FontWeight.w900,fontFamily: 'Lato'),
                     unselectedLabelStyle: TextStyle(fontSize: 16.0,fontFamily: 'Lato'),
-                    unselectedLabelColor: Theme.of(context).primaryColorBrightness == Brightness.dark ? Colors.white.withOpacity(.5): Colors.black.withOpacity(0.5),
-                    labelColor: Theme.of(context).primaryColorBrightness == Brightness.dark ? Colors.white: Colors.black,
+                    unselectedLabelColor: Theme.of(context).colorScheme.brightness == Brightness.dark ? Colors.white.withOpacity(.5): Colors.black.withOpacity(0.5),
+                    labelColor: Theme.of(context).primaryColor.computeLuminance() < 0.5 ? Colors.white : Colors.black,
                     indicator: MD2Indicator(
                         indicatorHeight: 5,
-                        indicatorColor: Theme.of(context).primaryColorBrightness == Brightness.dark ? Colors.orangeAccent: Colors.black,//Theme.of(context).primaryColor,//Colors.white,//Theme.of(context).primaryColor,
+                        indicatorColor: Theme.of(context).primaryColor.computeLuminance() < 0.5 ? Colors.orangeAccent : Colors.black,//Theme.of(context).primaryColor,//Colors.white,//Theme.of(context).primaryColor,
                         indicatorSize: MD2IndicatorSize.normal  //3 different modes tiny-normal-full
                     ),
                     tabs: subCategories
                         .map<Widget>((Category category) => Tab(
                             text: category.name
-                                .replaceAll(new RegExp(r'&amp;'), '&')))
+                                .replaceAll(RegExp(r'&amp;'), '&')))
                         .toList(),
                   ),
                 ),
               )
             : null,
+        // ignore: unnecessary_null_comparison
         title: widget.name != null
             ? Text(parseHtmlString(widget.name),style: TextStyle(
           color:Theme.of(context).brightness == Brightness.light ? Color(0xFFf2f3f7) : Colors.white,
@@ -162,7 +165,7 @@ class _ProductsWidgetState extends State<ProductsWidget>
             children: <Widget>[
               IconButton(
                 icon: Icon(
-                  FlutterIcons.shopping_cart_fea,
+                  Icons.shopping_cart,
                   semanticLabel: 'filter',
                   color:Theme.of(context).brightness == Brightness.light ? Colors.white : Colors.white,
                 ),
@@ -208,19 +211,19 @@ class _ProductsWidgetState extends State<ProductsWidget>
                                     color: Colors.black,
                                 ),
                               ))));
-                    } else
+                    } else {
                       return Container();
+                    }
                   }),
                 ),
               )
             ],
           ),
-        ],
+        ], systemOverlayStyle: SystemUiOverlayStyle.light,
       ),
       body: Stack(
-        overflow: Overflow.visible,
-        children: [
-          Container(
+        clipBehavior: Clip.none, children: [
+          SizedBox(
               height: 180,
               width: double.infinity,
               child: CustomPaint(
@@ -230,7 +233,7 @@ class _ProductsWidgetState extends State<ProductsWidget>
               stream: widget.productsBloc.allProducts,
               builder: (context, AsyncSnapshot<List<Product>> snapshot) {
                 if (snapshot.hasData) {
-                  if (snapshot.data.length != 0) {
+                  if (snapshot.data!.length != 0) {
                     return CustomScrollView(
                       controller: _scrollController,
                       slivers: buildLisOfBlocks(snapshot),
@@ -241,14 +244,15 @@ class _ProductsWidgetState extends State<ProductsWidget>
                         builder: (context, snapshot) {
                           if (snapshot.hasData && snapshot.data == true) {
                             return Center(child: CircularProgressIndicator());
-                          } else
+                          } else {
                             return Center(
                               child: Icon(
-                                FlutterIcons.smile_o_faw,
+                                Icons.sentiment_satisfied,
                                 size: 150,
                                 color: Theme.of(context).focusColor,
                               ),
                             );
+                          }
                         });
                   }
                 } else if (snapshot.hasError) {
@@ -262,18 +266,18 @@ class _ProductsWidgetState extends State<ProductsWidget>
   }
 
   List<Widget> buildLisOfBlocks(AsyncSnapshot<List<Product>> snapshot) {
-    List<Widget> list = new List<Widget>();
+    List<Widget> list = List<Widget>.empty(growable: true);
 
     /// UnComment this if you use rounded corner category list in body.
     //list.add(buildSubcategories());
     if (snapshot.data != null) {
-      list.add(ProductGrid(products: snapshot.data));
+      list.add(ProductGrid(products: snapshot.data ?? []));
 
       list.add(SliverPadding(
           padding: EdgeInsets.all(0.0),
           sliver: SliverList(
               delegate: SliverChildListDelegate([
-            Container(
+            SizedBox(
                 height: 60,
                 child: StreamBuilder(
                     stream: widget.productsBloc.hasMoreItems,
@@ -299,12 +303,12 @@ class _ProductsWidgetState extends State<ProductsWidget>
               return Column(
                 children: <Widget>[
                   ProductItem(
-                      product: snapshot.data[index]),
+                      product: snapshot.data![index]),
                   Divider(height: 0.0),
                 ],
               );
             },
-            childCount: snapshot.data.length,
+            childCount: snapshot.data!.length,
           ),
         ));
   }
@@ -333,7 +337,7 @@ class _ProductsWidgetState extends State<ProductsWidget>
                             elevation: 0.5,
                             child: InkWell(
                               onTap: () {
-                                var filter = new Map<String, dynamic>();
+                                var filter = <String, dynamic>{};
                                 filter['id'] =
                                     subCategories[index].id.toString();
                                 Navigator.push(
@@ -361,7 +365,7 @@ class _ProductsWidgetState extends State<ProductsWidget>
                           SizedBox(height: 10.0),
                           InkWell(
                             onTap: () {
-                              var filter = new Map<String, dynamic>();
+                              var filter = <String, dynamic>{};
                               filter['id'] = subCategories[index].id.toString();
                               Navigator.push(
                                   context,
@@ -393,23 +397,30 @@ class _ProductsWidgetState extends State<ProductsWidget>
       position: RelativeRect.fromLTRB(150, 100, 50, 100),
       items: [
         PopupMenuItem<List>(
-            child: Text(widget.model.blocks.localeText.date), value: ['date', 'ASC']
+            value: ['date', 'ASC'],
+            child: Text(widget.model.blocks.localeText.date)
         ),
         PopupMenuItem<List>(
-            child: Text(widget.model.blocks.localeText.priceHighToLow), value: ['price', 'DESC']),
+            value: ['price', 'DESC'],
+            child: Text(widget.model.blocks.localeText.priceHighToLow)),
         PopupMenuItem<List>(
-            child: Text(widget.model.blocks.localeText.priceLowToHigh), value: ['price', 'ASC']),
+            value: ['price', 'ASC'],
+            child: Text(widget.model.blocks.localeText.priceLowToHigh)),
         PopupMenuItem<List>(
-            child: Text(widget.model.blocks.localeText.newArrivals), value: ['date', 'DESC']),
+            value: ['date', 'DESC'],
+            child: Text(widget.model.blocks.localeText.newArrivals)),
         PopupMenuItem<List>(
-            child: Text(widget.model.blocks.localeText.popular), value: ['popularity', 'ASC']),
+            value: ['popularity', 'ASC'],
+            child: Text(widget.model.blocks.localeText.popular)),
         PopupMenuItem<List>(
-            child: Text(widget.model.blocks.localeText.rating), value: ['rating', 'ASC']),
+            value: ['rating', 'ASC'],
+            child: Text(widget.model.blocks.localeText.rating)),
       ],
       elevation: 4.0,
     );
-    if(result != null)
-    _sort(result[0], result[1]);
+    if(result != null) {
+      _sort(result[0], result[1]);
+    }
   }
 
   _sort(String orderBy, String order) {

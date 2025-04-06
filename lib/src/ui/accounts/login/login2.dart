@@ -6,6 +6,8 @@ import './tabs3/login_tab2.dart';
 import './tabs3/register_tab2.dart';
 
 class Login2 extends StatefulWidget {
+  const Login2({super.key});
+
 
   @override
   _Login2State createState() => _Login2State();
@@ -13,12 +15,12 @@ class Login2 extends StatefulWidget {
 
 class _Login2State extends State<Login2> with SingleTickerProviderStateMixin {
   TabController _tabController;
-  TextEditingController emailController = new TextEditingController();
+  TextEditingController emailController = TextEditingController();
   AppStateModel appStateModel  = AppStateModel();
 
   @override
   void initState() {
-    _tabController = new TabController(vsync: this, length: 4);
+    _tabController = TabController(vsync: this, length: 4);
     super.initState();
   }
 
@@ -71,15 +73,15 @@ class _Login2State extends State<Login2> with SingleTickerProviderStateMixin {
                           padding: EdgeInsets.all(24),
                           child: Wrap(
                             children: [
-                              new Row(
+                              Row(
                                 mainAxisSize: MainAxisSize.min,
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  new CircularProgressIndicator(),
+                                  CircularProgressIndicator(),
                                   SizedBox(
                                     width: 24,
                                   ),
-                                  new Text(appStateModel.blocks.localeText.pleaseWait),
+                                  Text(appStateModel.blocks.localeText.pleaseWait),
                                 ],
                               ),
                             ],

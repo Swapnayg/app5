@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api, unused_local_variable, curly_braces_in_flow_control_structures, avoid_unnecessary_containers
+
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -14,7 +16,7 @@ class ProductAddons extends StatefulWidget {
   final GlobalKey<FormState> addonFormKey;
   final Map<String, dynamic> addOnsFormData;
 
-  const ProductAddons({Key key, this.product, this.addOnsFormData, this.addonFormKey}) : super(key: key);
+  const ProductAddons({super.key, required this.product, required this.addOnsFormData, required this.addonFormKey});
 
   @override
   _ProductAddonsState createState() => _ProductAddonsState();
@@ -24,7 +26,7 @@ class _ProductAddonsState extends State<ProductAddons> {
 
   //final addonFormKey = GlobalKey<FormState>();
   final appStateModel = AppStateModel();
-  NumberFormat formatter;
+  late NumberFormat formatter;
   bool excludeGlobal = false;
   List<AddonField> addonFields = [];
 
@@ -74,17 +76,17 @@ class _ProductAddonsState extends State<ProductAddons> {
 
     var productLevelAddonIndex = 0;
 
-    List<Widget> list = new List<Widget>();
+    List<Widget> list = [];
 
-    TextStyle headingStyle = Theme.of(context).textTheme.headline6;
+    TextStyle? headingStyle = Theme.of(context).textTheme.titleLarge;
 
     if(model.productAddons.length > 0 && !excludeGlobal)
     for (var i = 0; i < model.productAddons.length; i++) {
 
       List<String> cateogryIds = [];
-      widget.product.categories.forEach((element) {
+      for (var element in widget.product.categories) {
         cateogryIds.add(element.toString());
-      });
+      }
 
       bool inRestricted = false;
       for(var value in model.productAddons[i].restrictToCategories.keys) {
@@ -108,7 +110,7 @@ class _ProductAddonsState extends State<ProductAddons> {
             );
             for (var o = 0; o < model.productAddons[i].fields[f].options.length; o++) {
               list.add(
-                  Container(
+                  SizedBox(
                     height: 50,
                     //color: Colors.green,
                     child: TextFormField(
@@ -118,13 +120,13 @@ class _ProductAddonsState extends State<ProductAddons> {
                         });
                       },
                       validator: (value) {
-                        if (model.productAddons[i].fields[f].required == 1 && value.isEmpty) {
+                        if (model.productAddons[i].fields[f].required == 1 && value!.isEmpty) {
                           return appStateModel.blocks.localeText.pleaseEnterFirstName;
                         }
                         return null;
                       },
                       decoration: InputDecoration(
-                        labelText: model.productAddons[i].fields[f].options[o].label + ' ' + _getPrice(model.productAddons[i].fields[f].options[o]),
+                        labelText: '${model.productAddons[i].fields[f].options[o].label} ${_getPrice(model.productAddons[i].fields[f].options[o])}',
                       ),
                     ),
                   )
@@ -154,14 +156,14 @@ class _ProductAddonsState extends State<ProductAddons> {
                         });
                       },
                       validator: (value) {
-                        if (model.productAddons[i].fields[f].required == 1 && value.isEmpty) {
+                        if (model.productAddons[i].fields[f].required == 1 && value!.isEmpty) {
                           return appStateModel.blocks.localeText.pleaseEnterFirstName;
                         }
                         return null;
                       },
                       decoration: InputDecoration(
                         alignLabelWithHint: true,
-                        labelText: model.productAddons[i].fields[f].options[o].label + ' ' + _getPrice(model.productAddons[i].fields[f].options[o]),
+                        labelText: '${model.productAddons[i].fields[f].options[o].label} ${_getPrice(model.productAddons[i].fields[f].options[o])}',
                       ),
                     ),
                   )
@@ -189,14 +191,14 @@ class _ProductAddonsState extends State<ProductAddons> {
                         });
                       },
                       validator: (value) {
-                        if (model.productAddons[i].fields[f].required == 1 && value.isEmpty) {
+                        if (model.productAddons[i].fields[f].required == 1 && value!.isEmpty) {
                           return appStateModel.blocks.localeText.pleaseEnterFirstName;
                         }
                         return null;
                       },
                       decoration: InputDecoration(
                         alignLabelWithHint: true,
-                        labelText: model.productAddons[i].fields[f].options[o].label + ' ' + _getPrice(model.productAddons[i].fields[f].options[o]),
+                        labelText: '${model.productAddons[i].fields[f].options[o].label} ${_getPrice(model.productAddons[i].fields[f].options[o])}',
                       ),
                       keyboardType: TextInputType.emailAddress,
                     ),
@@ -225,14 +227,14 @@ class _ProductAddonsState extends State<ProductAddons> {
                         });
                       },
                       validator: (value) {
-                        if (model.productAddons[i].fields[f].required == 1 && value.isEmpty) {
+                        if (model.productAddons[i].fields[f].required == 1 && value!.isEmpty) {
                           return appStateModel.blocks.localeText.pleaseEnterFirstName;
                         }
                         return null;
                       },
                       decoration: InputDecoration(
                         alignLabelWithHint: true,
-                        labelText: model.productAddons[i].fields[f].options[o].label + ' ' + _getPrice(model.productAddons[i].fields[f].options[o]),
+                        labelText: '${model.productAddons[i].fields[f].options[o].label} ${_getPrice(model.productAddons[i].fields[f].options[o])}',
                       ),
                       keyboardType: TextInputType.number,
                     ),
@@ -261,14 +263,14 @@ class _ProductAddonsState extends State<ProductAddons> {
                         });
                       },
                       validator: (value) {
-                        if (model.productAddons[i].fields[f].required == 1 && value.isEmpty) {
+                        if (model.productAddons[i].fields[f].required == 1 && value!.isEmpty) {
                           return appStateModel.blocks.localeText.pleaseEnterFirstName;
                         }
                         return null;
                       },
                       decoration: InputDecoration(
                         alignLabelWithHint: true,
-                        labelText: model.productAddons[i].fields[f].options[o].label + ' ' + _getPrice(model.productAddons[i].fields[f].options[o]),
+                        labelText: '${model.productAddons[i].fields[f].options[o].label} ${_getPrice(model.productAddons[i].fields[f].options[o])}',
                       ),
                       keyboardType: TextInputType.number,
                     ),
@@ -297,7 +299,7 @@ class _ProductAddonsState extends State<ProductAddons> {
                         });
                       },
                       validator: (value) {
-                        if (model.productAddons[i].fields[f].required == 1 && value.isEmpty) {
+                        if (model.productAddons[i].fields[f].required == 1 && value!.isEmpty) {
                           return appStateModel.blocks.localeText.pleaseEnterFirstName;
                         }
                         return null;
@@ -329,8 +331,8 @@ class _ProductAddonsState extends State<ProductAddons> {
               CheckboxListTile(
                 controlAffinity: ListTileControlAffinity.leading,
                 value: widget.addOnsFormData[_getCheckBoxSelectKey(model.productAddons, i, f, o)] == model.productAddons[i].fields[f].options[o].label.toLowerCase().replaceAll(' ', '-'),
-                onChanged: (bool value) {
-                  if(value) {
+                onChanged: (bool? value) {
+                  if (value == true) {
                     setState(() {
                       widget.addOnsFormData[_getCheckBoxSelectKey(model.productAddons, i, f, o)] = model.productAddons[i].fields[f].options[o].label.toLowerCase().replaceAll(' ', '-'); //*** For Lower version of addons ***/
                     });
@@ -371,11 +373,11 @@ class _ProductAddonsState extends State<ProductAddons> {
             list.add(
               CheckboxListTile(
                 controlAffinity: ListTileControlAffinity.leading,
-                value: widget.addOnsFormData[_getCheckBoxKey(model.productAddons, i, f, o)] == model.productAddons[i].fields[f].options[o].label.toLowerCase().replaceAll(' ', '-') + '-' + (o + 1).toString(),
-                onChanged: (bool value) {
-                  if(value) {
+                value: widget.addOnsFormData[_getCheckBoxKey(model.productAddons, i, f, o)] == '${model.productAddons[i].fields[f].options[o].label.toLowerCase().replaceAll(' ', '-')}-${o + 1}',
+                onChanged: (bool? value) {
+                  if (value == true) {
                     setState(() {
-                      widget.addOnsFormData[_getCheckBoxKey(model.productAddons, i, f, o)] = model.productAddons[i].fields[f].options[o].label.toLowerCase().replaceAll(' ', '-') + '-' + (o + 1).toString(); //*** For Lower version of addons ***/
+                      widget.addOnsFormData[_getCheckBoxKey(model.productAddons, i, f, o)] = '${model.productAddons[i].fields[f].options[o].label.toLowerCase().replaceAll(' ', '-')}-${o + 1}'; //*** For Lower version of addons ***/
                     });
                   } else {
                     setState(() {
@@ -422,9 +424,9 @@ class _ProductAddonsState extends State<ProductAddons> {
                     ),
                   ],
                 ),
-                value: model.productAddons[i].fields[f].options[o].label.toLowerCase().replaceAll(' ', '-') + '-' + (o + 1).toString(),
+                value: '${model.productAddons[i].fields[f].options[o].label.toLowerCase().replaceAll(' ', '-')}-${o + 1}',
                 groupValue: widget.addOnsFormData[_getRadioKey(model.productAddons, i, f)],
-                onChanged: (String value) {
+                onChanged: (String? value) {
                   setState(() {
                     widget.addOnsFormData[_getRadioKey(model.productAddons, i, f)] = value;
                   });
@@ -437,7 +439,7 @@ class _ProductAddonsState extends State<ProductAddons> {
         if(model.productAddons[i].fields[f].type == 'select') {
 
           if(widget.addOnsFormData[_getSelectKey(model.productAddons, i, f)] == null) {
-              widget.addOnsFormData[_getSelectKey(model.productAddons, i, f)] = model.productAddons[i].fields[f].options.first.label.toLowerCase().replaceAll(' ', '-') + '-1';
+              widget.addOnsFormData[_getSelectKey(model.productAddons, i, f)] = '${model.productAddons[i].fields[f].options.first.label.toLowerCase().replaceAll(' ', '-')}-1';
           }
 
           list.add(
@@ -460,10 +462,12 @@ class _ProductAddonsState extends State<ProductAddons> {
                 height: 2,
                 color: Theme.of(context).dividerColor,
               ),
-              onChanged: (AddonOption value) {
-                setState(() {
-                  widget.addOnsFormData[_getRadioKey(model.productAddons, i, f)] = value.label.toLowerCase().replaceAll(' ', '-') + '-' + (model.productAddons[i].fields[f].options.indexOf(value) + 1).toString();
-                });
+              onChanged: (AddonOption? value) {
+                if (value != null) {
+                  setState(() {
+                    widget.addOnsFormData[_getRadioKey(model.productAddons, i, f)] = '${value.label.toLowerCase().replaceAll(' ', '-')}-${model.productAddons[i].fields[f].options.indexOf(value) + 1}';
+                  });
+                }
               },
               items: model.productAddons[i].fields[f].options
                   .map<DropdownMenuItem<AddonOption>>(
@@ -501,7 +505,7 @@ class _ProductAddonsState extends State<ProductAddons> {
           );
           for (var o = 0; o < addonFields[f].options.length; o++) {
             list.add(
-                Container(
+                SizedBox(
                   height: 50,
                   //color: Colors.green,
                   child: TextFormField(
@@ -511,13 +515,13 @@ class _ProductAddonsState extends State<ProductAddons> {
                       });
                     },
                     validator: (value) {
-                      if (addonFields[f].required == 1 && value.isEmpty) {
+                      if (addonFields[f].required == 1 && value!.isEmpty) {
                         return appStateModel.blocks.localeText.pleaseEnterFirstName;
                       }
                       return null;
                     },
                     decoration: InputDecoration(
-                      labelText: addonFields[f].options[o].label + ' ' + _getPrice(addonFields[f].options[o]),
+                      labelText: '${addonFields[f].options[o].label} ${_getPrice(addonFields[f].options[o])}',
                     ),
                   ),
                 )
@@ -547,14 +551,14 @@ class _ProductAddonsState extends State<ProductAddons> {
                       });
                     },
                     validator: (value) {
-                      if (addonFields[f].required == 1 && value.isEmpty) {
+                      if (addonFields[f].required == 1 && value!.isEmpty) {
                         return appStateModel.blocks.localeText.pleaseEnterFirstName;
                       }
                       return null;
                     },
                     decoration: InputDecoration(
                       alignLabelWithHint: true,
-                      labelText: addonFields[f].options[o].label + ' ' + _getPrice(addonFields[f].options[o]),
+                      labelText: '${addonFields[f].options[o].label} ${_getPrice(addonFields[f].options[o])}',
                     ),
                   ),
                 )
@@ -582,14 +586,14 @@ class _ProductAddonsState extends State<ProductAddons> {
                       });
                     },
                     validator: (value) {
-                      if (addonFields[f].required == 1 && value.isEmpty) {
+                      if (addonFields[f].required == 1 && value!.isEmpty) {
                         return appStateModel.blocks.localeText.pleaseEnterFirstName;
                       }
                       return null;
                     },
                     decoration: InputDecoration(
                       alignLabelWithHint: true,
-                      labelText: addonFields[f].options[o].label + ' ' + _getPrice(addonFields[f].options[o]),
+                      labelText: '${addonFields[f].options[o].label} ${_getPrice(addonFields[f].options[o])}',
                     ),
                     keyboardType: TextInputType.emailAddress,
                   ),
@@ -618,14 +622,14 @@ class _ProductAddonsState extends State<ProductAddons> {
                       });
                     },
                     validator: (value) {
-                      if (addonFields[f].required == 1 && value.isEmpty) {
+                      if (addonFields[f].required == 1 && value!.isEmpty) {
                         return appStateModel.blocks.localeText.pleaseEnterFirstName;
                       }
                       return null;
                     },
                     decoration: InputDecoration(
                       alignLabelWithHint: true,
-                      labelText: addonFields[f].options[o].label + ' ' + _getPrice(addonFields[f].options[o]),
+                      labelText: '${addonFields[f].options[o].label} ${_getPrice(addonFields[f].options[o])}',
                     ),
                     keyboardType: TextInputType.number,
                   ),
@@ -654,14 +658,14 @@ class _ProductAddonsState extends State<ProductAddons> {
                       });
                     },
                     validator: (value) {
-                      if (addonFields[f].required == 1 && value.isEmpty) {
+                      if (addonFields[f].required == 1 && value!.isEmpty) {
                         return appStateModel.blocks.localeText.pleaseEnterFirstName;
                       }
                       return null;
                     },
                     decoration: InputDecoration(
                       alignLabelWithHint: true,
-                      labelText: addonFields[f].options[o].label + ' ' + _getPrice(addonFields[f].options[o]),
+                      labelText: '${addonFields[f].options[o].label} ${_getPrice(addonFields[f].options[o])}',
                     ),
                     keyboardType: TextInputType.number,
                   ),
@@ -690,7 +694,7 @@ class _ProductAddonsState extends State<ProductAddons> {
                       });
                     },
                     validator: (value) {
-                      if (addonFields[f].required == 1 && value.isEmpty) {
+                      if (addonFields[f].required == 1 && value!.isEmpty) {
                         return appStateModel.blocks.localeText.pleaseEnterFirstName;
                       }
                       return null;
@@ -722,8 +726,8 @@ class _ProductAddonsState extends State<ProductAddons> {
             CheckboxListTile(
               controlAffinity: ListTileControlAffinity.leading,
               value: widget.addOnsFormData[_getProductCheckBoxKey(addonFields[f], f, o)] == addonFields[f].options[o].label.toLowerCase().replaceAll(' ', '-'), // + '-' + (o + 1).toString()
-              onChanged: (bool value) {
-                if(value) {
+              onChanged: (bool? value) {
+                if(value == true) {
                   setState(() {
                     widget.addOnsFormData[_getProductCheckBoxKey(addonFields[f], f, o)] = addonFields[f].options[o].label.toLowerCase().replaceAll(' ', '-'); // + '-' + (o + 1).toString()
                   });
@@ -764,11 +768,11 @@ class _ProductAddonsState extends State<ProductAddons> {
           list.add(
             CheckboxListTile(
               controlAffinity: ListTileControlAffinity.leading,
-              value: widget.addOnsFormData[_getProductCheckBoxSelectKey(addonFields[f], f, o)] == addonFields[f].options[o].label.toLowerCase().replaceAll(' ', '-') + '-' + (o + 1).toString(),
-              onChanged: (bool value) {
-                if(value) {
+              value: widget.addOnsFormData[_getProductCheckBoxSelectKey(addonFields[f], f, o)] == '${addonFields[f].options[o].label.toLowerCase().replaceAll(' ', '-')}-${o + 1}',
+              onChanged: (bool? value) {
+                if(value == true) {
                   setState(() {
-                    widget.addOnsFormData[_getProductCheckBoxSelectKey(addonFields[f], f, o)] = addonFields[f].options[o].label.toLowerCase().replaceAll(' ', '-') + '-' + (o + 1).toString();
+                    widget.addOnsFormData[_getProductCheckBoxSelectKey(addonFields[f], f, o)] = '${addonFields[f].options[o].label.toLowerCase().replaceAll(' ', '-')}-${o + 1}';
                   });
                 } else {
                   setState(() {
@@ -818,7 +822,7 @@ class _ProductAddonsState extends State<ProductAddons> {
               ),
               value: addonFields[f].options[o].label.toLowerCase().replaceAll(' ', '-'),
               groupValue: widget.addOnsFormData[_getProductRadioKey(addonFields[f], f)],
-              onChanged: (String value) {
+              onChanged: (String? value) {
                 setState(() {
                   widget.addOnsFormData[_getProductRadioKey(addonFields[f], f)] = value;
                 });
@@ -831,7 +835,7 @@ class _ProductAddonsState extends State<ProductAddons> {
       if(addonFields[f].type == 'select') {
 
         if(widget.addOnsFormData[_getProductSelectKey(addonFields[f], f)] == null) {
-          widget.addOnsFormData[_getProductSelectKey(addonFields[f], f)] = addonFields[f].options.first.label.toLowerCase().replaceAll(' ', '-') + '-1';
+          widget.addOnsFormData[_getProductSelectKey(addonFields[f], f)] = '${addonFields[f].options.first.label.toLowerCase().replaceAll(' ', '-')}-1';
         }
 
         list.add(
@@ -854,10 +858,12 @@ class _ProductAddonsState extends State<ProductAddons> {
               height: 2,
               color: Theme.of(context).dividerColor,
             ),
-            onChanged: (AddonOption value) {
-              setState(() {
-                widget.addOnsFormData[_getProductRadioKey(addonFields[f], f)] = value.label.toLowerCase().replaceAll(' ', '-') + '-' + (addonFields[f].options.indexOf(value) + 1).toString();
-              });
+            onChanged: (AddonOption? value) {
+              if (value != null) {
+                setState(() {
+                  widget.addOnsFormData[_getProductRadioKey(addonFields[f], f)] = '${value.label.toLowerCase().replaceAll(' ', '-')}-${addonFields[f].options.indexOf(value) + 1}';
+                });
+              }
             },
             items: addonFields[f].options
                 .map<DropdownMenuItem<AddonOption>>(
@@ -884,49 +890,49 @@ class _ProductAddonsState extends State<ProductAddons> {
   }
 
   _getKey(List<ProductAddonsModel> productAddons, int i, int f, int o) {
-    return 'addon-' + widget.product.id.toString() + '-' + productAddons[i].fields[f].name.toLowerCase().replaceAll(' ', '-') + '-' + f.toString(); /* + '[' + productAddons[i].fields[f].options[o].label.toLowerCase().replaceAll(' ', '-') + ']'*/ /*** ADD this for lower version of addon plugin ****/
+    return 'addon-${widget.product.id}-${productAddons[i].fields[f].name.toLowerCase().replaceAll(' ', '-')}-$f'; /* + '[' + productAddons[i].fields[f].options[o].label.toLowerCase().replaceAll(' ', '-') + ']'*/ /*** ADD this for lower version of addon plugin ****/
   }
 
   _getSelectKey(List<ProductAddonsModel> productAddons, int i, int f) {
-    return 'addon-' + widget.product.id.toString() + '-' + productAddons[i].fields[f].name.toLowerCase().replaceAll(' ', '-') + '-' + f.toString();
+    return 'addon-${widget.product.id}-${productAddons[i].fields[f].name.toLowerCase().replaceAll(' ', '-')}-$f';
   }
 
   _getRadioKey(List<ProductAddonsModel> productAddons, int i, int f) {
-    return 'addon-' + widget.product.id.toString() + '-' + productAddons[i].fields[f].name.toLowerCase().replaceAll(' ', '-') + '-' + f.toString(); //+ '[]'
+    return 'addon-${widget.product.id}-${productAddons[i].fields[f].name.toLowerCase().replaceAll(' ', '-')}-$f'; //+ '[]'
   }
 
   _getCheckBoxKey(List<ProductAddonsModel> productAddons, int i, int f, int o) {
-    return 'addon-' + widget.product.id.toString() + '-' + productAddons[i].fields[f].name.toLowerCase().replaceAll(' ', '-') + '-' + f.toString(); // + '[' + o.toString() + ']'
+    return 'addon-${widget.product.id}-${productAddons[i].fields[f].name.toLowerCase().replaceAll(' ', '-')}-$f'; // + '[' + o.toString() + ']'
   }
 
   _getCheckBoxSelectKey(List<ProductAddonsModel> productAddons, int i, int f, int o) {
-    return 'addon-' + widget.product.id.toString() + '-' + productAddons[i].fields[f].name.toLowerCase().replaceAll(' ', '-') + '-' + f.toString() + '[' + o.toString() + ']';
+    return 'addon-${widget.product.id}-${productAddons[i].fields[f].name.toLowerCase().replaceAll(' ', '-')}-$f[$o]';
   }
 
   //Product Addon Level Keys
 
   _getProductKey(AddonField addOnsField, int f, int o) {
-    return 'addon-' + widget.product.id.toString() + '-' + addOnsField.name.toLowerCase().replaceAll(' ', '-') + '-' + f.toString(); // + '[' + addOnsField.options[o].label.toLowerCase().replaceAll(' ', '-') + ']'
+    return 'addon-${widget.product.id}-${addOnsField.name.toLowerCase().replaceAll(' ', '-')}-$f'; // + '[' + addOnsField.options[o].label.toLowerCase().replaceAll(' ', '-') + ']'
   }
 
   _getProductSelectKey(AddonField addOnsField, int f) {
-    return 'addon-' + widget.product.id.toString() + '-' + addOnsField.name.toLowerCase().replaceAll(' ', '-') + '-' + f.toString();
+    return 'addon-${widget.product.id}-${addOnsField.name.toLowerCase().replaceAll(' ', '-')}-$f';
   }
 
   _getProductRadioKey(AddonField addOnsField, int f) {
-    return 'addon-' + widget.product.id.toString() + '-' + addOnsField.name.toLowerCase().replaceAll(' ', '-') + '-' + f.toString() + '[]';
+    return 'addon-${widget.product.id}-${addOnsField.name.toLowerCase().replaceAll(' ', '-')}-$f[]';
   }
 
   _getProductCheckBoxKey(AddonField addOnsField, int f, int o) {
-    return 'addon-' + widget.product.id.toString() + '-' + addOnsField.name.toLowerCase().replaceAll(' ', '-') + '-' + f.toString() + '[' + o.toString() + ']';
+    return 'addon-${widget.product.id}-${addOnsField.name.toLowerCase().replaceAll(' ', '-')}-$f[$o]';
   }
 
   _getProductCheckBoxSelectKey(AddonField addOnsField, int f, int o) {
-    return 'addon-' + widget.product.id.toString() + '-' + addOnsField.name.toLowerCase().replaceAll(' ', '-') + '-' + f.toString();
+    return 'addon-${widget.product.id}-${addOnsField.name.toLowerCase().replaceAll(' ', '-')}-$f';
   }
 
   String _getPrice(AddonOption option) {
-    if(option.price != null && option.price.isNotEmpty) {
+    if(option.price.isNotEmpty) {
       return formatter.format(double.parse(option.price)).toString();
     } else {
       return '';

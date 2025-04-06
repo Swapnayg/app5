@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api, unused_local_variable, avoid_unnecessary_containers
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
@@ -11,14 +13,14 @@ import '../../../ui/accounts/login/login.dart';
 import '../../../ui/products/product_detail/product_detail.dart';
 
 double desktopCategoryMenuPageWidth({
-  BuildContext context,
+  required BuildContext context,
 }) {
   return 232 * reducedTextScale(context);
 }
 
 class ProductGrid extends StatefulWidget {
   final List<Product> products;
-  const ProductGrid({Key key, this.products}) : super(key: key);
+  const ProductGrid({super.key, required this.products});
   @override
   _ProductGridState createState() => _ProductGridState();
 }
@@ -67,13 +69,13 @@ class ProductItem extends StatefulWidget {
   final containerWidth;
   final void Function(Product category) onProductClick;
 
-  ProductItem({
-    Key key,
-    this.product,
-    this.onProductClick,
+  const ProductItem({
+    super.key,
+    required this.product,
+    required this.onProductClick,
     this.crossAxisCount,
     this.containerWidth
-  }) : super(key: key);
+  });
 
   @override
   _ProductItemState createState() => _ProductItemState();
@@ -89,7 +91,7 @@ class _ProductItemState extends State<ProductItem> {
 
     int percentOff = 0;
 
-    if ((widget.product.salePrice != null && widget.product.salePrice != 0)) {
+    if ((widget.product.salePrice != 0)) {
       percentOff = (((widget.product.regularPrice - widget.product.salePrice / widget.product.regularPrice)).round());
     }
     bool onSale = false;
@@ -118,7 +120,7 @@ class _ProductItemState extends State<ProductItem> {
                 child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
-                      Container(
+                      SizedBox(
                             height: widget.containerWidth/widget.crossAxisCount,
                             child: Stack(
                               children: <Widget>[
@@ -137,7 +139,7 @@ class _ProductItemState extends State<ProductItem> {
                                     top: 0.0,
                                     right: 0.0,
                                     child: IconButton(
-                                        icon: model.wishListIds.contains(widget.product.id) ? Icon(Icons.favorite, color: Theme.of(context).accentColor) :
+                                        icon: model.wishListIds.contains(widget.product.id) ? Icon(Icons.favorite, color: Theme.of(context).colorScheme.secondary) :
                                         Icon(Icons.favorite_border, color: Colors.black87),
                                         onPressed: () {
                                           if (!model.loggedIn) {
@@ -166,9 +168,9 @@ class _ProductItemState extends State<ProductItem> {
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               textAlign: TextAlign.center,
-                              style: Theme.of(context).textTheme.subtitle.copyWith(
+                              style: Theme.of(context).textTheme.titleSmall!.copyWith(
                                   fontSize: 12,
-                                color: Theme.of(context).textTheme.caption.color
+                                color: Theme.of(context).textTheme.bodySmall!.color
                               ),
                             ),
                             SizedBox(height: 4.0),
@@ -186,9 +188,9 @@ class _ProductItemState extends State<ProductItem> {
                                   },
                                 ),
                                 isLoading ? SizedBox(
-                                  child: CircularProgressIndicator(strokeWidth: 2),
                                   height: 20.0,
                                   width: 20.0,
+                                  child: CircularProgressIndicator(strokeWidth: 2),
                                 ) :  SizedBox(
                                   width: 20.0,
                                   child: Text(getQty(model).toString(), textAlign: TextAlign.center,),
@@ -202,13 +204,13 @@ class _ProductItemState extends State<ProductItem> {
                                 ),
                               ],
                             )
-                            else RaisedButton(
-                              elevation: 0,
-                              shape: StadiumBorder(),
-                              child: const Padding(
-                                padding: EdgeInsets.all(7.0),
-                                child: Text("ADD"),
+                            else ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                elevation: 0,
+                                shape: const StadiumBorder(),
+                                padding: const EdgeInsets.all(7.0),
                               ),
+                              child: const Text("ADD"),
                               onPressed: () {
                                 addToCart(context);
                               },
@@ -226,7 +228,7 @@ class _ProductItemState extends State<ProductItem> {
   }
 
   addToCart(BuildContext context) async {
-    var data = new Map<String, dynamic>();
+    var data = <String, dynamic>{};
     data['product_id'] = widget.product.id.toString();
     data['quantity'] = '1';
     setState(() {
@@ -239,7 +241,7 @@ class _ProductItemState extends State<ProductItem> {
   }
 
   decreaseQty() async {
-    if (appStateModel.shoppingCart?.cartContents != null) {
+    if (appStateModel.shoppingCart.cartContents != null) {
       if (appStateModel.shoppingCart.cartContents
           .any((cartContent) => cartContent.productId == widget.product.id)) {
         final cartContent = appStateModel.shoppingCart.cartContents
@@ -256,7 +258,7 @@ class _ProductItemState extends State<ProductItem> {
   }
 
   increaseQty() async {
-    if (appStateModel.shoppingCart?.cartContents != null) {
+    if (appStateModel.shoppingCart.cartContents != null) {
       if (appStateModel.shoppingCart.cartContents
           .any((cartContent) => cartContent.productId == widget.product.id)) {
         final cartContent = appStateModel.shoppingCart.cartContents
@@ -275,16 +277,18 @@ class _ProductItemState extends State<ProductItem> {
   getQty(AppStateModel model) {
     if(model.shoppingCart.cartContents.any((element) => element.productId == widget.product.id)) {
       return model.shoppingCart.cartContents.firstWhere((element) => element.productId == widget.product.id).quantity;
-    } else return 0;
+    } else {
+      return 0;
+    }
   }
 }
 
 class PriceWidget extends StatelessWidget {
   const PriceWidget({
-    Key key,
-    @required this.onSale,
-    @required this.product,
-  }) : super(key: key);
+    super.key,
+    required this.onSale,
+    required this.product,
+  });
 
   final bool onSale;
   final Product product;
@@ -296,13 +300,12 @@ class PriceWidget extends StatelessWidget {
       textBaseline: TextBaseline.ideographic,
       children: <Widget>[
         Text(onSale ? parseHtmlString(product.formattedSalesPrice)
-            : '', textAlign: TextAlign.left, style: Theme.of(context).textTheme.bodyText2.copyWith(
+            : '', textAlign: TextAlign.left, style: Theme.of(context).textTheme.bodyMedium!.copyWith(
           fontSize: 14,
           fontWeight: FontWeight.w600,
         )),
         onSale ? SizedBox(width: 4.0) : SizedBox(width: 0.0),
-        Text((product.formattedPrice !=
-            null && product.formattedPrice.isNotEmpty)
+        Text((product.formattedPrice.isNotEmpty)
             ? parseHtmlString(product.formattedPrice)
             : '', textAlign: TextAlign.left, style: TextStyle(
           fontWeight: onSale ? FontWeight.w400 : FontWeight.w600,

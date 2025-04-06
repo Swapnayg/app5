@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api, prefer_typing_uninitialized_variables, deprecated_member_use
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
@@ -11,14 +13,14 @@ import '../../../ui/accounts/login/login.dart';
 import '../../../ui/products/product_detail/product_detail.dart';
 
 double desktopCategoryMenuPageWidth({
-  BuildContext context,
+  required BuildContext context,
 }) {
   return 232 * reducedTextScale(context);
 }
 
 class ProductGrid extends StatefulWidget {
   final List<Product> products;
-  const ProductGrid({Key key, this.products}) : super(key: key);
+  const ProductGrid({super.key, required this.products});
   @override
   _ProductGridState createState() => _ProductGridState();
 }
@@ -63,12 +65,12 @@ class ProductItem extends StatefulWidget {
   final crossAxisCount;
   final containerWidth;
 
-  ProductItem({
-    Key key,
-    this.product,
+  const ProductItem({
+    super.key,
+    required this.product,
     this.crossAxisCount,
     this.containerWidth
-  }) : super(key: key);
+  });
 
   @override
   _ProductItemState createState() => _ProductItemState();
@@ -84,7 +86,7 @@ class _ProductItemState extends State<ProductItem> {
 
     int percentOff = 0;
 
-    if ((widget.product.salePrice != null && widget.product.salePrice != 0)) {
+    if ((widget.product.salePrice != 0)) {
       percentOff = (((widget.product.regularPrice - widget.product.salePrice) / widget.product.regularPrice) * 100).round();
     }
     bool onSale = false;
@@ -112,7 +114,7 @@ class _ProductItemState extends State<ProductItem> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
-                Container(
+                SizedBox(
                   height: widget.containerWidth/widget.crossAxisCount,
                   child: Stack(
                     children: <Widget>[
@@ -131,7 +133,7 @@ class _ProductItemState extends State<ProductItem> {
                         top: 0.0,
                         right: 0.0,
                         child: IconButton(
-                            icon: model.wishListIds.contains(widget.product.id) ? Icon(Icons.favorite, color: Theme.of(context).accentColor) :
+                            icon: model.wishListIds.contains(widget.product.id) ? Icon(Icons.favorite, color: Theme.of(context).colorScheme.secondary) :
                             Icon(Icons.favorite_border, color: Colors.black87),
                             onPressed: () {
                               if (!model.loggedIn) {
@@ -156,11 +158,12 @@ class _ProductItemState extends State<ProductItem> {
                           clipBehavior: Clip.antiAlias,
                           elevation: 0.0,
                           margin: EdgeInsets.all(0.0),
-                          color: Theme.of(context).accentColor,
+                          color: Theme.of(context).colorScheme.secondary,
                           child: percentOff != 0 ? Center(
                             child: Container(
                               padding: EdgeInsets.fromLTRB(8.0, 4.0, 8.0, 4.0),
-                              child: Text('-'+percentOff.toString() + '%', style: Theme.of(context).accentTextTheme.bodyText1.copyWith(
+                              child: Text('-$percentOff%', style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                color: Theme.of(context).colorScheme.onSecondary,
                                   fontSize: 12.0
                               ),),
                             ),
@@ -182,8 +185,8 @@ class _ProductItemState extends State<ProductItem> {
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                         textAlign: TextAlign.left,
-                        style: Theme.of(context).textTheme.bodyText2.copyWith(
-                          color: Theme.of(context).textTheme.bodyText2.color.withOpacity(0.6),
+                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                          color: Theme.of(context).textTheme.bodyMedium!.color!.withOpacity(0.6),
                         ),
                       ),
                       SizedBox(height: 6.0),

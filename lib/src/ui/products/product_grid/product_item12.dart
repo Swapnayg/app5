@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api, unused_local_variable
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -19,14 +21,15 @@ class ProductGrid extends StatefulWidget {
   final List<Product> products;
   final appStateModel = AppStateModel();
   ProductGrid({
-    Key key,
-    this.products,
-  }) : super(key: key);
+    super.key,
+    required this.products,
+  });
   @override
   _ProductGridState createState() => _ProductGridState();
 }
 
 class _ProductGridState extends State<ProductGrid> {
+  @override
   void initState() {
     super.initState();
     widget.appStateModel.getCart();
@@ -52,7 +55,9 @@ class _ProductGridState extends State<ProductGrid> {
               (BuildContext context, int index) {
             return ProductItem(
                 product: widget.products[index],
-                onProductClick: onProductClick);
+                onProductClick: onProductClick,
+                cartContent: CartContent(), // Pass a valid CartContent object here
+            );
           },
           childCount: widget.products.length,
         ),
@@ -72,12 +77,12 @@ class ProductItem extends StatefulWidget {
   final void Function(Product category) onProductClick;
   final CartContent cartContent;
 
-  ProductItem({
-    Key key,
-    this.product,
-    this.onProductClick,
-    this.cartContent,
-  }) : super(key: key);
+  const ProductItem({
+    super.key,
+    required this.product,
+    required this.onProductClick,
+    required this.cartContent,
+  });
 
   @override
   _ProductItemState createState() => _ProductItemState();
@@ -124,18 +129,17 @@ class _ProductItemState extends State<ProductItem> {
 
     double detailsWidth = (screenWidth / crossAxisCount) - 150;
 
-    if ((widget.product.salePrice != null && widget.product.salePrice != 0)) {
+    if ((widget.product.salePrice != 0)) {
       percentOff = ((((widget.product.regularPrice - widget.product.salePrice) /
           widget.product.regularPrice *
           100))
           .round());
     }
     bool onSale = false;
-    if (widget.product.regularPrice == null ||
-        widget.product.regularPrice.isNaN) {
+    if (widget.product.regularPrice.isNaN) {
       widget.product.regularPrice = widget.product.price;
     }
-    if (widget.product.salePrice != null && widget.product.salePrice != 0) {
+    if (widget.product.salePrice != 0) {
       onSale = true;
     }
 
@@ -157,7 +161,7 @@ class _ProductItemState extends State<ProductItem> {
       ),
       margin: EdgeInsets.symmetric(vertical: 5.0),
       child: InkWell(
-        splashColor: Theme.of(context).accentColor.withOpacity(0.1),
+        splashColor: Theme.of(context).colorScheme.secondary.withOpacity(0.1),
         onTap: () {
           widget.onProductClick(widget.product);
         },
@@ -206,14 +210,14 @@ class _ProductItemState extends State<ProductItem> {
                       ),
                       elevation: 0.0,
                       margin: EdgeInsets.all(0.0),
-                      color: Theme.of(context).accentColor,
+                      color: Theme.of(context).colorScheme.secondary,
                       child: Container(
                         padding: EdgeInsets.fromLTRB(8.0, 4.0, 8.0, 4.0),
                         child: Text(
-                          percentOff.toString() + '% OFF',
+                          '$percentOff% OFF',
                           style: Theme.of(context)
-                              .accentTextTheme
-                              .body2
+                              .textTheme
+                              .bodyLarge!
                               .copyWith(fontSize: 12.0),
                         ),
                       ),
@@ -225,7 +229,7 @@ class _ProductItemState extends State<ProductItem> {
             ),
             Expanded(
               child: Center(
-                child: Container(
+                child: SizedBox(
                   width: detailsWidth * 1.4,
                   height: 150,
                   child: Padding(
@@ -246,12 +250,12 @@ class _ProductItemState extends State<ProductItem> {
                                   padding:
                                   EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 0.0),
                                   child: Container(
-                                    decoration: new BoxDecoration(
+                                    decoration: BoxDecoration(
                                       color: Colors.indigo[900],
-                                      border: new Border.all(
+                                      border: Border.all(
                                           color: Colors.white, width: 2.0),
                                       borderRadius:
-                                      new BorderRadius.circular(10.0),
+                                      BorderRadius.circular(10.0),
                                     ),
                                     child: Text(
                                         onSale
@@ -276,17 +280,15 @@ class _ProductItemState extends State<ProductItem> {
                                     Padding(
                                       padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
                                       child: Container(
-                                        decoration: new BoxDecoration(
+                                        decoration: BoxDecoration(
                                           color: Colors.teal[400],
-                                          border: new Border.all(
+                                          border: Border.all(
                                               color: Colors.white, width: 2.0),
                                           borderRadius:
-                                          new BorderRadius.circular(10.0),
+                                          BorderRadius.circular(10.0),
                                         ),
                                         child: Text(
-                                            (widget.product.formattedPrice !=
-                                                null &&
-                                                widget
+                                            (widget
                                                     .product
                                                     .formattedPrice
                                                     .isNotEmpty)
@@ -351,14 +353,14 @@ class _ProductItemState extends State<ProductItem> {
                                   child: ScopedModelDescendant<AppStateModel>(
                                       builder: (context, child, model) {
                                         if (loading == true) {
-                                          return Container(
+                                          return SizedBox(
                                               width: 25,
                                               height: 25,
                                               child: CircularProgressIndicator(
                                                 strokeWidth: 2.0,
                                               ));
                                         } else if (model
-                                            .shoppingCart?.cartContents !=
+                                            .shoppingCart.cartContents !=
                                             null &&
                                             model.shoppingCart.cartContents.any(
                                                     (cartContent) =>
@@ -405,7 +407,7 @@ class _ProductItemState extends State<ProductItem> {
   }
 
   addToCart(Product product, BuildContext context) async {
-    var data = new Map<String, dynamic>();
+    var data = Map<String, dynamic>();
     data['product_id'] = product.id.toString();
     data['quantity'] = '1';
     setState(() {
@@ -418,7 +420,7 @@ class _ProductItemState extends State<ProductItem> {
   }
 
   removeFromCart(Product product) async {
-    if (appStateModel.shoppingCart?.cartContents != null) {
+    if (appStateModel.shoppingCart.cartContents != null) {
       if (appStateModel.shoppingCart.cartContents
           .any((cartContent) => cartContent.productId == product.id)) {
         final cartContent = appStateModel.shoppingCart.cartContents

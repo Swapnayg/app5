@@ -1,7 +1,9 @@
+// ignore_for_file: library_private_types_in_public_api, unused_field, unused_local_variable
+
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_swiper/flutter_swiper.dart';
+import 'package:flutter_swiper_null_safety/flutter_swiper_null_safety.dart';
 
 import '../../models/blocks_model.dart';
 import 'hex_color.dart';
@@ -9,14 +11,14 @@ import 'hex_color.dart';
 class BannerTopSlider extends StatefulWidget {
   final Block block;
   final Function onBannerClick;
-  BannerTopSlider({Key key, this.block, this.onBannerClick}) : super(key: key);
+  const BannerTopSlider({super.key, required this.block, required this.onBannerClick});
   @override
   _BannerTopSliderState createState() => _BannerTopSliderState();
 }
 
 class _BannerTopSliderState extends State<BannerTopSlider> {
 
-  bool _isVisible = false;
+  final bool _isVisible = false;
 
   //*
 
@@ -28,7 +30,7 @@ class _BannerTopSliderState extends State<BannerTopSlider> {
         child: Stack(
           //overflow: Overflow.visible,
           children: [
-            Container(
+            SizedBox(
               height: 310,
               width: double.infinity,
               child: buildImagesSwiper(context),
@@ -41,7 +43,7 @@ class _BannerTopSliderState extends State<BannerTopSlider> {
                 filter:  ImageFilter.blur(sigmaX: 50, sigmaY: 50),
                 child: Stack(
                   children:  [
-                    Container(
+                    SizedBox(
                       height: 300,
                       //color: Colors.red ,
                       width: double.infinity,
@@ -50,7 +52,7 @@ class _BannerTopSliderState extends State<BannerTopSlider> {
                       ),),
                     Padding(
                       padding: EdgeInsets.symmetric(vertical: 0, horizontal: 15),
-                      child: Container(
+                      child: SizedBox(
                         //height: MediaQuery.of(context).size.height,
                         width: MediaQuery.of(context).size.width,
                         child: topImageSwiper(context),
@@ -74,14 +76,14 @@ class _BannerTopSliderState extends State<BannerTopSlider> {
             itemBuilder: (BuildContext context, int index) {
               return Stack(
                 children: [
-                  Container(
+                  SizedBox(
                     width: MediaQuery.of(context).size.width,
                     child: Image.network(
                       widget.block.children[index].image,
                       fit: BoxFit.fill,
                     ),
                   ),
-                  Container(
+                  SizedBox(
                     width: MediaQuery.of(context).size.width,
                     child: BackdropFilter(
                       filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
@@ -96,7 +98,7 @@ class _BannerTopSliderState extends State<BannerTopSlider> {
             itemCount:  widget.block.children.length,
             pagination: SwiperPagination(
               //margin: EdgeInsets.only(bottom:40),
-              builder: new DotSwiperPaginationBuilder(
+              builder: DotSwiperPaginationBuilder(
                   color: Color(0xffb0bec5),
                   activeColor: Colors.white,
                   size: 8,
@@ -118,7 +120,7 @@ class _BannerTopSliderState extends State<BannerTopSlider> {
     //TabController imagesController = TabController(length: 3, vsync: this );
     return Stack(
       children: <Widget>[
-        Container(
+        SizedBox(
           //alignment: Alignment.topCenter,
           width: double.infinity,
           height: 180,
@@ -130,7 +132,7 @@ class _BannerTopSliderState extends State<BannerTopSlider> {
               itemBuilder: (BuildContext context, int index) {
                 return InkWell(
                     splashColor: Theme.of(context).hintColor,
-                    onTap: () => null,
+                    onTap: () {},
                     child: Image.network(
                       widget.block.children[index].image,
                       fit: BoxFit.fill,
@@ -140,7 +142,7 @@ class _BannerTopSliderState extends State<BannerTopSlider> {
               itemCount:  widget.block.children.length,
               pagination: SwiperPagination(
                 //margin: EdgeInsets.only(bottom:40),
-                builder: new DotSwiperPaginationBuilder(
+                builder: DotSwiperPaginationBuilder(
                     color: Color(0xffb0bec5),
                     activeColor: Colors.white,
                     size: 8,

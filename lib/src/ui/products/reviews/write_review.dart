@@ -1,6 +1,8 @@
-import 'package:flutter/cupertino.dart';
+
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:flutter/material.dart';
-import 'package:smooth_star_rating/smooth_star_rating.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 import './../../../models/app_state_model.dart';
 import '../../../resources/api_provider.dart';
@@ -8,24 +10,23 @@ import '../../color_override.dart';
 
 class ReviewsPage extends StatefulWidget {
   final int productId;
-  ReviewsPage({Key key, this.productId}) : super(key: key);
+  const ReviewsPage({super.key, required this.productId});
   @override
   _ReviewsPageState createState() => _ReviewsPageState();
 }
 
 class _ReviewsPageState extends State<ReviewsPage> {
-  Map reviewData = Map<String, dynamic>();
+  Map reviewData = <String, dynamic>{};
   final apiProvider = ApiProvider();
   final _formKey = GlobalKey<FormState>();
-  TextEditingController nameController = new TextEditingController();
-  TextEditingController emailController = new TextEditingController();
-  TextEditingController reviewController = new TextEditingController();
+  TextEditingController nameController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController reviewController = TextEditingController();
   AppStateModel appStateModel = AppStateModel();
   bool showRatingError = false;
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
   }
 
@@ -34,7 +35,7 @@ class _ReviewsPageState extends State<ReviewsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        resizeToAvoidBottomPadding: false,
+        resizeToAvoidBottomInset: false,
         appBar: AppBar(
           elevation: 0,
           centerTitle: true,
@@ -53,27 +54,26 @@ class _ReviewsPageState extends State<ReviewsPage> {
                     SizedBox(
                       height: 20,
                     ),
-                    Text(appStateModel.blocks.localeText.whatIsYourRate + '?',
-                        style: Theme.of(context).textTheme.caption.copyWith(
+                    Text('${appStateModel.blocks.localeText.whatIsYourRate}?',
+                        style: Theme.of(context).textTheme.bodySmall!.copyWith(
                             // fontWeight: FontWeight.w600
                             )),
                     SizedBox(
                       height: 5,
                     ),
                     Container(
-                        child: SmoothStarRating(
-                      rating: rating,
-                      isReadOnly: false,
-                      size: 30,
-                      filledIconData: Icons.star,
-                      halfFilledIconData: Icons.star_half,
-                      defaultIconData: Icons.star_border,
-                      starCount: 5,
+                        child: RatingBar.builder(
+                      initialRating: rating,
+                      minRating: 0,
+                      direction: Axis.horizontal,
                       allowHalfRating: true,
-                      color: Colors.orange,
-                      borderColor: Colors.orange,
-                      spacing: 2.0,
-                      onRated: (value) {
+                      itemCount: 5,
+                      itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
+                      itemBuilder: (context, _) => Icon(
+                        Icons.star,
+                        color: Colors.orange,
+                      ),
+                      onRatingUpdate: (value) {
                         setState(() {
                           rating = value;
                         });
@@ -83,8 +83,8 @@ class _ReviewsPageState extends State<ReviewsPage> {
                       Text(appStateModel.blocks.localeText.whatIsYourRate,
                           style: Theme.of(context)
                               .textTheme
-                              .bodyText2
-                              .copyWith(color: Theme.of(context).errorColor))
+                              .bodyMedium!
+                              .copyWith(color: Theme.of(context).colorScheme.error))
                     else
                       Container(),
                     Padding(
@@ -95,6 +95,7 @@ class _ReviewsPageState extends State<ReviewsPage> {
                         children: [
                           Flexible(
                             child: PrimaryColorOverride(
+                              key: UniqueKey(),
                               child: TextFormField(
                                 maxLength: 1000,
                                 maxLines: 8,
@@ -105,7 +106,7 @@ class _ReviewsPageState extends State<ReviewsPage> {
                                   errorMaxLines: 1,
                                 ),
                                 validator: (value) {
-                                  if (value.isEmpty) {
+                                  if (value!.isEmpty) {
                                     return appStateModel.blocks.localeText.pleaseEnterMessage;
                                   }
                                   return null;
@@ -130,15 +131,15 @@ class _ReviewsPageState extends State<ReviewsPage> {
                     Center(
                       child: SizedBox(
                         width: MediaQuery.of(context).size.width,
-                        child: RaisedButton(
+                        child: ElevatedButton(
                           child: Text(appStateModel.blocks.localeText.submit),
                           onPressed: () async {
                             setState(() {
                               showRatingError = true;
                             });
-                            if (_formKey.currentState.validate() &&
+                            if (_formKey.currentState!.validate() &&
                                 rating != 0.0) {
-                              _formKey.currentState.save();
+                              _formKey.currentState!.save();
                               reviewData["author"] = nameController.text;
                               reviewData["email"] = emailController.text;
                               reviewData["comment"] = reviewController.text;
@@ -173,14 +174,15 @@ class _ReviewsPageState extends State<ReviewsPage> {
   Widget buildTextFormField(
       TextEditingController controller, String name) {
     return PrimaryColorOverride(
+        key: UniqueKey(),
         child: TextFormField(
       controller: controller,
       decoration: InputDecoration(
         labelText: name,
       ),
       validator: (value) {
-        if (value.isEmpty) {
-          return appStateModel.blocks.localeText.pleaseEnter + ' ${name.toLowerCase()}';
+        if (value!.isEmpty) {
+          return '${appStateModel.blocks.localeText.pleaseEnter} ${name.toLowerCase()}';
         }
         return null;
       },
@@ -188,19 +190,18 @@ class _ReviewsPageState extends State<ReviewsPage> {
   }
 
   void _thankYouMessage() {
-    showDialog(context: context, child: AlertDialog(
+    showDialog(builder: (context) => AlertDialog(
       content: Text(appStateModel.blocks.localeText.thankYouForYourReview),
       actions: [
-        RaisedButton(
+        ElevatedButton(
           onPressed: () {
             Navigator.of(context).pop();
             Navigator.of(context).pop();
           },
           child: Text(appStateModel.blocks.localeText.ok),
-          //color: const Color(0xFF1BC0C5),
         ),
       ],
-    ),
+    ), context: context,
     );
   }
 }

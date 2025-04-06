@@ -152,7 +152,7 @@ class _VendorDetailsState extends State<VendorDetails>
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.start,
                                               children: <Widget>[
-                                                Container(
+                                                SizedBox(
                                                   width:
                                                       MediaQuery.of(context)
                                                               .size

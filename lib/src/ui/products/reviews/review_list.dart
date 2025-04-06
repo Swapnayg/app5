@@ -1,3 +1,5 @@
+// ignore_for_file: use_super_parameters, library_private_types_in_public_api
+
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -9,7 +11,7 @@ import '../../../../src/models/review_model.dart';
 class ReviewList extends StatefulWidget {
   final ProductDetailBloc productDetailBloc;
 
-  const ReviewList({Key key, this.productDetailBloc}) : super(key: key);
+  const ReviewList({Key? key, required this.productDetailBloc}) : super(key: key);
   @override
   _ReviewListState createState() => _ReviewListState();
 }
@@ -25,7 +27,7 @@ class _ReviewListState extends State<ReviewList> {
           } else {
             return SliverToBoxAdapter();
           }
-        });;
+        });
   }
 
   Widget buildReviewsList(
@@ -35,12 +37,12 @@ class _ReviewListState extends State<ReviewList> {
         return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              buildListTile(context, snapshot.data[index]),
+              buildListTile(context, snapshot.data![index]),
               Divider(
                 height: 0.0,
               ),
             ]);
-      }, childCount: snapshot.data.length),
+      }, childCount: snapshot.data!.length),
     );
   }
 
@@ -89,7 +91,7 @@ class _ReviewListState extends State<ReviewList> {
                       Text(timeago.format(comment.date),
                           style: TextStyle(
                               fontSize: 12.0,
-                              color: Theme.of(context).textTheme.caption.color))
+                              color: Theme.of(context).textTheme.bodySmall!.color))
                     ]),
               ),
             ],

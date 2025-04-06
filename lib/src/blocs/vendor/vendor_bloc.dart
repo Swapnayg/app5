@@ -165,7 +165,7 @@ class VendorBloc {
   void getVendorOrderForm() async {
     final response = await apiProvider.post(
         '/wp-admin/admin-ajax.php?action=mstore_flutter-get_checkout_form',
-        Map()); //formData.toJson();
+        {}); //formData.toJson();
     if (response.statusCode == 200) {
       CheckoutFormModel checkoutForm =
           CheckoutFormModel.fromJson(json.decode(response.body));

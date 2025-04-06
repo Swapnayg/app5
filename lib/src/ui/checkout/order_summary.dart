@@ -34,7 +34,7 @@ class _OrderSummaryState extends State<OrderSummary> {
       body: StreamBuilder<Order>(
         stream: widget.orderSummary.order,
         builder: (context, snapshot) {
-          if (snapshot.hasData && snapshot.data.id != null) {
+          if (snapshot.hasData) {
             final NumberFormat formatter = NumberFormat.currency(
                 decimalDigits: snapshot.data.decimals, name: snapshot.data.currency);
             return CustomScrollView(
@@ -60,19 +60,19 @@ class _OrderSummaryState extends State<OrderSummary> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 SizedBox(height: 10.0),
-                Text(widget.appStateModel.blocks.localeText.order + (" - " + order.number.toString()),
-                  style: Theme.of(context).textTheme.headline6,
+                Text(widget.appStateModel.blocks.localeText.order + (" - ${order.number}"),
+                  style: Theme.of(context).textTheme.titleLarge,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(getOrderStatusText(order.status, widget.appStateModel.blocks.localeText),
-                      style: Theme.of(context).textTheme.subtitle2,
+                      style: Theme.of(context).textTheme.titleSmall,
                     ),
                     order.status == 'pending' ? RaisedButton(
                       onPressed: () {
                         Config config = Config();
-                        String url = config.url + '/checkout/order-pay/' + order.number.toString()  + '/?key=' + order.orderKey;
+                        String url = '${config.url}/checkout/order-pay/${order.number}/?key=${order.orderKey}';
                         Navigator.push(context, MaterialPageRoute(builder: (context) =>
                             WebViewPage(
                                 url: url, selectedPaymentMethod: order.paymentMethod
@@ -90,7 +90,7 @@ class _OrderSummaryState extends State<OrderSummary> {
                     children: <Widget>[
                       Text(
                         widget.appStateModel.blocks.localeText.billing,
-                        style: Theme.of(context).textTheme.subtitle,
+                        style: Theme.of(context).textTheme.subtitle2,
                       ),
                       SizedBox(height: 10.0),
                       Text(
@@ -103,7 +103,7 @@ class _OrderSummaryState extends State<OrderSummary> {
                     children: <Widget>[
                       Text(
                         widget.appStateModel.blocks.localeText.shipping,
-                        style: Theme.of(context).textTheme.subtitle,
+                        style: Theme.of(context).textTheme.subtitle2,
                       ),
                       SizedBox(
                         height: 10.0,
@@ -118,7 +118,7 @@ class _OrderSummaryState extends State<OrderSummary> {
                     children: <Widget>[
                       Text(
                         widget.appStateModel.blocks.localeText.payment,
-                        style: Theme.of(context).textTheme.subtitle,
+                        style: Theme.of(context).textTheme.subtitle2,
                       ),
                       SizedBox(
                         height: 10.0,
@@ -133,7 +133,7 @@ class _OrderSummaryState extends State<OrderSummary> {
                     children: <Widget>[
                       Text(
                         widget.appStateModel.blocks.localeText.items,
-                        style: Theme.of(context).textTheme.subtitle,
+                        style: Theme.of(context).textTheme.subtitle2,
                       ),
                       SizedBox(
                         height: 10.0,
@@ -157,7 +157,7 @@ class _OrderSummaryState extends State<OrderSummary> {
               SizedBox(height: 10.0),
               Text(
                 widget.appStateModel.blocks.localeText.total,
-                style: Theme.of(context).textTheme.subtitle,
+                style: Theme.of(context).textTheme.subtitle2,
               ),
               SizedBox(height: 10.0),
               Row(
@@ -166,7 +166,7 @@ class _OrderSummaryState extends State<OrderSummary> {
                   Expanded(
                     child: Text(widget.appStateModel.blocks.localeText.shipping),
                   ),
-                  Text(formatter.format((double.parse('${order.shippingTotal}')))),
+                  Text(formatter.format((double.parse(order.shippingTotal)))),
                 ],
               ),
               SizedBox(height: 10.0),
@@ -176,7 +176,7 @@ class _OrderSummaryState extends State<OrderSummary> {
                   Expanded(
                     child: Text(widget.appStateModel.blocks.localeText.tax),
                   ),
-                  Text(formatter.format((double.parse('${order.totalTax}')))),
+                  Text(formatter.format((double.parse(order.totalTax)))),
                 ],
               ),
               SizedBox(height: 10.0),
@@ -186,7 +186,7 @@ class _OrderSummaryState extends State<OrderSummary> {
                   Expanded(
                     child: Text(widget.appStateModel.blocks.localeText.discount),
                   ),
-                  Text(formatter.format((double.parse('${order.discountTotal}')))),
+                  Text(formatter.format((double.parse(order.discountTotal)))),
                 ],
               ),
               SizedBox(height: 10.0),
@@ -196,14 +196,14 @@ class _OrderSummaryState extends State<OrderSummary> {
                   Expanded(
                     child: Text(
                       widget.appStateModel.blocks.localeText.total,
-                      style: Theme.of(context).textTheme.title,
+                      style: Theme.of(context).textTheme.headline6,
                     ),
                   ),
                   Text(
                     formatter.format(
                       double.parse(order.total),
                     ),
-                    style: Theme.of(context).textTheme.title,
+                    style: Theme.of(context).textTheme.headline6,
                   ),
                 ],
               ),
@@ -238,10 +238,11 @@ class _OrderSummaryState extends State<OrderSummary> {
               (BuildContext context, int index) {
 
                 String metaData = '';
-                order.lineItems[index].metaData.forEach((element) {
-                  if(element.value is String)
-                    metaData = element.key + '-' + element.value + '.';
-                });
+                for (var element in order.lineItems[index].metaData) {
+                  if(element.value is String) {
+                    metaData = '${element.key}-' + element.value + '.';
+                  }
+                }
 
             return Column(
               children: <Widget>[
@@ -250,17 +251,15 @@ class _OrderSummaryState extends State<OrderSummary> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
-                        Container(
+                        SizedBox(
                           width: MediaQuery.of(context).size.width * 0.7,
-                          child: Text(order.lineItems[index].name +
-                              ' x ' +
-                              order.lineItems[index].quantity.toString(),
+                          child: Text('${order.lineItems[index].name} x ${order.lineItems[index].quantity}',
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
                           ),
                         ),
                         Text(formatter.format(
-                            (double.parse('${order.lineItems[index].total}')))),
+                            (double.parse(order.lineItems[index].total)))),
                       ],
                     )),
               ],
@@ -273,10 +272,7 @@ class _OrderSummaryState extends State<OrderSummary> {
   }
 
   void onSuccessMessage(Order order) {
-    showDialog(context: context,
-        barrierDismissible: false,
-        // ignore: deprecated_member_use
-        child: AlertDialog(
+    showDialog(builder: (context) => AlertDialog(
           title: new Text(widget.appStateModel.blocks.localeText.youOrderHaveBeenReceived),
           content: new Text(widget.appStateModel.blocks.localeText.thankYouForShoppingWithUs+'!'+widget.appStateModel.blocks.localeText.thankYouOrderIdIs+':'+' #${order.id.toString()}. '+ widget.appStateModel.blocks.localeText.youWillReceiveAConfirmationMessage+'.'),
           actions: <Widget>[
@@ -289,7 +285,8 @@ class _OrderSummaryState extends State<OrderSummary> {
                 }
             )
           ],
-        )
+        ), context: context,
+        barrierDismissible: false
     );
   }
 

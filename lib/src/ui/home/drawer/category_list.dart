@@ -1,6 +1,7 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 import '../../../functions.dart';
 import '../../../models/category_model.dart';
@@ -8,22 +9,22 @@ import '../../../models/category_model.dart';
 class CategoryList extends StatefulWidget {
   List<Category> categories;
   final Function onTapCategory;
-  CategoryList({Key key, this.categories, this.onTapCategory})
-      : super(key: key);
+  CategoryList({super.key, required this.categories, required this.onTapCategory});
   @override
   _CategoryListState createState() => _CategoryListState();
 }
 
 class _CategoryListState extends State<CategoryList> {
-  List<Category> mainCategories;
-  Category selectedCategory;
+  late List<Category> mainCategories;
+  late Category selectedCategory;
 
   @override
   void initState() {
     super.initState();
     mainCategories = widget.categories.where((cat) => cat.parent == 0).toList();
-    if(mainCategories.length != 0)
+    if(mainCategories.length != 0) {
       selectedCategory = mainCategories[0];
+    }
   }
 
   void onCategoryClick(Category category) {
@@ -55,6 +56,13 @@ class _CategoryListState extends State<CategoryList> {
         key: PageStorageKey<Category>(category),
         leading: leadingIcon(category),
         title: Text(parseHtmlString(category.name)),
+        subtitle: Text('Subtitle for ${category.name}'), // Provide a subtitle
+        backgroundColor: Colors.grey[200]!, // Provide a background color
+        onExpansionChanged: (bool expanded) {
+          // Handle expansion state change
+          print('${category.name} is ${expanded ? 'expanded' : 'collapsed'}');
+        },
+        trailing: Icon(Icons.arrow_drop_down), // Provide a trailing widget
         children: subCategories.map(_buildTiles).toList(),
       );
     }
@@ -74,24 +82,24 @@ class _CategoryListState extends State<CategoryList> {
     );
   }
 
-  Container leadingIcon(Category category) {
-    return Container(
+  SizedBox leadingIcon(Category category) {
+    return SizedBox(
       width: 40,
       height: 40,
       child: CachedNetworkImage(
-        imageUrl: category.image != null ? category.image : '',
+        imageUrl: category.image,
         imageBuilder: (context, imageProvider) => Card(
           clipBehavior: Clip.antiAlias,
           elevation: 0.0,
           shape: StadiumBorder(),
           child: Ink.image(
+            image: imageProvider,
+            fit: BoxFit.cover,
             child: InkWell(
               onTap: () {
                 onCategoryClick(category);
               },
             ),
-            image: imageProvider,
-            fit: BoxFit.cover,
           ),
         ),
         placeholder: (context, url) => Card(
@@ -132,17 +140,16 @@ class ExpansionTile2 extends StatefulWidget {
   /// the tile to reveal or hide the [children]. The [initiallyExpanded] property must
   /// be non-null.
   const ExpansionTile2({
-    Key key,
-    this.leading,
-    @required this.title,
-    this.subtitle,
-    this.backgroundColor,
-    this.onExpansionChanged,
+    super.key,
+    required this.leading,
+    required this.title,
+    required this.subtitle,
+    required this.backgroundColor,
+    required this.onExpansionChanged,
     this.children = const <Widget>[],
-    this.trailing,
+    required this.trailing,
     this.initiallyExpanded = false,
-  }) : assert(initiallyExpanded != null),
-        super(key: key);
+  });
 
   /// A widget to display before the title.
   ///
@@ -194,13 +201,13 @@ class _ExpansionTile2State extends State<ExpansionTile2> with SingleTickerProvid
   final ColorTween _iconColorTween = ColorTween();
   final ColorTween _backgroundColorTween = ColorTween();
 
-  AnimationController _controller;
-  Animation<double> _iconTurns;
-  Animation<double> _heightFactor;
-  Animation<Color> _borderColor;
-  Animation<Color> _headerColor;
-  Animation<Color> _iconColor;
-  Animation<Color> _backgroundColor;
+  late AnimationController _controller;
+  late Animation<double> _iconTurns;
+  late Animation<double> _heightFactor;
+  late Animation<Color> _borderColor;
+  late Animation<Color> _headerColor;
+  late Animation<Color> _iconColor;
+  late Animation<Color> _backgroundColor;
 
   bool _isExpanded = false;
 
@@ -210,14 +217,15 @@ class _ExpansionTile2State extends State<ExpansionTile2> with SingleTickerProvid
     _controller = AnimationController(duration: _kExpand, vsync: this);
     _heightFactor = _controller.drive(_easeInTween);
     _iconTurns = _controller.drive(_halfTween.chain(_easeInTween));
-    _borderColor = _controller.drive(_borderColorTween.chain(_easeOutTween));
-    _headerColor = _controller.drive(_headerColorTween.chain(_easeInTween));
-    _iconColor = _controller.drive(_iconColorTween.chain(_easeInTween));
-    _backgroundColor = _controller.drive(_backgroundColorTween.chain(_easeOutTween));
+    _borderColor = _controller.drive(_borderColorTween.chain(_easeOutTween) as Animatable<Color>);
+    _headerColor =_controller.drive(_headerColorTween.chain(_easeInTween) as Animatable<Color>);
+    _iconColor = _controller.drive(_iconColorTween.chain(_easeInTween) as Animatable<Color>);
+    _backgroundColor = _controller.drive(_backgroundColorTween.chain(_easeOutTween) as Animatable<Color>);
 
-    _isExpanded = PageStorage.of(context)?.readState(context) ?? widget.initiallyExpanded;
-    if (_isExpanded)
+    _isExpanded = PageStorage.of(context).readState(context) ?? widget.initiallyExpanded;
+    if (_isExpanded) {
       _controller.value = 1.0;
+    }
   }
 
   @override
@@ -233,25 +241,25 @@ class _ExpansionTile2State extends State<ExpansionTile2> with SingleTickerProvid
         _controller.forward();
       } else {
         _controller.reverse().then<void>((void value) {
-          if (!mounted)
+          if (!mounted) {
             return;
+          }
           setState(() {
             // Rebuild without widget.children.
           });
         });
       }
-      PageStorage.of(context)?.writeState(context, _isExpanded);
+      PageStorage.of(context).writeState(context, _isExpanded);
     });
-    if (widget.onExpansionChanged != null)
-      widget.onExpansionChanged(_isExpanded);
+    widget.onExpansionChanged(_isExpanded);
   }
 
-  Widget _buildChildren(BuildContext context, Widget child) {
-    final Color borderSideColor = _borderColor.value ?? Colors.transparent;
+  Widget _buildChildren(BuildContext context, Widget? child) {
+    final Color borderSideColor = _borderColor.value;
 
     return Container(
       decoration: BoxDecoration(
-        color: _backgroundColor.value ?? Colors.transparent,
+        color: _backgroundColor.value,
         border: Border(
           top: BorderSide(color: borderSideColor),
           bottom: BorderSide(color: borderSideColor),
@@ -292,15 +300,15 @@ class _ExpansionTile2State extends State<ExpansionTile2> with SingleTickerProvid
   void didChangeDependencies() {
     final ThemeData theme = Theme.of(context);
     _borderColorTween
-      ..end = theme.dividerColor;
+      .end = theme.dividerColor;
     _headerColorTween
-      ..begin = theme.textTheme.subtitle1.color
-      ..end = theme.accentColor;
+      ..begin = theme.textTheme.titleMedium!.color
+      ..end = theme.colorScheme.secondary;
     _iconColorTween
       ..begin = theme.unselectedWidgetColor
-      ..end = theme.accentColor;
+      ..end = theme.colorScheme.secondary;
     _backgroundColorTween
-      ..end = widget.backgroundColor;
+      .end = widget.backgroundColor;
     super.didChangeDependencies();
   }
 
@@ -309,7 +317,7 @@ class _ExpansionTile2State extends State<ExpansionTile2> with SingleTickerProvid
     final bool closed = !_isExpanded && _controller.isDismissed;
     return AnimatedBuilder(
       animation: _controller.view,
-      builder: _buildChildren,
+      builder: (BuildContext context, Widget? child) => _buildChildren(context, child),
       child: closed ? null : Column(children: widget.children),
     );
 

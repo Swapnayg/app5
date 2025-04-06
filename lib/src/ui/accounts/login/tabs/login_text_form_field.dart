@@ -11,7 +11,7 @@ class CustomTextFormField extends StatelessWidget {
   TextInputType inputType;
 
   CustomTextFormField(
-      {this.label,
+      {super.key, this.label,
         this.validationMsg,
         this.controller,
         this.icon,

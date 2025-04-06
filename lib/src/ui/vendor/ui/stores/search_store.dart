@@ -181,7 +181,7 @@ class _SearchStoresState extends State<SearchStores> {
         sliver: SliverList(
             delegate: SliverChildListDelegate([
               model.hasMoreItems
-                  ? Container(
+                  ? SizedBox(
                   height: 60, child: Center(child: CircularProgressIndicator()))
                   : Container()
             ]))));

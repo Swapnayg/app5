@@ -10,21 +10,21 @@ String addToCartErrorModelToJson(AddToCartErrorModel data) => json.encode(data.t
 
 class AddToCartErrorModel {
   bool success;
-  AddToCartErrorData data;
+  AddToCartErrorData? data;
 
   AddToCartErrorModel({
-    this.success,
-    this.data,
+    required this.success,
+    required this.data,
   });
 
   factory AddToCartErrorModel.fromJson(Map<String, dynamic> json) => AddToCartErrorModel(
-    success: json["success"] == null ? null : json["success"],
+    success: json["success"],
     data: json["data"] == null ? null : AddToCartErrorData.fromJson(json["data"]),
   );
 
   Map<String, dynamic> toJson() => {
-    "success": success == null ? null : success,
-    "data": data == null ? null : data.toJson(),
+    "success": success,
+    "data": data?.toJson(),
   };
 }
 
@@ -34,20 +34,20 @@ class AddToCartErrorData {
   String notice;
 
   AddToCartErrorData({
-    this.error,
-    this.productUrl,
-    this.notice,
+    required this.error,
+    required this.productUrl,
+    required this.notice,
   });
 
   factory AddToCartErrorData.fromJson(Map<String, dynamic> json) => AddToCartErrorData(
-    error: json["error"] == null ? null : json["error"],
+    error: json["error"],
     //productUrl: json["product_url"] == null ? null : json["product_url"],
-    notice: json["notice"] == null ? null : json["notice"],
+    notice: json["notice"], productUrl: '',
   );
 
   Map<String, dynamic> toJson() => {
-    "error": error == null ? null : error,
-    "product_url": productUrl == null ? null : productUrl,
-    "notice": notice == null ? null : notice,
+    "error": error,
+    "product_url": productUrl,
+    "notice": notice,
   };
 }

@@ -90,7 +90,7 @@ class _VendorContacts1State extends State<VendorContacts1> {
                       target: _lastMapPosition,
                       zoom: 11.0,
                     ),
-                    gestureRecognizers: Set()
+                    gestureRecognizers: <Factory<OneSequenceGestureRecognizer>>{}
                       ..add(Factory<PanGestureRecognizer>(
                               () => PanGestureRecognizer())),
                     scrollGesturesEnabled: true,
@@ -195,8 +195,8 @@ class _VendorContacts1State extends State<VendorContacts1> {
     );
   }
 
-  Container buildIcon(child) {
-    return Container(
+  SizedBox buildIcon(child) {
+    return SizedBox(
       width: 30,
       height: 30,
       child: child,

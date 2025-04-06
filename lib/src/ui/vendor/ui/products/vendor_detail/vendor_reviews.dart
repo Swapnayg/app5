@@ -60,7 +60,7 @@ class _VendorReviewsListState extends State<VendorReviewsList> {
     List<Widget> list = List<Widget>.empty(growable: true);
     list.add(writeReviewTile());
     list.add(buildReviewsList(reviews, context));
-    if(reviews.length < 10);
+    if(reviews.length < 10) {}
     return list;
   }
 

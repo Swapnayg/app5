@@ -1,5 +1,6 @@
+// ignore_for_file: must_be_immutable, library_private_types_in_public_api, avoid_print, avoid_unnecessary_containers, unnecessary_null_comparison, unused_element, deprecated_member_use
+
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:smooth_star_rating/smooth_star_rating.dart';
 import '../../../ui/products/product_grid/products_widgets/product_addons.dart';
 import '../reviews/reviewDetail.dart';
 import '../reviews/write_review.dart';
@@ -8,14 +9,14 @@ import '../../../ui/checkout/cart/cart4.dart';
 import '../../../functions.dart';
 import './../product_grid/products_widgets/add_button_detail.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter_icons/flutter_icons.dart';
+import 'package:flutter_font_icons/flutter_font_icons.dart';
 import '../../../blocs/vendor/vendor_detail_state_model.dart';
 import '../../vendor/ui/products/vendor_detail/vendor_detail.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:scoped_model/scoped_model.dart';
-import 'package:share/share.dart';
+import 'package:share_plus/share_plus.dart';
 import '../../../models/app_state_model.dart';
 import '../../accounts/login/login.dart';
 import '../../../models/releated_products.dart';
@@ -24,7 +25,7 @@ import '../../../blocs/product_detail_bloc.dart';
 import '../../../models/product_model.dart';
 import '../product_grid/products_scroll.dart';
 import 'package:flutter_html/flutter_html.dart';
-import 'package:flutter_swiper/flutter_swiper.dart';
+import 'package:flutter_swiper_null_safety/flutter_swiper_null_safety.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'gallery_view.dart';
 
@@ -37,18 +38,18 @@ class ProductDetail2 extends StatefulWidget {
 
   final appStateModel = AppStateModel();
 
-  ProductDetail2({this.product});
+  ProductDetail2({super.key, required this.product});
 
   @override
   _ProductDetail2State createState() => _ProductDetail2State();
 }
 
 class _ProductDetail2State extends State<ProductDetail2> {
-  bool _alreadySaved;
+  late bool _alreadySaved;
   var saved;
-  ScrollController _scrollController = new ScrollController();
+  final ScrollController _scrollController = ScrollController();
 
-  List<ReviewModel> reviews;
+  late List<ReviewModel> reviews;
   bool _visible = false;
   int _quantity = 1;
 
@@ -73,9 +74,6 @@ class _ProductDetail2State extends State<ProductDetail2> {
   void initState() {
     super.initState();
     _scrollController.addListener(_scrollListener);
-    if (widget.product.description == null) {
-      getProduct();
-    }
     widget.productDetailBloc.getProductsDetails(widget.product.id);
     widget.productDetailBloc.getReviews(widget.product.id);
   }
@@ -84,38 +82,18 @@ class _ProductDetail2State extends State<ProductDetail2> {
     setState(() {
       addingToCart = true;
     });
-    var data = new Map<String, dynamic>();
+    var data = <String, dynamic>{};
     data['product_id'] = widget.product.id.toString();
     //data['add-to-cart'] = widget.product.id.toString();
     data['quantity'] = _quantity.toString();
     var doAdd = true;
-    if (widget.product.type == 'variable' &&
-        widget.product.variationOptions != null) {
+    if (widget.product.type == 'variable') {
       for (var i = 0; i < widget.product.variationOptions.length; i++) {
-        if (widget.product.variationOptions[i].selected != null) {
-          data['variation[attribute_' + widget.product.variationOptions[i].attribute.toLowerCase() + ']'] = widget.product.variationOptions[i].selected;
-          //data['attribute_pa_' + widget.product.variationOptions[i].attribute.toLowerCase()] = widget.product.variationOptions[i].selected;
-        } else if (widget.product.variationOptions[i].selected == null &&
-            widget.product.variationOptions[i].options.length != 0) {
-          Fluttertoast.showToast(
-              msg: widget.appStateModel.blocks.localeText.select +
-                  ' ' +
-                  widget.product.variationOptions[i].name);
-          doAdd = false;
-          break;
-        } else if (widget.product.variationOptions[i].selected == null &&
-            widget.product.variationOptions[i].options.length == 0) {
-          setState(() {
-            widget.product.stockStatus = 'outofstock';
-          });
-          doAdd = false;
-          break;
+        data['variation[attribute_${widget.product.variationOptions[i].attribute.toLowerCase()}]'] = widget.product.variationOptions[i].selected;
+        //data['attribute_pa_' + widget.product.variationOptions[i].attribute.toLowerCase()] = widget.product.variationOptions[i].selected;
+            }
+      data['variation_id'] = widget.product.variationId;
         }
-      }
-      if (widget.product.variationId != null) {
-        data['variation_id'] = widget.product.variationId;
-      }
-    }
     print(data);
     if (doAdd) {
       await widget.appStateModel.addToCart(data);
@@ -128,27 +106,19 @@ class _ProductDetail2State extends State<ProductDetail2> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomPadding: false,
-      body: widget.product.description != null
-          ? buildBody()
-          : CustomScrollView(
-        slivers: <Widget>[
-          _buildDBackgroundImage(),
-          _buildDBackgroundCircleIndicator()
-        ],
-      ),
+      resizeToAvoidBottomInset: false,
+      body: buildBody(),
     );
   }
 
   List<Widget> buildSliverList() {
-    List<Widget> list = new List<Widget>();
-    String key;
+    List<Widget> list = [];
+    String key = ''; // Initialize with a default value
     list.add(_buildProductImages(key));
     list.add(buildNamePrice());
     /*if (widget.product.vendor?.name != null &&
         widget.product.vendor?.icon != null) list.add(buildStore());*/
-    if (widget.product.availableVariations != null &&
-        widget.product.availableVariations?.length != 0) {
+    if (widget.product.availableVariations.length != 0) {
       for (var i = 0; i < widget.product.variationOptions.length; i++) {
         if (widget.product.variationOptions[i].options.length != 0) {
           list.add(buildOptionHeader(widget.product.variationOptions[i].name));
@@ -170,13 +140,13 @@ class _ProductDetail2State extends State<ProductDetail2> {
   Widget buildNamePrice() {
     bool onSale = false;
 
-    if (widget.product.salePrice != null && widget.product.salePrice != 0) {
+    if (widget.product.salePrice != 0) {
       onSale = true;
     }
 
     return SliverList(
         delegate: SliverChildListDelegate([
-          Container(
+          SizedBox(
             height: 200,
             child: Column(
               children: <Widget>[
@@ -261,8 +231,7 @@ class _ProductDetail2State extends State<ProductDetail2> {
                                       mainAxisAlignment: MainAxisAlignment.start,
                                       children: [
                                         Text(
-                                          (widget.product.formattedSalesPrice != null &&
-                                              widget.product.formattedSalesPrice
+                                          (widget.product.formattedSalesPrice
                                                   .isNotEmpty)
                                               ? parseHtmlString(
                                               widget.product.formattedSalesPrice)
@@ -276,8 +245,7 @@ class _ProductDetail2State extends State<ProductDetail2> {
                                             ? SizedBox(width: 6)
                                             : SizedBox(width: 0),
                                         Text(
-                                          (widget.product.formattedPrice != null &&
-                                              widget
+                                          (widget
                                                   .product.formattedPrice.isNotEmpty)
                                               ? parseHtmlString(
                                               widget.product.formattedPrice)
@@ -292,7 +260,7 @@ class _ProductDetail2State extends State<ProductDetail2> {
                                                 ? Theme.of(context).hintColor
                                                 : Theme.of(context)
                                                 .textTheme
-                                                .bodyText1
+                                                .bodyLarge!
                                                 .color,
                                             decoration: onSale
                                                 ? TextDecoration.lineThrough
@@ -308,24 +276,20 @@ class _ProductDetail2State extends State<ProductDetail2> {
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: <Widget>[
-                                  SmoothStarRating(
+                                    RatingBarIndicator(
                                     rating: double.parse(widget.product.averageRating),
-                                    isReadOnly: true,
-                                    size: 18,
-                                    filledIconData: Icons.star,
-                                    halfFilledIconData: Icons.star_half,
-                                    defaultIconData: Icons.star_border,
-                                    starCount: 5,
-                                    allowHalfRating: true,
-                                    color: Colors.amber,
-                                    borderColor: Colors.amber,
-                                    spacing: 2.0,
+                                    itemBuilder: (context, index) => Icon(
+                                      Icons.star,
+                                      color: Colors.amber,
+                                    ),
+                                    itemSize: 18,
+                                    itemCount: 5,
                                   ),
                                   widget.product.averageRating != '0.00'
                                       ? Row(
                                     children: <Widget>[
                                       SizedBox(width: 4.0),
-                                      Text('(' + widget.product.ratingCount.toString() + ')',
+                                      Text('(${widget.product.ratingCount})',
                                           maxLines: 2,
                                           style: TextStyle(
                                             color: Theme
@@ -365,7 +329,7 @@ class _ProductDetail2State extends State<ProductDetail2> {
         builder: (context, AsyncSnapshot<ReleatedProductsModel> snapshot) {
           if (snapshot.hasData) {
             return buildProductList(
-                snapshot.data.relatedProducts, context, title);
+                snapshot.data!.relatedProducts, context, title);
           } else {
             return SliverToBoxAdapter();
           }
@@ -380,7 +344,7 @@ class _ProductDetail2State extends State<ProductDetail2> {
         builder: (context, AsyncSnapshot<ReleatedProductsModel> snapshot) {
           if (snapshot.hasData) {
             return buildProductList(
-                snapshot.data.crossProducts, context, title);
+                snapshot.data!.crossProducts, context, title);
           } else {
             return SliverToBoxAdapter();
           }
@@ -395,7 +359,7 @@ class _ProductDetail2State extends State<ProductDetail2> {
         builder: (context, AsyncSnapshot<ReleatedProductsModel> snapshot) {
           if (snapshot.hasData) {
             return buildProductList(
-                snapshot.data.upsellProducts, context, title);
+                snapshot.data!.upsellProducts, context, title);
           } else {
             return SliverToBoxAdapter();
           }
@@ -408,18 +372,18 @@ class _ProductDetail2State extends State<ProductDetail2> {
         child: SliverList(
           delegate: SliverChildListDelegate(
             [
-              products.length != null
+              products.isNotEmpty
                   ? Container(
                   height: 20,
                   margin: EdgeInsets.symmetric(horizontal: 18.0, vertical: 8),
                   child: Text(title,
-                      style: Theme.of(context).textTheme.bodyText1.copyWith(
+                      style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                           fontSize: 14, fontWeight: FontWeight.w600)))
                   : Container(),
               Container(
                   height: 270,
                   margin: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 14.0),
-                  decoration: new BoxDecoration(
+                  decoration: BoxDecoration(
                     color: Theme.of(context).brightness == Brightness.light ? Color(0xFFf2f3f7) : Colors.black,
                   ),
                   child: ListView.builder(
@@ -457,22 +421,24 @@ class _ProductDetail2State extends State<ProductDetail2> {
                           mainAxisSize: MainAxisSize.max,
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: <Widget>[
-                            RaisedButton(
-                              shape: const RoundedRectangleBorder(
-                                borderRadius: BorderRadius.all(Radius.circular(2.0)),
+                            ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                shape: const RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.all(Radius.circular(2.0)),
+                                ),
+                                padding: EdgeInsets.all(14.0),
                               ),
-                              padding: EdgeInsets.all(14.0),
                               onPressed: widget.product.stockStatus != 'outofstock'
                                   ? () {
                                 addToCart();
                               }
                                   : null,
-                              child: addingToCart ? Container(
+                              child: addingToCart ? SizedBox(
                                   width: 17,
                                   height: 17,
                                   child: CircularProgressIndicator(
-                                      valueColor: new AlwaysStoppedAnimation<Color>(
-                                          Theme.of(context).buttonTheme.colorScheme.onPrimary),
+                                      valueColor: AlwaysStoppedAnimation<Color>(
+                                          Theme.of(context).buttonTheme.colorScheme!.onPrimary),
                                       strokeWidth: 2.0)) : Text(widget.appStateModel.blocks.localeText.
                               addToCart),
                             ),
@@ -486,10 +452,10 @@ class _ProductDetail2State extends State<ProductDetail2> {
                                       child: Text(widget.appStateModel.blocks.localeText.outOfStock,
                                           style: Theme.of(context)
                                               .textTheme
-                                              .subtitle
+                                              .titleSmall!
                                               .copyWith(
                                               color: Theme.of(context)
-                                                  .errorColor))),
+                                                  .colorScheme.error))),
                             ),
                                   ],
                                 )
@@ -521,17 +487,17 @@ class _ProductDetail2State extends State<ProductDetail2> {
       actions: <Widget>[
         IconButton(
             icon: Icon(
-              FlutterIcons.share_fea,
+              Icons.share,
               semanticLabel: 'Share',
               color: isShrink
                   ? Theme.of(context).primaryIconTheme.color
                   : Colors.black,
             ),
             onPressed: () {
-              Share.share('Check out product ' + widget.product.permalink);
+              Share.share('Check out product ${widget.product.permalink}');
             }),
         InkWell(
-          child: Container(
+          child: SizedBox(
             height: MediaQuery.of(context).size.height,
             //width: 70,
             child: Stack(
@@ -539,7 +505,7 @@ class _ProductDetail2State extends State<ProductDetail2> {
               children: <Widget>[
                 IconButton(
                   icon: Icon(
-                    FlutterIcons.shopping_cart_fea,
+                    Icons.shopping_cart,
                     semanticLabel: 'Cart',
                   ),
                   onPressed: () {
@@ -572,7 +538,7 @@ class _ProductDetail2State extends State<ProductDetail2> {
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(4.0),
                                 ),
-                                color: Theme.of(context).accentColor,
+                                color: Theme.of(context).colorScheme.secondary,
                                 child: Container(
                                     padding: EdgeInsets.all(2),
                                     constraints: BoxConstraints(minWidth: 20.0),
@@ -582,11 +548,12 @@ class _ProductDetail2State extends State<ProductDetail2> {
                                           style: TextStyle(
                                               fontSize: 12,
                                               fontWeight: FontWeight.w800,
-                                              color: Theme.of(context).accentIconTheme.color,
-                                              backgroundColor: Theme.of(context).accentColor),
+                                              color: Theme.of(context).iconTheme.color,
+                                              backgroundColor: Theme.of(context).colorScheme.secondary),
                                         ))));
-                          } else
+                          } else {
                             return Container();
+                          }
                         }),
                   ),
                 )
@@ -605,7 +572,7 @@ class _ProductDetail2State extends State<ProductDetail2> {
         background: Container(
             padding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
             child: InkWell(
-              onTap: () => null,
+              onTap: () {},
               child: Swiper(
                 //control: new SwiperControl(),
                 //viewportFraction: 0.8,
@@ -613,7 +580,7 @@ class _ProductDetail2State extends State<ProductDetail2> {
                 itemBuilder: (BuildContext context, int index) {
                   return InkWell(
                     splashColor: Theme.of(context).hintColor,
-                    onTap: () => null,
+                    onTap: () {},
                     child: Card(
                       margin: EdgeInsets.all(0.0),
                       shape: RoundedRectangleBorder(
@@ -624,6 +591,8 @@ class _ProductDetail2State extends State<ProductDetail2> {
                       child: CachedNetworkImage(
                         imageUrl: widget.product.images[index].src,
                         imageBuilder: (context, imageProvider) => Ink.image(
+                          image: imageProvider,
+                          fit: BoxFit.cover,
                           child: InkWell(
                             splashColor: Theme.of(context).hintColor,
                             onTap: () {
@@ -632,8 +601,6 @@ class _ProductDetail2State extends State<ProductDetail2> {
                               }));
                             },
                           ),
-                          image: imageProvider,
-                          fit: BoxFit.cover,
                         ),
                         placeholder: (context, url) =>
                             Container(color: Colors.black12),
@@ -644,7 +611,7 @@ class _ProductDetail2State extends State<ProductDetail2> {
                   );
                 },
                 itemCount: widget.product.images.length,
-                pagination: new SwiperPagination(),
+                pagination: SwiperPagination(),
                 //autoplay: true,
               ),
             )),
@@ -656,13 +623,13 @@ class _ProductDetail2State extends State<ProductDetail2> {
     return SliverPadding(
       padding: const EdgeInsets.fromLTRB(16.0, 10.0, 16.0, 10.0),
       sliver: SliverGrid(
-        gridDelegate: new SliverGridDelegateWithMaxCrossAxisExtent(
+        gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
           maxCrossAxisExtent: 100.0,
           mainAxisSpacing: 8.0,
           crossAxisSpacing: 8.0,
           childAspectRatio: 3,
         ),
-        delegate: new SliverChildBuilderDelegate(
+        delegate: SliverChildBuilderDelegate(
               (BuildContext context, int index) {
 
             return InkWell(
@@ -673,8 +640,8 @@ class _ProductDetail2State extends State<ProductDetail2> {
                 });
                 if (widget.product.variationOptions
                     .every((option) => option.selected != null)) {
-                  var selectedOptions = new List<String>();
-                  var matchedOptions = new List<String>();
+                  var selectedOptions = <String>[];
+                  var matchedOptions = <String>[];
                   for (var i = 0;
                   i < widget.product.variationOptions.length;
                   i++) {
@@ -684,7 +651,7 @@ class _ProductDetail2State extends State<ProductDetail2> {
                   for (var i = 0;
                   i < widget.product.availableVariations.length;
                   i++) {
-                    matchedOptions = new List<String>();
+                    matchedOptions = <String>[];
                     for (var j = 0;
                     j < widget.product.availableVariations[i].option.length;
                     j++) {
@@ -701,23 +668,20 @@ class _ProductDetail2State extends State<ProductDetail2> {
                         widget.product.variationId = widget
                             .product.availableVariations[i].variationId
                             .toString();
-                        if(widget
-                            .product.availableVariations[i].displayPrice != null)
                         widget.product.regularPrice = widget
-                            .product.availableVariations[i].displayPrice
-                            .toDouble();
+                          .product.availableVariations[i].displayPrice
+                          .toDouble();
                         widget.product.formattedPrice = widget
                             .product.availableVariations[i].formattedPrice;
-                        if(widget
-                            .product.availableVariations[i].formattedSalesPrice != null)
                         widget.product.formattedSalesPrice = widget
-                            .product.availableVariations[i].formattedSalesPrice;
+                          .product.availableVariations[i].formattedSalesPrice;
 
                         if(widget.product
-                            .availableVariations[i].image?.fullSrc != null && widget.product
-                            .availableVariations[i].image.fullSrc.isNotEmpty)
-                        widget.product.images[0].src = widget.product
+                            .availableVariations[i].image.fullSrc != null && widget.product
+                            .availableVariations[i].image.fullSrc.isNotEmpty) {
+                          widget.product.images[0].src = widget.product
                             .availableVariations[i].image.fullSrc;
+                        }
 
                         if (widget.product.availableVariations[i]
                             .displayRegularPrice !=
@@ -726,8 +690,9 @@ class _ProductDetail2State extends State<ProductDetail2> {
                               .availableVariations[i].displayRegularPrice
                               .toDouble();
                         }
-                        else
-                          widget.product.formattedSalesPrice = null;
+                        else {
+                          widget.product.formattedSalesPrice = '';
+                        }
                       });
                       if (!widget.product.availableVariations[i].isInStock) {
                         setState(() {
@@ -750,7 +715,7 @@ class _ProductDetail2State extends State<ProductDetail2> {
                   border:
                   variationOption.selected == variationOption.options[index]
                       ? Border.all(
-                      color: Theme.of(context).accentColor, width: 2)
+                      color: Theme.of(context).colorScheme.secondary, width: 2)
                       : Border.all(color: Colors.grey, width: 2),
                   borderRadius: BorderRadius.all(Radius.circular(
                       1.0) //                 <--- border radius here
@@ -763,8 +728,8 @@ class _ProductDetail2State extends State<ProductDetail2> {
                     fontSize: 10.0,
                     color: variationOption.selected ==
                         variationOption.options[index]
-                        ? Theme.of(context).accentColor
-                        : Theme.of(context).textTheme.title.color,
+                        ? Theme.of(context).colorScheme.secondary
+                        : Theme.of(context).textTheme.titleLarge!.color,
                   ),
                 ),
               ),
@@ -809,7 +774,7 @@ class _ProductDetail2State extends State<ProductDetail2> {
   }
 
   Future _openWhatsApp(String number) async {
-    final url = 'https://wa.me/' + number;
+    final url = 'https://wa.me/$number';
     if (await canLaunch(url)) {
       await launch(url);
     } else {
@@ -853,11 +818,11 @@ class _ProductDetail2State extends State<ProductDetail2> {
               Icons.share,
               semanticLabel: 'Share',
               color: isShrink
-                  ? Theme.of(context).appBarTheme.iconTheme.color
+                  ? Theme.of(context).appBarTheme.iconTheme!.color
                   : Colors.black,
             ),
             onPressed: () {
-              Share.share('check out product ' + widget.product.permalink);
+              Share.share('check out product ${widget.product.permalink}');
             }),
       ],
       flexibleSpace: FlexibleSpaceBar(
@@ -891,12 +856,10 @@ class _ProductDetail2State extends State<ProductDetail2> {
   getProduct() async {
     Product product =
     await widget.productDetailBloc.getProduct(widget.product.id);
-    if (product.id != null) {
-      setState(() {
-        widget.product = product;
-      });
+    setState(() {
+      widget.product = product;
+    });
     }
-  }
 
   Widget _qSelector() {
     return Container(
@@ -906,7 +869,7 @@ class _ProductDetail2State extends State<ProductDetail2> {
         child: Row(
           children: <Widget>[
             InkWell(
-              child: Container(
+              child: SizedBox(
                 height: MediaQuery.of(context).size.height,
                 width: 70,
                 child: Stack(
@@ -914,7 +877,7 @@ class _ProductDetail2State extends State<ProductDetail2> {
                   children: <Widget>[
                     IconButton(
                       icon: Icon(
-                        FlutterIcons.shopping_cart_fea,
+                        Icons.shopping_cart,
                         semanticLabel: 'Cart',
                       ),
                       onPressed: () {
@@ -947,7 +910,7 @@ class _ProductDetail2State extends State<ProductDetail2> {
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(4.0),
                                     ),
-                                    color: Theme.of(context).accentColor,
+                                    color: Theme.of(context).colorScheme.secondary,
                                     child: Container(
                                         padding: EdgeInsets.all(2),
                                         constraints: BoxConstraints(minWidth: 20.0),
@@ -957,11 +920,12 @@ class _ProductDetail2State extends State<ProductDetail2> {
                                               style: TextStyle(
                                                   fontSize: 12,
                                                   fontWeight: FontWeight.w800,
-                                                  color: Theme.of(context).accentIconTheme.color,
-                                                  backgroundColor: Theme.of(context).accentColor),
+                                                  color: Theme.of(context).iconTheme.color,
+                                                  backgroundColor: Theme.of(context).colorScheme.secondary),
                                             ))));
-                              } else
+                              } else {
                                 return Container();
+                              }
                             }),
                       ),
                     )
@@ -975,11 +939,11 @@ class _ProductDetail2State extends State<ProductDetail2> {
               },
             ),
             ScopedModelDescendant<AppStateModel>(builder: (context, child, model) {
-                return Container(
+                return SizedBox(
                   height: 55,
                   child: AddButtonDetail(
                       product: widget.product,
-                      model: model),
+                      model: model, addonFormKey: GlobalKey<FormState>(), addOnsFormData: {},),
                 );
               }
             )
@@ -988,7 +952,7 @@ class _ProductDetail2State extends State<ProductDetail2> {
   }
 
   Widget _animContainer() {
-    TextStyle textStyle = Theme.of(context).textTheme.bodyText1;
+    TextStyle textStyle = Theme.of(context).textTheme.bodyLarge ?? TextStyle();
     return _visible
         ? AnimatedContainer(
       duration: Duration(
@@ -1035,14 +999,16 @@ class _ProductDetail2State extends State<ProductDetail2> {
                     children: <Widget>[
                       SizedBox(
                         width: 50,
-                        child: OutlineButton(
+                        child: OutlinedButton(
                           // width: 50,
                           //height: 70,
-                          borderSide: _quantity == 1
-                              ? BorderSide(
-                              color: Theme.of(context).accentColor,
-                              width: 1.5)
-                              : null,
+                          style: OutlinedButton.styleFrom(
+                            side: _quantity == 1
+                                ? BorderSide(
+                                    color: Theme.of(context).colorScheme.secondary,
+                                    width: 1.5)
+                                : BorderSide(color: Colors.grey),
+                          ),
                           onPressed: () {
                             setState(() {
                               _quantity = 1;
@@ -1063,21 +1029,20 @@ class _ProductDetail2State extends State<ProductDetail2> {
                       ),
                       SizedBox(
                         width: 50,
-                        child: OutlineButton(
-                          // width: 50,
-                          //height: 70,
-                          borderSide: _quantity == 2
-                              ? BorderSide(
-                              color: Theme.of(context).accentColor,
-                              width: 1.5)
-                              : null,
+                        child: OutlinedButton(
+                          style: OutlinedButton.styleFrom(
+                            side: _quantity == 2
+                                ? BorderSide(
+                                    color: Theme.of(context).colorScheme.secondary,
+                                    width: 1.5)
+                                : BorderSide(color: Colors.grey),
+                          ),
                           onPressed: () {
                             setState(() {
                               _quantity = 2;
                             });
                             _visible = false;
                           },
-                          //color: Colors.white,
                           child: Center(
                             child: Text(
                               '2',
@@ -1091,12 +1056,14 @@ class _ProductDetail2State extends State<ProductDetail2> {
                       ),
                       SizedBox(
                         width: 50,
-                        child: OutlineButton(
-                          borderSide: _quantity == 3
-                              ? BorderSide(
-                              color: Theme.of(context).accentColor,
-                              width: 1.5)
-                              : null,
+                        child: OutlinedButton(
+                          style: OutlinedButton.styleFrom(
+                            side: _quantity == 3
+                                ? BorderSide(
+                                    color: Theme.of(context).colorScheme.secondary,
+                                    width: 1.5)
+                                : BorderSide(color: Colors.grey),
+                          ),
                           onPressed: () {
                             setState(() {
                               _quantity = 3;
@@ -1116,19 +1083,20 @@ class _ProductDetail2State extends State<ProductDetail2> {
                       ),
                       SizedBox(
                         width: 50,
-                        child: OutlineButton(
-                          borderSide: _quantity == 4
-                              ? BorderSide(
-                              color: Theme.of(context).accentColor,
-                              width: 1.5)
-                              : null,
+                        child: OutlinedButton(
+                          style: OutlinedButton.styleFrom(
+                            side: _quantity == 4
+                                ? BorderSide(
+                                    color: Theme.of(context).colorScheme.secondary,
+                                    width: 1.5)
+                                : BorderSide(color: Colors.grey),
+                          ),
                           onPressed: () {
                             setState(() {
                               _quantity = 4;
                             });
                             _visible = false;
                           },
-                          //color: Colors.white,
                           child: Center(
                             child: Text(
                               '4',
@@ -1142,21 +1110,20 @@ class _ProductDetail2State extends State<ProductDetail2> {
                       ),
                       SizedBox(
                         width: 50,
-                        child: OutlineButton(
-                          // width: 50,
-                          //height: 70,
-                          borderSide: _quantity == 5
-                              ? BorderSide(
-                              color: Theme.of(context).accentColor,
-                              width: 1.5)
-                              : null,
+                        child: OutlinedButton(
+                          style: OutlinedButton.styleFrom(
+                            side: _quantity == 5
+                                ? BorderSide(
+                                    color: Theme.of(context).colorScheme.secondary,
+                                    width: 1.5)
+                                : BorderSide(color: Colors.grey),
+                          ),
                           onPressed: () {
                             setState(() {
                               _quantity = 5;
                             });
                             _visible = false;
                           },
-                          //color: Colors.white,
                           child: Center(
                             child: Text(
                               '5',
@@ -1186,7 +1153,7 @@ class _ProductDetail2State extends State<ProductDetail2> {
           context,
           MaterialPageRoute(
               builder: (context) =>
-                  VendorDetails(vendorId: store.id.toString()))),
+                  VendorDetails(key: Key(store.id.toString()), vendorId: store.id.toString()))),
       child: Container(
         padding: EdgeInsets.fromLTRB(16, 16.0, 16.0, 16.0),
         child: Column(

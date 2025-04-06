@@ -1,6 +1,8 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_swiper/flutter_swiper.dart';
+import 'package:flutter_swiper_null_safety/flutter_swiper_null_safety.dart';
 
 import '../../models/blocks_model.dart';
 import 'hex_color.dart';
@@ -9,7 +11,7 @@ import 'list_header.dart';
 class BannerSlider2 extends StatefulWidget {
   final Block block;
   final Function onBannerClick;
-  BannerSlider2({Key key, this.block, this.onBannerClick}) : super(key: key);
+  const BannerSlider2({super.key, required this.block, required this.onBannerClick});
   @override
   _BannerSlider2State createState() => _BannerSlider2State();
 }
@@ -55,15 +57,15 @@ class _BannerSlider2State extends State<BannerSlider2> {
                       elevation: widget.block.elevation.toDouble(),
                       clipBehavior: Clip.antiAlias,
                       child:  CachedNetworkImage(
-                        imageUrl: widget.block.children[index].image != null ? widget.block.children[index].image : '',
+                        imageUrl: widget.block.children[index].image ?? '',
                         imageBuilder: (context, imageProvider) => Ink.image(
                           colorFilter: ColorFilter.mode(HexColor(widget.block.bgColor).withOpacity(0.1), BlendMode.multiply),
+                          image: imageProvider,
+                          fit: BoxFit.cover,
                           child: InkWell(
                             splashColor: HexColor(widget.block.bgColor).withOpacity(0.1),
                             onTap: () => widget.onBannerClick(widget.block.children[index]),
                           ),
-                          image: imageProvider,
-                          fit: BoxFit.cover,
                         ),
                         placeholder: (context, url) =>
                             Container(color: HexColor(widget.block.bgColor).withOpacity(0.2)),

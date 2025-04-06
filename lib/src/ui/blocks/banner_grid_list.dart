@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
@@ -7,7 +9,7 @@ import 'hex_color.dart';
 class BannerGridList extends StatefulWidget {
   final Block block;
   final Function onBannerClick;
-  BannerGridList({Key key, this.block, this.onBannerClick}) : super(key: key);
+  const BannerGridList({super.key, required this.block, required this.onBannerClick});
   @override
   _BannerGridListState createState() => _BannerGridListState();
 }
@@ -58,6 +60,8 @@ class _BannerGridListState extends State<BannerGridList> {
                           imageUrl:  widget.block
                               .children[index].image,
                           imageBuilder: (context, imageProvider) => Ink.image(
+                            fit: BoxFit.cover,
+                            image: imageProvider,
                             child: InkWell(
                               splashColor: HexColor(widget.block.bgColor).withOpacity(0.1),
                               onTap: () {
@@ -65,8 +69,6 @@ class _BannerGridListState extends State<BannerGridList> {
                                     .children[index]);
                               },
                             ),
-                            fit: BoxFit.cover,
-                            image: imageProvider,
                           ),
                           placeholder: (context, url) =>
                               Container(color: Colors.black12),

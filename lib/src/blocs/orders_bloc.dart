@@ -36,7 +36,7 @@ class OrdersBloc {
 
   getOrders() async {
     final response = await apiProvider.post(
-        '/wp-admin/admin-ajax.php?action=mstore_flutter-orders', Map());
+        '/wp-admin/admin-ajax.php?action=mstore_flutter-orders', {});
     orders = orderFromJson(response.body);
     _ordersFetcher.sink.add(orders);
     _hasMoreOrdersFetcher.sink.add(true);

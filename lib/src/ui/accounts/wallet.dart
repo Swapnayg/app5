@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:scoped_model/scoped_model.dart';
 
@@ -10,18 +11,20 @@ import '../widgets/buttons/button_text.dart';
 
 class Wallet extends StatefulWidget {
   final walletBloc = WalletBloc();
+
+  Wallet({super.key});
   @override
   _WalletState createState() => _WalletState();
 }
 
 class _WalletState extends State<Wallet> {
-  ScrollController _scrollController = new ScrollController();
+  final ScrollController _scrollController = ScrollController();
   DateFormat dateFormatter = DateFormat('dd-MMM-yyyy');
   final appStateModel = AppStateModel();
   
   final _formKey = GlobalKey<FormState>();
   bool isLoading = false;
-  TextEditingController _balanceAmountController = new TextEditingController();
+  final TextEditingController _balanceAmountController = TextEditingController();
   NumberFormat formatter;
 
   @override
@@ -42,7 +45,7 @@ class _WalletState extends State<Wallet> {
 
   @override
   Widget build(BuildContext context) {
-    TextStyle menuTextStyle = Theme.of(context).textTheme.bodyText1;
+    TextStyle menuTextStyle = Theme.of(context).textTheme.bodyLarge;
     Color onPrimaryColor = Colors.white;
     Color headerBackgroundColor = Theme.of(context).primaryColor;
 
@@ -61,7 +64,6 @@ class _WalletState extends State<Wallet> {
                     color: onPrimaryColor,
                   ),
                 ),
-                brightness: Brightness.dark,
                 floating: false,
                 pinned: true,
                 snap: false,
@@ -75,22 +77,21 @@ class _WalletState extends State<Wallet> {
                           if (snapshot.hasData && snapshot.data.length > 0) {
                               return Container(
                                   child: Text(
-                                      appStateModel.blocks.localeText.balance + ' ' + formatter.format(double.parse(snapshot.data[0].balance)),
+                                      '${appStateModel.blocks.localeText.balance} ${formatter.format(double.parse(snapshot.data[0].balance))}',
                                     style: TextStyle(color: onPrimaryColor),
                                   ));
                           } else {
                             double balance = 0;
                             return Container(
                                 child: Text(
-                                  appStateModel.blocks.localeText.balance + ' ' +
-                                      formatter.format(balance),
+                                  '${appStateModel.blocks.localeText.balance} ${formatter.format(balance)}',
                                   style: TextStyle(color: onPrimaryColor),
                                 ));
                           }
 
                         }),
                     background: buildAccountBackground2()),
-                backgroundColor: headerBackgroundColor,
+                backgroundColor: headerBackgroundColor, systemOverlayStyle: SystemUiOverlayStyle.light,
               ),
               StreamBuilder(
                   stream: widget.walletBloc.allTransactions,
@@ -100,7 +101,7 @@ class _WalletState extends State<Wallet> {
                       if (snapshot.data.length == 0) {
                         double balance = 0;
                         return SliverToBoxAdapter(
-                          child: Container(
+                          child: SizedBox(
                             height: MediaQuery.of(context).size.height - 225,
                             child: Center(
                               child: RaisedButton(
@@ -208,14 +209,13 @@ class _WalletState extends State<Wallet> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Container(
+                              SizedBox(
                                 width: MediaQuery.of(context).size.width - 80,
                                 child: Text(
-                                    appStateModel.blocks.localeText.balance + ' ' +
-                                      formatter.format(balance),
+                                    '${appStateModel.blocks.localeText.balance} ${formatter.format(balance)}',
                                   overflow: TextOverflow.ellipsis,
                                   maxLines: 1,
-                                  style: Theme.of(context).textTheme.headline6,
+                                  style: Theme.of(context).textTheme.titleLarge,
                                 ),
                               ),
                               IconButton(
@@ -246,7 +246,7 @@ class _WalletState extends State<Wallet> {
                           RaisedButton(
                             onPressed: () async {
                               if (_formKey.currentState.validate()) {
-                                var data = new Map<String, dynamic>();
+                                var data = <String, dynamic>{};
                                 data['woo_wallet_balance_to_add'] =
                                     _balanceAmountController.text;
                                 data['woo_wallet_topup'] = appStateModel

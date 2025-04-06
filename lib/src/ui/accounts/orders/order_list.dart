@@ -18,7 +18,7 @@ class OrderList extends StatefulWidget {
 }
 
 class _OrderListState extends State<OrderList> {
-  ScrollController _scrollController = new ScrollController();
+  final ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
@@ -68,7 +68,7 @@ class _OrderListState extends State<OrderList> {
     );
   }
   buildList(AsyncSnapshot<List<Order>> snapshot) {
-    var formatter1 = new DateFormat('yyyy-MM-dd  hh:mm a');
+    var formatter1 = DateFormat('yyyy-MM-dd  hh:mm a');
     return SliverPadding(
       padding: EdgeInsets.all(0.0),
       sliver: SliverList(
@@ -94,9 +94,9 @@ class _OrderListState extends State<OrderList> {
                               title: Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: <Widget>[
-                                  Text(widget.appStateModel.blocks.localeText.order + '-' + snapshot.data[index].id.toString(), style: Theme.of(context).textTheme.bodyText1,),
+                                  Text('${widget.appStateModel.blocks.localeText.order}-${snapshot.data[index].id}', style: Theme.of(context).textTheme.bodyLarge,),
                                   Text(formatter.format(
-                                      double.parse(snapshot.data[index].total,)), style: Theme.of(context).textTheme.bodyText1,),
+                                      double.parse(snapshot.data[index].total,)), style: Theme.of(context).textTheme.bodyLarge,),
                                 ],
                               ),
                               subtitle: Column(
@@ -130,7 +130,7 @@ class _OrderListState extends State<OrderList> {
         padding: EdgeInsets.all(0.0),
         sliver: SliverList(
             delegate: SliverChildListDelegate([
-          Container(
+          SizedBox(
               height: 60,
               child: StreamBuilder(
                   stream: widget.ordersBloc.hasMoreOrderItems,

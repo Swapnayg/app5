@@ -24,11 +24,11 @@ class Category {
   });
 
   factory Category.fromJson(Map<String, dynamic> json) => Category(
-    id: json["id"] == null ? null : json["id"],
-    name: json["name"] == null ? null : json["name"],
-    description: json["description"] == null ? null : json["description"],
-    parent: json["parent"] == null ? null : json["parent"],
-    count: json["count"] == null ? null : json["count"],
+    id: json["id"],
+    name: json["name"],
+    description: json["description"],
+    parent: json["parent"],
+    count: json["count"],
     image: json["image"] == null || json["image"] == false ? '' : json["image"],
   );
 }

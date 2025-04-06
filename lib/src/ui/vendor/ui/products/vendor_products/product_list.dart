@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:flutter/material.dart';
 
 import './products_grid/product_item.dart';
@@ -9,13 +11,13 @@ import 'add_product.dart';
 class VendorProductList extends StatefulWidget {
   final vendorBloc = VendorBloc();
   final vendorId;
-  VendorProductList({Key key, this.vendorId}) : super(key: key);
+  VendorProductList({super.key, this.vendorId});
   @override
   _VendorProductListState createState() => _VendorProductListState();
 }
 
 class _VendorProductListState extends State<VendorProductList> {
-  ScrollController _scrollController = new ScrollController();
+  final ScrollController _scrollController = ScrollController();
   bool hasMoreProducts = true;
   AppStateModel appStateModel = AppStateModel();
 
@@ -76,14 +78,14 @@ class _VendorProductListState extends State<VendorProductList> {
   }
 
   List<Widget> buildLisOfBlocks(AsyncSnapshot<List<VendorProduct>> snapshot) {
-    List<Widget> list = new List<Widget>();
+    List<Widget> list = [];
     if (snapshot.data != null) {
-      list.add(ProductGrid(products: snapshot.data));
+      list.add(ProductGrid(products: snapshot.data ?? []));
       list.add(SliverPadding(
           padding: EdgeInsets.all(0.0),
           sliver: SliverList(
               delegate: SliverChildListDelegate([
-            Container(
+            SizedBox(
                 height: 60,
                 child: hasMoreProducts
                     ? Center(child: CircularProgressIndicator())

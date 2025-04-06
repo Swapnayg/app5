@@ -9,14 +9,14 @@ class Contact {
 
   Contact({required this.id, required this.email, required this.name, required this.image, required this.lastseen});
 
-  factory Contact.fromFirestore(DocumentSnapshot _snapshot) {
-    var _data = _snapshot.data() as Map<String, dynamic>;
+  factory Contact.fromFirestore(DocumentSnapshot snapshot) {
+    var data = snapshot.data() as Map<String, dynamic>;
     return Contact(
-      id: _snapshot.id,
-      lastseen: _data["lastSeen"],
-      email: _data["email"],
-      name: _data["name"],
-      image: _data["image"],
+      id: snapshot.id,
+      lastseen: data["lastSeen"],
+      email: data["email"],
+      name: data["name"],
+      image: data["image"],
     );
   }
 }

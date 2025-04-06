@@ -5,7 +5,6 @@ import '../../../../models/app_state_model.dart';
 import '../../../../models/vendor/store_model.dart';
 import '../../../../models/vendor/search_store_state_model.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_font_icons/flutter_font_icons.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'store_list.dart';

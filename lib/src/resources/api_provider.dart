@@ -205,7 +205,7 @@ class ApiProvider {
   List<Cookie> generateCookies() {
     //cookieList.clear();
     for (var key in cookies.keys) {
-      Cookie ck = new Cookie(key, cookies[key]);
+      Cookie ck = Cookie(key, cookies[key]);
       cookieList.add(ck);
     }
     return cookieList;

@@ -1,7 +1,7 @@
-import 'dart:ui';
+
+// ignore_for_file: library_private_types_in_public_api, dead_code, deprecated_member_use, unused_element, unused_local_variable, avoid_unnecessary_containers
 
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
 
@@ -11,6 +11,8 @@ import '../../models/category_model.dart';
 import '../products/products.dart';
 
 class Categories9 extends StatefulWidget {
+  const Categories9({super.key});
+
   @override
   _Categories9State createState() => _Categories9State();
 }
@@ -26,11 +28,9 @@ class _Categories9State extends State<Categories9> {
       ),
       body: ScopedModelDescendant<AppStateModel>(
         builder: (context, child, model) {
-          if (model.blocks?.categories != null) {
-            return CategoryList(
-                categories: model.blocks.categories);
-          }
-          return Center(child: CircularProgressIndicator());
+          return CategoryList(
+              categories: model.blocks.categories);
+                  return Center(child: CircularProgressIndicator());
         },
       ),
     );
@@ -39,15 +39,14 @@ class _Categories9State extends State<Categories9> {
 
 class CategoryList extends StatefulWidget {
   List<Category> categories;
-  CategoryList({Key key, this.categories})
-      : super(key: key);
+  CategoryList({super.key, required this.categories});
   @override
   _CategoryListState createState() => _CategoryListState();
 }
 
 class _CategoryListState extends State<CategoryList> {
-  List<Category> mainCategories;
-  Category selectedCategory;
+  late List<Category> mainCategories;
+  late Category selectedCategory;
 
   @override
   void initState() {
@@ -62,7 +61,7 @@ class _CategoryListState extends State<CategoryList> {
   }
 
   _onTap(Category category) {
-    var filter = new Map<String, dynamic>();
+    var filter = <String, dynamic>{};
     filter['id'] = category.id.toString();
     Navigator.push(
         context,
@@ -100,7 +99,11 @@ class _CategoryListState extends State<CategoryList> {
           parseHtmlString(category.name),
           style: menuItemStyle(),
         ),
-        subtitle: category.description != '' ? Text(parseHtmlString(category.description), maxLines: 2, style: Theme.of(context).textTheme.caption,) : null,
+        subtitle: category.description != '' ? Text(parseHtmlString(category.description), maxLines: 2, style: Theme.of(context).textTheme.bodySmall,) : SizedBox(),
+        onExpansionChanged: (bool expanded) {
+          // Handle expansion state change if needed
+        },
+        trailing: Icon(Icons.keyboard_arrow_down),
         children: subCategories.map(_buildCard).toList(),
       );
     }
@@ -152,7 +155,7 @@ class _CategoryListState extends State<CategoryList> {
                       ),
                       category.description != '' ? Text(
                         parseHtmlString(category.description),
-                        style: Theme.of(context).textTheme.caption,
+                        style: Theme.of(context).textTheme.bodySmall,
                         maxLines: 2,
                       ) : Container(),
                     ],
@@ -190,25 +193,25 @@ class _CategoryListState extends State<CategoryList> {
     );
   }
 
-  Container leadingIcon(Category category) {
-    return Container(
+  SizedBox leadingIcon(Category category) {
+    return SizedBox(
       width: 80,
       height: 80,
       child: CachedNetworkImage(
-        imageUrl: category.image != null ? category.image : '',
+        imageUrl: category.image ?? '',
         imageBuilder: (context, imageProvider) => Card(
           clipBehavior: Clip.antiAlias,
           margin: EdgeInsets.all(0.0),
           elevation: 0.0,
           //shape: StadiumBorder(),
           child: Ink.image(
+            image: imageProvider,
+            fit: BoxFit.cover,
             child: InkWell(
               onTap: () {
                 onCategoryClick(category);
               },
             ),
-            image: imageProvider,
-            fit: BoxFit.cover,
           ),
         ),
         placeholder: (context, url) => Card(
@@ -233,20 +236,20 @@ class _CategoryListState extends State<CategoryList> {
       width: 80,
       height: 80,
       child: CachedNetworkImage(
-        imageUrl: category.image != null ? category.image : '',
+        imageUrl: category.image,
         imageBuilder: (context, imageProvider) => Card(
           clipBehavior: Clip.antiAlias,
           margin: EdgeInsets.all(0.0),
           elevation: 0.0,
           //shape: StadiumBorder(),
           child: Ink.image(
+            image: imageProvider,
+            fit: BoxFit.cover,
             child: InkWell(
               onTap: () {
                 onCategoryClick(category);
               },
             ),
-            image: imageProvider,
-            fit: BoxFit.cover,
           ),
         ),
         placeholder: (context, url) => Card(
@@ -288,17 +291,16 @@ class ExpansionTile2 extends StatefulWidget {
   /// the tile to reveal or hide the [children]. The [initiallyExpanded] property must
   /// be non-null.
   const ExpansionTile2({
-    Key key,
-    this.leading,
-    @required this.title,
-    this.subtitle,
-    this.backgroundColor,
-    this.onExpansionChanged,
+    super.key,
+    required this.leading,
+    required this.title,
+    required this.subtitle,
+    required this.backgroundColor,
+    required this.onExpansionChanged,
     this.children = const <Widget>[],
-    this.trailing,
+    required this.trailing,
     this.initiallyExpanded = false,
-  })  : assert(initiallyExpanded != null),
-        super(key: key);
+  });
 
   /// A widget to display before the title.
   ///
@@ -354,13 +356,13 @@ class _ExpansionTile2State extends State<ExpansionTile2>
   final ColorTween _iconColorTween = ColorTween();
   final ColorTween _backgroundColorTween = ColorTween();
 
-  AnimationController _controller;
-  Animation<double> _iconTurns;
-  Animation<double> _heightFactor;
-  Animation<Color> _borderColor;
-  Animation<Color> _headerColor;
-  Animation<Color> _iconColor;
-  Animation<Color> _backgroundColor;
+  late AnimationController _controller;
+  late Animation<double> _iconTurns;
+  late Animation<double> _heightFactor;
+  late Animation<Color> _borderColor;
+  late Animation<Color> _headerColor;
+  late Animation<Color> _iconColor;
+  late Animation<Color> _backgroundColor;
 
   bool _isExpanded = false;
 
@@ -370,14 +372,14 @@ class _ExpansionTile2State extends State<ExpansionTile2>
     _controller = AnimationController(duration: _kExpand, vsync: this);
     _heightFactor = _controller.drive(_easeInTween);
     _iconTurns = _controller.drive(_halfTween.chain(_easeInTween));
-    _borderColor = _controller.drive(_borderColorTween.chain(_easeOutTween));
-    _headerColor = _controller.drive(_headerColorTween.chain(_easeInTween));
-    _iconColor = _controller.drive(_iconColorTween.chain(_easeInTween));
+    _borderColor = _controller.drive(_borderColorTween.chain(_easeOutTween) as Animatable<Color>);
+    _headerColor = _controller.drive(_headerColorTween.chain(_easeInTween) as Animatable<Color>);
+    _iconColor = _controller.drive(_iconColorTween.chain(_easeInTween) as Animatable<Color>);
     _backgroundColor =
-        _controller.drive(_backgroundColorTween.chain(_easeOutTween));
+        _controller.drive(_backgroundColorTween.chain(_easeOutTween) as Animatable<Color>);
 
     _isExpanded =
-        PageStorage.of(context)?.readState(context) ?? widget.initiallyExpanded;
+        PageStorage.of(context).readState(context) ?? widget.initiallyExpanded;
     if (_isExpanded) _controller.value = 1.0;
   }
 
@@ -400,21 +402,20 @@ class _ExpansionTile2State extends State<ExpansionTile2>
           });
         });
       }
-      PageStorage.of(context)?.writeState(context, _isExpanded);
+      PageStorage.of(context).writeState(context, _isExpanded);
     });
-    if (widget.onExpansionChanged != null)
-      widget.onExpansionChanged(_isExpanded);
+    widget.onExpansionChanged(_isExpanded);
   }
 
-  Widget _buildChildren(BuildContext context, Widget child) {
-    final Color borderSideColor = _borderColor.value ?? Colors.transparent;
+  Widget _buildChildren(BuildContext context, Widget? child) {
+    final Color borderSideColor = _borderColor.value;
 
     return Column(
       children: [
         Container(
           decoration: BoxDecoration(
             color: _isExpanded
-                ? _backgroundColor.value ?? Colors.yellow.withOpacity(.3)
+                ? _backgroundColor.value
                 : Colors.transparent,
             border: Border(
                 // top: BorderSide(color: borderSideColor),
@@ -435,7 +436,7 @@ class _ExpansionTile2State extends State<ExpansionTile2>
                       padding: EdgeInsets.fromLTRB(16,16,16,16),
                       child: InkWell(
                         onTap: _handleTap,
-                        child: Container(
+                        child: SizedBox(
                           width: MediaQuery.of(context).size.width - 32,
                           child: Row(
                             children: [
@@ -453,25 +454,24 @@ class _ExpansionTile2State extends State<ExpansionTile2>
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
                                           widget.title,
-                                          if(widget.subtitle != null)
                                           Column(
-                                            children: [
-                                              SizedBox(height: 4,),
-                                              widget.subtitle,
-                                            ],
-                                          )
+                                          children: [
+                                            SizedBox(height: 4,),
+                                            widget.subtitle,
+                                          ],
+                                        )
                                         ],
                                       ),
                                     ),
                                     _isExpanded
-                                        ? Container(
+                                        ? SizedBox(
                                       height: 60,
                                       child: RotationTransition(
                                         turns: _iconTurns,
                                         child: const Icon(Icons.keyboard_arrow_down),
                                       ),
                                     )
-                                        : Container(
+                                        : SizedBox(
                                       height: 60,
                                       child: RotationTransition(
                                         turns: _iconTurns,
@@ -509,14 +509,14 @@ class _ExpansionTile2State extends State<ExpansionTile2>
   @override
   void didChangeDependencies() {
     final ThemeData theme = Theme.of(context);
-    _borderColorTween..end = theme.dividerColor;
+    _borderColorTween.end = theme.dividerColor;
     _headerColorTween
-      ..begin = theme.textTheme.subtitle1.color
-      ..end = theme.accentColor;
+      ..begin = theme.textTheme.titleMedium!.color
+      ..end = theme.colorScheme.secondary;
     _iconColorTween
       ..begin = theme.unselectedWidgetColor
-      ..end = theme.accentColor;
-    _backgroundColorTween..end = widget.backgroundColor;
+      ..end = theme.colorScheme.secondary;
+    _backgroundColorTween.end = widget.backgroundColor;
     super.didChangeDependencies();
   }
 
@@ -525,7 +525,7 @@ class _ExpansionTile2State extends State<ExpansionTile2>
     final bool closed = !_isExpanded && _controller.isDismissed;
     return AnimatedBuilder(
       animation: _controller.view,
-      builder: _buildChildren,
+      builder: (BuildContext context, Widget? child) => _buildChildren(context, child),
       child: closed
           ? null
           : Container(

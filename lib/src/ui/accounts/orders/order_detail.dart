@@ -11,7 +11,7 @@ class OrderDetail extends StatefulWidget {
   final OrdersBloc ordersBloc;
   final Order order;
 
-  OrderDetail({this.order, this.ordersBloc});
+  OrderDetail({super.key, this.order, this.ordersBloc});
 
   @override
   _OrderDetailState createState() => _OrderDetailState();
@@ -52,10 +52,10 @@ class _OrderDetailState extends State<OrderDetail> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                    widget.order.number.toString() + ' - ' + getOrderStatusText(widget.order.status, widget.appStateModel.blocks.localeText),
-                  style: Theme.of(context).textTheme.title,
+                    '${widget.order.number} - ${getOrderStatusText(widget.order.status, widget.appStateModel.blocks.localeText)}',
+                  style: Theme.of(context).textTheme.headline6,
                 ),
-                widget.order.status == 'pending' ? Container(
+                widget.order.status == 'pending' ? SizedBox(
                   height: 25,
                   child: OutlineButton(
                       padding: EdgeInsets.all(0),
@@ -76,7 +76,7 @@ class _OrderDetailState extends State<OrderDetail> {
                 children: <Widget>[
                   Text(
                     widget.appStateModel.blocks.localeText.billing.toUpperCase(),
-                    style: Theme.of(context).textTheme.subtitle,
+                    style: Theme.of(context).textTheme.subtitle2,
                   ),
                   SizedBox(height: 10.0),
                   Text(
@@ -89,7 +89,7 @@ class _OrderDetailState extends State<OrderDetail> {
                 children: <Widget>[
                   Text(
                     widget.appStateModel.blocks.localeText.shipping.toUpperCase(),
-                    style: Theme.of(context).textTheme.subtitle,
+                    style: Theme.of(context).textTheme.subtitle2,
                   ),
                   SizedBox(
                     height: 10.0,
@@ -104,7 +104,7 @@ class _OrderDetailState extends State<OrderDetail> {
                 children: <Widget>[
                   Text(
                     widget.appStateModel.blocks.localeText.payment.toUpperCase(),
-                    style: Theme.of(context).textTheme.subtitle,
+                    style: Theme.of(context).textTheme.subtitle2,
                   ),
                   SizedBox(
                     height: 10.0,
@@ -119,7 +119,7 @@ class _OrderDetailState extends State<OrderDetail> {
                     children: <Widget>[
                         Text(
                           widget.appStateModel.blocks.localeText.products.toUpperCase(),
-                          style: Theme.of(context).textTheme.subtitle,
+                          style: Theme.of(context).textTheme.subtitle2,
                         ),
                         SizedBox(
                           height: 10.0,
@@ -143,7 +143,7 @@ class _OrderDetailState extends State<OrderDetail> {
           SizedBox(height: 10.0),
           Text(
             widget.appStateModel.blocks.localeText.total.toUpperCase(),
-            style: Theme.of(context).textTheme.subtitle,
+            style: Theme.of(context).textTheme.subtitle2,
           ),
           SizedBox(height: 10.0),
           Row(
@@ -152,7 +152,7 @@ class _OrderDetailState extends State<OrderDetail> {
               Expanded(
                 child: Text(widget.appStateModel.blocks.localeText.shipping,),
               ),
-              Text(formatter.format((double.parse('${widget.order.shippingTotal}')))),
+              Text(formatter.format((double.parse(widget.order.shippingTotal)))),
             ],
           ),
           SizedBox(height: 10.0),
@@ -162,7 +162,7 @@ class _OrderDetailState extends State<OrderDetail> {
               Expanded(
                 child: Text(widget.appStateModel.blocks.localeText.tax,),
               ),
-              Text(formatter.format((double.parse('${widget.order.totalTax}')))),
+              Text(formatter.format((double.parse(widget.order.totalTax)))),
             ],
           ),
           SizedBox(height: 10.0),
@@ -172,7 +172,7 @@ class _OrderDetailState extends State<OrderDetail> {
               Expanded(
                 child: Text(widget.appStateModel.blocks.localeText.discount),
               ),
-              Text(formatter.format((double.parse('${widget.order.discountTotal}')))),
+              Text(formatter.format((double.parse(widget.order.discountTotal)))),
             ],
           ),
           SizedBox(height: 10.0),
@@ -182,14 +182,14 @@ class _OrderDetailState extends State<OrderDetail> {
               Expanded(
                 child: Text(
                   widget.appStateModel.blocks.localeText.total,
-                  style: Theme.of(context).textTheme.title,
+                  style: Theme.of(context).textTheme.headline6,
                 ),
               ),
               Text(
                 formatter.format(
                   double.parse(widget.order.total),
                 ),
-                style: Theme.of(context).textTheme.title,
+                style: Theme.of(context).textTheme.headline6,
               ),
             ],
           ),
@@ -206,10 +206,11 @@ class _OrderDetailState extends State<OrderDetail> {
           (BuildContext context, int index) {
 
             String metaData = '';
-            widget.order.lineItems[index].metaData.forEach((element) {
-              if(element.value is String)
-              metaData = element.key + '-' + element.value + '.';
-            });
+            for (var element in widget.order.lineItems[index].metaData) {
+              if(element.value is String) {
+                metaData = '${element.key}-' + element.value + '.';
+              }
+            }
 
             return Column(
               children: <Widget>[
@@ -218,17 +219,15 @@ class _OrderDetailState extends State<OrderDetail> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
-                        Container(
+                        SizedBox(
                           width: MediaQuery.of(context).size.width * 0.7,
-                          child: Text(widget.order.lineItems[index].name +
-                              ' x ' +
-                              widget.order.lineItems[index].quantity.toString(),
+                          child: Text('${widget.order.lineItems[index].name} x ${widget.order.lineItems[index].quantity}',
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
                           ),
                         ),
                         Text(formatter.format(
-                            (double.parse('${widget.order.lineItems[index].total}')))),
+                            (double.parse(widget.order.lineItems[index].total)))),
                       ],
                     )),
               ],

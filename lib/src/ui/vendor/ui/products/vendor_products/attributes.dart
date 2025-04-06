@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable, library_private_types_in_public_api, unused_local_variable
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -13,7 +15,7 @@ class SelectAttributes extends StatefulWidget {
   VendorProduct product;
   AttributeBloc attributeBloc = AttributeBloc();
 
-  SelectAttributes({Key key, this.vendorBloc, this.product}) : super(key: key);
+  SelectAttributes({super.key, required this.vendorBloc, required this.product});
   @override
   _SelectAttributesState createState() => _SelectAttributesState();
 }
@@ -24,7 +26,7 @@ class _SelectAttributesState extends State<SelectAttributes> {
   @override
   void initState() {
     super.initState();
-    if (widget.product.attributes == null) widget.product.attributes = [];
+    widget.product.attributes;
     widget.attributeBloc.fetchAllAttributes();
   }
 
@@ -47,11 +49,13 @@ class _SelectAttributesState extends State<SelectAttributes> {
 
   buildBody(BuildContext ctxt, ProductAttribute productAttribute) {
     String option = '';
-    widget.product.attributes.forEach((value) {
-      if (value.id == productAttribute.id)
-        value.options.forEach(
-            (name) => option = option.isEmpty ? name : option + ', ' + name);
-    });
+    for (var value in widget.product.attributes) {
+      if (value.id == productAttribute.id) {
+        for (var name in value.options) {
+          option = option.isEmpty ? name : '$option, $name';
+        }
+      }
+    }
     return ListTile(
       onTap: () async {
         final data = await Navigator.push(
@@ -73,13 +77,13 @@ class _SelectAttributesState extends State<SelectAttributes> {
   }
 
   _buildList(AsyncSnapshot<List<ProductAttribute>> snapshot) {
-    List<Widget> list = new List<Widget>();
+    List<Widget> list = List<Widget>.empty(growable: true);
     list.add(
       SliverFixedExtentList(
         itemExtent: 56, // I'm forcing item heights
         delegate: SliverChildBuilderDelegate(
-          (context, index) => buildBody(context, snapshot.data[index]),
-          childCount: snapshot.data.length,
+          (context, index) => buildBody(context, snapshot.data![index]),
+          childCount: snapshot.data!.length,
         ),
       ),
     );

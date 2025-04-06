@@ -1,6 +1,6 @@
 // ignore_for_file: unused_local_variable, non_constant_identifier_names, prefer_interpolation_to_compose_strings
 
-library woocommerce_api;
+library;
 
 import 'dart:async';
 import "dart:collection";
@@ -188,7 +188,7 @@ class WooCommerceAPI {
       } else if (value is Map) {
         data[key] = removeNullAndEmptyParams(value.cast<String, Object>());
       } else if(value is List){
-        value.forEach((item) {
+        for (var item in value) {
           if(item is Map) {
             item = removeNullAndEmptyParams(item.cast<String, Object>());
           } else if(item == null) {
@@ -196,14 +196,14 @@ class WooCommerceAPI {
           } else if(item is String && item.isEmpty) {
             value.remove(item);
           }
-        });
+        }
       }
     }
     return data;
   }
 
   Future<http.Response> postAsync(String endPoint, Map data) async {
-    var url = this._getOAuthURL("POST", endPoint);
+    var url = _getOAuthURL("POST", endPoint);
     data = removeNullAndEmptyParams(data.cast<String, Object>());
 
     final response = await http.post(Uri.parse(url),

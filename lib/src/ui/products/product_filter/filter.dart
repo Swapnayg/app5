@@ -1,3 +1,5 @@
+// ignore_for_file: use_super_parameters, library_private_types_in_public_api, avoid_unnecessary_containers
+
 import 'package:flutter/material.dart';
 import '../../../blocs/products_bloc.dart';
 import '../../../models/app_state_model.dart';
@@ -7,13 +9,13 @@ import '../../../models/attributes_model.dart';
 class FilterProduct3 extends StatefulWidget {
   final ProductsBloc productsBloc;
 
-  const FilterProduct3({Key key, this.productsBloc}) : super(key: key);
+  const FilterProduct3({Key? key, required this.productsBloc}) : super(key: key);
   @override
   _FilterProduct3State createState() => _FilterProduct3State();
 }
 
 class _FilterProduct3State extends State<FilterProduct3> {
-  var filter = new Map<String, dynamic>();
+  var filter = <String, dynamic>{};
   final appStateModel = AppStateModel();
 
   @override
@@ -25,7 +27,7 @@ class _FilterProduct3State extends State<FilterProduct3> {
       appBar: AppBar(
         title: Text('Filter'),
         actions: [
-          FlatButton(
+          TextButton(
             child: Text('Done'),
             onPressed: () {
               widget.productsBloc.applyFilter(
@@ -48,11 +50,11 @@ class _FilterProduct3State extends State<FilterProduct3> {
   }
 
   buildFilterList(AsyncSnapshot<List<AttributesModel>> snapshot) {
-    List<Widget> list = new List<Widget>();
+    List<Widget> list = List.empty(growable: true);
 
     list.add(_priceFilter());
-    for (var i = 0; i < snapshot.data.length; i++) {
-      if (snapshot.data[i].terms.length != 0) {
+    for (var i = 0; i < snapshot.data!.length; i++) {
+      if (snapshot.data![i].terms.isNotEmpty) {
         list.add(buildFilter(snapshot, i));
       }
     }
@@ -98,8 +100,8 @@ class _FilterProduct3State extends State<FilterProduct3> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   Text(
-                      '${formatter.format(appStateModel.selectedRange.start)}'),
-                  Text('${formatter.format(appStateModel.selectedRange.end)}'),
+                      formatter.format(appStateModel.selectedRange.start)),
+                  Text(formatter.format(appStateModel.selectedRange.end)),
                 ],
               ),
             ),
@@ -110,8 +112,8 @@ class _FilterProduct3State extends State<FilterProduct3> {
                   divisions: appStateModel.maxPrice.toInt(),
                   values: appStateModel.selectedRange,
                   labels: RangeLabels(
-                      '${formatter.format(appStateModel.selectedRange.start)}',
-                      '${formatter.format(appStateModel.selectedRange.end)}'),
+                      formatter.format(appStateModel.selectedRange.start),
+                      formatter.format(appStateModel.selectedRange.end)),
                   onChanged: (RangeValues newRange) {
                     appStateModel.updateRangeValue(newRange);
                     setState(() {
@@ -133,14 +135,14 @@ class _FilterProduct3State extends State<FilterProduct3> {
         borderRadius: BorderRadius.circular(0.0),
       ),
       child: ListTile(
-        title: Text(snapshot.data[i].name),
+        title: Text(snapshot.data![i].name),
         trailing: Icon(Icons.keyboard_arrow_right),
         onTap: () {
           Navigator.push(
               context,
               MaterialPageRoute(
                 builder: (BuildContext context) =>
-                    FilterAttributes(attribute: snapshot.data[i]),
+                    FilterAttributes(attribute: snapshot.data![i]),
                 //fullscreenDialog: true,
               ));
         },
@@ -152,7 +154,7 @@ class _FilterProduct3State extends State<FilterProduct3> {
 class FilterAttributes extends StatefulWidget {
   final AttributesModel attribute;
 
-  const FilterAttributes({Key key, this.attribute}) : super(key: key);
+  const FilterAttributes({Key? key, required this.attribute}) : super(key: key);
   @override
   _FilterAttributesState createState() => _FilterAttributesState();
 }
@@ -179,9 +181,9 @@ class _FilterAttributesState extends State<FilterAttributes> {
               child: CheckboxListTile(
                 title: Text(widget.attribute.terms[index].name),
                 value: widget.attribute.terms[index].selected,
-                onChanged: (bool value) {
+                onChanged: (bool? value) {
                   setState(() {
-                    widget.attribute.terms[index].selected = value;
+                    widget.attribute.terms[index].selected = value ?? false;
                   });
                 },
               ),

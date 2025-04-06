@@ -17,6 +17,8 @@ import '../../../color_override.dart';
 import 'theme_override.dart';
 
 class Login7 extends StatefulWidget {
+  const Login7({super.key});
+
   @override
   _Login7State createState() => _Login7State();
 }
@@ -25,11 +27,11 @@ class _Login7State extends State<Login7> {
   final GoogleSignIn _googleSignIn = GoogleSignIn();
   final appStateModel = AppStateModel();
   final _formKey = GlobalKey<FormState>();
-  var formData = new Map<String, dynamic>();
-  TextEditingController usernameController = new TextEditingController();
-  TextEditingController passwordController = new TextEditingController();
+  var formData = <String, dynamic>{};
+  TextEditingController usernameController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
   final RoundedLoadingButtonController _btnController =
-      new RoundedLoadingButtonController();
+      RoundedLoadingButtonController();
 
   /*@override
   void initState() {
@@ -60,8 +62,7 @@ class _Login7State extends State<Login7> {
           child: Scaffold(
             body: Builder(
               builder: (context) => Stack(
-                overflow: Overflow.visible,
-                children: [
+                clipBehavior: Clip.none, children: [
                   Positioned(
                     top: height * -.16,
                     //means -160 of total height; i.e above the screen
@@ -168,6 +169,15 @@ class _Login7State extends State<Login7> {
                             elevation: 0,
                             color: Color(0xfff7892b),
                             valueColor: Colors.white,
+                            controller: _btnController,
+                            onPressed: () {
+                              if (_formKey.currentState.validate()) {
+                                _formKey.currentState.save();
+                                _submit(context);
+                              }
+                            },
+                            animateOnTap: false,
+                            width: MediaQuery.of(context).size.width - 34,
                             child: Container(
                               alignment: Alignment.center,
                               height: 50,
@@ -195,15 +205,6 @@ class _Login7State extends State<Login7> {
                                 textAlign: TextAlign.center,
                               ),
                             ),
-                            controller: _btnController,
-                            onPressed: () {
-                              if (_formKey.currentState.validate()) {
-                                _formKey.currentState.save();
-                                _submit(context);
-                              }
-                            },
-                            animateOnTap: false,
-                            width: MediaQuery.of(context).size.width - 34,
                           ),
                           SizedBox(height: 10.0),
                           FlatButton(
@@ -221,7 +222,7 @@ class _Login7State extends State<Login7> {
                                           .blocks.localeText.forgotPassword,
                                       style: Theme.of(context)
                                           .textTheme
-                                          .subtitle1
+                                          .titleMedium
                                           .copyWith(
                                               fontWeight: FontWeight.w500)),
                                 ],
@@ -266,7 +267,7 @@ class _Login7State extends State<Login7> {
                               children: <Widget>[
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
-                                  child: Container(
+                                  child: SizedBox(
                                     height: 50.0, // height of the button
                                     width: 50.0,
                                     child: Card(
@@ -293,7 +294,7 @@ class _Login7State extends State<Login7> {
                                   child: Card(
                                     shape: StadiumBorder(),
                                     margin: EdgeInsets.all(0),
-                                    child: Container(
+                                    child: SizedBox(
                                       height: 50,
                                       width: 50,
                                       child: IconButton(
@@ -315,7 +316,7 @@ class _Login7State extends State<Login7> {
                                         child: Card(
                                           shape: StadiumBorder(),
                                           margin: EdgeInsets.all(0),
-                                          child: Container(
+                                          child: SizedBox(
                                             height: 50,
                                             width: 50,
                                             child: IconButton(
@@ -338,7 +339,7 @@ class _Login7State extends State<Login7> {
                                   child: Card(
                                     shape: StadiumBorder(),
                                     margin: EdgeInsets.all(0),
-                                    child: Container(
+                                    child: SizedBox(
                                       height: 50,
                                       width: 50,
                                       child: IconButton(
@@ -379,7 +380,7 @@ class _Login7State extends State<Login7> {
                                           .blocks.localeText.dontHaveAnAccount,
                                       style: Theme.of(context)
                                           .textTheme
-                                          .bodyText2
+                                          .bodyMedium
                                           .copyWith(
                                             fontSize: 15,
                                           )),
@@ -390,7 +391,7 @@ class _Login7State extends State<Login7> {
                                         appStateModel.blocks.localeText.signUp,
                                         style: Theme.of(context)
                                             .textTheme
-                                            .subtitle1
+                                            .titleMedium
                                             .copyWith(
                                                 color: Color(0xfff7892b),
                                                 fontWeight: FontWeight.w500)),
@@ -427,15 +428,15 @@ class _Login7State extends State<Login7> {
                             padding: EdgeInsets.all(24),
                             child: Wrap(
                               children: [
-                                new Row(
+                                Row(
                                   mainAxisSize: MainAxisSize.min,
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    new CircularProgressIndicator(),
+                                    CircularProgressIndicator(),
                                     SizedBox(
                                       width: 24,
                                     ),
-                                    new Text(appStateModel
+                                    Text(appStateModel
                                         .blocks.localeText.pleaseWait),
                                   ],
                                 ),
@@ -474,7 +475,7 @@ class _Login7State extends State<Login7> {
 
   _loginGoogleUser(String idToken, GoogleSignInAccount googleUser,
       BuildContext context) async {
-    var login = new Map<String, dynamic>();
+    var login = <String, dynamic>{};
     login["type"] = 'google';
     login["token"] = idToken;
     login["name"] = googleUser.displayName;
@@ -530,29 +531,27 @@ class _Login7State extends State<Login7> {
       ),
     );
 
-    if (credential.authorizationCode != null) {
-      var login = new Map<String, dynamic>();
-      login["userIdentifier"] = credential.userIdentifier;
-      if (credential.authorizationCode != null)
-        login["authorizationCode"] = credential.authorizationCode;
-      if (credential.email != null) {
-        login["email"] = credential.email;
-      } else {
-        //await _showDialog(context);
-        //TODO If email and name is empty Request Email and Name
-      }
-      if (credential.userIdentifier != null)
-        login["email"] = credential.userIdentifier;
-      if (credential.givenName != null)
-        login["name"] = credential.givenName;
-      else
-        login["name"] = '';
-      login["useBundleId"] =
-          Platform.isIOS || Platform.isMacOS ? 'true' : 'false';
-      bool status = await appStateModel.appleLogin(login);
-      if (status) {
-        Navigator.of(context).pop();
-      }
+    var login = new Map<String, dynamic>();
+    login["userIdentifier"] = credential.userIdentifier;
+    if (credential.authorizationCode != null)
+      login["authorizationCode"] = credential.authorizationCode;
+    if (credential.email != null) {
+      login["email"] = credential.email;
+    } else {
+      //await _showDialog(context);
+      //TODO If email and name is empty Request Email and Name
     }
-  }
+    if (credential.userIdentifier != null)
+      login["email"] = credential.userIdentifier;
+    if (credential.givenName != null)
+      login["name"] = credential.givenName;
+    else
+      login["name"] = '';
+    login["useBundleId"] =
+        Platform.isIOS || Platform.isMacOS ? 'true' : 'false';
+    bool status = await appStateModel.appleLogin(login);
+    if (status) {
+      Navigator.of(context).pop();
+    }
+    }
 }

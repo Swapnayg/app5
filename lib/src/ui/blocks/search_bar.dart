@@ -1,7 +1,10 @@
+// ignore_for_file: library_private_types_in_public_api, avoid_unnecessary_containers, deprecated_member_use
+
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_icons/flutter_icons.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_font_icons/flutter_font_icons.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:scoped_model/scoped_model.dart';
 
@@ -11,7 +14,7 @@ import '../../ui/home/search.dart';
 
 class SearchBar extends StatefulWidget {
   final bool isVisible;
-  SearchBar({Key key, this.isVisible}) : super(key: key);
+  const SearchBar({super.key, required this.isVisible});
   @override
   _SearchBarState createState() => _SearchBarState();
 }
@@ -22,9 +25,8 @@ class _SearchBarState extends State<SearchBar> {
     return Container(
         //height: 110,
         child: AppBar(
-          brightness: Brightness.light,
           backgroundColor: widget.isVisible ? Colors.amber : Colors.transparent,
-          title: buildAppbarSearch(context),
+          title: buildAppbarSearch(context), systemOverlayStyle: SystemUiOverlayStyle.dark,
         ));
   }
 }
@@ -38,7 +40,7 @@ Row buildAppbarSearch(BuildContext context) {
         child: InkWell(
           //onTap: () => _scanBarCode(),
           child: Icon(
-            FlutterIcons.camera_fea,
+            FontAwesomeIcons.camera, // Replaced with a valid icon
             color: Theme.of(context)
                 .primaryIconTheme
                 .color, //Theme.of(context).primaryIconTheme.color,Theme.of(context).hintColor,
@@ -56,7 +58,7 @@ Row buildAppbarSearch(BuildContext context) {
             splashColor: Colors.transparent,
             onTap: () {
               Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return Search();
+                return Search(filter: {},);
               }));
             },
             child: TextField(
@@ -115,12 +117,12 @@ Row buildAppbarSearch(BuildContext context) {
         },
         child: Stack(children: <Widget>[
           Icon(
-            FlutterIcons.shopping_cart_fea,
+            Icons.shopping_cart,
             color: Theme.of(context)
                 .primaryIconTheme
                 .color, //Theme.of(context).hintColor
           ),
-          new Positioned(
+          Positioned(
             top: -3.0,
             right: -3.0,
             child: ScopedModelDescendant<AppStateModel>(
@@ -144,8 +146,9 @@ Row buildAppbarSearch(BuildContext context) {
                             backgroundColor: Colors.red,
                           ),
                         ))));
-              } else
+              } else {
                 return Container();
+              }
             }),
           ),
         ]),

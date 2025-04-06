@@ -7,6 +7,8 @@ import './../../../../ui/color_override.dart';
 import 'theme_override.dart';
 
 class Register extends StatefulWidget {
+  const Register({super.key});
+
   @override
   _RegisterState createState() => _RegisterState();
 }
@@ -15,9 +17,9 @@ class _RegisterState extends State<Register> {
 
   final _formKey = GlobalKey<FormState>();
   final appStateModel = AppStateModel();
-  var formData = new Map<String, dynamic>();
+  var formData = <String, dynamic>{};
   final RoundedLoadingButtonController _btnController =
-  new RoundedLoadingButtonController();
+  RoundedLoadingButtonController();
 
   @override
   Widget build(BuildContext context) {
@@ -41,11 +43,11 @@ class _RegisterState extends State<Register> {
                         SizedBox(
                           height: height * 0.10,
                         ),
-                        Text('Hearty Welcome !', style: Theme.of(context).textTheme.headline6.copyWith(
+                        Text('Hearty Welcome !', style: Theme.of(context).textTheme.titleLarge.copyWith(
                           //color: Colors.white,
                             fontSize: 32
                         )),
-                        Text('Sign up to create an account', style: Theme.of(context).textTheme.caption.copyWith(
+                        Text('Sign up to create an account', style: Theme.of(context).textTheme.bodySmall.copyWith(
                           //color: Colors.white,
                             fontSize: 14
                         )),
@@ -120,7 +122,6 @@ class _RegisterState extends State<Register> {
                           color: Theme.of(context).buttonColor,
                           elevation: 0,
                           valueColor: Theme.of(context).buttonTheme.colorScheme.onPrimary,
-                          child: Text(appStateModel.blocks.localeText.signUp),
                           controller: _btnController,
                           onPressed: () {
                             if(_formKey.currentState.validate()) {
@@ -130,6 +131,7 @@ class _RegisterState extends State<Register> {
                           },
                           animateOnTap: false,
                           width: MediaQuery.of(context).size.width - 34,
+                          child: Text(appStateModel.blocks.localeText.signUp),
                         ),
                         SizedBox(height: 10.0),
                         FlatButton(
@@ -142,7 +144,7 @@ class _RegisterState extends State<Register> {
                               children: [
                                 Text(
                                     'Already registered?',
-                                    style: Theme.of(context).textTheme.bodyText2.copyWith(
+                                    style: Theme.of(context).textTheme.bodyMedium.copyWith(
                                         fontSize: 15,
                                       color: Colors.white,
                                     )),
@@ -151,7 +153,7 @@ class _RegisterState extends State<Register> {
                                   const EdgeInsets.symmetric(horizontal: 8.0),
                                   child: Text(
                                       'Sign In',
-                                      style: Theme.of(context).textTheme.subtitle1.copyWith(
+                                      style: Theme.of(context).textTheme.titleMedium.copyWith(
                                           color: Colors.white,
                                           fontWeight: FontWeight.w500)),
                                 ),
@@ -199,7 +201,7 @@ class _RegisterState extends State<Register> {
 
   onValidate(String value, String label) {
     if (value.isEmpty) {
-      return label + ' ' + appStateModel.blocks.localeText.isRequired;
+      return '$label ${appStateModel.blocks.localeText.isRequired}';
     }
     return null;
   }

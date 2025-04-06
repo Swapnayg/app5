@@ -18,7 +18,6 @@ import 'src/data/gallery_options.dart';
 import 'src/models/app_state_model.dart';
 import 'src/resources/api_provider.dart';
 import 'src/themes/gallery_theme_data_material.dart';
-import 'src/ui/intro/intro_slider.dart';
 
 //Directory _appDocsDir;
 
@@ -85,6 +84,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return ModelBinding(
+      key: UniqueKey(),
       initialModel: GalleryOptions(
         themeMode: ThemeMode.system,
         customTextDirection: CustomTextDirection.localeBased,
@@ -104,23 +104,23 @@ class _MyAppState extends State<MyApp> {
                     GlobalWidgetsLocalizations.delegate,
                   ],
                   supportedLocales: GalleryOptions.supportedLocales,
-                  locale: GalleryOptions.of(context).locale,
+                  locale: GalleryOptions.of(context)!.locale,
                   title: 'WooCommerce',
                   debugShowCheckedModeBanner: false,
-                  themeMode: GalleryOptions.of(context).themeMode,
-                  theme: GalleryOptions.of(context).locale == Locale('ar')
+                  themeMode: GalleryOptions.of(context)!.themeMode,
+                  theme: GalleryOptions.of(context)!.locale == Locale('ar')
                       ? GalleryThemeData.lightArabicThemeData.copyWith(
-                          platform: GalleryOptions.of(context).platform,
+                          platform: GalleryOptions.of(context)!.platform,
                         )
                       : GalleryThemeData.lightThemeData.copyWith(
-                          platform: GalleryOptions.of(context).platform,
+                          platform: GalleryOptions.of(context)!.platform,
                         ),
-                  darkTheme: GalleryOptions.of(context).locale == Locale('ar')
+                  darkTheme: GalleryOptions.of(context)!.locale == Locale('ar')
                       ? GalleryThemeData.darkArabicThemeData.copyWith(
-                          platform: GalleryOptions.of(context).platform,
+                          platform: GalleryOptions.of(context)!.platform,
                         )
                       : GalleryThemeData.darkThemeData.copyWith(
-                          platform: GalleryOptions.of(context).platform,
+                          platform: GalleryOptions.of(context)!.platform,
                         ),
                   home: ScopedModelDescendant<AppStateModel>(
                       builder: (context, child, model) {

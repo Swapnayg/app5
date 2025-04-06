@@ -31,6 +31,8 @@ import '../wallet.dart';
 import '../wishlist.dart';
 
 class UserAccount8 extends StatefulWidget {
+  const UserAccount8({super.key});
+
   @override
   _UserAccount8State createState() => _UserAccount8State();
 }
@@ -40,7 +42,7 @@ class _UserAccount8State extends State<UserAccount8> {
 
   @override
   Widget build(BuildContext context) {
-    TextStyle menuTextStyle = Theme.of(context).textTheme.bodyText1;
+    TextStyle menuTextStyle = Theme.of(context).textTheme.bodyLarge;
     Color onPrimaryColor = Colors.white;
     Color headerBackgroundColor = Theme.of(context).primaryColor;
     return AnnotatedRegion<SystemUiOverlayStyle>(
@@ -85,22 +87,20 @@ class _UserAccount8State extends State<UserAccount8> {
                         ScopedModelDescendant<AppStateModel>(
                             builder: (context, child, model) {
                               return Container(
-                                  child: (model.user?.id != null &&
+                                  child: (model.user.id != null &&
                                       model.user.id > 0)
                                       ? (model.user.billing.firstName != '' ||
                                       model.user.billing.lastName != '')
                                       ? Text(
-                                    model.user.billing.firstName +
-                                        ' ' +
-                                        model.user.billing.lastName,
-                                    style: Theme.of(context).textTheme.headline6.copyWith(
+                                    '${model.user.billing.firstName} ${model.user.billing.lastName}',
+                                    style: Theme.of(context).textTheme.titleLarge.copyWith(
                                         color: Colors.white, fontSize: 24
                                     ),
                                   )
                                       : Container(
                                     child: Text(
                                       model.blocks.localeText.welcome,
-                                      style: Theme.of(context).textTheme.headline6.copyWith(
+                                      style: Theme.of(context).textTheme.titleLarge.copyWith(
                                           color: Colors.white, fontSize: 24
                                       ),
                                     ),
@@ -113,7 +113,7 @@ class _UserAccount8State extends State<UserAccount8> {
                                               builder: (context) => Login())),
                                       child: Text(
                                         model.blocks.localeText.signIn,
-                                        style: Theme.of(context).textTheme.headline6.copyWith(
+                                        style: Theme.of(context).textTheme.titleLarge.copyWith(
                                             color: Colors.white, fontSize: 24
                                         ),
                                       ),
@@ -153,7 +153,6 @@ class _UserAccount8State extends State<UserAccount8> {
                       Icons.close,
                       color: Theme.of(context).colorScheme.onSecondary,
                     ),
-                    child: Container(),
                     ringColor: Theme.of(context).colorScheme.secondary,
                     ringDiameter: 250.0,
                     ringWidth: 100.0,
@@ -164,7 +163,7 @@ class _UserAccount8State extends State<UserAccount8> {
                             color: Theme.of(context).colorScheme.onSecondary,
                           ),
                           onPressed: () {
-                            if (appStateModel.user?.id != null &&
+                            if (appStateModel.user.id != null &&
                                 appStateModel.user.id > 0) {
                               Navigator.push(
                                   context,
@@ -190,7 +189,7 @@ class _UserAccount8State extends State<UserAccount8> {
                                 color: Theme.of(context).colorScheme.onSecondary,
                               ),
                               onPressed: () {
-                                openLink('mailto:'+model.blocks.settings.supportEmail);
+                                openLink('mailto:${model.blocks.settings.supportEmail}');
                               },
                               iconSize: 20.0,
                               color: Colors.black)
@@ -201,8 +200,7 @@ class _UserAccount8State extends State<UserAccount8> {
                             color: Theme.of(context).colorScheme.onSecondary,
                           ),
                           onPressed: () {
-                            final url = 'https://wa.me/' +
-                                model.blocks.settings.whatsappNumber;
+                            final url = 'https://wa.me/${model.blocks.settings.whatsappNumber}';
                             openLink(url);
                           },
                           iconSize: 20.0,
@@ -214,11 +212,12 @@ class _UserAccount8State extends State<UserAccount8> {
                           ),
                           onPressed: () {
                             openLink(
-                                'tel:' + model.blocks.settings.whatsappNumber);
+                                'tel:${model.blocks.settings.whatsappNumber}');
                           },
                           iconSize: 20.0,
                           color: Colors.black),
-                    ]);
+                    ],
+                    child: Container());
               }),
             )
           ],
@@ -258,7 +257,7 @@ class _UserAccount8State extends State<UserAccount8> {
                   children: [
                     ListTile(
                       onTap: () {
-                        if (appStateModel.user?.id != null &&
+                        if (appStateModel.user.id != null &&
                             appStateModel.user.id > 0) {
                           Navigator.push(
                               context,
@@ -282,7 +281,7 @@ class _UserAccount8State extends State<UserAccount8> {
                     Divider(height: 0.0),
                     ListTile(
                       onTap: () {
-                        if (appStateModel.user?.id != null &&
+                        if (appStateModel.user.id != null &&
                             appStateModel.user.id > 0) {
                           Navigator.push(
                               context,
@@ -307,7 +306,7 @@ class _UserAccount8State extends State<UserAccount8> {
                     Divider(height: 0.0),
                     ListTile(
                       onTap: () {
-                        if (appStateModel.user?.id != null &&
+                        if (appStateModel.user.id != null &&
                             appStateModel.user.id > 0) {
                           Navigator.push(
                               context,
@@ -332,7 +331,7 @@ class _UserAccount8State extends State<UserAccount8> {
                     Divider(height: 0.0),
                     ListTile(
                       onTap: () {
-                        if (appStateModel.user?.id != null &&
+                        if (appStateModel.user.id != null &&
                             appStateModel.user.id > 0) {
                           Navigator.push(
                               context,
@@ -374,7 +373,7 @@ class _UserAccount8State extends State<UserAccount8> {
                     Divider(height: 0.0),
                     ScopedModelDescendant<AppStateModel>(
                         builder: (context, child, model) {
-                      if (model.blocks?.languages != null &&
+                      if (model.blocks.languages != null &&
                           model.blocks.languages.length > 0) {
                         return Column(
                           children: <Widget>[
@@ -402,7 +401,7 @@ class _UserAccount8State extends State<UserAccount8> {
                     }),
                     ScopedModelDescendant<AppStateModel>(
                         builder: (context, child, model) {
-                      if (model.blocks?.currencies != null &&
+                      if (model.blocks.currencies != null &&
                           model.blocks.currencies.length > 0) {
                         return Column(
                           children: <Widget>[
@@ -444,7 +443,7 @@ class _UserAccount8State extends State<UserAccount8> {
                     Divider(height: 0.0),
                     ListTile(
                       onTap: () {
-                        if (appStateModel.user?.id != null &&
+                        if (appStateModel.user.id != null &&
                             appStateModel.user.id > 0) {
                           Navigator.push(
                               context,
@@ -581,7 +580,6 @@ class _UserAccount8State extends State<UserAccount8> {
   SliverAppBar buildSliverAppBar(
       Color onPrimaryColor, BuildContext context, Color headerBackgroundColor) {
     return SliverAppBar(
-      brightness: Brightness.dark,
       floating: false,
       pinned: true,
       snap: false,
@@ -609,14 +607,12 @@ class _UserAccount8State extends State<UserAccount8> {
               ScopedModelDescendant<AppStateModel>(
                   builder: (context, child, model) {
                   return Container(
-                      child: (model.user?.id != null &&
+                      child: (model.user.id != null &&
                           model.user.id > 0)
                           ? (model.user.billing.firstName != '' ||
                           model.user.billing.lastName != '')
                               ? Text(
-                        model.user.billing.firstName +
-                                      ' ' +
-                            model.user.billing.lastName,
+                        '${model.user.billing.firstName} ${model.user.billing.lastName}',
                                   style: TextStyle(color: onPrimaryColor),
                                 )
                               : Container(
@@ -642,7 +638,7 @@ class _UserAccount8State extends State<UserAccount8> {
             ],
           ),
           background: buildAccountBackground2()),
-      backgroundColor: headerBackgroundColor,
+      backgroundColor: headerBackgroundColor, systemOverlayStyle: SystemUiOverlayStyle.light,
     );
   }
 
@@ -653,7 +649,7 @@ class _UserAccount8State extends State<UserAccount8> {
           top: 30,
           left: -30,
           child: RotationTransition(
-            turns: new AlwaysStoppedAnimation(38 / 360),
+            turns: AlwaysStoppedAnimation(38 / 360),
             child: Container(
               color: Theme.of(context).primaryColorLight.withOpacity(0.3),
               height: 35,
@@ -665,7 +661,7 @@ class _UserAccount8State extends State<UserAccount8> {
           top: 0,
           left: -5,
           child: RotationTransition(
-            turns: new AlwaysStoppedAnimation(127 / 360),
+            turns: AlwaysStoppedAnimation(127 / 360),
             child: Container(
               color: Theme.of(context).primaryColorDark.withOpacity(0.8),
               height: 35,
@@ -677,7 +673,7 @@ class _UserAccount8State extends State<UserAccount8> {
           bottom: 62,
           right: -40,
           child: RotationTransition(
-            turns: new AlwaysStoppedAnimation(125 / 360),
+            turns: AlwaysStoppedAnimation(125 / 360),
             child: Container(
               color: Theme.of(context).primaryColorDark.withOpacity(0.8),
               height: 35,
@@ -689,7 +685,7 @@ class _UserAccount8State extends State<UserAccount8> {
           bottom: 80,
           right: -60,
           child: RotationTransition(
-            turns: new AlwaysStoppedAnimation(125 / 360),
+            turns: AlwaysStoppedAnimation(125 / 360),
             child: Container(
               color: Theme.of(context).primaryColorLight.withOpacity(0.3),
               height: 35,
@@ -770,8 +766,7 @@ class _UserAccount8State extends State<UserAccount8> {
   buildPages(BuildContext context, TextStyle menuTextStyle) {
     return ScopedModelDescendant<AppStateModel>(
         builder: (context, child, model) {
-      if (model.blocks != null &&
-          model.blocks.pages.length != 0 &&
+      if (model.blocks.pages.length != 0 &&
           model.blocks.pages[0].url.isNotEmpty) {
         return buildPageList(model.blocks.pages, menuTextStyle);
       } else {
@@ -829,12 +824,10 @@ class _UserAccount8State extends State<UserAccount8> {
   _shareApp() {
     if (Platform.isIOS) {
       //Add ios App link here
-      Share.share('Check out this app: ' +
-          appStateModel.blocks.settings.shareAppIosLink);
+      Share.share('Check out this app: ${appStateModel.blocks.settings.shareAppIosLink}');
     } else {
       //Add android app link here
-      Share.share('Check out this app: ' +
-          appStateModel.blocks.settings.shareAppAndroidLink);
+      Share.share('Check out this app: ${appStateModel.blocks.settings.shareAppAndroidLink}');
     }
   }
 

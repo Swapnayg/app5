@@ -214,13 +214,13 @@ class _ChatPageState extends State<ChatPage> {
                     Container(
                       height: _deviceHeight * 0.30,
                       width: _deviceWidth * 0.40,
-                      decoration: new BoxDecoration(
-                        gradient: new LinearGradient(
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
                             colors: [Colors.black54, Colors.transparent],
                             begin: Alignment.bottomCenter,
                             //begin: FractionalOffset.topCenter,
                             //end: FractionalOffset.center,
-                            end: new Alignment(0.0, 0.5),
+                            end: Alignment(0.0, 0.5),
                             tileMode: TileMode.clamp),
                       ),
                     ),

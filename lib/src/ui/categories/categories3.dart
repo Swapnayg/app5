@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api, dead_code
+
 import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
@@ -9,21 +11,23 @@ import '../../models/category_model.dart';
 import '../products/products.dart';
 
 class Categories3 extends StatefulWidget {
+  const Categories3({super.key});
+
   @override
   _Categories3State createState() => _Categories3State();
 }
 
 class _Categories3State extends State<Categories3> {
 
-  List<Category> mainCategories;
-  List<Category> subCategories;
-  Category selectedCategory;
-  int mainCategoryId = 0;
+  late List<Category> mainCategories;
+  late List<Category> subCategories;
+  late int mainCategoryId = 0;
   int selectedCategoryIndex = 0;
+  late Category selectedCategory;
   AppStateModel appStateModel = AppStateModel();
 
   void onCategoryClick(Category category) {
-    var filter = new Map<String, dynamic>();
+    var filter = <String, dynamic>{};
     filter['id'] = category.id.toString();
     Navigator.push(
         context,
@@ -38,14 +42,12 @@ class _Categories3State extends State<Categories3> {
       appBar: AppBar(title: Text(appStateModel.blocks.localeText.categories),),
       body: ScopedModelDescendant<AppStateModel>(
         builder: (context, child, model) {
-          if (model.blocks?.categories != null) {
+          mainCategories = model.blocks.categories.where((cat) => cat.parent == 0).toList();
+          selectedCategory = mainCategories[selectedCategoryIndex];
+          subCategories = model.blocks.categories.where((cat) => cat.parent == selectedCategory.id).toList();
 
-            mainCategories = model.blocks.categories.where((cat) => cat.parent == 0).toList();
-            selectedCategory = mainCategories[selectedCategoryIndex];
-            subCategories = model.blocks.categories.where((cat) => cat.parent == selectedCategory.id).toList();
-
-            return buildList();
-          } return Center(child: CircularProgressIndicator());
+          return buildList();
+        return Center(child: CircularProgressIndicator());
         },
       ),
     );
@@ -74,7 +76,7 @@ class CategoryRow extends StatelessWidget {
   final Category category;
   final void Function(Category category) onCategoryClick;
 
-  CategoryRow({this.category, this.onCategoryClick});
+  const CategoryRow({super.key, required this.category, required this.onCategoryClick});
 
   @override
   Widget build(BuildContext context) {
@@ -85,7 +87,7 @@ class CategoryRow extends StatelessWidget {
       onTap: () {
         onCategoryClick(category);
       },
-      leading: Container(
+      leading: SizedBox(
         width: 60,
         height: 60,
         child: CachedNetworkImage(
@@ -97,13 +99,13 @@ class CategoryRow extends StatelessWidget {
               borderRadius: BorderRadius.circular(0.0),
             ),
             child: Ink.image(
+              image: imageProvider,
+              fit: BoxFit.cover,
               child: InkWell(
                 onTap: () {
                   onCategoryClick(category);
                 },
               ),
-              image: imageProvider,
-              fit: BoxFit.cover,
             ),
           ),
           placeholder: (context, url) => Card(

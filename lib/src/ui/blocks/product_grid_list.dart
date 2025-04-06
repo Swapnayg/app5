@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api, unused_local_variable
+
 import 'package:flutter/material.dart';
 
 import '../../../src/ui/products/product_grid/product_item4.dart';
@@ -8,7 +10,7 @@ import '../../models/blocks_model.dart';
 class ProductGridList extends StatefulWidget {
   final Block block;
   final Function onProductClick;
-  ProductGridList({Key key, this.block, this.onProductClick}) : super(key: key);
+  const ProductGridList({super.key, required this.block, required this.onProductClick});
   @override
   _ProductGridListState createState() => _ProductGridListState();
 }

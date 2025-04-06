@@ -6,6 +6,8 @@ import '../../../color_override.dart';
 
 
 class Register extends StatefulWidget {
+  const Register({super.key});
+
   @override
   _RegisterState createState() => _RegisterState();
 }
@@ -13,7 +15,7 @@ class Register extends StatefulWidget {
 class _RegisterState extends State<Register> {
 
   final appStateModel = AppStateModel();
-  RegisterModel _register = RegisterModel();
+  final RegisterModel _register = RegisterModel();
   bool _obscureText = true;
   var isLoading = false;
   final _formKey = GlobalKey<FormState>();
@@ -134,7 +136,7 @@ class _RegisterState extends State<Register> {
                               Text(
                                   appStateModel.blocks.localeText
                                       .alreadyHaveAnAccount,
-                                  style: Theme.of(context).textTheme.bodyText2.copyWith(
+                                  style: Theme.of(context).textTheme.bodyMedium.copyWith(
                                       fontSize: 15,
                                       color: Colors.grey)),
                               Padding(
@@ -142,9 +144,9 @@ class _RegisterState extends State<Register> {
                                 const EdgeInsets.symmetric(horizontal: 8.0),
                                 child: Text(
                                     appStateModel.blocks.localeText.signIn,
-                                    style: Theme.of(context).textTheme.bodyText2.copyWith(
+                                    style: Theme.of(context).textTheme.bodyMedium.copyWith(
                                         color:
-                                        Theme.of(context).accentColor)),
+                                        Theme.of(context).colorScheme.secondary)),
                               ),
                             ],
                           )),

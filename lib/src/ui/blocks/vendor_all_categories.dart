@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
@@ -9,7 +11,7 @@ import '../products/products.dart';
 
 class VendorAllCategories extends StatefulWidget {
   final List<Category> categories;
-  const VendorAllCategories({Key key, this.categories}) : super(key: key);
+  const VendorAllCategories({super.key, required this.categories});
   @override
   _VendorAllCategoriesState createState() => _VendorAllCategoriesState();
 }
@@ -17,7 +19,7 @@ class VendorAllCategories extends StatefulWidget {
 class _VendorAllCategoriesState extends State<VendorAllCategories> {
 
   void onCategoryClick(Category category) {
-    var filter = new Map<String, dynamic>();
+    var filter = <String, dynamic>{};
     filter['id'] = category.id.toString();
     Navigator.push(
         context,
@@ -57,7 +59,7 @@ class CategoryRow extends StatelessWidget {
   final Category category;
   final void Function(Category category) onCategoryClick;
 
-  CategoryRow({this.category, this.onCategoryClick});
+  const CategoryRow({super.key, required this.category, required this.onCategoryClick});
 
   @override
   Widget build(BuildContext context) {
@@ -68,7 +70,7 @@ class CategoryRow extends StatelessWidget {
       onTap: () {
         onCategoryClick(category);
       },
-      leading: Container(
+      leading: SizedBox(
         width: 60,
         height: 60,
         child: CachedNetworkImage(
@@ -78,13 +80,13 @@ class CategoryRow extends StatelessWidget {
             elevation: 0,
             shape: StadiumBorder(),
             child: Ink.image(
+              image: imageProvider,
+              fit: BoxFit.cover,
               child: InkWell(
                 onTap: () {
                   onCategoryClick(category);
                 },
               ),
-              image: imageProvider,
-              fit: BoxFit.cover,
             ),
           ),
           placeholder: (context, url) => Card(
@@ -103,7 +105,7 @@ class CategoryRow extends StatelessWidget {
       ),
       title: Text(
         parseHtmlString(category.name),
-        style: Theme.of(context).textTheme.bodyText1,
+        style: Theme.of(context).textTheme.bodyLarge,
         maxLines: 2,
         overflow: TextOverflow.ellipsis,
       ),

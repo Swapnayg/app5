@@ -79,9 +79,9 @@ class _VariationProductListState extends State<VariationProductList> {
         name: _appStateModel.selectedCurrency);
     var name = '';
 
-    variationProduct.attributes.forEach((value) {
+    for (var value in variationProduct.attributes) {
       name = '$name ${value.option}';
-    });
+    }
 
     return MergeSemantics(
       child: ListTile(

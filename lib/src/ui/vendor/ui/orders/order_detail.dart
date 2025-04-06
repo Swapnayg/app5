@@ -74,7 +74,7 @@ class _OrderDetailState extends State<OrderDetail> {
           children: <Widget>[
             SizedBox(height: 10.0),
             Text(
-              "Order" + ' - ' + order.id.toString(),
+              "Order" ' - ' + order.id.toString(),
               style: Theme.of(context).textTheme.titleLarge,
             ),
             Divider(),

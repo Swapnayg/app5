@@ -20,14 +20,14 @@ class AttributesModel {
   });
 
   factory AttributesModel.fromJson(Map<String, dynamic> json) => AttributesModel(
-    id: json["id"] == null ? null : json["id"],
-    name: json["name"] == null ? null : json["name"],
+    id: json["id"],
+    name: json["name"],
     terms: json["terms"] == null ? null : List<Term>.from(json["terms"].map((x) => Term.fromJson(x))),
   );
 
   Map<String, dynamic> toJson() => {
-    "id": id == null ? null : id,
-    "name": name == null ? null : name,
+    "id": id,
+    "name": name,
     "terms": terms == null ? null : List<dynamic>.from(terms.map((x) => x.toJson())),
   };
 }
@@ -60,29 +60,29 @@ class Term {
   });
 
   factory Term.fromJson(Map<String, dynamic> json) => Term(
-    termId: json["term_id"] == null ? null : json["term_id"],
-    name: json["name"] == null ? null : json["name"],
-    slug: json["slug"] == null ? null : json["slug"],
-    termGroup: json["term_group"] == null ? null : json["term_group"],
-    termTaxonomyId: json["term_taxonomy_id"] == null ? null : json["term_taxonomy_id"],
-    taxonomy: json["taxonomy"] == null ? null : json["taxonomy"],
-    description: json["description"] == null ? null : json["description"],
-    parent: json["parent"] == null ? null : json["parent"],
-    count: json["count"] == null ? null : json["count"],
-    filter: json["filter"] == null ? null : json["filter"],
+    termId: json["term_id"],
+    name: json["name"],
+    slug: json["slug"],
+    termGroup: json["term_group"],
+    termTaxonomyId: json["term_taxonomy_id"],
+    taxonomy: json["taxonomy"],
+    description: json["description"],
+    parent: json["parent"],
+    count: json["count"],
+    filter: json["filter"],
     selected: false,
   );
 
   Map<String, dynamic> toJson() => {
-    "term_id": termId == null ? null : termId,
-    "name": name == null ? null : name,
-    "slug": slug == null ? null : slug,
-    "term_group": termGroup == null ? null : termGroup,
-    "term_taxonomy_id": termTaxonomyId == null ? null : termTaxonomyId,
-    "taxonomy": taxonomy == null ? null : taxonomy,
-    "description": description == null ? null : description,
-    "parent": parent == null ? null : parent,
-    "count": count == null ? null : count,
-    "filter": filter == null ? null : filter,
+    "term_id": termId,
+    "name": name,
+    "slug": slug,
+    "term_group": termGroup,
+    "term_taxonomy_id": termTaxonomyId,
+    "taxonomy": taxonomy,
+    "description": description,
+    "parent": parent,
+    "count": count,
+    "filter": filter,
   };
 }

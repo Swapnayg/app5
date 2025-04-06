@@ -27,10 +27,10 @@ class PostDetailBloc {
   ValueStream<CommentsModel> get comments => _commentsFetcher.stream;
   ValueStream<bool> get hasMoreCommets => _hasMoreCommentsFetcher.stream;
 
-  Map<int, CommentsModel> _comments;
+  final Map<int, CommentsModel> _comments;
   final _post = <int, Post>{};
 
-  PostDetailBloc() : _comments = Map() {
+  PostDetailBloc() : _comments = <int, CommentsModel>{} {
     _postIdController.stream.listen((id) async {
       fetchPost(id);
       fetchComments(id);

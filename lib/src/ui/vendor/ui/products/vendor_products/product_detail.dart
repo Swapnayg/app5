@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api, no_logic_in_create_state
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
@@ -15,9 +17,9 @@ class VendorProductDetail extends StatefulWidget {
   final VendorProduct product;
 
   VendorProductDetail({
-    Key key,
-    this.product,
-  }) : super(key: key);
+    super.key,
+    required this.product,
+  });
   @override
   _VendorProductDetailState createState() =>
       _VendorProductDetailState(product);
@@ -70,7 +72,7 @@ class _VendorProductDetailState extends State<VendorProductDetail> {
               subtitle: GridView.builder(
                   shrinkWrap: true,
                   itemCount: products.images.length + 1,
-                  gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 4),
                   itemBuilder: (BuildContext context, int index) {
                     if (products.images.length != index) {
@@ -120,7 +122,7 @@ class _VendorProductDetailState extends State<VendorProductDetail> {
             subtitle: Html(data: products.shortDescription),
           ),
           ListTile(
-            title: Text(appStateModel.blocks.localeText.description + ' ' + appStateModel.blocks.localeText.description),
+            title: Text('${appStateModel.blocks.localeText.description} ${appStateModel.blocks.localeText.description}'),
             subtitle: Html(data: products.description),
           ),
           widget.product.type == "variable"

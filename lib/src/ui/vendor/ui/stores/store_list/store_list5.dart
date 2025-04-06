@@ -63,10 +63,10 @@ class StoreCard extends StatelessWidget {
     return Card(
       child: InkWell(
         onTap: () => openDetails(store, context),
-        child: new Column(
+        child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Container(
+            SizedBox(
               height: 170,
               child: featuredImage,
             ),
@@ -92,10 +92,10 @@ class StoreCard extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       Container(
-                        child: new Text(store.name,
+                        child: Text(store.name,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
-                            style: new TextStyle(
+                            style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 18.0,
                             )),
@@ -140,10 +140,7 @@ class StoreCard extends StatelessWidget {
               width: 6.0,
             ),
             Text(
-              '(' +
-                  store.ratingCount.toString() +
-                  ' ' + appStateModel.blocks.localeText.reviews +
-                  ')',
+              '(${store.ratingCount} ${appStateModel.blocks.localeText.reviews})',
               style: TextStyle(
                   fontSize: 10, fontWeight: FontWeight.w300),
             ),

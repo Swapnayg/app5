@@ -96,89 +96,89 @@ class ProductVariation {
   });
 
   factory ProductVariation.fromJson(Map<String, dynamic> json) => ProductVariation(
-    id: json["id"] == null ? null : json["id"],
+    id: json["id"],
     dateCreated: json["date_created"] == null ? null : DateTime.parse(json["date_created"]),
     dateCreatedGmt: json["date_created_gmt"] == null ? null : DateTime.parse(json["date_created_gmt"]),
     dateModified: json["date_modified"] == null ? null : DateTime.parse(json["date_modified"]),
     dateModifiedGmt: json["date_modified_gmt"] == null ? null : DateTime.parse(json["date_modified_gmt"]),
-    description: json["description"] == null ? null : json["description"],
-    permalink: json["permalink"] == null ? null : json["permalink"],
-    sku: json["sku"] == null ? null : json["sku"],
+    description: json["description"],
+    permalink: json["permalink"],
+    sku: json["sku"],
     price: json["price"] == null || json["price"] == '' ? '0' : json["price"],
     regularPrice: json["regular_price"] == null || json["price"] == '' ? '0' : json["regular_price"],
-    salePrice: json["sale_price"] == null ? null : json["sale_price"],
+    salePrice: json["sale_price"],
     dateOnSaleFrom: json["date_on_sale_from"],
     dateOnSaleFromGmt: json["date_on_sale_from_gmt"],
     dateOnSaleTo: json["date_on_sale_to"],
     dateOnSaleToGmt: json["date_on_sale_to_gmt"],
-    onSale: json["on_sale"] == null ? null : json["on_sale"],
-    status: json["status"] == null ? null : json["status"],
-    purchasable: json["purchasable"] == null ? null : json["purchasable"],
-    virtual: json["virtual"] == null ? null : json["virtual"],
-    downloadable: json["downloadable"] == null ? null : json["downloadable"],
+    onSale: json["on_sale"],
+    status: json["status"],
+    purchasable: json["purchasable"],
+    virtual: json["virtual"],
+    downloadable: json["downloadable"],
     downloads: json["downloads"] == null ? null : List<dynamic>.from(json["downloads"].map((x) => x)),
-    downloadLimit: json["download_limit"] == null ? null : json["download_limit"],
-    downloadExpiry: json["download_expiry"] == null ? null : json["download_expiry"],
-    taxStatus: json["tax_status"] == null ? null : json["tax_status"],
-    taxClass: json["tax_class"] == null ? null : json["tax_class"],
-    manageStock: json["manage_stock"] == null ? null : json["manage_stock"],
+    downloadLimit: json["download_limit"],
+    downloadExpiry: json["download_expiry"],
+    taxStatus: json["tax_status"],
+    taxClass: json["tax_class"],
+    manageStock: json["manage_stock"],
     stockQuantity: json["stock_quantity"],
-    stockStatus: json["stock_status"] == null ? null : json["stock_status"],
-    backorders: json["backorders"] == null ? null : json["backorders"],
-    backordersAllowed: json["backorders_allowed"] == null ? null : json["backorders_allowed"],
-    backordered: json["backordered"] == null ? null : json["backordered"],
-    weight: json["weight"] == null ? null : json["weight"],
+    stockStatus: json["stock_status"],
+    backorders: json["backorders"],
+    backordersAllowed: json["backorders_allowed"],
+    backordered: json["backordered"],
+    weight: json["weight"],
     dimensions: json["dimensions"] == null ? null : Dimensions.fromJson(json["dimensions"]),
-    shippingClass: json["shipping_class"] == null ? null : json["shipping_class"],
-    shippingClassId: json["shipping_class_id"] == null ? null : json["shipping_class_id"],
+    shippingClass: json["shipping_class"],
+    shippingClassId: json["shipping_class_id"],
     image: json["image"] == null ? null : VariationImage.fromJson(json["image"]),
     attributes: json["attributes"] == null ? null : List<VariationAttribute>.from(json["attributes"].map((x) => VariationAttribute.fromJson(x))),
-    menuOrder: json["menu_order"] == null ? null : json["menu_order"],
+    menuOrder: json["menu_order"],
     metaData: json["meta_data"] == null ? null : List<dynamic>.from(json["meta_data"].map((x) => x)),
     links: json["_links"] == null ? null : Links.fromJson(json["_links"]),
   );
 
   Map<String, dynamic> toJson() => {
-    "id": id == null ? null : id,
-    "date_created": dateCreated == null ? null : dateCreated.toIso8601String(),
-    "date_created_gmt": dateCreatedGmt == null ? null : dateCreatedGmt.toIso8601String(),
-    "date_modified": dateModified == null ? null : dateModified.toIso8601String(),
-    "date_modified_gmt": dateModifiedGmt == null ? null : dateModifiedGmt.toIso8601String(),
-    "description": description == null ? null : description,
-    "permalink": permalink == null ? null : permalink,
-    "sku": sku == null ? null : sku,
-    "price": price == null ? null : price,
-    "regular_price": regularPrice == null ? null : regularPrice,
-    "sale_price": salePrice == null ? null : salePrice,
+    "id": id,
+    "date_created": dateCreated?.toIso8601String(),
+    "date_created_gmt": dateCreatedGmt?.toIso8601String(),
+    "date_modified": dateModified?.toIso8601String(),
+    "date_modified_gmt": dateModifiedGmt?.toIso8601String(),
+    "description": description,
+    "permalink": permalink,
+    "sku": sku,
+    "price": price,
+    "regular_price": regularPrice,
+    "sale_price": salePrice,
     "date_on_sale_from": dateOnSaleFrom,
     "date_on_sale_from_gmt": dateOnSaleFromGmt,
     "date_on_sale_to": dateOnSaleTo,
     "date_on_sale_to_gmt": dateOnSaleToGmt,
-    "on_sale": onSale == null ? null : onSale,
-    "status": status == null ? null : status,
-    "purchasable": purchasable == null ? null : purchasable,
-    "virtual": virtual == null ? null : virtual,
-    "downloadable": downloadable == null ? null : downloadable,
+    "on_sale": onSale,
+    "status": status,
+    "purchasable": purchasable,
+    "virtual": virtual,
+    "downloadable": downloadable,
     "downloads": downloads == null ? null : List<dynamic>.from(downloads.map((x) => x)),
-    "download_limit": downloadLimit == null ? null : downloadLimit,
-    "download_expiry": downloadExpiry == null ? null : downloadExpiry,
-    "tax_status": taxStatus == null ? null : taxStatus,
-    "tax_class": taxClass == null ? null : taxClass,
-    "manage_stock": manageStock == null ? null : manageStock,
+    "download_limit": downloadLimit,
+    "download_expiry": downloadExpiry,
+    "tax_status": taxStatus,
+    "tax_class": taxClass,
+    "manage_stock": manageStock,
     "stock_quantity": stockQuantity,
-    "stock_status": stockStatus == null ? null : stockStatus,
-    "backorders": backorders == null ? null : backorders,
-    "backorders_allowed": backordersAllowed == null ? null : backordersAllowed,
-    "backordered": backordered == null ? null : backordered,
-    "weight": weight == null ? null : weight,
-    "dimensions": dimensions == null ? null : dimensions.toJson(),
-    "shipping_class": shippingClass == null ? null : shippingClass,
-    "shipping_class_id": shippingClassId == null ? null : shippingClassId,
-    "image": image == null ? null : image.toJson(),
+    "stock_status": stockStatus,
+    "backorders": backorders,
+    "backorders_allowed": backordersAllowed,
+    "backordered": backordered,
+    "weight": weight,
+    "dimensions": dimensions?.toJson(),
+    "shipping_class": shippingClass,
+    "shipping_class_id": shippingClassId,
+    "image": image?.toJson(),
     "attributes": attributes == null ? null : List<dynamic>.from(attributes.map((x) => x.toJson())),
-    "menu_order": menuOrder == null ? null : menuOrder,
+    "menu_order": menuOrder,
     "meta_data": metaData == null ? null : List<dynamic>.from(metaData.map((x) => x)),
-    "_links": links == null ? null : links.toJson(),
+    "_links": links?.toJson(),
   };
 }
 
@@ -194,15 +194,15 @@ class VariationAttribute {
   });
 
   factory VariationAttribute.fromJson(Map<String, dynamic> json) => VariationAttribute(
-    id: json["id"] == null ? null : json["id"],
-    name: json["name"] == null ? null : json["name"],
-    option: json["option"] == null ? null : json["option"],
+    id: json["id"],
+    name: json["name"],
+    option: json["option"],
   );
 
   Map<String, dynamic> toJson() => {
-    "id": id == null ? null : id,
-    "name": name == null ? null : name,
-    "option": option == null ? null : option,
+    "id": id,
+    "name": name,
+    "option": option,
   };
 }
 
@@ -218,15 +218,15 @@ class Dimensions {
   });
 
   factory Dimensions.fromJson(Map<String, dynamic> json) => Dimensions(
-    length: json["length"] == null ? null : json["length"],
-    width: json["width"] == null ? null : json["width"],
-    height: json["height"] == null ? null : json["height"],
+    length: json["length"],
+    width: json["width"],
+    height: json["height"],
   );
 
   Map<String, dynamic> toJson() => {
-    "length": length == null ? null : length,
-    "width": width == null ? null : width,
-    "height": height == null ? null : height,
+    "length": length,
+    "width": width,
+    "height": height,
   };
 }
 
@@ -252,25 +252,25 @@ class VariationImage {
   });
 
   factory VariationImage.fromJson(Map<String, dynamic> json) => VariationImage(
-    id: json["id"] == null ? null : json["id"],
+    id: json["id"],
     dateCreated: json["date_created"] == null ? null : DateTime.parse(json["date_created"]),
     dateCreatedGmt: json["date_created_gmt"] == null ? null : DateTime.parse(json["date_created_gmt"]),
     dateModified: json["date_modified"] == null ? null : DateTime.parse(json["date_modified"]),
     dateModifiedGmt: json["date_modified_gmt"] == null ? null : DateTime.parse(json["date_modified_gmt"]),
-    src: json["src"] == null ? null : json["src"],
-    name: json["name"] == null ? null : json["name"],
-    alt: json["alt"] == null ? null : json["alt"],
+    src: json["src"],
+    name: json["name"],
+    alt: json["alt"],
   );
 
   Map<String, dynamic> toJson() => {
-    "id": id == null ? null : id,
-    "date_created": dateCreated == null ? null : dateCreated.toIso8601String(),
-    "date_created_gmt": dateCreatedGmt == null ? null : dateCreatedGmt.toIso8601String(),
-    "date_modified": dateModified == null ? null : dateModified.toIso8601String(),
-    "date_modified_gmt": dateModifiedGmt == null ? null : dateModifiedGmt.toIso8601String(),
-    "src": src == null ? null : src,
-    "name": name == null ? null : name,
-    "alt": alt == null ? null : alt,
+    "id": id,
+    "date_created": dateCreated?.toIso8601String(),
+    "date_created_gmt": dateCreatedGmt?.toIso8601String(),
+    "date_modified": dateModified?.toIso8601String(),
+    "date_modified_gmt": dateModifiedGmt?.toIso8601String(),
+    "src": src,
+    "name": name,
+    "alt": alt,
   };
 }
 
@@ -306,10 +306,10 @@ class Collection {
   });
 
   factory Collection.fromJson(Map<String, dynamic> json) => Collection(
-    href: json["href"] == null ? null : json["href"],
+    href: json["href"],
   );
 
   Map<String, dynamic> toJson() => {
-    "href": href == null ? null : href,
+    "href": href,
   };
 }

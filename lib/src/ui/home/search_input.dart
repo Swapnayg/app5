@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 class SearchInput extends StatefulWidget {
   final ValueChanged<String> onSearchInput;
 
-  SearchInput(this.onSearchInput);
+  const SearchInput(this.onSearchInput, {super.key});
 
   @override
   State<StatefulWidget> createState() => SearchInputState();
@@ -15,7 +15,7 @@ class SearchInput extends StatefulWidget {
 class SearchInputState extends State<SearchInput> {
   TextEditingController editController = TextEditingController();
 
-  Timer debouncer;
+  late Timer debouncer;
 
   bool hasSearchEntry = false;
 
@@ -24,30 +24,30 @@ class SearchInputState extends State<SearchInput> {
   @override
   void initState() {
     super.initState();
-    this.editController.addListener(this.onSearchInputChange);
+    editController.addListener(onSearchInputChange);
   }
 
   @override
   void dispose() {
-    this.editController.removeListener(this.onSearchInputChange);
-    this.editController.dispose();
+    editController.removeListener(onSearchInputChange);
+    editController.dispose();
 
     super.dispose();
   }
 
   void onSearchInputChange() {
-    if (this.editController.text.isEmpty) {
-      this.debouncer?.cancel();
-      widget.onSearchInput(this.editController.text);
+    if (editController.text.isEmpty) {
+      debouncer.cancel();
+      widget.onSearchInput(editController.text);
       return;
     }
 
-    if (this.debouncer?.isActive ?? false) {
-      this.debouncer.cancel();
+    if (debouncer.isActive ?? false) {
+      debouncer.cancel();
     }
 
-    this.debouncer = Timer(Duration(milliseconds: 500), () {
-      widget.onSearchInput(this.editController.text);
+    debouncer = Timer(Duration(milliseconds: 500), () {
+      widget.onSearchInput(editController.text);
     });
   }
 
@@ -55,6 +55,10 @@ class SearchInputState extends State<SearchInput> {
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 0),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(16),
+        color: Theme.of(context).canvasColor,
+      ),
       child: Row(
         children: <Widget>[
           //Icon(Icons.search, color: Theme.of(context).textTheme.body1.color),
@@ -85,10 +89,6 @@ class SearchInputState extends State<SearchInput> {
               },
             ),
         ],
-      ),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(16),
-        color: Theme.of(context).canvasColor,
       ),
     );
   }

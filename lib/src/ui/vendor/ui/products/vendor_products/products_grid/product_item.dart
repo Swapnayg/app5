@@ -66,10 +66,10 @@ class ProductItem extends StatelessWidget {
       decimalDigits: 2, name: AppStateModel().selectedCurrency);
 
   ProductItem({
-    Key? key,
+    super.key,
     required this.product,
     required this.onProductClick,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -174,7 +174,7 @@ class ProductItem extends StatelessWidget {
                 ],
               ),
             ),
-            Container(
+            SizedBox(
               width: detailsWidth,
               height: 160,
               child: Padding(
@@ -221,8 +221,7 @@ class ProductItem extends StatelessWidget {
                             Row(
                               children: <Widget>[
                                 Text(
-                                    (product.regularPrice != null &&
-                                            product.regularPrice.isNotEmpty)
+                                    (product.regularPrice.isNotEmpty)
                                         ? formatter
                                             .format(double.parse(product.regularPrice))
                                         : '',
@@ -266,9 +265,7 @@ class ProductItem extends StatelessWidget {
                                 children: <Widget>[
                                   SizedBox(width: 4.0),
                                   Text(
-                                      '(' +
-                                          product.ratingCount.toString() +
-                                          ')',
+                                      '(${product.ratingCount})',
                                       maxLines: 2,
                                       style: TextStyle(
                                         color: Theme.of(context)

@@ -1,9 +1,11 @@
+// ignore_for_file: library_private_types_in_public_api, unnecessary_null_comparison, avoid_unnecessary_containers
+
 import 'package:cached_network_image/cached_network_image.dart';
 //import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import '../blocks/banner_top_slider.dart';
-import '../blocks/search_bar.dart';
+import '../blocks/search_bar.dart' as custom;
 import '../blocks/top_static_icons.dart';
-import 'package:flutter_icons/flutter_icons.dart';
+import 'package:flutter_font_icons/flutter_font_icons.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../../blocs/products_bloc.dart';
 import '../checkout/cart/cart4.dart';
@@ -37,16 +39,16 @@ import 'package:flutter/rendering.dart';
 
 class Home extends StatefulWidget {
   final ProductsBloc productsBloc = ProductsBloc();
-  Home({Key key}) : super(key: key);
+  Home({super.key});
   @override
   _HomeState createState() => _HomeState();
 }
 
 class _HomeState extends State<Home> with TickerProviderStateMixin {
-  ScrollController _scrollController = new ScrollController();
+  final ScrollController _scrollController = ScrollController();
   AppStateModel appStateModel = AppStateModel();
-  TabController _controller;
-  Category selectedCategory;
+  late TabController _controller;
+  late Category selectedCategory;
   bool _isVisible = false;
 
   @override
@@ -73,17 +75,19 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
       if (_scrollController.position.userScrollDirection ==
           ScrollDirection.reverse && (40 <= _scrollController.position.pixels &&
           !_scrollController.position.outOfRange)) {
-        if (!_isVisible)
+        if (!_isVisible) {
           setState(() {
             _isVisible = true;
           });
+        }
       }
       if (_scrollController.position.userScrollDirection ==
           ScrollDirection.forward && 40 >= _scrollController.position.pixels) {
-        if (_isVisible)
+        if (_isVisible) {
           setState(() {
             _isVisible = false;
           });
+        }
       }
     });
   }
@@ -92,13 +96,14 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
     setState(() {
       selectedCategory = appStateModel.mainCategories[_controller.index];
     });
-    widget.productsBloc.productsFilter = new Map<String, dynamic>();
+    widget.productsBloc.productsFilter = <String, dynamic>{};
     widget.productsBloc.productsFilter['id'] =
         appStateModel.mainCategories[_controller.index].id.toString();
     appStateModel.selectedRange = RangeValues(0, appStateModel.blocks.maxPrice.toDouble());
     widget.productsBloc.fetchAllProducts('0');
-    if(_scrollController.hasClients && _controller.index != 0)
+    if(_scrollController.hasClients && _controller.index != 0) {
       _scrollController.jumpTo(0.0);
+    }
   }
 
   @override
@@ -147,7 +152,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                         controller: _scrollController,
                         slivers: buildLisOfBlocks(model.blocks),
                       ),
-                      SearchBar(isVisible: _isVisible),
+                      custom.SearchBar(isVisible: _isVisible),
                     ],
                   ),
                 )
@@ -180,20 +185,20 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
   }
 
   List<Widget> buildLisOfCategoryBlocks(AsyncSnapshot<List<Product>> snapshot) {
-    List<Widget> list = new List<Widget>();
+    List<Widget> list = List<Widget>.empty(growable: true);
 
     list.add(addCategoryBanner());
 
     /// UnComment this if you use rounded corner category list in body.
     list.add(buildSubcategories());
     if (snapshot.data != null) {
-      list.add(ProductGrid(products: snapshot.data));
+      list.add(ProductGrid(products: snapshot.data ?? []));
 
       list.add(SliverPadding(
           padding: EdgeInsets.all(0.0),
           sliver: SliverList(
               delegate: SliverChildListDelegate([
-                Container(
+                SizedBox(
                     height: 60,
                     child: StreamBuilder(
                         stream: widget.productsBloc.hasMoreItems,
@@ -238,7 +243,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                       elevation: 0,
                       child: InkWell(
                         onTap: () {
-                          var filter = new Map<String, dynamic>();
+                          var filter = Map<String, dynamic>();
                           filter['id'] =
                               subCategories[index].id.toString();
                           Navigator.push(
@@ -266,7 +271,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                     SizedBox(height: 10.0),
                     InkWell(
                       onTap: () {
-                        var filter = new Map<String, dynamic>();
+                        var filter = <String, dynamic>{};
                         filter['id'] = subCategories[index].id.toString();
                         Navigator.push(
                             context,
@@ -308,13 +313,13 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
           ),
           child: CachedNetworkImage(
             imageUrl:
-            selectedCategory.image != null ? selectedCategory.image : '',
+            selectedCategory.image,
             imageBuilder: (context, imageProvider) => Ink.image(
+              image: imageProvider,
+              fit: BoxFit.cover,
               child: InkWell(
                 onTap: () => _categoryBannerClick(selectedCategory),
               ),
-              image: imageProvider,
-              fit: BoxFit.cover,
             ),
             placeholder: (context, url) => Container(color: Colors.black12),
             errorWidget: (context, url, error) =>
@@ -326,7 +331,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
   }
 
   _categoryBannerClick(Category selectedCategory) {
-    var filter = new Map<String, dynamic>();
+    var filter = <String, dynamic>{};
     filter['id'] = selectedCategory.id.toString();
     Navigator.push(
         context,
@@ -338,7 +343,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
   }
 
   List<Widget> buildLisOfBlocks(BlocksModel snapshot) {
-    List<Widget> list = new List<Widget>();
+    List<Widget> list = List<Widget>.empty(growable: true);
 
     for (var i = 0; i < snapshot.blocks.length; i++) {
       if (snapshot.blocks[i].blockType == 'banner_block') {
@@ -426,34 +431,32 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
       }
     }
 
-    if (snapshot.recentProducts != null) {
-      list.add(buildRecentProductGridList(snapshot));
+    list.add(buildRecentProductGridList(snapshot));
 
-      list.add(SliverPadding(
-          padding: EdgeInsets.all(0.0),
-          sliver: SliverList(
-              delegate: SliverChildListDelegate([
-            Container(
-                height: 60,
-                child: ScopedModelDescendant<AppStateModel>(
-                    builder: (context, child, model) {
-                  if (model.blocks?.recentProducts != null && model.hasMoreRecentItem == false) {
-                    return Center(
-                      child: Text(
-                        model.blocks.localeText.noMoreProducts,
-                      ),
-                    );
-                  } else {
-                    return Center(child: CircularProgressIndicator());
-                  }
-                }))
-          ]))));
-    }
-
+    list.add(SliverPadding(
+        padding: EdgeInsets.all(0.0),
+        sliver: SliverList(
+            delegate: SliverChildListDelegate([
+          SizedBox(
+              height: 60,
+              child: ScopedModelDescendant<AppStateModel>(
+                  builder: (context, child, model) {
+                if (model.blocks.recentProducts != null && model.hasMoreRecentItem == false) {
+                  return Center(
+                    child: Text(
+                      model.blocks.localeText.noMoreProducts,
+                    ),
+                  );
+                } else {
+                  return Center(child: CircularProgressIndicator());
+                }
+              }))
+        ]))));
+  
     return list;
   }
 
-  double _headerAlign(String align) {
+  double? _headerAlign(String align) {
     switch (align) {
       case 'top_left':
         return -1;
@@ -476,32 +479,32 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
   }
 
   Widget buildListHeader(AsyncSnapshot<BlocksModel> snapshot, int childIndex) {
-    Color bgColor = HexColor(snapshot.data.blocks[childIndex].bgColor);
-    double textAlign =
-        _headerAlign(snapshot.data.blocks[childIndex].headerAlign);
+    Color bgColor = HexColor(snapshot.data!.blocks[childIndex].bgColor);
+    double? textAlign =
+        _headerAlign(snapshot.data!.blocks[childIndex].headerAlign);
     return textAlign != null
         ? SliverToBoxAdapter(child: ScopedModelDescendant<AppStateModel>(
             builder: (context, child, model) {
             return Container(
                 padding: EdgeInsets.fromLTRB(
-                    snapshot.data.blocks[childIndex].paddingBetween,
+                    snapshot.data!.blocks[childIndex].paddingBetween,
                     double.parse(
-                        snapshot.data.blocks[childIndex].paddingTop.toString()),
-                    snapshot.data.blocks[childIndex].paddingBetween,
+                        snapshot.data!.blocks[childIndex].paddingTop.toString()),
+                    snapshot.data!.blocks[childIndex].paddingBetween,
                     16.0),
-                color: GalleryOptions.of(context).themeMode == ThemeMode.light
+                color: GalleryOptions.of(context)!.themeMode == ThemeMode.light
                     ? bgColor
                     : Theme.of(context).canvasColor,
                 alignment: Alignment(textAlign, 0),
                 child: Text(
-                  snapshot.data.blocks[childIndex].title,
+                  snapshot.data!.blocks[childIndex].title,
                   textAlign: TextAlign.start,
-                  style: GalleryOptions.of(context).themeMode == ThemeMode.light
-                      ? Theme.of(context).textTheme.headline6.copyWith(
+                  style: GalleryOptions.of(context)!.themeMode == ThemeMode.light
+                      ? Theme.of(context).textTheme.titleLarge!.copyWith(
                             color: HexColor(
-                                snapshot.data.blocks[childIndex].titleColor),
+                                snapshot.data!.blocks[childIndex].titleColor),
                           )
-                      : Theme.of(context).textTheme.headline6,
+                      : Theme.of(context).textTheme.titleLarge,
                 ));
           }))
         : SliverToBoxAdapter(
@@ -510,12 +513,12 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
               return Container(
                 margin: EdgeInsets.all(0),
                 padding: EdgeInsets.fromLTRB(
-                    snapshot.data.blocks[childIndex].paddingBetween,
+                    snapshot.data!.blocks[childIndex].paddingBetween,
                     double.parse(
-                        snapshot.data.blocks[childIndex].paddingTop.toString()),
-                    snapshot.data.blocks[childIndex].paddingBetween,
+                        snapshot.data!.blocks[childIndex].paddingTop.toString()),
+                    snapshot.data!.blocks[childIndex].paddingBetween,
                     0.0),
-                color: GalleryOptions.of(context).themeMode == ThemeMode.light
+                color: GalleryOptions.of(context)!.themeMode == ThemeMode.light
                     ? bgColor
                     : Theme.of(context).canvasColor,
               );
@@ -524,16 +527,16 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
   }
 
   Widget buildGridHeader(BlocksModel snapshot, int childIndex) {
-    double textAlign = _headerAlign(snapshot.blocks[childIndex].headerAlign);
-    TextStyle subhead = Theme.of(context).brightness != Brightness.dark
-        ? Theme.of(context).textTheme.headline6.copyWith(color: HexColor(snapshot.blocks[childIndex].titleColor))
+    double? textAlign = _headerAlign(snapshot.blocks[childIndex].headerAlign);
+    TextStyle? subhead = Theme.of(context).brightness != Brightness.dark
+        ? Theme.of(context).textTheme.titleLarge!.copyWith(color: HexColor(snapshot.blocks[childIndex].titleColor))
         : Theme.of(context)
             .textTheme
-            .headline6;
+            .titleLarge;
 
-    TextStyle _textStyleCounter = Theme.of(context)
+    TextStyle textStyleCounter = Theme.of(context)
         .textTheme
-        .bodyText2
+        .bodyMedium!
         .copyWith(color: Colors.white, fontSize: 12);
 
     if(snapshot.blocks[childIndex].blockType == 'flash_sale_block') {
@@ -551,7 +554,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                 double.parse(snapshot.blocks[childIndex].paddingTop.toString()),
                 snapshot.blocks[childIndex].paddingBetween + 4,
                 0.0),
-            alignment: Alignment(textAlign, 0),
+            alignment: Alignment(textAlign!, 0),
             height: 60,
             child: Countdown(
               duration: Duration(seconds: difference),
@@ -572,46 +575,46 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                           Container(
                             width: 24,
                             height: 24,
-                            decoration: new BoxDecoration(
+                            decoration: BoxDecoration(
                                 color: Colors.black,
                                 borderRadius:
-                                new BorderRadius.all(Radius.circular(2.0))),
+                                BorderRadius.all(Radius.circular(2.0))),
                             margin: EdgeInsets.all(4),
                             child: Center(
                                 child: Text('${remaining.inHours.clamp(0, 99)}',
                                     maxLines: 1,
-                                    style: _textStyleCounter)),
+                                    style: textStyleCounter)),
                           ),
                           Container(
                             width: 24,
                             height: 24,
                             margin: EdgeInsets.all(4),
-                            decoration: new BoxDecoration(
+                            decoration: BoxDecoration(
                                 color: Colors.black,
                                 borderRadius:
-                                new BorderRadius.all(Radius.circular(2.0))),
+                                BorderRadius.all(Radius.circular(2.0))),
                             child: Center(
                                 child: Text(
                                     '${remaining.inMinutes.remainder(60)}',
-                                    style: _textStyleCounter)),
+                                    style: textStyleCounter)),
                           ),
                           Container(
                             width: 24,
                             height: 24,
-                            decoration: new BoxDecoration(
+                            decoration: BoxDecoration(
                                 color: Colors.black,
                                 borderRadius:
-                                new BorderRadius.all(Radius.circular(2.0))),
+                                BorderRadius.all(Radius.circular(2.0))),
                             margin: EdgeInsets.all(4),
                             child: Center(
                                 child: Text(
                                     '${remaining.inSeconds.remainder(60)}',
-                                    style: _textStyleCounter)),
+                                    style: textStyleCounter)),
                           ),
                         ]),
                   ],
                 );
-              },
+              }, onFinish: () {  },
             ),
           ),
         ),
@@ -661,7 +664,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
     //Naviaget yo product or product list depend on type
     if (data.url.isNotEmpty) {
       if (data.description == 'category') {
-        var filter = new Map<String, dynamic>();
+        var filter = <String, dynamic>{};
         filter['id'] = data.url;
         Navigator.push(
             context,
@@ -670,7 +673,6 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                     filter: filter,
                     name: data.title)));
       }
-      ;
       if (data.description == 'product') {
         Navigator.push(
             context,
@@ -682,12 +684,11 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                     ),
                     )));
       }
-      ;
     }
   }
 
   onCategoryClick(Category category, List<Category> categories) {
-    var filter = new Map<String, dynamic>();
+    var filter = <String, dynamic>{};
     filter['id'] = category.id.toString();
     Navigator.push(
         context,
@@ -722,7 +723,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
               splashColor: Colors.transparent,
               onTap: () {
                 Navigator.push(context, MaterialPageRoute(builder: (context) {
-                  return Search();
+                  return Search(filter: {},);
                 }));
               },
               child: TextField(
@@ -778,10 +779,10 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
           },
           child: Stack(children: <Widget>[
             Icon(
-              FlutterIcons.shopping_cart_fea,
+              Icons.shopping_cart,
               color: Theme.of(context).hintColor, //Theme.of(context).hintColor
             ),
-            new Positioned(
+            Positioned(
               top: -3.0,
               right: -3.0,
               child: ScopedModelDescendant<AppStateModel>(
@@ -805,8 +806,9 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                                       backgroundColor: Colors.red,
                                     ),
                                   ))));
-                    } else
+                    } else {
                       return Container();
+                    }
                   }),
             ),
           ]),
@@ -830,7 +832,7 @@ class HexColor extends Color {
   static int _getColorFromHex(String hexColor) {
     hexColor = hexColor.toUpperCase().replaceAll("#", "");
     if (hexColor.length == 6) {
-      hexColor = "FF" + hexColor;
+      hexColor = "FF$hexColor";
     }
     return int.parse(hexColor, radix: 16);
   }

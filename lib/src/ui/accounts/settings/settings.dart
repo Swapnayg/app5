@@ -200,7 +200,7 @@ class _SettingsLink extends StatelessWidget {
   final IconData icon;
   final GestureTapCallback onTap;
 
-  _SettingsLink({this.title, this.icon, this.onTap});
+  const _SettingsLink({this.icon});
 
   @override
   Widget build(BuildContext context) {
@@ -231,7 +231,7 @@ class _SettingsLink extends StatelessWidget {
                 ),
                 child: Text(
                   title,
-                  style: textTheme.subtitle.apply(
+                  style: textTheme.subtitle2.apply(
                     color: colorScheme.onSecondary,
                   ),
                   textAlign: isDesktop ? TextAlign.end : TextAlign.start,
@@ -249,8 +249,6 @@ class _SettingsLink extends StatelessWidget {
 class _AnimatedSettingsPage extends StatelessWidget {
   const _AnimatedSettingsPage({
     Key key,
-    @required this.animation,
-    @required this.child,
   }) : super(key: key);
 
   final Widget child;
@@ -289,10 +287,6 @@ class _AnimatedSettingsPage extends StatelessWidget {
 class _AnimateSettingsListItems extends StatelessWidget {
   const _AnimateSettingsListItems({
     Key key,
-    this.animation,
-    this.children,
-    this.topPadding,
-    this.bottomPadding,
   }) : super(key: key);
 
   final Animation<double> animation;

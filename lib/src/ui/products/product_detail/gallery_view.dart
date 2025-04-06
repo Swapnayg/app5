@@ -1,3 +1,5 @@
+// ignore_for_file: use_super_parameters, library_private_types_in_public_api, avoid_unnecessary_containers
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:photo_view/photo_view.dart';
@@ -8,7 +10,7 @@ import './../../../models/product_model.dart';
 class GalleryView extends StatefulWidget {
   final List<Mage> images;
 
-  const GalleryView({Key key, this.images}) : super(key: key);
+  const GalleryView({Key? key, required this.images}) : super(key: key);
   @override
   _GalleryViewState createState() => _GalleryViewState();
 }
@@ -33,13 +35,13 @@ class _GalleryViewState extends State<GalleryView> {
                   },
                   itemCount: widget.images.length,
                   loadingBuilder: (context, event) => Center(
-                    child: Container(
+                    child: SizedBox(
                       width: 20.0,
                       height: 20.0,
                       child: CircularProgressIndicator(
                         value: event == null
                             ? 0
-                            : event.cumulativeBytesLoaded / event.expectedTotalBytes,
+                            : event.cumulativeBytesLoaded / (event.expectedTotalBytes ?? 1),
                       ),
                     ),
                   ),

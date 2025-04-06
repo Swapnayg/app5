@@ -8,9 +8,9 @@ import '../resources/api_provider.dart';
 
 class CustomerBloc {
 
-  var addressFormData = new Map<String, String>();
+  var addressFormData = <String, String>{};
   final apiProvider = ApiProvider();
-  var formData = new Map<String, String>();
+  var formData = <String, String>{};
 
   final _customersFetcher = BehaviorSubject<Customer>();
   final _checkoutFormFetcher = BehaviorSubject<CheckoutFormModel>();
@@ -20,7 +20,7 @@ class CustomerBloc {
   void getCheckoutForm() async {
     final response = await apiProvider.post(
         '/wp-admin/admin-ajax.php?action=mstore_flutter-get_checkout_form',
-        Map()); //formData.toJson();
+        {}); //formData.toJson();
     if (response.statusCode == 200) {
       CheckoutFormModel checkoutForm =
       CheckoutFormModel.fromJson(json.decode(response.body));
@@ -32,7 +32,7 @@ class CustomerBloc {
 
   getCustomerDetails() async {
     final response = await apiProvider.postWithCookies(
-        '/wp-admin/admin-ajax.php?action=mstore_flutter-customer', new Map());
+        '/wp-admin/admin-ajax.php?action=mstore_flutter-customer', {});
     Customer customers = Customer.fromJson(json.decode(response.body));
     _customersFetcher.sink.add(customers);
   }

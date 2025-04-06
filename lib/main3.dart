@@ -16,7 +16,6 @@ import 'src/data/gallery_options.dart';
 import 'src/models/app_state_model.dart';
 import 'src/resources/api_provider.dart';
 import 'src/themes/gallery_theme_data_material.dart';
-import 'src/ui/intro/intro_slider.dart';
 
 Directory? _appDocsDir;
 

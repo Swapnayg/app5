@@ -29,9 +29,9 @@ class _EditAddressState extends State<EditAddress> {
   Config config = Config();
 
   List<Region> regions;
-  TextEditingController _address1Controller = TextEditingController();
-  TextEditingController _cityController = TextEditingController();
-  TextEditingController _postCodeController = TextEditingController();
+  final TextEditingController _address1Controller = TextEditingController();
+  final TextEditingController _cityController = TextEditingController();
+  final TextEditingController _postCodeController = TextEditingController();
 
   @override
   void initState() {
@@ -71,17 +71,20 @@ class _EditAddressState extends State<EditAddress> {
         widget.customer.data.billing.country = snapshot.data.countries.first.value;
       }
     }
-    if(regions != null && regions.isNotEmpty) {
+    if(regions.isNotEmpty) {
       widget.customer.data.billing.state = regions.any((z) => z.value == widget.customer.data.billing.state) ? widget.customer.data.billing.state
           : regions.first.value;
     }
 
-    if(_address1Controller.text.isEmpty)
+    if(_address1Controller.text.isEmpty) {
       _address1Controller.text = snapshot.data.billingAddress1;
-    if(_cityController.text.isEmpty)
+    }
+    if(_cityController.text.isEmpty) {
       _cityController.text = snapshot.data.billingCity;
-    if(_postCodeController.text.isEmpty)
+    }
+    if(_postCodeController.text.isEmpty) {
       _postCodeController.text = snapshot.data.billingPostcode;
+    }
 
     return ListView(
         children: <Widget>[
@@ -179,7 +182,7 @@ class _EditAddressState extends State<EditAddress> {
                         return null;
                       },
                       onSaved: (value) {
-                        widget.customer.data.billing..city = value;
+                        widget.customer.data.billing.city = value;
                       },
                     ),
                   ),
@@ -247,14 +250,14 @@ class _EditAddressState extends State<EditAddress> {
                             .map<DropdownMenuItem<String>>(
                                 (value) {
                               return DropdownMenuItem<String>(
-                                value: value.value != null ? value.value : '',
+                                value: value.value ?? '',
                                 child: Text(parseHtmlString(value.label)),
                               );
                             }).toList(),
                       ),
                     ],
                   ) : Container(),
-                  (regions != null && regions.isNotEmpty) ? Column(
+                  (regions.isNotEmpty) ? Column(
                     children: <Widget>[
                       SizedBox(height: 20,),
                       DropdownButton<String>(
@@ -278,7 +281,7 @@ class _EditAddressState extends State<EditAddress> {
                             .map<DropdownMenuItem<String>>(
                                 (value) {
                               return DropdownMenuItem<String>(
-                                value: value.value != null ? value.value : '',
+                                value: value.value ?? '',
                                 child: Text(parseHtmlString(value.label)),
                               );
                             }).toList(),
@@ -292,6 +295,7 @@ class _EditAddressState extends State<EditAddress> {
                         if (value.isEmpty) {
                           return widget.appStateModel.blocks.localeText.pleaseEnterState;
                         }
+                        return null;
                       },
                       onSaved: (val) => setState(() =>
                       widget.customerBloc.formData['billing_state'] = val),
@@ -319,8 +323,8 @@ class _EditAddressState extends State<EditAddress> {
                       widget.customerBloc.addressFormData['billing_postcode'] = widget.customer.data.billing.postcode;
                       widget.customerBloc.addressFormData['billing_email'] = widget.customer.data.billing.email;
                       widget.customerBloc.addressFormData['billing_phone'] = widget.customer.data.billing.phone;
-                      widget.customerBloc.addressFormData['billing_country'] = widget.customer.data.billing.country != null ? widget.customer.data.billing.country : '';
-                      widget.customerBloc.addressFormData['billing_state'] = widget.customer.data.billing.state != null ? widget.customer.data.billing.state : '';
+                      widget.customerBloc.addressFormData['billing_country'] = widget.customer.data.billing.country ?? '';
+                      widget.customerBloc.addressFormData['billing_state'] = widget.customer.data.billing.state ?? '';
                       widget.customerBloc.updateAddress();
                       Navigator.pop(context);
                     }
@@ -336,28 +340,26 @@ class _EditAddressState extends State<EditAddress> {
   void showPlacePicker(AsyncSnapshot<CheckoutFormModel> snapshot) async {
     LocationResult result = await Navigator.of(context).push(
         MaterialPageRoute(builder: (context) => PlacePicker(config.mapApiKey)));
-    if(result != null) {
+    setState(() {
+      _address1Controller.text = result.formattedAddress;
+      _cityController.text = result.city.name;
+      _postCodeController.text = result.postalCode;
+    });
+    if (snapshot.data.countries.indexWhere((country) =>
+    country.value == result.country.shortName) != -1) {
       setState(() {
-        _address1Controller.text = result.formattedAddress;
-        _cityController.text = result.city.name;
-        _postCodeController.text = result.postalCode;
+        snapshot.data.billingCountry = result.country.shortName;
       });
-      if (snapshot.data.countries.indexWhere((country) =>
-      country.value == result.country.shortName) != -1) {
-        setState(() {
-          snapshot.data.billingCountry = result.country.shortName;
-        });
-        regions = snapshot.data.countries
-            .singleWhere((country) => country.value == result.country.shortName)
-            .regions;
-      } else if (snapshot.data.countries.length != 0) {
-        snapshot.data.billingCountry = snapshot.data.countries.first.value;
-      }
-      if (regions != null) {
-        snapshot.data.billingState =
-        regions.any((z) => z.value == result.administrativeAreaLevel1.shortName) ? result.administrativeAreaLevel1.shortName
-            : regions.first.value;
-      }
+      regions = snapshot.data.countries
+          .singleWhere((country) => country.value == result.country.shortName)
+          .regions;
+    } else if (snapshot.data.countries.length != 0) {
+      snapshot.data.billingCountry = snapshot.data.countries.first.value;
     }
-  }
+    if (regions != null) {
+      snapshot.data.billingState =
+      regions.any((z) => z.value == result.administrativeAreaLevel1.shortName) ? result.administrativeAreaLevel1.shortName
+          : regions.first.value;
+    }
+    }
 }

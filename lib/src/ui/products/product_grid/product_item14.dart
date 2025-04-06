@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api, unused_local_variable
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import '../../../models/app_state_model.dart';
@@ -9,7 +11,7 @@ import 'package:scoped_model/scoped_model.dart';
 
 class ProductGrid extends StatefulWidget {
   final List<Product> products;
-  const ProductGrid({Key key, this.products}) : super(key: key);
+  const ProductGrid({super.key, required this.products});
   @override
   _ProductGridState createState() => _ProductGridState();
 }
@@ -30,9 +32,9 @@ class _ProductGridState extends State<ProductGrid> {
 
 class ProductItem extends StatelessWidget {
   const ProductItem({
-    Key key,
-    @required this.product,
-  }) : super(key: key);
+    super.key,
+    required this.product,
+  });
 
   final Product product;
 
@@ -43,7 +45,7 @@ class ProductItem extends StatelessWidget {
 
     double save = 0;
 
-    if ((product.salePrice != null && product.salePrice != 0)) {
+    if ((product.salePrice != 0)) {
       percentOff = (((product.regularPrice - product.salePrice) / product.regularPrice) * 100).round();
       save = product.regularPrice - product.salePrice;
     }
@@ -56,7 +58,7 @@ class ProductItem extends StatelessWidget {
     return Column(
       children: [
         InkWell(
-          splashColor: Theme.of(context).accentColor.withOpacity(0.1),
+          splashColor: Theme.of(context).colorScheme.secondary.withOpacity(0.1),
           onTap: () {
             onProductClick(context, product);
           },
@@ -68,7 +70,7 @@ class ProductItem extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Container(
+                  SizedBox(
                     width: 120,
                     height: 120,
                     child: CachedNetworkImage(
@@ -109,13 +111,13 @@ class ProductItem extends StatelessWidget {
                               maxLines: 2,
                               style: Theme.of(context)
                                   .textTheme
-                                  .bodyText2
+                                  .bodyMedium!
                                   .copyWith(fontSize: 16),
                             ),
                             SizedBox(height: 8),
                             Container(child: PriceWidget(onSale: onSale, product: product)),
                             SizedBox(height: 8),
-                            save != 0 ? Text('You Save Rs. ' + save.toString(), style: TextStyle(
+                            save != 0 ? Text('You Save Rs. $save', style: TextStyle(
                                 color: Color(0xff00a100)
                             ),) : Container(),
                             ScopedModelDescendant<AppStateModel>(

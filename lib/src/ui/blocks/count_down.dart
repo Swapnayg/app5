@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api, dead_code
+
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -5,12 +7,12 @@ import 'package:flutter/material.dart';
 
 class Countdown extends StatefulWidget {
   const Countdown({
-    Key key,
-    @required this.duration,
-    @required this.builder,
-    this.onFinish,
+    super.key,
+    required this.duration,
+    required this.builder,
+    required this.onFinish,
     this.interval = const Duration(seconds: 1),
-  }) : super(key: key);
+  });
 
   final Duration duration;
   final Duration interval;
@@ -21,8 +23,8 @@ class Countdown extends StatefulWidget {
 }
 
 class _CountdownState extends State<Countdown> {
-  Timer _timer;
-  Duration _duration;
+  late Timer _timer;
+  late Duration _duration;
   @override
   void initState() {
     _duration = widget.duration;
@@ -33,7 +35,7 @@ class _CountdownState extends State<Countdown> {
 
   @override
   void dispose() {
-    _timer?.cancel();
+    _timer.cancel();
     super.dispose();
   }
 
@@ -45,7 +47,7 @@ class _CountdownState extends State<Countdown> {
     setState(() {
       if (_duration.inSeconds == 0) {
         timer.cancel();
-        if (widget.onFinish != null) widget.onFinish();
+        widget.onFinish();
       } else {
         _duration = Duration(seconds: _duration.inSeconds - 1);
       }
@@ -60,13 +62,13 @@ class _CountdownState extends State<Countdown> {
 
 class CountdownFormatted extends StatelessWidget {
   const CountdownFormatted({
-    Key key,
-    @required this.duration,
-    @required this.builder,
-    this.onFinish,
+    super.key,
+    required this.duration,
+    required this.builder,
+    required this.onFinish,
     this.interval = const Duration(seconds: 1),
-    this.formatter,
-  }) : super(key: key);
+    required this.formatter,
+  });
 
   final Duration duration;
   final Duration interval;
@@ -78,7 +80,7 @@ class CountdownFormatted extends StatelessWidget {
   final Widget Function(BuildContext context, String remaining) builder;
 
   Function(Duration) _formatter() {
-    if (formatter != null) return formatter;
+    return formatter;
     if (duration.inHours >= 1) return formatByHours;
     if (duration.inMinutes >= 1) return formatByMinutes;
 

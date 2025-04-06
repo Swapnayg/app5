@@ -15,10 +15,10 @@ class ReviewsPage extends StatefulWidget {
 }
 
 class _ReviewsPageState extends State<ReviewsPage> {
-  Map reviewData = Map<String, dynamic>();
+  Map reviewData = <String, dynamic>{};
   final _formKey = GlobalKey<FormState>();
-  TextEditingController titleController = new TextEditingController();
-  TextEditingController reviewController = new TextEditingController();
+  TextEditingController titleController = TextEditingController();
+  TextEditingController reviewController = TextEditingController();
   AppStateModel appStateModel = AppStateModel();
 
   bool showRatingError = false;

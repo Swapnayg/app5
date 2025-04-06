@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api, dead_code
+
 import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
@@ -9,21 +11,23 @@ import '../../models/category_model.dart';
 import '../products/products.dart';
 
 class Categories2 extends StatefulWidget {
+  const Categories2({super.key});
+
   @override
   _Categories2State createState() => _Categories2State();
 }
 
 class _Categories2State extends State<Categories2> {
 
-  List<Category> mainCategories;
-  List<Category> subCategories;
-  Category selectedCategory;
+  late List<Category> mainCategories;
+  late List<Category> subCategories;
+  late Category selectedCategory;
   int mainCategoryId = 0;
   int selectedCategoryIndex = 0;
   AppStateModel appStateModel = AppStateModel();
 
   void onCategoryClick(Category category) {
-    var filter = new Map<String, dynamic>();
+    var filter = <String, dynamic>{};
     filter['id'] = category.id.toString();
     Navigator.push(
         context,
@@ -38,14 +42,12 @@ class _Categories2State extends State<Categories2> {
       appBar: AppBar(title: Text(appStateModel.blocks.localeText.categories),),
       body: ScopedModelDescendant<AppStateModel>(
         builder: (context, child, model) {
-          if (model.blocks?.categories != null) {
+          mainCategories = model.blocks.categories.where((cat) => cat.parent == 0).toList();
+          selectedCategory = mainCategories[selectedCategoryIndex];
+          subCategories = model.blocks.categories.where((cat) => cat.parent == selectedCategory.id).toList();
 
-            mainCategories = model.blocks.categories.where((cat) => cat.parent == 0).toList();
-            selectedCategory = mainCategories[selectedCategoryIndex];
-            subCategories = model.blocks.categories.where((cat) => cat.parent == selectedCategory.id).toList();
-
-            return buildList();
-          } return Center(child: CircularProgressIndicator());
+          return buildList();
+        return Center(child: CircularProgressIndicator());
         },
       ),
     );
@@ -56,7 +58,7 @@ class _Categories2State extends State<Categories2> {
         itemCount: mainCategories.length,
         padding: EdgeInsets.all(16.0),
         itemBuilder: (BuildContext context, int index) {
-          return new CategoryRow(category: mainCategories[index], onCategoryClick: onCategoryClick);
+          return CategoryRow(category: mainCategories[index], onCategoryClick: onCategoryClick);
         });
   }
 }
@@ -65,7 +67,7 @@ class CategoryRow extends StatelessWidget {
   final Category category;
   final void Function(Category category) onCategoryClick;
 
-  CategoryRow({this.category, this.onCategoryClick});
+  const CategoryRow({super.key, required this.category, required this.onCategoryClick});
 
   @override
   Widget build(BuildContext context) {
@@ -89,7 +91,7 @@ class CategoryRow extends StatelessWidget {
                 children: [
                   Align(
                     alignment: Alignment.topLeft,
-                    child: Container(
+                    child: SizedBox(
                       width: 122,
                       height: 122,
                       child: CachedNetworkImage(
@@ -100,13 +102,13 @@ class CategoryRow extends StatelessWidget {
                           margin: EdgeInsets.all(10.0),
                           shape: StadiumBorder(),
                           child: Ink.image(
+                            image: imageProvider,
+                            fit: BoxFit.cover,
                             child: InkWell(
                               onTap: () {
                                 onCategoryClick(category);
                               },
                             ),
-                            image: imageProvider,
-                            fit: BoxFit.cover,
                           ),
                         ),
                         placeholder: (context, url) => Card(
@@ -170,7 +172,7 @@ class CategoryRow extends StatelessWidget {
                               child: Container(
                                 margin: EdgeInsets.only(top: 4),
                                 child: Text(
-                                  category.count.toString() + ' Items',
+                                  '${category.count} Items',
                                   style: TextStyle(
                                     color:Theme.of(context).hintColor,
                                     fontSize: 15,

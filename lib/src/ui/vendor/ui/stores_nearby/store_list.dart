@@ -89,7 +89,7 @@ class _StoreCardState extends State<StoreCard> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            Container(
+            SizedBox(
               height: 140,
               width: 100,
                 child: ClipRRect(
@@ -100,7 +100,7 @@ class _StoreCardState extends State<StoreCard> {
               flex: 6,
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(16,8,16,0),
-                child: Container(
+                child: SizedBox(
                   height: 140,
                   child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,

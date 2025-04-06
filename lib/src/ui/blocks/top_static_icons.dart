@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api, unused_local_variable
+
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
 
@@ -10,7 +12,7 @@ import '../../ui/accounts/wishlist.dart';
 import '../../ui/products/products.dart';
 import '../../ui/vendor/ui/stores/stores.dart';
 class TopStaticIcons extends StatefulWidget {
-  TopStaticIcons({Key key}) : super(key: key);
+  const TopStaticIcons({super.key});
   @override
   _TopStaticIconsState createState() => _TopStaticIconsState();
 }
@@ -18,7 +20,7 @@ class TopStaticIcons extends StatefulWidget {
 class _TopStaticIconsState extends State<TopStaticIcons> {
   @override
   Widget build(BuildContext context) {
-    TextStyle labelstyel = Theme.of(context).textTheme.bodyText1.copyWith(
+    TextStyle labelstyel = Theme.of(context).textTheme.bodyLarge!.copyWith(
       fontSize: 10,
     );
     final bool isDesktop = isDisplayDesktop(context);
@@ -71,7 +73,7 @@ class _TopStaticIconsState extends State<TopStaticIcons> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => Stores()));
+                            builder: (context) => Stores(key: UniqueKey(), filter: {})));
                   },
                   child: Column(
                     children: [
@@ -95,7 +97,7 @@ class _TopStaticIconsState extends State<TopStaticIcons> {
                   borderRadius: BorderRadius.circular(8)),
               child: InkWell(
                   onTap: () {
-                    var filter = new Map<String, dynamic>();
+                    var filter = <String, dynamic>{};
                     Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -127,7 +129,7 @@ class _TopStaticIconsState extends State<TopStaticIcons> {
                       borderRadius: BorderRadius.circular(8)),
                   child: InkWell(
                       onTap: () {
-                        if (model.user?.id != null && model.user.id > 0) {
+                        if (model.user.id != null && model.user.id > 0) {
                           Navigator.push(
                               context,
                               MaterialPageRoute(

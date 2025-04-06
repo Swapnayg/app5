@@ -55,7 +55,7 @@ class _ProductItemState extends State<ProductItem> {
           Container(
             padding: EdgeInsets.all(10.0),
             height: 130,
-            child: new ListTile(
+            child: ListTile(
                 leading: AspectRatio(
                   aspectRatio: 18.0 / 20,
                   child: Image.network(
@@ -65,7 +65,7 @@ class _ProductItemState extends State<ProductItem> {
                 ),
                 
 
-                title: new Text(
+                title: Text(
                   widget.product.name,
                 ),
                 subtitle: Column(

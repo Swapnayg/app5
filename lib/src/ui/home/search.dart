@@ -1,6 +1,8 @@
+// ignore_for_file: library_private_types_in_public_api, unnecessary_null_comparison, curly_braces_in_flow_control_structures, avoid_unnecessary_containers
+
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:flutter_icons/flutter_icons.dart';
+import 'package:flutter_font_icons/flutter_font_icons.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../../models/app_state_model.dart';
 import '../../blocs/search_bloc.dart';
@@ -11,7 +13,7 @@ class Search extends StatefulWidget {
   final Map<String, dynamic> filter;
   final SearchBloc searchBloc = SearchBloc();
 
-  Search({Key key, this.filter}) : super(key: key);
+  Search({super.key, required this.filter});
 
   @override
   _SearchState createState() => _SearchState();
@@ -21,17 +23,15 @@ class _SearchState extends State<Search> {
 
   AppStateModel appStateModel = AppStateModel();
 
-  ScrollController _scrollController = new ScrollController();
-  TextEditingController inputController = new TextEditingController();
-  Timer _debounce;
+  final ScrollController _scrollController = ScrollController();
+  TextEditingController inputController = TextEditingController();
+  late Timer _debounce;
 
   @override
   void initState() {
-    _debounce != null ?? _debounce.cancel();
-    if(widget.filter != null) {
-      widget.searchBloc.filter = widget.filter;
-    }
-    _scrollController.addListener(() {
+    _debounce != null;
+    widget.searchBloc.filter = widget.filter;
+      _scrollController.addListener(() {
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent && widget.searchBloc.moreItems) {
         widget.searchBloc.loadMoreSearchResults(inputController.text);
@@ -43,12 +43,12 @@ class _SearchState extends State<Search> {
 
   @override
   void dispose() {
-    _debounce != null ?? _debounce.cancel();
+    _debounce != null;
     super.dispose();
   }
 
   _onSearchChanged() {
-    if (_debounce?.isActive ?? false) _debounce.cancel();
+    if (_debounce.isActive) _debounce.cancel();
     _debounce = Timer(const Duration(milliseconds: 300), () {
       if(inputController.text.isNotEmpty) {
         widget.searchBloc.fetchSearchResults(inputController.text);
@@ -108,8 +108,8 @@ class _SearchState extends State<Search> {
                             inputController.clear();
                             setState(() {});
                           },
-                          child: Icon(FlutterIcons.ios_close_ion, size: 16, color: Theme.of(context).hintColor,)
-                      ) : Container(
+                          child: Icon(Icons.close, size: 16, color: Theme.of(context).hintColor,)
+                      ) : SizedBox(
                         width: 4,
                         height: 4,
                       ),
@@ -124,7 +124,7 @@ class _SearchState extends State<Search> {
             Container(
               child: InkWell(
                 onTap: Navigator.of(context).pop,
-                child: Text(appStateModel.blocks.localeText.cancel, style: Theme.of(context).primaryTextTheme.bodyText2.copyWith(
+                child: Text(appStateModel.blocks.localeText.cancel, style: Theme.of(context).primaryTextTheme.bodyMedium!.copyWith(
                   color: Theme.of(context).hintColor,//Theme.of(context).primaryIconTheme.color,//Theme.of(context).hintColor,
                 )),
               ),
@@ -138,15 +138,15 @@ class _SearchState extends State<Search> {
           return StreamBuilder<List<Product>>(
             stream: widget.searchBloc.searchResults,
             builder: (context, AsyncSnapshot<List<Product>> snapshot) {
-              if(snapshotLoading.hasData && snapshotLoading.data) {
+              if(snapshotLoading.hasData && snapshotLoading.data == true) {
                 return Center(child: CircularProgressIndicator());
               }
               else if(snapshot.hasData && inputController.text.isNotEmpty) {
-                if(snapshot.data.length == 0) {
+                if(snapshot.data?.length == 0) {
                   return Center(child: Text(appStateModel.blocks.localeText.noResults,));
                 }
                 return buildProductList(snapshot, context);
-              } else if(snapshot.hasData && snapshot.data.length == 0) {
+              } else if(snapshot.hasData && snapshot.data!.length == 0) {
                 return Center(
                     child: Text('Please type something to search')
                 );
@@ -168,7 +168,9 @@ class _SearchState extends State<Search> {
           builder: (context, AsyncSnapshot<bool> snapshot) {
             if(snapshot.hasData && snapshot.data == true) {
               return SliverToBoxAdapter(child: Center(child: CircularProgressIndicator()));
-            } else return SliverToBoxAdapter(child: Container());
+            } else {
+              return SliverToBoxAdapter(child: Container());
+            }
           },
         )
       ],

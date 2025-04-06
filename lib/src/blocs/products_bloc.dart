@@ -16,7 +16,7 @@ class ProductsBloc {
   final _hasMoreItemsFetcher = BehaviorSubject<bool>();
   final _isLoadingProductsFetcher = BehaviorSubject<bool>();
 
-  ProductsBloc() : products = Map() {}
+  ProductsBloc() : products = <String, List<Product>>{};
 
   //String search="";
 

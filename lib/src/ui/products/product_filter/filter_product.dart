@@ -1,3 +1,5 @@
+// ignore_for_file: use_super_parameters, library_private_types_in_public_api
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -16,11 +18,11 @@ class FilterProduct extends StatefulWidget {
   final List<Category> categories;
   final Function onSelectSubcategory;
 
-  FilterProduct(
-      {Key key,
-      this.productsBloc,
-      this.categories,
-      this.onSelectSubcategory})
+  const FilterProduct(
+      {Key? key,
+      required this.productsBloc,
+      required this.categories,
+      required this.onSelectSubcategory})
       : super(key: key);
 
   @override
@@ -28,9 +30,9 @@ class FilterProduct extends StatefulWidget {
 }
 
 class _FilterProductState extends State<FilterProduct> {
-  ScrollController _scrollController = new ScrollController();
+  final ScrollController _scrollController = ScrollController();
 
-  var filter = new Map<String, dynamic>();
+  var filter = <String, dynamic>{};
   final appStateModel = AppStateModel();
 
   @override
@@ -68,7 +70,7 @@ class _FilterProductState extends State<FilterProduct> {
                 right: 10.0,
                 child: SizedBox(
                   width: 80.0,
-                  child: RaisedButton(
+                  child: ElevatedButton(
                     child: Text(appStateModel.blocks.localeText.apply),
                     onPressed: () {
                       widget.productsBloc.applyFilter(int.parse(widget.productsBloc.productsFilter['id']), appStateModel.selectedRange.start, appStateModel.selectedRange.end);
@@ -78,7 +80,7 @@ class _FilterProductState extends State<FilterProduct> {
                 ),
               ),
             ]);
-          } else if (snapshot.hasData && snapshot.data.length == 0) {
+          } else if (snapshot.hasData && snapshot.data!.length == 0) {
             return Container();
           } else {
             return Center(
@@ -91,7 +93,7 @@ class _FilterProductState extends State<FilterProduct> {
   }
 
   buildFilterList(AsyncSnapshot<List<AttributesModel>> snapshot) {
-    List<Widget> list = new List<Widget>();
+    List<Widget> list = [];
 
     /*if (widget.subcategories.length != 0) {
       list.add(buildHeader('Categories'));
@@ -101,9 +103,9 @@ class _FilterProductState extends State<FilterProduct> {
     list.add(buildHeader('Price'));
     list.add(priceSlider());
 
-    for (var i = 0; i < snapshot.data.length; i++) {
-      if (snapshot.data[i].terms.length != 0) {
-        list.add(buildHeader(snapshot.data[i].name));
+    for (var i = 0; i < snapshot.data!.length; i++) {
+      if (snapshot.data![i].terms.length != 0) {
+        list.add(buildHeader(snapshot.data![i].name));
         list.add(buildFilter(snapshot, i));
       }
     }
@@ -128,7 +130,7 @@ class _FilterProductState extends State<FilterProduct> {
                 max: appStateModel.blocks.maxPrice.toDouble(),
                 divisions: appStateModel.maxPrice.toInt(),
                 values: appStateModel.selectedRange,
-                labels: RangeLabels('${formatter.format(appStateModel.selectedRange.start)}', '${formatter.format(appStateModel.selectedRange.end)}'),
+                labels: RangeLabels(formatter.format(appStateModel.selectedRange.start), formatter.format(appStateModel.selectedRange.end)),
                 onChanged: (RangeValues newRange) {
                   appStateModel.updateRangeValue(newRange);
                   setState(() {
@@ -141,8 +143,8 @@ class _FilterProductState extends State<FilterProduct> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  Text('${formatter.format(appStateModel.selectedRange.start)}'),
-                  Text('${formatter.format(appStateModel.selectedRange.end)}'),
+                  Text(formatter.format(appStateModel.selectedRange.start)),
+                  Text(formatter.format(appStateModel.selectedRange.end)),
                 ],
               ),
             )
@@ -160,17 +162,19 @@ class _FilterProductState extends State<FilterProduct> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
             Checkbox(
-              value: snapshot.data[filterIndex].terms[index].selected,
-              onChanged: (bool value) {
-                setState(() {
-                  snapshot.data[filterIndex].terms[index].selected = value;
-                });
+              value: snapshot.data![filterIndex].terms[index].selected,
+              onChanged: (bool? value) {
+                if (value != null) {
+                  setState(() {
+                    snapshot.data![filterIndex].terms[index].selected = value;
+                  });
+                }
               },
             ),
-            Text(snapshot.data[filterIndex].terms[index].name),
+            Text(snapshot.data![filterIndex].terms[index].name),
           ],
         );
-      }, childCount: snapshot.data[filterIndex].terms.length),
+      }, childCount: snapshot.data![filterIndex].terms.length),
     );
   }
 
@@ -178,16 +182,16 @@ class _FilterProductState extends State<FilterProduct> {
     return SliverPadding(
       padding: EdgeInsets.all(16.0),
       sliver: SliverGrid(
-        gridDelegate: new SliverGridDelegateWithMaxCrossAxisExtent(
+        gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
           maxCrossAxisExtent: 110.0,
           mainAxisSpacing: 10.0,
           crossAxisSpacing: 10.0,
           childAspectRatio: 3.5,
         ),
         delegate:
-            new SliverChildBuilderDelegate((BuildContext context, int index) {
+            SliverChildBuilderDelegate((BuildContext context, int index) {
           return Container(
-            child: RaisedButton(
+            child: ElevatedButton(
               onPressed: () {
                 widget.onSelectSubcategory(widget.categories[index].id);
                 Navigator.pop(context);

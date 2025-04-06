@@ -98,7 +98,7 @@ class _AddVariationsState extends State<AddVariations> {
           padding: EdgeInsets.all(0.0),
           sliver: SliverList(
               delegate: SliverChildListDelegate([
-                Container(
+                SizedBox(
                     height: 60,
                     child: StreamBuilder<bool>(
                         stream: widget.vendorBloc.hasMoreProductsStream,

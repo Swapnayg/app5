@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api, dead_code, unnecessary_null_comparison
+
 import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
@@ -9,20 +11,22 @@ import '../../models/category_model.dart';
 import '../products/products.dart';
 
 class Categories6 extends StatefulWidget {
+  const Categories6({super.key});
+
   @override
   _Categories6State createState() => _Categories6State();
 }
 
 class _Categories6State extends State<Categories6> {
-  List<Category> mainCategories;
-  List<Category> subCategories;
-  Category selectedCategory;
+  late List<Category> mainCategories;
+  late List<Category> subCategories;
+  late Category selectedCategory;
   int mainCategoryId = 0;
   int selectedCategoryIndex = 0;
   AppStateModel appStateModel = AppStateModel();
 
   void onCategoryClick(Category category) {
-    var filter = new Map<String, dynamic>();
+    var filter = <String, dynamic>{};
     filter['id'] = category.id.toString();
     Navigator.push(
         context,
@@ -39,18 +43,16 @@ class _Categories6State extends State<Categories6> {
       ),
       body: ScopedModelDescendant<AppStateModel>(
         builder: (context, child, model) {
-          if (model.blocks?.categories != null) {
-            mainCategories = model.blocks.categories
-                .where((cat) => cat.parent == 0)
-                .toList();
-            selectedCategory = mainCategories[selectedCategoryIndex];
-            subCategories = model.blocks.categories
-                .where((cat) => cat.parent == selectedCategory.id)
-                .toList();
+          mainCategories = model.blocks.categories
+              .where((cat) => cat.parent == 0)
+              .toList();
+          selectedCategory = mainCategories[selectedCategoryIndex];
+          subCategories = model.blocks.categories
+              .where((cat) => cat.parent == selectedCategory.id)
+              .toList();
 
-            return buildList();
-          }
-          return Center(child: CircularProgressIndicator());
+          return buildList();
+                  return Center(child: CircularProgressIndicator());
         },
       ),
     );
@@ -81,7 +83,7 @@ class CategoryRow extends StatelessWidget {
   final Category category;
   final void Function(Category category) onCategoryClick;
 
-  CategoryRow({this.category, this.onCategoryClick});
+  const CategoryRow({super.key, required this.category, required this.onCategoryClick});
 
   @override
   Widget build(BuildContext context) {
@@ -107,37 +109,37 @@ class CategoryRow extends StatelessWidget {
       elevation: 0,
       child: InkWell(
         onTap: () => _detail(category, context),
-        child: new Column(
+        child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Stack(
               children: [
-                Container(
+                SizedBox(
                   height: 170,
                   child: featuredImage,
                 ),
-                Container(
+                SizedBox(
                   height: 170,
-                  child: new BackdropFilter(
-                    filter: new ImageFilter.blur(sigmaX: 0.0, sigmaY: 0.0),
-                    child: new Container(
-                      decoration: new BoxDecoration(
-                        gradient: new LinearGradient(
+                  child: BackdropFilter(
+                    filter: ImageFilter.blur(sigmaX: 0.0, sigmaY: 0.0),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
                             colors: [Colors.black54, Colors.black38],
                             begin: Alignment.bottomCenter,
-                            end: new Alignment(0.0, 0.0),
+                            end: Alignment(0.0, 0.0),
                             tileMode: TileMode.clamp),
                       ),
                     ),
                   ),
                 ),
-                Container(
+                SizedBox(
                   height: 170,
                   child: Center(
-                    child: new Text(category.name,
+                    child: Text(category.name,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
-                        style: new TextStyle(
+                        style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 24.0,
                             color: Colors.white)),
@@ -152,7 +154,7 @@ class CategoryRow extends StatelessWidget {
   }
 
   _detail(Category, BuildContext context) {
-    var filter = new Map<String, dynamic>();
+    var filter = <String, dynamic>{};
     filter['id'] = category.id.toString();
     Navigator.push(
         context,

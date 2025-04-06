@@ -107,8 +107,7 @@ class _VendorOrderListState extends State<VendorOrderList> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
                              Text(
-                               "ORDER" +
-                                    '-' +
+                               "ORDER" '-' +
                                     snapshot.data![index].number.toString(),
                                 style: Theme.of(context).textTheme.bodyLarge,
                               ),

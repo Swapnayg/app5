@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api, unnecessary_null_comparison, deprecated_member_use
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
@@ -13,7 +15,7 @@ class VendorCategoryScrollList extends StatefulWidget {
   final Block block;
   final List<Category> categories;
   final Function onCategoryClick;
-  VendorCategoryScrollList({Key key, this.block, this.categories, this.onCategoryClick}) : super(key: key);
+  const VendorCategoryScrollList({super.key, required this.block, required this.categories, required this.onCategoryClick});
   @override
   _VendorCategoryScrollListState createState() => _VendorCategoryScrollListState();
 }
@@ -94,12 +96,12 @@ class _VendorCategoryScrollListState extends State<VendorCategoryScrollList> {
                                             child: widget.categories[index].image != null ? CachedNetworkImage(
                                               imageUrl: widget.categories[index].image,
                                               imageBuilder: (context, imageProvider) => Ink.image(
+                                                image: imageProvider,
+                                                fit: BoxFit.cover,
                                                 child: InkWell(
                                                   splashColor: HexColor(widget.block.bgColor).withOpacity(0.1),
                                                   onTap: () => widget.onCategoryClick(widget.categories[index], widget.categories),
                                                 ),
-                                                image: imageProvider,
-                                                fit: BoxFit.cover,
                                               ),
                                               placeholder: (context, url) =>
                                                   Container(color: HexColor(widget.block.bgColor).withOpacity(0.5)),
@@ -108,9 +110,9 @@ class _VendorCategoryScrollListState extends State<VendorCategoryScrollList> {
                                         ),
                                         Expanded(
                                           child: Center(
-                                            child: new Text(
+                                            child: Text(
                                               parseHtmlString(widget.categories[index].name),
-                                              style: Theme.of(context).textTheme.display3,
+                                              style: Theme.of(context).textTheme.displayMedium,
                                               maxLines: 1,
                                               textAlign: TextAlign.center,
                                             ),
@@ -133,7 +135,7 @@ class VendorCategoryScrollStadiumList extends StatefulWidget {
   final Block block;
   final List<Category> categories;
   final Function onCategoryClick;
-  VendorCategoryScrollStadiumList({Key key, this.block, this.categories, this.onCategoryClick}) : super(key: key);
+  const VendorCategoryScrollStadiumList({super.key, required this.block, required this.categories, required this.onCategoryClick});
   @override
   _VendorCategoryScrollStadiumListState createState() => _VendorCategoryScrollStadiumListState();
 }
@@ -211,12 +213,12 @@ class _VendorCategoryScrollStadiumListState extends State<VendorCategoryScrollSt
                                                 child: widget.categories[index].image != null ? CachedNetworkImage(
                                                   imageUrl: widget.categories[index].image,
                                                   imageBuilder: (context, imageProvider) => Ink.image(
+                                                    image: imageProvider,
+                                                    fit: BoxFit.cover,
                                                     child: InkWell(
                                                       splashColor: HexColor(widget.block.bgColor).withOpacity(0.1),
                                                       onTap: () => widget.onCategoryClick(widget.categories[index], widget.categories),
                                                     ),
-                                                    image: imageProvider,
-                                                    fit: BoxFit.cover,
                                                   ),
                                                   placeholder: (context, url) =>
                                                       Container(color: HexColor(widget.block.bgColor).withOpacity(0.5)),
@@ -228,12 +230,12 @@ class _VendorCategoryScrollStadiumListState extends State<VendorCategoryScrollSt
                                       )),
                                   Padding(
                                     padding: const EdgeInsets.all(8.0),
-                                    child: new Text(
+                                    child: Text(
                                       parseHtmlString(widget.categories[index].name),
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
                                       textAlign: TextAlign.center,
-                                      style: Theme.of(context).textTheme.headline1,
+                                      style: Theme.of(context).textTheme.displayLarge,
                                     ),
                                   ),
                                 ],

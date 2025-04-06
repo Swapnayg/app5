@@ -1,8 +1,10 @@
+// ignore_for_file: use_super_parameters, library_private_types_in_public_api, no_logic_in_create_state, unnecessary_null_comparison, prefer_interpolation_to_compose_strings
+
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
-import 'package:flutter_icons/flutter_icons.dart';
+import 'package:flutter_font_icons/flutter_font_icons.dart';
 import 'package:html/dom.dart' as dom;
-import 'package:share/share.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:url_launcher/url_launcher.dart';
 
@@ -14,32 +16,30 @@ import '../checkout/webview.dart';
 class PostDetail extends StatefulWidget {
   final Post post;
   final PostDetailBloc bloc = PostDetailBloc();
-  PostDetail({Key key, this.post}) : super(key: key);
+  PostDetail({Key? key, required this.post}) : super(key: key);
 
   @override
   _PostDetailState createState() => _PostDetailState(post: post);
 }
 
 class _PostDetailState extends State<PostDetail> {
-  ScrollController _scrollController = new ScrollController();
+  final ScrollController _scrollController = ScrollController();
 
   final Post post;
 
-  _PostDetailState({this.post});
+  _PostDetailState({required this.post});
 
-  TextEditingController emailController = new TextEditingController();
+  TextEditingController emailController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    if (this.post.title != null) {
-      widget.bloc.addPost(this.post);
-    }
-    widget.bloc.postId.add(this.post.id);
+    widget.bloc.addPost(post);
+      widget.bloc.postId.add(post.id);
     _scrollController.addListener(() {
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {
-        widget.bloc.fetchMoreComments(this.post.id);
+        widget.bloc.fetchMoreComments(post.id);
       }
     });
   }
@@ -51,24 +51,21 @@ class _PostDetailState extends State<PostDetail> {
         title: StreamBuilder<Post>(
             stream: widget.bloc.post,
             builder: (context, snapshot) {
-              return snapshot.hasData ? Text(snapshot.data.title.rendered) : Container();
+              return snapshot.hasData ? Text(snapshot.data!.title.rendered) : Container();
             }),
         
       ),
       body: StreamBuilder<Post>(
           stream: widget.bloc.post,
           builder: (context, snapshot) {
-            var height;
+            double height = 0; // Initialize with a default value
             if (snapshot.hasData) {
               double width = MediaQuery.of(context).size.width;
-              double aspectRatio = snapshot.data.featuredDetails != null
-                  ? snapshot.data.featuredDetails.height /
-                      snapshot.data.featuredDetails.width
+              double aspectRatio = snapshot.data!.featuredDetails != null
+                  ? snapshot.data!.featuredDetails.height /
+                      snapshot.data!.featuredDetails.width
                   : 1;
-              if (snapshot.data.featuredUrl == null) {
-                height = 0.0;
-              } else
-                height = (aspectRatio * width);
+              height = (aspectRatio * width);
             } else if(snapshot.hasError) {
               return Center(
                   child: Text('Nothing to show')
@@ -94,9 +91,9 @@ class _PostDetailState extends State<PostDetail> {
 
   shareFun(AsyncSnapshot<Post> snapshot) {
     Share.share('Checkout this Article ' +
-        snapshot.data.title.rendered +
+        snapshot.data!.title.rendered +
         "  " +
-        snapshot.data.link.toString());
+        snapshot.data!.link.toString());
   }
 
   CustomScrollView buildLayout1(
@@ -135,7 +132,7 @@ class _PostDetailState extends State<PostDetail> {
               Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Text(
-                  snapshot.data.title.rendered,
+                  snapshot.data!.title.rendered,
                   //style: Styles.title1,
                   style: TextStyle(fontSize: 36.0, fontWeight: FontWeight.bold),
                 ),
@@ -169,31 +166,32 @@ class _PostDetailState extends State<PostDetail> {
               Padding(
                 padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 16.0),
                 child: Text(
-                  timeago.format(snapshot.data.date),
+                  timeago.format(snapshot.data!.date),
                   //style: Styles.title3
                   style: TextStyle(
                       fontSize: 12.0,
-                      color: Theme.of(context).textTheme.caption.color),
+                      color: Theme.of(context).textTheme.bodySmall!.color),
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 16.0),
                 child: Html(
-                  data: snapshot.data.content.rendered,
+                  data: snapshot.data!.content.rendered,
                   //Optional parameters:
-                  onLinkTap: (url) async {
-                    if (url.contains('https://wa.me')) {
-                      if (await canLaunch(url)) {
-                        await launch(url);
-                      } else {
-                        throw 'Could not launch $url';
-                      }
-                    } else
-                      openWebView(url);
-                  },
-                  onImageTap: (src) {
-                    //
-                  },
+                  // onLinkTap: (url) async {
+                  //   if (url.contains('https://wa.me')) {
+                  //     if (await canLaunch(url)) {
+                  //       await launch(url);
+                  //     } else {
+                  //       throw 'Could not launch $url';
+                  //     }
+                  //   } else {
+                  //     openWebView(url);
+                  //   }
+                  // },
+                  // onImageTap: (src) {
+                  //   //
+                  // },
                 ),
               ),
               StreamBuilder(
@@ -238,11 +236,11 @@ class _PostDetailState extends State<PostDetail> {
                 child: Row(
                   children: <Widget>[
                     Text(
-                      timeago.format(snapshot.data.date),
+                      timeago.format(snapshot.data!.date),
                       style: TextStyle(
                           fontSize: 16.0,
                           fontWeight: FontWeight.w500,
-                          color: Theme.of(context).textTheme.caption.color),
+                          color: Theme.of(context).textTheme.bodySmall!.color),
                     ),
                   ],
                 ),
@@ -250,7 +248,7 @@ class _PostDetailState extends State<PostDetail> {
               Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Text(
-                  snapshot.data.title.rendered,
+                  snapshot.data!.title.rendered,
                   style: TextStyle(fontSize: 36.0, fontWeight: FontWeight.bold),
                 ),
               ),
@@ -261,7 +259,7 @@ class _PostDetailState extends State<PostDetail> {
                     CircleAvatar(
                       radius: 20.0,
                       backgroundImage:
-                          NetworkImage(snapshot.data.authorDetails.avatar),
+                          NetworkImage(snapshot.data!.authorDetails.avatar),
                     ),
                     SizedBox(
                       width: 16.0,
@@ -269,7 +267,7 @@ class _PostDetailState extends State<PostDetail> {
                     Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          Text('By ' + snapshot.data.authorDetails.name,
+                          Text('By ${snapshot.data!.authorDetails.name}',
                               style: TextStyle(
                                   fontSize: 16.0, fontWeight: FontWeight.w400)),
                         ]),
@@ -278,32 +276,33 @@ class _PostDetailState extends State<PostDetail> {
               ),
               Padding(
                 padding: const EdgeInsets.all(0.0),
-                child: snapshot.data.featuredUrl != null
-                    ? Image.network(snapshot.data.featuredUrl)
+                child: snapshot.data!.featuredUrl != null
+                    ? Image.network(snapshot.data!.featuredUrl)
                     : null,
               ),
               Padding(
                 padding: const EdgeInsets.all(16.0),
-                child: Html(data: snapshot.data.excerpt.rendered),
+                child: Html(data: snapshot.data!.excerpt.rendered),
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 16.0),
                 child: Html(
-                  data: snapshot.data.content.rendered,
+                  data: snapshot.data!.content.rendered,
                   //Optional parameters:
-                  onLinkTap: (url) async {
-                    if (url.contains('https://wa.me')) {
-                      if (await canLaunch(url)) {
-                        await launch(url);
-                      } else {
-                        throw 'Could not launch $url';
-                      }
-                    } else
-                      openWebView(url);
-                  },
-                  onImageTap: (src) {
-                    //
-                  },
+                  // onLinkTap: (url) async {
+                  //   if (url.contains('https://wa.me')) {
+                  //     if (await canLaunch(url)) {
+                  //       await launch(url);
+                  //     } else {
+                  //       throw 'Could not launch $url';
+                  //     }
+                  //   } else {
+                  //     openWebView(url);
+                  //   }
+                  // },
+                  // onImageTap: (src) {
+                  //   //
+                  // },
                 ),
               ),
               StreamBuilder(
@@ -324,7 +323,7 @@ class _PostDetailState extends State<PostDetail> {
   }
 
   Widget buildList(AsyncSnapshot<CommentsModel> snapshot) {
-    Iterable<Widget> listTiles = snapshot.data.comments
+    Iterable<Widget> listTiles = snapshot.data!.comments
         .map<Widget>((Comment item) => buildListTile(context, item));
     listTiles = ListTile.divideTiles(context: context, tiles: listTiles);
 
@@ -333,13 +332,13 @@ class _PostDetailState extends State<PostDetail> {
         Column(
           children: listTiles.toList(),
         ),
-        Container(
+        SizedBox(
             height: 60,
             child: StreamBuilder(
                 stream: widget.bloc.hasMoreCommets,
                 builder: (context, AsyncSnapshot<bool> snapshot) {
                   return snapshot.hasData && snapshot.data == false
-                      ? Center(child: Icon(FlutterIcons.document_ent, size: 150, color: Theme.of(context).focusColor,))
+                      ? Center(child: Icon(Icons.insert_drive_file, size: 150, color: Theme.of(context).focusColor,))
                       : Container();
                 }
                 //child: Center(child: CircularProgressIndicator())
@@ -358,7 +357,7 @@ class _PostDetailState extends State<PostDetail> {
             children: <Widget>[
               CircleAvatar(
                 radius: 20.0,
-                backgroundImage: NetworkImage(comment.authorAvatarUrls['96']),
+                backgroundImage: NetworkImage(comment.authorAvatarUrls['96']!),
               ),
               SizedBox(
                 width: 16.0,
@@ -372,7 +371,7 @@ class _PostDetailState extends State<PostDetail> {
                     Text(timeago.format(comment.date),
                         style: TextStyle(
                             fontSize: 12.0,
-                            color: Theme.of(context).textTheme.caption.color))
+                            color: Theme.of(context).textTheme.bodySmall!.color))
                   ]),
             ],
           ),
@@ -396,7 +395,7 @@ class _PostDetailState extends State<PostDetail> {
     hexColor = hexColor.toUpperCase().replaceAll('#', '');
 
     if (hexColor.length == 6) {
-      hexColor = 'FF' + hexColor;
+      hexColor = 'FF$hexColor';
     }
 
     return Color(int.parse(hexColor, radix: 16));

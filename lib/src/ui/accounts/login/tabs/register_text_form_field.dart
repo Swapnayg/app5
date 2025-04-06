@@ -12,7 +12,7 @@ class CustomTextFormField extends StatelessWidget {
   FormFieldSetter onSaved;
 
   CustomTextFormField(
-      {this.label,
+      {super.key, this.label,
       this.validationMsg,
       this.controller,
       this.icon,

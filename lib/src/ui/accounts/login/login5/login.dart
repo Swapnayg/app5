@@ -16,6 +16,8 @@ import '../../../color_override.dart';
 import 'theme_override.dart';
 
 class Login5 extends StatefulWidget {
+  const Login5({super.key});
+
   @override
   _Login5State createState() => _Login5State();
 }
@@ -25,11 +27,11 @@ class _Login5State extends State<Login5> {
   final GoogleSignIn _googleSignIn = GoogleSignIn();
   final appStateModel = AppStateModel();
   final _formKey = GlobalKey<FormState>();
-  var formData = new Map<String, dynamic>();
-  TextEditingController usernameController = new TextEditingController();
-  TextEditingController passwordController = new TextEditingController();
+  var formData = Map<String, dynamic>();
+  TextEditingController usernameController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
   final RoundedLoadingButtonController _btnController =
-  new RoundedLoadingButtonController();
+  RoundedLoadingButtonController();
 
   @override
   Widget build(BuildContext context) {
@@ -46,18 +48,18 @@ class _Login5State extends State<Login5> {
             body: Builder(
                 builder: (context) => Stack(
                 children: [
-                  Container(
+                  SizedBox(
                     height: MediaQuery.of(context).size.height,
                     width: MediaQuery.of(context).size.width,
                     child: CustomPaint(
                       painter: CurvePainter2(color: Theme.of(context).primaryColor),
                     ),
                   ),
-                  Container(
+                  SizedBox(
                     height: MediaQuery.of(context).size.height,
                     width: MediaQuery.of(context).size.width,
                     child: CustomPaint(
-                      painter: CurvePainter(color: Theme.of(context).backgroundColor),
+                      painter: CurvePainter(color: Theme.of(context).colorScheme.background),
                     ),
                   ),
                   Container(
@@ -69,10 +71,10 @@ class _Login5State extends State<Login5> {
                           SizedBox(
                             height: height * 0.10,
                           ),
-                          Text('Welcome Back!', style: Theme.of(context).textTheme.headline6.copyWith(
+                          Text('Welcome Back!', style: Theme.of(context).textTheme.titleLarge.copyWith(
                               fontSize: 32
                           )),
-                          Text('Sign in to your account', style: Theme.of(context).textTheme.caption.copyWith(
+                          Text('Sign in to your account', style: Theme.of(context).textTheme.bodySmall.copyWith(
                               fontSize: 14
                           )),
                           SizedBox(
@@ -121,7 +123,6 @@ class _Login5State extends State<Login5> {
                             color: Theme.of(context).buttonColor,
                             elevation: 0,
                             valueColor: Theme.of(context).buttonTheme.colorScheme.onPrimary,
-                            child: Text(appStateModel.blocks.localeText.signIn),
                             controller: _btnController,
                             onPressed: () {
                               if(_formKey.currentState.validate()) {
@@ -131,6 +132,7 @@ class _Login5State extends State<Login5> {
                             },
                             animateOnTap: false,
                             width: MediaQuery.of(context).size.width - 34,
+                            child: Text(appStateModel.blocks.localeText.signIn),
                           ),
                           SizedBox(height: 10.0),
                           FlatButton(
@@ -145,7 +147,7 @@ class _Login5State extends State<Login5> {
                                   Text(
                                       appStateModel.blocks.localeText
                                           .dontHaveAnAccount,
-                                      style: Theme.of(context).textTheme.bodyText2.copyWith(
+                                      style: Theme.of(context).textTheme.bodyMedium.copyWith(
                                           fontSize: 15,
                                           color: Colors.white
                                       )),
@@ -154,7 +156,7 @@ class _Login5State extends State<Login5> {
                                     const EdgeInsets.symmetric(horizontal: 8.0),
                                     child: Text(
                                         appStateModel.blocks.localeText.signUp,
-                                        style: Theme.of(context).textTheme.bodyText2.copyWith(color: Colors.white,fontWeight: FontWeight.w500)),
+                                        style: Theme.of(context).textTheme.bodyMedium.copyWith(color: Colors.white,fontWeight: FontWeight.w500)),
                                   ),
                                 ],
                               )),
@@ -169,7 +171,7 @@ class _Login5State extends State<Login5> {
                                 children: [
                                   Text(
                                       appStateModel.blocks.localeText.forgotPassword,
-                                      style: Theme.of(context).textTheme.bodyText2.copyWith(
+                                      style: Theme.of(context).textTheme.bodyMedium.copyWith(
                                           fontSize: 15,
                                           color: Colors.white,
                                           fontWeight: FontWeight.w500
@@ -183,14 +185,14 @@ class _Login5State extends State<Login5> {
                               children: <Widget>[
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
-                                  child: Container(
+                                  child: SizedBox(
                                     height: 50.0, // height of the button
                                     width: 50.0,
                                     child: Card(
                                       shape: StadiumBorder(),
                                       margin: EdgeInsets.all(0),
                                       color: Color(0xFFEA4335),
-                                      child: Container(
+                                      child: SizedBox(
                                         height: 50,
                                         width: 50,
                                         child: Center(
@@ -217,7 +219,7 @@ class _Login5State extends State<Login5> {
                                     shape: StadiumBorder(),
                                     margin: EdgeInsets.all(0),
                                     color: Color(0xFF3b5998),
-                                    child: Container(
+                                    child: SizedBox(
                                       height: 50,
                                       width: 50,
                                       child: IconButton(
@@ -240,7 +242,7 @@ class _Login5State extends State<Login5> {
                                     shape: StadiumBorder(),
                                     margin: EdgeInsets.all(0),
                                     color: Theme.of(context).brightness == Brightness.dark ? Color(0xFFFFFFFF) : Color(0xFF000000),
-                                    child: Container(
+                                    child: SizedBox(
                                       height: 50,
                                       width: 50,
                                       child: IconButton(
@@ -264,7 +266,7 @@ class _Login5State extends State<Login5> {
                                     shape: StadiumBorder(),
                                     margin: EdgeInsets.all(0),
                                     color: Color(0xFF34B7F1),
-                                    child: Container(
+                                    child: SizedBox(
                                       height: 50,
                                       width: 50,
                                       child: IconButton(
@@ -314,15 +316,15 @@ class _Login5State extends State<Login5> {
                                 padding: EdgeInsets.all(24),
                                 child: Wrap(
                                   children: [
-                                    new Row(
+                                    Row(
                                       mainAxisSize: MainAxisSize.min,
                                       mainAxisAlignment: MainAxisAlignment.center,
                                       children: [
-                                        new CircularProgressIndicator(),
+                                        CircularProgressIndicator(),
                                         SizedBox(
                                           width: 24,
                                         ),
-                                        new Text(appStateModel.blocks.localeText.pleaseWait),
+                                        Text(appStateModel.blocks.localeText.pleaseWait),
                                       ],
                                     ),
                                   ],
@@ -360,7 +362,7 @@ class _Login5State extends State<Login5> {
 
   _loginGoogleUser(String idToken, GoogleSignInAccount googleUser,
       BuildContext context) async {
-    var login = new Map<String, dynamic>();
+    var login = <String, dynamic>{};
     login["type"] = 'google';
     login["token"] = idToken;
     login["name"] = googleUser.displayName;
@@ -420,29 +422,27 @@ class _Login5State extends State<Login5> {
       ),
     );
 
-    if(credential.authorizationCode != null) {
-      var login = new Map<String, dynamic>();
-      login["userIdentifier"] = credential.userIdentifier;
-      if(credential.authorizationCode != null)
-        login["authorizationCode"] = credential.authorizationCode;
-      if(credential.email != null) {
-        login["email"] = credential.email;
-      } else {
-        //await _showDialog(context);
-        //TODO If email and name is empty Request Email and Name
-      }
-      if(credential.userIdentifier != null)
-        login["email"] = credential.userIdentifier;
-      if(credential.givenName != null)
-        login["name"] = credential.givenName;
-      else login["name"] = '';
-      login["useBundleId"] = Platform.isIOS || Platform.isMacOS ? 'true' : 'false';
-      bool status = await appStateModel.appleLogin(login);
-      if (status) {
-        Navigator.of(context).pop();
-      }
+    var login = new Map<String, dynamic>();
+    login["userIdentifier"] = credential.userIdentifier;
+    if(credential.authorizationCode != null)
+      login["authorizationCode"] = credential.authorizationCode;
+    if(credential.email != null) {
+      login["email"] = credential.email;
+    } else {
+      //await _showDialog(context);
+      //TODO If email and name is empty Request Email and Name
     }
-  }
+    if(credential.userIdentifier != null)
+      login["email"] = credential.userIdentifier;
+    if(credential.givenName != null)
+      login["name"] = credential.givenName;
+    else login["name"] = '';
+    login["useBundleId"] = Platform.isIOS || Platform.isMacOS ? 'true' : 'false';
+    bool status = await appStateModel.appleLogin(login);
+    if (status) {
+      Navigator.of(context).pop();
+    }
+    }
 
 }
 

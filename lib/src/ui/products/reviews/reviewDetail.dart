@@ -1,3 +1,5 @@
+// ignore_for_file: use_super_parameters, library_private_types_in_public_api, deprecated_member_use, dead_code
+
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -12,7 +14,7 @@ class ReviewsDetail extends StatefulWidget {
   final ProductDetailBloc productDetailBloc;
   final Product product;
 
-  const ReviewsDetail({Key key, this.productDetailBloc, this.product}) : super(key: key);
+  const ReviewsDetail({Key? key, required this.productDetailBloc, required this.product}) : super(key: key);
 
   @override
   _ReviewsDetailState createState() => _ReviewsDetailState();
@@ -78,12 +80,12 @@ class _ReviewsDetailState extends State<ReviewsDetail> {
         return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              buildListTile(context, snapshot.data[index]),
+              buildListTile(context, snapshot.data![index]),
               Divider(
                 height: 0.0,
               ),
             ]);
-      }, childCount: snapshot.data.length),
+      }, childCount: snapshot.data!.length),
     );
   }
 
@@ -132,7 +134,7 @@ class _ReviewsDetailState extends State<ReviewsDetail> {
                       Text(timeago.format(comment.date),
                           style: TextStyle(
                               fontSize: 12.0,
-                              color: Theme.of(context).textTheme.caption.color))
+                              color: Theme.of(context).textTheme.bodySmall!.color))
                     ]),
               ),
             ],
@@ -146,13 +148,13 @@ class _ReviewsDetailState extends State<ReviewsDetail> {
 
   Column buildReviewSummary(AsyncSnapshot<List<ReviewModel>> snapshot, BuildContext context) {
 
-    var fiveStars = snapshot.data.where((element) => double.parse(element.rating) > 4 && double.parse(element.rating) <= 5).length;
-    var fourStars = snapshot.data.where((element) => double.parse(element.rating) > 3 && double.parse(element.rating) <= 4).length;
-    var threeStars = snapshot.data.where((element) => double.parse(element.rating) > 2 && double.parse(element.rating) <= 3).length;
-    var twoStars = snapshot.data.where((element) => double.parse(element.rating) > 1 && double.parse(element.rating) <= 2).length;
-    var singleStars = snapshot.data.where((element) => double.parse(element.rating) > 0 && double.parse(element.rating) <= 1).length;
+    var fiveStars = snapshot.data!.where((element) => double.parse(element.rating) > 4 && double.parse(element.rating) <= 5).length;
+    var fourStars = snapshot.data!.where((element) => double.parse(element.rating) > 3 && double.parse(element.rating) <= 4).length;
+    var threeStars = snapshot.data!.where((element) => double.parse(element.rating) > 2 && double.parse(element.rating) <= 3).length;
+    var twoStars = snapshot.data!.where((element) => double.parse(element.rating) > 1 && double.parse(element.rating) <= 2).length;
+    var singleStars = snapshot.data!.where((element) => double.parse(element.rating) > 0 && double.parse(element.rating) <= 1).length;
 
-    var count = snapshot.data.length;
+    var count = snapshot.data!.length;
     //print(widget.product.averageRating);
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
@@ -166,7 +168,7 @@ class _ReviewsDetailState extends State<ReviewsDetail> {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(
+              SizedBox(
                 height: 150,
                 width: widthOfSummaryOverview,
                 child: Column(
@@ -176,12 +178,12 @@ class _ReviewsDetailState extends State<ReviewsDetail> {
                     RichText(
                       text: TextSpan(
                         text: widget.product.averageRating.toString(),
-                        style: Theme.of(context).textTheme.headline5.copyWith(
+                        style: Theme.of(context).textTheme.headlineSmall!.copyWith(
                             fontSize: 28,
                             fontWeight: FontWeight.w800
                         ),
                         children: <TextSpan>[
-                          TextSpan(text: '/5', style: Theme.of(context).textTheme.subtitle1.copyWith(color: Colors.grey),),
+                          TextSpan(text: '/5', style: Theme.of(context).textTheme.titleMedium!.copyWith(color: Colors.grey),),
                         ],
                       ),
                     ),
@@ -201,15 +203,15 @@ class _ReviewsDetailState extends State<ReviewsDetail> {
                       onRatingUpdate: (rating) {},
                     ),
                     Text(
-                      '${snapshot.data.length} Ratings ',
-                      style: Theme.of(context).textTheme.subtitle1.copyWith(color: Colors.grey),),
+                      '${snapshot.data!.length} Ratings ',
+                      style: Theme.of(context).textTheme.titleMedium!.copyWith(color: Colors.grey),),
                   ],
                 ),
               ),
               SizedBox(
                 width: 5,
               ),
-              Container(
+              SizedBox(
                   height: 120,
                   child: VerticalDivider(
                     thickness: 1,
@@ -278,19 +280,19 @@ class _ReviewsDetailState extends State<ReviewsDetail> {
                 children: [
                   Text(
                     '${fiveStars.floor()}',
-                    style: Theme.of(context).textTheme.subtitle2.copyWith(color: Colors.grey),),
+                    style: Theme.of(context).textTheme.titleSmall!.copyWith(color: Colors.grey),),
                   Text(
                     '${fourStars.floor()}',
-                    style: Theme.of(context).textTheme.subtitle2.copyWith(color: Colors.grey),),
+                    style: Theme.of(context).textTheme.titleSmall!.copyWith(color: Colors.grey),),
                   Text(
                     '${threeStars.floor()}',
-                    style: Theme.of(context).textTheme.subtitle2.copyWith(color: Colors.grey),),
+                    style: Theme.of(context).textTheme.titleSmall!.copyWith(color: Colors.grey),),
                   Text(
                     '${twoStars.floor()}',
-                    style: Theme.of(context).textTheme.subtitle2.copyWith(color: Colors.grey),),
+                    style: Theme.of(context).textTheme.titleSmall!.copyWith(color: Colors.grey),),
                   Text(
                     '${singleStars.floor()}',
-                    style: Theme.of(context).textTheme.subtitle2.copyWith(color: Colors.grey),),
+                    style: Theme.of(context).textTheme.titleSmall!.copyWith(color: Colors.grey),),
                 ],
               ),
             ],
@@ -303,8 +305,7 @@ class _ReviewsDetailState extends State<ReviewsDetail> {
   Stack buildBarStack(int value, int count) {
     final width =MediaQuery.of(context).size.width-widthOfWholeSummary;
     return Stack(
-      overflow: Overflow.visible,
-      children: [
+      clipBehavior: Clip.none, children: [
         ClipRRect(
           borderRadius: BorderRadius.circular(4),
           child: Container(
@@ -329,8 +330,8 @@ class _ReviewsDetailState extends State<ReviewsDetail> {
     );
   }
 
-  Container buildStarRow(Color color1,Color color2,Color color3,Color color4,Color color5) {
-    return Container(
+  SizedBox buildStarRow(Color color1,Color color2,Color color3,Color color4,Color color5) {
+    return SizedBox(
       width: widthOfStarRow,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,

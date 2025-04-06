@@ -10,10 +10,10 @@ class CommentsModel {
 
   factory CommentsModel.fromJson(List<dynamic> parsedJson) {
 
-    List<Comment> comments = new List<Comment>();
+    List<Comment> comments = List<Comment>();
     comments = parsedJson.map((i)=>Comment.fromJson(i)).toList();
 
-    return new CommentsModel(comments : comments);
+    return CommentsModel(comments : comments);
   }
 
 }
@@ -54,39 +54,39 @@ class Comment {
   });
 
   factory Comment.fromJson(Map<String, dynamic> json) => Comment(
-    id: json["id"] == null ? null : json["id"],
-    post: json["post"] == null ? null : json["post"],
-    parent: json["parent"] == null ? null : json["parent"],
-    author: json["author"] == null ? null : json["author"],
-    authorName: json["author_name"] == null ? null : json["author_name"],
-    authorUrl: json["author_url"] == null ? null : json["author_url"],
+    id: json["id"],
+    post: json["post"],
+    parent: json["parent"],
+    author: json["author"],
+    authorName: json["author_name"],
+    authorUrl: json["author_url"],
     date: json["date"] == null ? null : DateTime.parse(json["date"]),
     dateGmt: json["date_gmt"] == null ? null : DateTime.parse(json["date_gmt"]),
     content: json["content"] == null ? null : Content.fromJson(json["content"]),
-    link: json["link"] == null ? null : json["link"],
-    status: json["status"] == null ? null : json["status"],
-    type: json["type"] == null ? null : json["type"],
+    link: json["link"],
+    status: json["status"],
+    type: json["type"],
     authorAvatarUrls: json["author_avatar_urls"] == null ? null : Map.from(json["author_avatar_urls"]).map((k, v) => MapEntry<String, String>(k, v)),
     meta: json["meta"] == null ? null : List<dynamic>.from(json["meta"].map((x) => x)),
     links: json["_links"] == null ? null : Links.fromJson(json["_links"]),
   );
 
   Map<String, dynamic> toJson() => {
-    "id": id == null ? null : id,
-    "post": post == null ? null : post,
-    "parent": parent == null ? null : parent,
-    "author": author == null ? null : author,
-    "author_name": authorName == null ? null : authorName,
-    "author_url": authorUrl == null ? null : authorUrl,
-    "date": date == null ? null : date.toIso8601String(),
-    "date_gmt": dateGmt == null ? null : dateGmt.toIso8601String(),
-    "content": content == null ? null : content.toJson(),
-    "link": link == null ? null : link,
-    "status": status == null ? null : status,
-    "type": type == null ? null : type,
+    "id": id,
+    "post": post,
+    "parent": parent,
+    "author": author,
+    "author_name": authorName,
+    "author_url": authorUrl,
+    "date": date?.toIso8601String(),
+    "date_gmt": dateGmt?.toIso8601String(),
+    "content": content?.toJson(),
+    "link": link,
+    "status": status,
+    "type": type,
     "author_avatar_urls": authorAvatarUrls == null ? null : Map.from(authorAvatarUrls).map((k, v) => MapEntry<String, dynamic>(k, v)),
     "meta": meta == null ? null : List<dynamic>.from(meta.map((x) => x)),
-    "_links": links == null ? null : links.toJson(),
+    "_links": links?.toJson(),
   };
 }
 
@@ -98,11 +98,11 @@ class Content {
   });
 
   factory Content.fromJson(Map<String, dynamic> json) => Content(
-    rendered: json["rendered"] == null ? null : json["rendered"],
+    rendered: json["rendered"],
   );
 
   Map<String, dynamic> toJson() => {
-    "rendered": rendered == null ? null : rendered,
+    "rendered": rendered,
   };
 }
 
@@ -144,13 +144,13 @@ class Author {
   });
 
   factory Author.fromJson(Map<String, dynamic> json) => Author(
-    embeddable: json["embeddable"] == null ? null : json["embeddable"],
-    href: json["href"] == null ? null : json["href"],
+    embeddable: json["embeddable"],
+    href: json["href"],
   );
 
   Map<String, dynamic> toJson() => {
-    "embeddable": embeddable == null ? null : embeddable,
-    "href": href == null ? null : href,
+    "embeddable": embeddable,
+    "href": href,
   };
 }
 
@@ -162,11 +162,11 @@ class Collection {
   });
 
   factory Collection.fromJson(Map<String, dynamic> json) => Collection(
-    href: json["href"] == null ? null : json["href"],
+    href: json["href"],
   );
 
   Map<String, dynamic> toJson() => {
-    "href": href == null ? null : href,
+    "href": href,
   };
 }
 
@@ -182,14 +182,14 @@ class Up {
   });
 
   factory Up.fromJson(Map<String, dynamic> json) => Up(
-    embeddable: json["embeddable"] == null ? null : json["embeddable"],
-    postType: json["post_type"] == null ? null : json["post_type"],
-    href: json["href"] == null ? null : json["href"],
+    embeddable: json["embeddable"],
+    postType: json["post_type"],
+    href: json["href"],
   );
 
   Map<String, dynamic> toJson() => {
-    "embeddable": embeddable == null ? null : embeddable,
-    "post_type": postType == null ? null : postType,
-    "href": href == null ? null : href,
+    "embeddable": embeddable,
+    "post_type": postType,
+    "href": href,
   };
 }

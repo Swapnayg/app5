@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
 import './../../../models/product_model.dart';
@@ -8,9 +10,9 @@ import 'product_detail3.dart';
 
 class ProductDetail extends StatefulWidget {
   const ProductDetail({
-    Key key,
-    @required this.product,
-  }) : super(key: key);
+    super.key,
+    required this.product,
+  });
   final Product product;
   @override
   _ProductDetailState createState() => _ProductDetailState();

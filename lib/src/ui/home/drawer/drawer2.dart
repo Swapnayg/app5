@@ -1,4 +1,6 @@
-import 'package:flutter/cupertino.dart';
+
+// ignore_for_file: library_private_types_in_public_api, unused_field
+
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
 
@@ -8,6 +10,8 @@ import '../../products/products.dart';
 import 'category_list.dart';
 
 class MyDrawer extends StatefulWidget {
+  const MyDrawer({super.key});
+
   @override
   _MyDrawerState createState() => _MyDrawerState();
 }
@@ -23,13 +27,13 @@ class _MyDrawerState extends State<MyDrawer> with TickerProviderStateMixin {
     curve: Curves.fastOutSlowIn,
   ));
 
-  AnimationController _controller;
-  Animation<double> _drawerContentsOpacity;
-  Animation<Offset> _drawerDetailsPosition;
-  bool _showDrawerContents = true;
+  late AnimationController _controller;
+  late Animation<double> _drawerContentsOpacity;
+  late Animation<Offset> _drawerDetailsPosition;
+  final bool _showDrawerContents = true;
 
   @override
-  Future initState() {
+  void initState() {
     super.initState();
     _controller = AnimationController(
       vsync: this,
@@ -61,7 +65,7 @@ class _MyDrawerState extends State<MyDrawer> with TickerProviderStateMixin {
                         height: 50,
                       ),
                       ListTile(
-                        title: Text(ScopedModel.of<AppStateModel>(context).blocks.localeText.category, style: Theme.of(context).textTheme.subtitle1,),
+                        title: Text(ScopedModel.of<AppStateModel>(context).blocks.localeText.category, style: Theme.of(context).textTheme.titleMedium,),
                       ),
                       Expanded(child: buildList()),
                     ],
@@ -78,7 +82,7 @@ class _MyDrawerState extends State<MyDrawer> with TickerProviderStateMixin {
   Widget buildList() {
     return ScopedModelDescendant<AppStateModel>(
       builder: (context, child, model) {
-        if (model.blocks?.categories != null) {
+        if (model.blocks.categories != null) {
           return CategoryList(
               categories: model.blocks.categories, onTapCategory: _onTap);
         }
@@ -88,7 +92,7 @@ class _MyDrawerState extends State<MyDrawer> with TickerProviderStateMixin {
   }
 
   _onTap(Category category) {
-    var filter = new Map<String, dynamic>();
+    var filter = <String, dynamic>{};
     filter['id'] = category.id.toString();
     Navigator.push(
         context,

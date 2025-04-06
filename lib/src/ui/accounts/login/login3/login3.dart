@@ -27,7 +27,7 @@ class Login3 extends StatefulWidget {
 
   final AppStateModel model;
 
-  Login3({Key key, this.model}) : super(key: key);
+  const Login3({Key key, this.model}) : super(key: key);
   @override
   _Login3State createState() => _Login3State();
 }
@@ -36,7 +36,7 @@ class _Login3State extends State<Login3> {
 
   AppStateModel appStateModel  = AppStateModel();
   ScreenState screenState;
-  TextEditingController emailController = new TextEditingController();
+  TextEditingController emailController = TextEditingController();
 
   @override
   void initState() {
@@ -68,7 +68,7 @@ class _Login3State extends State<Login3> {
                               },
                               child: Text(
                                   'Forgot Password',
-                                  style: Theme.of(context).textTheme.bodyText2.copyWith(
+                                  style: Theme.of(context).textTheme.bodyMedium.copyWith(
                                       fontSize: 15,
                                       color: Colors.grey
                                   ))),
@@ -84,7 +84,7 @@ class _Login3State extends State<Login3> {
                                 children: [
                                   Text(
                                       'Don\'t have an account?',
-                                      style: Theme.of(context).textTheme.bodyText2.copyWith(
+                                      style: Theme.of(context).textTheme.bodyMedium.copyWith(
                                           fontSize: 15,
                                           color: Colors.grey
                                       )),
@@ -93,8 +93,8 @@ class _Login3State extends State<Login3> {
                                     const EdgeInsets.symmetric(horizontal: 8.0),
                                     child: Text(
                                         'Sign Up',
-                                        style: Theme.of(context).textTheme.bodyText2.copyWith(color:
-                                        Theme.of(context).accentColor)),
+                                        style: Theme.of(context).textTheme.bodyMedium.copyWith(color:
+                                        Theme.of(context).colorScheme.secondary)),
                                   ),
                                 ],
                               )),
@@ -111,7 +111,7 @@ class _Login3State extends State<Login3> {
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(50.0),
                                     ),
-                                    child: Container(
+                                    child: SizedBox(
                                       height: 50.0, // height of the button
                                       width: 50.0,
                                       child: GoogleLoginWidget(),
@@ -127,7 +127,7 @@ class _Login3State extends State<Login3> {
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(50.0),
                                     ),
-                                    child: Container(
+                                    child: SizedBox(
                                       height: 50.0, // height of the button
                                       width: 50.0,
                                       child: FacebookLoginWidget(),
@@ -143,7 +143,7 @@ class _Login3State extends State<Login3> {
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(50.0),
                                     ),
-                                    child: Container(
+                                    child: SizedBox(
                                       height: 50.0, // height of the button
                                       width: 50.0,
                                       child: AppleLogin(),
@@ -159,14 +159,14 @@ class _Login3State extends State<Login3> {
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(50.0),
                                     ),
-                                    child: Container(
+                                    child: SizedBox(
                                       height: 50.0, // height of the button
                                       width: 50.0,
                                       child: Card(
                                         shape: StadiumBorder(),
                                         margin: EdgeInsets.all(0),
                                         color: Color(0xFF34B7F1),
-                                        child: Container(
+                                        child: SizedBox(
                                           height: 50,
                                           width: 50,
                                           child: IconButton(
@@ -209,7 +209,7 @@ class _Login3State extends State<Login3> {
                                 children: [
                                   Text(
                                       'Already have an account?',
-                                      style: Theme.of(context).textTheme.bodyText2.copyWith(
+                                      style: Theme.of(context).textTheme.bodyMedium.copyWith(
                                           fontSize: 15,
                                           color: Colors.grey)),
                                   Padding(
@@ -217,9 +217,9 @@ class _Login3State extends State<Login3> {
                                     const EdgeInsets.symmetric(horizontal: 8.0),
                                     child: Text(
                                         'Sign In',
-                                        style: Theme.of(context).textTheme.bodyText2.copyWith(
+                                        style: Theme.of(context).textTheme.bodyMedium.copyWith(
                                             color:
-                                            Theme.of(context).accentColor)),
+                                            Theme.of(context).colorScheme.secondary)),
                                   ),
                                 ],
                               )), Center(
@@ -241,7 +241,7 @@ class _Login3State extends State<Login3> {
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(50.0),
                                     ),
-                                    child: Container(
+                                    child: SizedBox(
                                       height: 50.0, // height of the button
                                       width: 50.0,
                                       child: GoogleLoginWidget(),
@@ -257,7 +257,7 @@ class _Login3State extends State<Login3> {
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(50.0),
                                     ),
-                                    child: Container(
+                                    child: SizedBox(
                                       height: 50.0, // height of the button
                                       width: 50.0,
                                       child: FacebookLoginWidget(),
@@ -273,7 +273,7 @@ class _Login3State extends State<Login3> {
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(50.0),
                                     ),
-                                    child: Container(
+                                    child: SizedBox(
                                       height: 50.0, // height of the button
                                       width: 50.0,
                                       child: AppleLogin(),
@@ -289,14 +289,14 @@ class _Login3State extends State<Login3> {
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(50.0),
                                     ),
-                                    child: Container(
+                                    child: SizedBox(
                                       height: 50.0, // height of the button
                                       width: 50.0,
                                       child: Card(
                                         shape: StadiumBorder(),
                                         margin: EdgeInsets.all(0),
                                         color: Color(0xFF34B7F1),
-                                        child: Container(
+                                        child: SizedBox(
                                           height: 50,
                                           width: 50,
                                           child: IconButton(
@@ -330,7 +330,7 @@ class _Login3State extends State<Login3> {
                           InkWell(
                             child:  Text("Sign In with Username",style:TextStyle(
                                 fontFamily: 'Montserrat',
-                                color: Theme.of(context).accentColor,
+                                color: Theme.of(context).colorScheme.secondary,
                                 fontWeight: FontWeight.w500)),
                             onTap:()  {
                               setState(() {
@@ -355,7 +355,7 @@ class _Login3State extends State<Login3> {
                           InkWell(
                             child:  Text("OTP Dummy Link  >>>>",style:TextStyle(
                                 fontFamily: 'Montserrat',
-                                color: Theme.of(context).accentColor,
+                                color: Theme.of(context).colorScheme.secondary,
                                 fontWeight: FontWeight.w500)),
                             onTap:()  {
                               setState(() {
@@ -373,7 +373,7 @@ class _Login3State extends State<Login3> {
                           InkWell(
                             child:  Text("Login with Username ",style:TextStyle(
                                 fontFamily: 'Montserrat',
-                                color: Theme.of(context).accentColor,
+                                color: Theme.of(context).colorScheme.secondary,
                                 fontWeight: FontWeight.w500)),
                             onTap:()  {
                               setState(() {
@@ -394,7 +394,7 @@ class _Login3State extends State<Login3> {
 
   AppBar buildAppBar() {
     return AppBar(
-      backgroundColor: Theme.of(context).accentColor,
+      backgroundColor: Theme.of(context).colorScheme.secondary,
       leading: IconButton(
         onPressed:()=> Navigator.of(context).pop(),
         icon: Icon(Icons.chevron_left,color: Colors.white,),
@@ -437,8 +437,8 @@ class _LoginPageState extends State<LoginPage> {
 
   final _formKey = GlobalKey<FormState>();
 
-  TextEditingController usernameController = new TextEditingController();
-  TextEditingController passwordController = new TextEditingController();
+  TextEditingController usernameController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
 
   var isLoading = false;
   ScreenState screenState;
@@ -463,7 +463,7 @@ class _LoginPageState extends State<LoginPage> {
           children: <Widget>[
             SizedBox(
               height: 60,),
-            Container(
+            SizedBox(
               width: 220,
               //constraints: BoxConstraints(minWidth: 180, maxWidth: 180),
               child: Image.asset(
@@ -476,8 +476,7 @@ class _LoginPageState extends State<LoginPage> {
               child: TextFormField(
                 controller: usernameController,
                 decoration: InputDecoration(
-                    hasFloatingPlaceholder: false,
-                  enabledBorder: OutlineInputBorder(
+                    enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(50),
                     borderSide: BorderSide(
                         color: Colors.grey.withOpacity(.3), width: 1.0),
@@ -497,7 +496,7 @@ class _LoginPageState extends State<LoginPage> {
                     borderSide:
                     BorderSide(color: Colors.red, width: 1.0),
                   ),
-                    prefixIcon: Icon(Icons.person, color: Theme.of(context).accentColor),
+                    prefixIcon: Icon(Icons.person, color: Theme.of(context).colorScheme.secondary),
                     labelText: widget.model.blocks.localeText.username,
                     labelStyle: TextStyle(
                         fontFamily: 'Montserrat',
@@ -509,7 +508,7 @@ class _LoginPageState extends State<LoginPage> {
                     counterStyle:
                     TextStyle(color: Colors.white.withOpacity(0.8)),
                     errorStyle: TextStyle(color: Colors.redAccent),
-                    filled: true,
+                    filled: true, floatingLabelBehavior: FloatingLabelBehavior.never,
                     //fillColor: Colors.white
                 ),
                 validator: (value) {
@@ -535,7 +534,6 @@ class _LoginPageState extends State<LoginPage> {
                 },
                 decoration: InputDecoration(
                   //isDense: true,
-                  hasFloatingPlaceholder: false,
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(50),
                     borderSide: BorderSide(
@@ -568,7 +566,7 @@ class _LoginPageState extends State<LoginPage> {
                           _obscureText = !_obscureText;
                         });
                       }),
-                  prefixIcon: Icon(Icons.lock, color: Theme.of(context).accentColor),
+                  prefixIcon: Icon(Icons.lock, color: Theme.of(context).colorScheme.secondary),
                   labelText: widget.model.blocks.localeText.password,
                   labelStyle: TextStyle(
                       fontFamily: 'Montserrat',
@@ -580,7 +578,7 @@ class _LoginPageState extends State<LoginPage> {
                   counterStyle:
                   TextStyle(color: Colors.white.withOpacity(0.8)),
                   errorStyle: TextStyle(color: Colors.redAccent),
-                  filled: true,
+                  filled: true, floatingLabelBehavior: FloatingLabelBehavior.never,
                   //fillColor: Colors.white,
                 ),
               ),
@@ -603,14 +601,14 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Container buildIcon(child) {
-    return Container(
+    return SizedBox(
       width: 30,
       height: 30,
       child: child,
     );
   }
   _login() async {
-    var login = new Map<String, dynamic>();
+    var login = Map<String, dynamic>();
     if (_formKey.currentState.validate()) {
       login["username"] = usernameController.text;
       login["password"] = passwordController.text;
@@ -641,8 +639,8 @@ class RegisterPage extends StatefulWidget {
 
 class _RegisterPageState extends State<RegisterPage> {
   //Country _selected = Country.IN;
-  Map loginData =  Map<String, dynamic>();
-  var _register = RegisterModel();
+  Map loginData =  <String, dynamic>{};
+  final _register = RegisterModel();
   var isLoading = false;
   bool _obscureText;
 
@@ -666,7 +664,7 @@ class _RegisterPageState extends State<RegisterPage> {
           children: <Widget>[
             SizedBox(
               height: 60,),
-            Container(
+            SizedBox(
               width: 220,
               //constraints: BoxConstraints(minWidth: 80, maxWidth: 80),
               child: Image.asset(
@@ -679,7 +677,6 @@ class _RegisterPageState extends State<RegisterPage> {
             PrimaryColorOverride(
               child: TextFormField(
                 decoration:InputDecoration(
-                    hasFloatingPlaceholder: false,
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(50),
                       borderSide: BorderSide(
@@ -700,7 +697,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       borderSide:
                       BorderSide(color: Colors.red, width: 1.0),
                     ),
-                    prefixIcon: Icon(Icons.person, color: Theme.of(context).accentColor),
+                    prefixIcon: Icon(Icons.person, color: Theme.of(context).colorScheme.secondary),
                     labelText:  widget.model.blocks.localeText.firstName,
                     labelStyle: TextStyle(
                         fontFamily: 'Montserrat',
@@ -712,7 +709,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     counterStyle:
                     TextStyle(color: Colors.white.withOpacity(0.8)),
                     errorStyle: TextStyle(color: Colors.redAccent),
-                    filled: true,
+                    filled: true, floatingLabelBehavior: FloatingLabelBehavior.never,
                     //fillColor: Colors.white
                 ),
                 onSaved: (val) =>
@@ -729,7 +726,6 @@ class _RegisterPageState extends State<RegisterPage> {
             PrimaryColorOverride(
               child: TextFormField(
                 decoration:InputDecoration(
-                    hasFloatingPlaceholder: false,
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(50),
                       borderSide: BorderSide(
@@ -750,7 +746,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       borderSide:
                       BorderSide(color: Colors.red, width: 1.0),
                     ),
-                    prefixIcon: Icon(Icons.person, color: Theme.of(context).accentColor),
+                    prefixIcon: Icon(Icons.person, color: Theme.of(context).colorScheme.secondary),
                     labelText:  widget.model.blocks.localeText.lastName,
                     labelStyle: TextStyle(
                         fontFamily: 'Montserrat',
@@ -762,7 +758,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     counterStyle:
                     TextStyle(color: Colors.white.withOpacity(0.8)),
                     errorStyle: TextStyle(color: Colors.redAccent),
-                    filled: true,
+                    filled: true, floatingLabelBehavior: FloatingLabelBehavior.never,
                     //fillColor: Colors.white
                 ),
                 onSaved: (val) =>
@@ -779,7 +775,6 @@ class _RegisterPageState extends State<RegisterPage> {
             PrimaryColorOverride(
               child: TextFormField(
                 decoration: InputDecoration(
-                    hasFloatingPlaceholder: false,
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(50),
                       borderSide: BorderSide(
@@ -800,7 +795,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       borderSide:
                       BorderSide(color: Colors.red, width: 1.0),
                     ),
-                    prefixIcon: Icon(Icons.email, color: Theme.of(context).accentColor),
+                    prefixIcon: Icon(Icons.email, color: Theme.of(context).colorScheme.secondary),
                     labelText: widget.model.blocks.localeText.email,
                     labelStyle: TextStyle(
                         fontFamily: 'Montserrat',
@@ -812,7 +807,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     counterStyle:
                     TextStyle(color: Colors.white.withOpacity(0.8)),
                     errorStyle: TextStyle(color: Colors.redAccent),
-                    filled: true,
+                    filled: true, floatingLabelBehavior: FloatingLabelBehavior.never,
                     //fillColor: Colors.white
                 ),
                 onSaved: (val) =>
@@ -832,7 +827,6 @@ class _RegisterPageState extends State<RegisterPage> {
                 obscureText: _obscureText,
                 decoration: InputDecoration(
                   //isDense: true,
-                  hasFloatingPlaceholder: false,
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(50),
                     borderSide: BorderSide(
@@ -865,7 +859,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           _obscureText = !_obscureText;
                         });
                       }),
-                  prefixIcon: Icon(Icons.lock, color: Theme.of(context).accentColor),
+                  prefixIcon: Icon(Icons.lock, color: Theme.of(context).colorScheme.secondary),
                   labelText: widget.model.blocks.localeText.password,
                   labelStyle: TextStyle(
                       fontFamily: 'Montserrat',
@@ -877,7 +871,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   counterStyle:
                   TextStyle(color: Colors.white.withOpacity(0.8)),
                   errorStyle: TextStyle(color: Colors.redAccent),
-                  filled: true,
+                  filled: true, floatingLabelBehavior: FloatingLabelBehavior.never,
                   //fillColor: Colors.white,
                 ),
                 onSaved: (val) =>
@@ -925,7 +919,7 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   Container buildIcon(child) {
-    return Container(
+    return SizedBox(
       width: 30,
       height: 30,
       child: child,
@@ -956,7 +950,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
 class ForgotPassword extends StatefulWidget {
 
-  ForgotPassword({Key key,
+  const ForgotPassword({Key key,
     @required this.model,
     this.emailController,
   }) : super(key: key);
@@ -988,7 +982,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
           children: <Widget>[
             SizedBox(
               height: 60,),
-            Container(
+            SizedBox(
               width: 220,
               //constraints: BoxConstraints(minWidth: 80, maxWidth: 80),
               child: Image.asset(
@@ -1001,7 +995,6 @@ class _ForgotPasswordState extends State<ForgotPassword> {
             PrimaryColorOverride(
               child: TextFormField(
                 decoration: InputDecoration(
-                    hasFloatingPlaceholder: false,
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(50),
                       borderSide: BorderSide(
@@ -1022,7 +1015,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                       borderSide:
                       BorderSide(color: Colors.red, width: 1.0),
                     ),
-                    prefixIcon: Icon(Icons.email, color: Theme.of(context).accentColor),
+                    prefixIcon: Icon(Icons.email, color: Theme.of(context).colorScheme.secondary),
                     labelText: widget.model.blocks.localeText.email,
                     labelStyle: TextStyle(
                         fontFamily: 'Montserrat',
@@ -1034,7 +1027,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                     counterStyle:
                     TextStyle(color: Colors.white.withOpacity(0.8)),
                     errorStyle: TextStyle(color: Colors.redAccent),
-                    filled: true,
+                    filled: true, floatingLabelBehavior: FloatingLabelBehavior.never,
                    // fillColor: Colors.white
                 ),
                 obscureText: false,
@@ -1065,7 +1058,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
   }
 
   _sendOtp() async {
-    var data = new Map<String, dynamic>();
+    var data = <String, dynamic>{};
     if (_formKey.currentState.validate()) {
       data["email"] = widget.emailController.text;
       setState(() {
@@ -1086,7 +1079,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
   }
 
   Container buildIcon(child) {
-    return Container(
+    return SizedBox(
       width: 30,
       height: 30,
       child: child,
@@ -1096,7 +1089,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
 }
 
 class ResetPassword extends StatefulWidget {
-  ResetPassword({
+  const ResetPassword({
     Key key,
     @required this.model,
     @required this.emailController,
@@ -1114,16 +1107,16 @@ class _ResetPasswordState extends State<ResetPassword> {
   var isLoading = false;
   final apiProvider = ApiProvider();
 
-  TextEditingController otpController = new TextEditingController();
-  TextEditingController newPasswordController = new TextEditingController();
+  TextEditingController otpController = TextEditingController();
+  TextEditingController newPasswordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.only(left: 16.0, right: 16.0),
-      child: new Form(
+      child: Form(
         key: _formKey,
-        child: new Column(
+        child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
@@ -1159,7 +1152,7 @@ class _ResetPasswordState extends State<ResetPassword> {
   }
 
   _resetPassword(AppStateModel model) async {
-    var data = new Map<String, dynamic>();
+    var data = Map<String, dynamic>();
     if (_formKey.currentState.validate()) {
       data["email"] = widget.emailController.text;
       data["password"] = newPasswordController.text;
@@ -1196,7 +1189,7 @@ class CustomTextFormField extends StatelessWidget {
   FormFieldSetter onSaved;
 
   CustomTextFormField(
-      {this.label,
+      {super.key, this.label,
         this.validationMsg,
         this.controller,
         this.icon,
@@ -1209,7 +1202,6 @@ class CustomTextFormField extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextFormField(
       decoration: InputDecoration(
-          hasFloatingPlaceholder: false,
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(50),
             borderSide: BorderSide(
@@ -1230,7 +1222,7 @@ class CustomTextFormField extends StatelessWidget {
             borderSide:
             BorderSide(color: Colors.red, width: 1.0),
           ),
-          prefixIcon: Icon(Icons.lock, color: Theme.of(context).accentColor),
+          prefixIcon: Icon(Icons.lock, color: Theme.of(context).colorScheme.secondary),
           suffixIcon: suffix,
           labelText: label,
           labelStyle: TextStyle(
@@ -1243,7 +1235,7 @@ class CustomTextFormField extends StatelessWidget {
           counterStyle:
           TextStyle(color: Colors.white.withOpacity(0.8)),
           errorStyle: TextStyle(color: Colors.redAccent),
-          filled: true,
+          filled: true, floatingLabelBehavior: FloatingLabelBehavior.never,
           //fillColor: Colors.white
       ),
       obscureText: obscureText,
@@ -1275,13 +1267,13 @@ class PhoneVerificationPage extends StatefulWidget {
 class _PhoneVerificationPageState extends State<PhoneVerificationPage> {
   static const tabBorderRadius = BorderRadius.all(Radius.circular(4.0));
 
-  double _tabHeight = kFullTabHeight;
+  final double _tabHeight = kFullTabHeight;
 
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   var loadingSendOtp = false;
-  var _formKey = new GlobalKey<FormState>();
+  final _formKey = GlobalKey<FormState>();
   var _loadingOtp = false;
   String prefixCode = '+91';
 
@@ -1311,11 +1303,11 @@ class _PhoneVerificationPageState extends State<PhoneVerificationPage> {
   Widget build(BuildContext context) {
     return  Container(
       margin: const EdgeInsets.only(left: 24.0, right: 24.0),
-      child: new Column(
+      child: Column(
         children:[
           SizedBox(
             height: 60,),
-          Container(
+          SizedBox(
             width: 220,
             //constraints: BoxConstraints(minWidth: 180, maxWidth: 180),
             child: Image.asset(
@@ -1338,7 +1330,7 @@ class _PhoneVerificationPageState extends State<PhoneVerificationPage> {
                 // optional. aligns the flag and the Text left
                 alignLeft: false,
               ),
-              new SizedBox(
+              SizedBox(
                 width: 0.0,
               ),
               Expanded(
@@ -1349,7 +1341,7 @@ class _PhoneVerificationPageState extends State<PhoneVerificationPage> {
                       child: BaseTextField(
                         labelText: widget.appStateModel.blocks.localeText.phoneNumber,
                         validator: (String value) {
-                          if (value == null || value.trim().isEmpty) return widget.appStateModel.blocks.localeText.pleaseEnterPhoneNumber;
+                          if (value.trim().isEmpty) return widget.appStateModel.blocks.localeText.pleaseEnterPhoneNumber;
                           return value.length == 0 ? null : widget.appStateModel.blocks.localeText.pleaseEnterPhoneNumber;
                         },
                         onSaved: (String value) {
@@ -1364,7 +1356,7 @@ class _PhoneVerificationPageState extends State<PhoneVerificationPage> {
               ),
             ],
           ),
-          new SizedBox(
+          SizedBox(
             height: 20.0,
           ),
           SizedBox(
@@ -1383,19 +1375,18 @@ class _PhoneVerificationPageState extends State<PhoneVerificationPage> {
 
   Container buildOtpEntryCard(BuildContext context) {
     return Container(
-      child: new Form(
-        autovalidate: false,
-        key: _formKey,
-        child: new Column(
+      child: Form(
+        autovalidateMode: AutovalidateMode.disabled, key: _formKey,
+        child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            new SizedBox(
+            SizedBox(
               height: 15.0,
             ),
-            new BaseTextField(
+            BaseTextField(
               labelText: widget.appStateModel.blocks.localeText.enterOtp,//'ENTER OTP(6 digits)',
               validator: (String value) {
-                if (value == null || value.trim().isEmpty) return widget.appStateModel.blocks.localeText.inValidCode;
+                if (value.trim().isEmpty) return widget.appStateModel.blocks.localeText.inValidCode;
                 return value.length == 6 ? null : widget.appStateModel.blocks.localeText.inValidCode;
               },
               onSaved: (String value) {
@@ -1403,10 +1394,10 @@ class _PhoneVerificationPageState extends State<PhoneVerificationPage> {
               },
               inputFormatters: [
                 WhitelistingTextInputFormatter.digitsOnly,
-                new LengthLimitingTextInputFormatter(6),
+                LengthLimitingTextInputFormatter(6),
               ],
             ),
-            new SizedBox(
+            SizedBox(
               height: 20.0,
             ),
             SizedBox(
@@ -1427,7 +1418,7 @@ class _PhoneVerificationPageState extends State<PhoneVerificationPage> {
       color: Theme.of(context).primaryColor.withOpacity(0.1),
       height: _tabHeight,
       alignment: Alignment.center,
-      child: new Text(
+      child: Text(
         widget.appStateModel.blocks.localeText.signIn,
         style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.w800),
       ),
@@ -1449,7 +1440,7 @@ class _PhoneVerificationPageState extends State<PhoneVerificationPage> {
     });
     //TODO VERIFY OTP
 
-    var login = new Map<String, dynamic>();
+    var login = <String, dynamic>{};
     login["smsOTP"] = smsOTP;
     login["verificationId"] = verificationId;
     login["phoneNumber"] = _phoneNumber;
@@ -1496,7 +1487,7 @@ class _PhoneVerificationPageState extends State<PhoneVerificationPage> {
     print(error.code);
     switch (error.code) {
       case 'ERROR_INVALID_VERIFICATION_CODE':
-        FocusScope.of(context).requestFocus(new FocusNode());
+        FocusScope.of(context).requestFocus(FocusNode());
         Fluttertoast.showToast(msg: widget.appStateModel.blocks.localeText.inValidCode);
         Navigator.of(context).pop();
         break;
@@ -1513,19 +1504,19 @@ class _PhoneVerificationPageState extends State<PhoneVerificationPage> {
     setState(() {
       _loadingNumber = true;
     });
-    final PhoneCodeSent smsOTPSent = (String verId, [int forceCodeResend]) {
-      this.verificationId = verId;
+    smsOTPSent(String verId, [int forceCodeResend]) {
+      verificationId = verId;
       setState(() {
         _loadingNumber = false;
       });
-    };
+    }
     try {
       await _auth.verifyPhoneNumber(
           phoneNumber: prefixCode + _phoneNumber, // PHONE NUMBER TO SEND OTP
           codeAutoRetrievalTimeout: (String verId) {
             //Starts the phone number verification process for the given phone number.
             //Either sends an SMS with a 6 digit code to the phone number specified, or sign's the user in and [verificationCompleted] is called.
-            this.verificationId = verId;
+            verificationId = verId;
           },
           codeSent:
           smsOTPSent, // WHEN CODE SENT THEN WE OPEN DIALOG TO ENTER OTP.
@@ -1548,12 +1539,12 @@ class _PhoneVerificationPageState extends State<PhoneVerificationPage> {
   handlePhoneNumberError(PlatformException error) {
     switch (error.code) {
       case 'TOO_LONG':
-        FocusScope.of(context).requestFocus(new FocusNode());
+        FocusScope.of(context).requestFocus(FocusNode());
         Fluttertoast.showToast(msg: widget.appStateModel.blocks.localeText.inValidNumber);
         Navigator.of(context).pop();
         break;
       case 'TOO_SHORT':
-        FocusScope.of(context).requestFocus(new FocusNode());
+        FocusScope.of(context).requestFocus(FocusNode());
         Fluttertoast.showToast(msg: widget.appStateModel.blocks.localeText.inValidNumber);
         Navigator.of(context).pop();
         break;
@@ -1578,7 +1569,7 @@ class _PhoneVerificationPageState extends State<PhoneVerificationPage> {
 class OTPPage extends StatefulWidget {
   final String phoneNumber;
 
-  OTPPage(this.phoneNumber);
+  const OTPPage(this.phoneNumber, {super.key});
 
   @override
   _OTPPageState createState() =>
@@ -1633,7 +1624,7 @@ class _OTPPageState extends State<OTPPage> {
           //Icon(Icons.phonelink_lock,size: 60,),
           SizedBox(
             height: 60,),
-          Container(
+          SizedBox(
             width: 220,
             //constraints: BoxConstraints(minWidth: 180, maxWidth: 180),
             child: Image.asset(
@@ -1751,7 +1742,7 @@ class _OTPPageState extends State<OTPPage> {
           ButtonTheme(
             height: 50,
             child: RaisedButton(
-              color: Theme.of(context).accentColor,
+              color: Theme.of(context).colorScheme.secondary,
               shape: StadiumBorder(),
               onPressed: () {
                 formKey.currentState.validate();
@@ -1829,5 +1820,5 @@ class _OTPPageState extends State<OTPPage> {
   }
 }
 
-typedef void OnResponse<CheckoutResponse>(CheckoutResponse response);
+typedef OnResponse<CheckoutResponse> = void Function(CheckoutResponse response);
 

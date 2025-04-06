@@ -143,7 +143,7 @@ class _AppState extends State<App> with TickerProviderStateMixin {
               padding: const EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0),
               child: Icon(MStoreIcons.shopping_basket_2_line),
             ),
-            new Positioned(
+            Positioned(
               top: 0.0,
               right: 0.0,
               child: ScopedModelDescendant<AppStateModel>(
@@ -177,7 +177,7 @@ class _AppState extends State<App> with TickerProviderStateMixin {
               padding: const EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0),
               child: Icon(MStoreIcons.shopping_basket_2_fill),
             ),
-            new Positioned(
+            Positioned(
               top: 0.0,
               right: 0.0,
               child: ScopedModelDescendant<AppStateModel>(

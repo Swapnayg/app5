@@ -1,6 +1,5 @@
 // ignore_for_file: unused_local_variable, must_be_immutable, unnecessary_null_comparison, avoid_unnecessary_containers, avoid_print
 
-import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';

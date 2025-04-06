@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -11,7 +13,7 @@ import '../../../ui/products/product_detail/product_detail.dart';
 
 class ProductGrid extends StatefulWidget {
   final List<Product> products;
-  const ProductGrid({Key key, this.products}) : super(key: key);
+  const ProductGrid({super.key, required this.products});
   @override
   _ProductGridState createState() => _ProductGridState();
 }
@@ -52,25 +54,25 @@ class ProductItem extends StatelessWidget {
   final void Function(Product category) onProductClick;
 
   const ProductItem({
-    Key key,
-    this.product,
-    this.onProductClick,
-  }) : super(key: key);
+    super.key,
+    required this.product,
+    required this.onProductClick,
+  });
 
   @override
   Widget build(BuildContext context) {
 
     int percentOff = 0;
 
-    if ((product.salePrice != null && product.salePrice != 0)) {
+    if ((product.salePrice != 0)) {
       percentOff = (((product.regularPrice - product.salePrice / product.regularPrice)).round());
     }
     bool onSale = false;
-    if(product.regularPrice == null || product.regularPrice.isNaN) {
+    if(product.regularPrice.isNaN) {
       product.regularPrice = product.price;
     }
 
-    if(product.salePrice != null && product.salePrice != 0) {
+    if(product.salePrice != 0) {
       onSale = true;
     }
 
@@ -88,7 +90,7 @@ class ProductItem extends StatelessWidget {
             children: <Widget>[
               Stack(
                 children: <Widget>[
-                  Container(
+                  SizedBox(
                     height: 180,
                     child: CachedNetworkImage(
                       imageUrl: product.images[0].src,
@@ -118,7 +120,7 @@ class ProductItem extends StatelessWidget {
                           child: Container(
                             padding: EdgeInsets.fromLTRB(15, 5, 15, 5),
                             child: Text(
-                              percentOff.toString() + '% Off',
+                              '$percentOff% Off',
                               style: TextStyle(color: Colors.white, fontSize: 12),
                             ),
                           )) : Container(),
@@ -175,11 +177,9 @@ class ProductItem extends StatelessWidget {
                     SizedBox(
                       height: 1.0,
                     ),
-                    (product.formattedPrice !=
-                        null && product.formattedPrice.isNotEmpty)
+                    (product.formattedPrice.isNotEmpty)
                         ? Text(
-                      (product.formattedPrice !=
-                          null && product.formattedPrice.isNotEmpty)
+                      (product.formattedPrice.isNotEmpty)
                           ? parseHtmlString(product.formattedPrice)
                           : '',
                       style: TextStyle(
@@ -211,7 +211,7 @@ class ProductItem extends StatelessWidget {
                           },
                         ),
                         Text(
-                          '(' + product.ratingCount.toString() + ')',
+                          '(${product.ratingCount})',
                           style: TextStyle(
                               fontSize: 10,
                               fontWeight: FontWeight.w300,

@@ -9,7 +9,7 @@ class VendorProductsBloc {
   List<Product> products = [];
   int page = 1;
 
-  var filter = new Map<String, dynamic>();
+  var filter = <String, dynamic>{};
   var selectedRange;
 
   final apiProvider = ApiProvider();
@@ -57,14 +57,14 @@ class VendorProductsBloc {
   }
 
   void applyFilter(double minPrice, double maxPrice) {
-    filter = new Map<String, dynamic>();
+    filter = <String, dynamic>{};
     filter['min_price'] = minPrice.toString();
     filter['max_price'] = maxPrice.toString();
     for(var i = 0; i < attributes.length; i++) {
       for(var j = 0; j < attributes[i].terms.length; j++) {
         if(attributes[i].terms[j].selected) {
-          filter['attribute_term' + j.toString()] = attributes[i].terms[j].termId.toString();
-          filter['attributes' + j.toString()] = attributes[i].terms[j].taxonomy;
+          filter['attribute_term$j'] = attributes[i].terms[j].termId.toString();
+          filter['attributes$j'] = attributes[i].terms[j].taxonomy;
         }
       }
     }

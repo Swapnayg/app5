@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
@@ -9,7 +11,7 @@ class BannerScrollList extends StatefulWidget {
 
   final Block block;
   final Function onBannerClick;
-  BannerScrollList({Key key, this.block, this.onBannerClick}) : super(key: key);
+  const BannerScrollList({super.key, required this.block, required this.onBannerClick});
 
   @override
   _BannerScrollListState createState() => _BannerScrollListState();
@@ -78,6 +80,8 @@ class _BannerScrollListState extends State<BannerScrollList> {
                                     imageUrl: widget.block
                                         .children[index].image,
                                     imageBuilder: (context, imageProvider) => Ink.image(
+                                      image: imageProvider,
+                                      fit: BoxFit.cover,
                                       child: InkWell(
                                         splashColor: HexColor(widget.block.bgColor).withOpacity(0.1),
                                         onTap: () {
@@ -85,8 +89,6 @@ class _BannerScrollListState extends State<BannerScrollList> {
                                               .children[index]);
                                         },
                                       ),
-                                      image: imageProvider,
-                                      fit: BoxFit.cover,
                                     ),
                                     placeholder: (context, url) =>
                                         Container(color: HexColor(widget.block.bgColor).withOpacity(0.5)),

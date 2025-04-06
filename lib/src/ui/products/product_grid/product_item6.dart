@@ -1,4 +1,6 @@
 
+// ignore_for_file: library_private_types_in_public_api, prefer_typing_uninitialized_variables, unused_local_variable
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
@@ -14,14 +16,14 @@ import '../../../ui/products/product_detail/product_detail.dart';
 
 
 double desktopCategoryMenuPageWidth({
-  BuildContext context,
+  required BuildContext context,
 }) {
   return 232 * reducedTextScale(context);
 }
 
 class ProductGrid extends StatefulWidget {
   final List<Product> products;
-  const ProductGrid({Key key, this.products}) : super(key: key);
+  const ProductGrid({super.key, required this.products});
   @override
   _ProductGridState createState() => _ProductGridState();
 }
@@ -70,13 +72,13 @@ class ProductItem extends StatefulWidget {
   final containerWidth;
   final void Function(Product category) onProductClick;
 
-  ProductItem({
-    Key key,
-    this.product,
-    this.onProductClick,
+  const ProductItem({
+    super.key,
+    required this.product,
+    required this.onProductClick,
     this.crossAxisCount,
     this.containerWidth
-  }) : super(key: key);
+  });
 
   @override
   _ProductItemState createState() => _ProductItemState();
@@ -92,7 +94,7 @@ class _ProductItemState extends State<ProductItem> {
 
     int percentOff = 0;
 
-    if ((widget.product.salePrice != null && widget.product.salePrice != 0)) {
+    if ((widget.product.salePrice != 0)) {
       percentOff = (((widget.product.regularPrice - widget.product.salePrice / widget.product.regularPrice)).round());
     }
     bool onSale = false;
@@ -119,7 +121,7 @@ class _ProductItemState extends State<ProductItem> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Container(
+                SizedBox(
                   height: 190,
                  // height: widget.containerWidth/widget.crossAxisCount,
                   child: Stack(
@@ -139,7 +141,7 @@ class _ProductItemState extends State<ProductItem> {
                         top: 0.0,
                         right: 0.0,
                         child: IconButton(
-                            icon: model.wishListIds.contains(widget.product.id) ? Icon(Icons.favorite, color: Theme.of(context).accentColor) :
+                            icon: model.wishListIds.contains(widget.product.id) ? Icon(Icons.favorite, color: Theme.of(context).colorScheme.secondary) :
                             Icon(Icons.favorite_border, color: Colors.black87),
                             onPressed: () {
                               if (!model.loggedIn) {
@@ -168,7 +170,7 @@ class _ProductItemState extends State<ProductItem> {
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                         //textAlign: TextAlign.center,
-                        style: Theme.of(context).textTheme.bodyText2.copyWith(
+                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                           fontFamily: 'Lexend_Deca',
                           fontSize: 14,
                           color: Colors.grey,
@@ -193,10 +195,10 @@ class _ProductItemState extends State<ProductItem> {
 }
 class PriceWidget extends StatelessWidget {
   const PriceWidget({
-    Key key,
-    @required this.onSale,
-    @required this.product,
-  }) : super(key: key);
+    super.key,
+    required this.onSale,
+    required this.product,
+  });
 
   final bool onSale;
   final Product product;
@@ -209,15 +211,14 @@ class PriceWidget extends StatelessWidget {
       children: <Widget>[
         Text(onSale ? parseHtmlString(product.formattedSalesPrice)
             : product.formattedPrice,
-            style: Theme.of(context).textTheme.bodyText2.copyWith(
+            style: Theme.of(context).textTheme.bodyMedium!.copyWith(
           fontFamily: 'Rubik',
           //fontStyle: FontStyle.italic,
           fontSize: 18,
           fontWeight: FontWeight.w600,
         )),
         onSale ? SizedBox(width: 4.0) : SizedBox(width: 0.0),
-        onSale ? Text((product.formattedPrice !=
-            null && product.formattedPrice.isNotEmpty)
+        onSale ? Text((product.formattedPrice.isNotEmpty)
             ? Html(data: product.formattedPrice).toString()
             : '', style: TextStyle(
           fontFamily: 'Rubik',

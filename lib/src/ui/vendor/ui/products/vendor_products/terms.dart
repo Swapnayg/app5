@@ -1,4 +1,6 @@
 //import 'package:app/src/models/vendor/vendor_product_model.dart';
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:flutter/material.dart';
 
 import '../../../../../blocs/vendor/attribute_bloc.dart';
@@ -10,12 +12,11 @@ class AttributeOptionsPage extends StatefulWidget {
   final ProductAttribute productAttribute;
   final VendorProduct product;
 
-  AttributeOptionsPage(
-      {Key key,
-      this.productAttribute,
-      this.product,
-      this.attributeBloc})
-      : super(key: key);
+  const AttributeOptionsPage(
+      {super.key,
+      required this.productAttribute,
+      required this.product,
+      required this.attributeBloc});
   @override
   _AttributeOptionsPageState createState() => _AttributeOptionsPageState();
 }
@@ -39,9 +40,9 @@ class _AttributeOptionsPageState extends State<AttributeOptionsPage> {
             builder: (context, snapshot) {
               return snapshot.hasData
                   ? ListView.builder(
-                      itemCount: snapshot.data.length,
+                      itemCount: snapshot.data!.length,
                       itemBuilder: (BuildContext ctxt, int index) =>
-                          buildBody(ctxt, snapshot.data[index]))
+                          buildBody(ctxt, snapshot.data![index]))
                   : Center(child: CircularProgressIndicator());
             }));
   }
@@ -59,8 +60,11 @@ class _AttributeOptionsPageState extends State<AttributeOptionsPage> {
       title: Text(attributesTerm.name),
       trailing: Checkbox(
         value: contains,
-        onChanged: (bool value) =>
-          _onAttributesTermsTap(attributesTerm),
+        onChanged: (bool? value) {
+          if (value != null) {
+            _onAttributesTermsTap(attributesTerm);
+          }
+        },
       ),
     );
   }
@@ -79,7 +83,7 @@ class _AttributeOptionsPageState extends State<AttributeOptionsPage> {
       }
     } else {
       Attribute attribute = Attribute();
-      attribute.options = List<String>();
+      attribute.options = [];
       attribute.id = widget.productAttribute.id;
       attribute.name = widget.productAttribute.name;
       attribute.options.add(term.name);

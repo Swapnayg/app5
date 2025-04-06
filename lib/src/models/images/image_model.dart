@@ -16,26 +16,26 @@ class Picture {
   int position;
 
   Picture({
-    this.id,
-    this.src,
-    this.name,
-    this.alt,
-    this.position,
+    required this.id,
+    required this.src,
+    required this.name,
+    required this.alt,
+    required this.position,
   });
 
   factory Picture.fromJson(Map<String, dynamic> json) => Picture(
-    id: json["id"] == null ? null : json["id"],
+    id: json["id"],
     src: (json["src"] == null || json["src"] == false) ? null : json["src"],
-    name: json["name"] == null ? null : json["name"],
-    alt: json["alt"] == null ? null : json["alt"],
-    position: json["position"] == null ? null : json["position"],
+    name: json["name"],
+    alt: json["alt"],
+    position: json["position"],
   );
 
   Map<String, dynamic> toJson() => {
-    "id": id == null ? null : id,
-    "src": src == null ? null : src,
-    "name": name == null ? null : name,
-    "alt": alt == null ? null : alt,
-    "position": position == null ? null : position,
+    "id": id,
+    "src": src,
+    "name": name,
+    "alt": alt,
+    "position": position,
   };
 }

@@ -28,23 +28,23 @@ class ProductAttribute {
   });
 
   factory ProductAttribute.fromJson(Map<String, dynamic> json) => ProductAttribute(
-    id: json["id"] == null ? null : json["id"],
-    name: json["name"] == null ? null : json["name"],
-    slug: json["slug"] == null ? null : json["slug"],
-    type: json["type"] == null ? null : json["type"],
-    orderBy: json["order_by"] == null ? null : json["order_by"],
-    hasArchives: json["has_archives"] == null ? null : json["has_archives"],
+    id: json["id"],
+    name: json["name"],
+    slug: json["slug"],
+    type: json["type"],
+    orderBy: json["order_by"],
+    hasArchives: json["has_archives"],
     links: json["_links"] == null ? null : Links.fromJson(json["_links"]),
   );
 
   Map<String, dynamic> toJson() => {
-    "id": id == null ? null : id,
-    "name": name == null ? null : name,
-    "slug": slug == null ? null : slug,
-    "type": type == null ? null : type,
-    "order_by": orderBy == null ? null : orderBy,
-    "has_archives": hasArchives == null ? null : hasArchives,
-    "_links": links == null ? null : links.toJson(),
+    "id": id,
+    "name": name,
+    "slug": slug,
+    "type": type,
+    "order_by": orderBy,
+    "has_archives": hasArchives,
+    "_links": links?.toJson(),
   };
 }
 
@@ -76,11 +76,11 @@ class Collection {
   });
 
   factory Collection.fromJson(Map<String, dynamic> json) => Collection(
-    href: json["href"] == null ? null : json["href"],
+    href: json["href"],
   );
 
   Map<String, dynamic> toJson() => {
-    "href": href == null ? null : href,
+    "href": href,
   };
 }
 
@@ -109,22 +109,22 @@ class AttributeTerms {
   });
 
   factory AttributeTerms.fromJson(Map<String, dynamic> json) => AttributeTerms(
-    id: json["id"] == null ? null : json["id"],
-    name: json["name"] == null ? null : json["name"],
-    slug: json["slug"] == null ? null : json["slug"],
-    description: json["description"] == null ? null : json["description"],
-    menuOrder: json["menu_order"] == null ? null : json["menu_order"],
-    count: json["count"] == null ? null : json["count"],
+    id: json["id"],
+    name: json["name"],
+    slug: json["slug"],
+    description: json["description"],
+    menuOrder: json["menu_order"],
+    count: json["count"],
     links: json["_links"] == null ? null : Links.fromJson(json["_links"]),
   );
 
   Map<String, dynamic> toJson() => {
-    "id": id == null ? null : id,
-    "name": name == null ? null : name,
-    "slug": slug == null ? null : slug,
-    "description": description == null ? null : description,
-    "menu_order": menuOrder == null ? null : menuOrder,
-    "count": count == null ? null : count,
-    "_links": links == null ? null : links.toJson(),
+    "id": id,
+    "name": name,
+    "slug": slug,
+    "description": description,
+    "menu_order": menuOrder,
+    "count": count,
+    "_links": links?.toJson(),
   };
 }

@@ -13,18 +13,18 @@ class RegisterError {
   List<Datum> data;
 
   RegisterError({
-    this.success,
-    this.data,
+    required this.success,
+    required this.data,
   });
 
-  factory RegisterError.fromJson(Map<String, dynamic> json) => new RegisterError(
+  factory RegisterError.fromJson(Map<String, dynamic> json) => RegisterError(
     success: json["success"],
-    data: new List<Datum>.from(json["data"].map((x) => Datum.fromJson(x))),
+    data: List<Datum>.from(json["data"].map((x) => Datum.fromJson(x))),
   );
 
   Map<String, dynamic> toJson() => {
     "success": success,
-    "data": new List<dynamic>.from(data.map((x) => x.toJson())),
+    "data": List<dynamic>.from(data.map((x) => x.toJson())),
   };
 }
 
@@ -33,11 +33,11 @@ class Datum {
   String message;
 
   Datum({
-    this.code,
-    this.message,
+    required this.code,
+    required this.message,
   });
 
-  factory Datum.fromJson(Map<String, dynamic> json) => new Datum(
+  factory Datum.fromJson(Map<String, dynamic> json) => Datum(
     code: json["code"],
     message: json["message"],
   );

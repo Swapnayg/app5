@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api, deprecated_member_use
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
@@ -13,7 +15,7 @@ const double _minWidthPerColumn = 350.0 + _scaffoldPadding * 2;
 
 class ProductGrid extends StatefulWidget {
   final List<Product> products;
-  const ProductGrid({Key key, this.products}) : super(key: key);
+  const ProductGrid({super.key, required this.products});
   @override
   _ProductGridState createState() => _ProductGridState();
 }
@@ -59,10 +61,10 @@ class ProductItem extends StatelessWidget {
   int percentOff = 0;
 
   ProductItem({
-    Key key,
-    this.product,
-    this.onProductClick,
-  }) : super(key: key);
+    super.key,
+    required this.product,
+    required this.onProductClick,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -72,21 +74,21 @@ class ProductItem extends StatelessWidget {
         : screenWidth ~/ _minWidthPerColumn;
 
     double detailsWidth = (screenWidth / crossAxisCount) - 160;
-    if ((product.salePrice != null && product.salePrice != 0)) {
+    if ((product.salePrice != 0)) {
       percentOff = ((((product.regularPrice - product.salePrice) /
           product.regularPrice *
           100))
           .round());
     }
     bool onSale = false;
-    if (product.regularPrice == null || product.regularPrice.isNaN) {
+    if (product.regularPrice.isNaN) {
       product.regularPrice = product.price;
     }
-    if (product.salePrice != null && product.salePrice != 0) {
+    if (product.salePrice != 0) {
       onSale = true;
     }
     return InkWell(
-      splashColor: Theme.of(context).accentColor.withOpacity(0.1),
+      splashColor: Theme.of(context).colorScheme.secondary.withOpacity(0.1),
       onTap: () {
         onProductClick(product);
       },
@@ -140,17 +142,18 @@ class ProductItem extends StatelessWidget {
                       clipBehavior: Clip.antiAlias,
                       elevation: 0.0,
                       margin: EdgeInsets.all(0.0),
-                      color: Theme.of(context).accentColor,
+                      color: Theme.of(context).colorScheme.secondary,
                       child: percentOff != 0
                           ? Center(
                         child: Container(
                           padding: EdgeInsets.fromLTRB(
                               8.0, 4.0, 8.0, 4.0),
                           child: Text(
-                            '-' + percentOff.toString() + '%',
+                            '-$percentOff%',
                             style: Theme.of(context)
-                                .accentTextTheme
-                                .body2
+                                .textTheme
+                                .bodyMedium
+                                ?.copyWith(color: Theme.of(context).colorScheme.onSecondary)
                                 .copyWith(fontSize: 12.0),
                           ),
                         ),
@@ -162,7 +165,7 @@ class ProductItem extends StatelessWidget {
                 ],
               ),
             ),
-            Container(
+            SizedBox(
               width: detailsWidth,
               height: 130,
               child: Padding(
@@ -197,7 +200,7 @@ class ProductItem extends StatelessWidget {
                                     product.formattedSalesPrice)
                                     : '',
                                 style:
-                                Theme.of(context).textTheme.body1.copyWith(
+                                Theme.of(context).textTheme.bodyMedium!.copyWith(
                                   fontSize: 16,
                                   //fontWeight: FontWeight.w600,
                                   color: Theme.of(context)
@@ -208,8 +211,7 @@ class ProductItem extends StatelessWidget {
                                 ? SizedBox(width: 6.0)
                                 : SizedBox(width: 0.0),
                             Text(
-                                (product.formattedPrice != null &&
-                                    product.formattedPrice.isNotEmpty)
+                                (product.formattedPrice.isNotEmpty)
                                     ? parseHtmlString(product.formattedPrice)
                                     : '',
                                 style: TextStyle(

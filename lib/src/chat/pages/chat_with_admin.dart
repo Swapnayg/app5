@@ -350,7 +350,7 @@ class _AdminChatPageState extends State<AdminChatPage> {
     var vendorID = '1';
     //TODO Replace Admin with site name
     var vendorName = 'Admin';
-    var vendorAvatar = '${this.config.url}/wp-content/wp-content/uploads/icon.png';
+    var vendorAvatar = '${config.url}/wp-content/wp-content/uploads/icon.png';
     bool isVendor = appStateModel.isVendor.contains(appStateModel.user.role);
     String? conversationID = await DBService.instance.getConversationId(chatId, userID, userName, userAvatar, vendorID, vendorName, vendorAvatar, isVendor);
     setState(() {

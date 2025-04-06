@@ -55,7 +55,7 @@ class CheckoutBloc {
   void getCheckoutForm() async {
     final response = await apiProvider.post(
         '/wp-admin/admin-ajax.php?action=mstore_flutter-get_checkout_form',
-        Map()); //formData.toJson();
+        {}); //formData.toJson();
     if (response.statusCode == 200) {
       CheckoutFormModel checkoutForm =
           CheckoutFormModel.fromJson(json.decode(response.body));
@@ -234,8 +234,8 @@ class CheckoutBloc {
   }
 
   void addAddToCarErrorMessage(String message) {
-    AddToCartErrorModel addToCartError = new AddToCartErrorModel();
-    addToCartError.data = new AddToCartErrorData();
+    AddToCartErrorModel addToCartError = AddToCartErrorModel();
+    addToCartError.data = AddToCartErrorData();
     addToCartError.data.notice = message;
     //_addToCartErrorFetcher.sink.add(addToCartError);
   }
@@ -263,7 +263,7 @@ class CheckoutBloc {
 
   getOrders() async {
     final response = await apiProvider.post(
-        '/wp-admin/admin-ajax.php?action=mstore_flutter-orders', Map());
+        '/wp-admin/admin-ajax.php?action=mstore_flutter-orders', {});
     orders = orderFromJson(response.body);
     _ordersFetcher.sink.add(orders);
     _hasMoreOrdersFetcher.sink.add(true);

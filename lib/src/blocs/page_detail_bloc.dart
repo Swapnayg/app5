@@ -25,7 +25,7 @@ class PageDetailBloc {
   ValueStream<CommentsModel> get comments => _commentsFetcher.stream;
   ValueStream<bool> get hasMoreCommets => _hasMoreCommentsFetcher.stream;
 
-  Map<int, CommentsModel> _comments;
+  final Map<int, CommentsModel> _comments;
   final _post = <int, Post>{};
 
   PageDetailBloc() : _comments = <int, CommentsModel>{} {
@@ -67,7 +67,7 @@ class PageDetailBloc {
   }
 
   Future<CommentsModel> _getComments(id) async {
-    final url = config.url + '/wp-json/wp/v2/comments?page=' + _commentsPage[id].toString() + '&post=' + id.toString();
+    final url = '${config.url}/wp-json/wp/v2/comments?page=${_commentsPage[id]}&post=$id';
     final response = await http.get(url as Uri);
     if (response.statusCode == 200) {
       return CommentsModel.fromJson(json.decode(response.body));
@@ -78,7 +78,7 @@ class PageDetailBloc {
   }
 
   Future<Post> _getPost(id) async {
-    final url = config.url + '/wp-json/wp/v2/pages/' + id.toString();
+    final url = '${config.url}/wp-json/wp/v2/pages/$id';
     final response = await http.get(url as Uri);
     if (response.statusCode == 200) {
       return Post.fromJson(json.decode(response.body));
