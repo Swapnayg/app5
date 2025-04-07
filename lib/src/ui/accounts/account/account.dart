@@ -1,3 +1,4 @@
+import 'package:app5/src/blocs/checkout_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
 import './../../../models/app_state_model.dart';
@@ -28,7 +29,7 @@ class _AccountState extends State<Account> {
           } else if (model.blocks.pageLayout.account == 'layout10') {
             return UserAccount10();
           } else if (model.blocks.pageLayout.account == 'layout4') {
-            return UserAccount4();
+            return UserAccount4(homeBloc: CheckoutBloc(),);
           } else {
             return UserAccount7();
           }

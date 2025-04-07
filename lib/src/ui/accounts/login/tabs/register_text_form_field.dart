@@ -12,13 +12,13 @@ class CustomTextFormField extends StatelessWidget {
   FormFieldSetter onSaved;
 
   CustomTextFormField(
-      {super.key, this.label,
-      this.validationMsg,
-      this.controller,
-      this.icon,
-      this.inputType,
-      this.password,
-      this.onSaved});
+      {super.key, required this.label,
+      required this.validationMsg,
+      required this.controller,
+      required this.icon,
+      required this.inputType,
+      required this.password,
+      required this.onSaved});
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +27,7 @@ class CustomTextFormField extends StatelessWidget {
       controller: controller,
       onSaved: onSaved,
       validator: (value) {
-        if (value.isEmpty) {
+        if (value!.isEmpty) {
           return validationMsg;
         }
         return null;

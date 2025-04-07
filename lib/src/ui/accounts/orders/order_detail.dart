@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api, unused_field, unnecessary_null_comparison, unused_local_variable, prefer_interpolation_to_compose_strings
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../../functions.dart';
@@ -11,7 +13,7 @@ class OrderDetail extends StatefulWidget {
   final OrdersBloc ordersBloc;
   final Order order;
 
-  OrderDetail({super.key, this.order, this.ordersBloc});
+  OrderDetail({super.key, required this.order, required this.ordersBloc});
 
   @override
   _OrderDetailState createState() => _OrderDetailState();
@@ -53,18 +55,21 @@ class _OrderDetailState extends State<OrderDetail> {
               children: [
                 Text(
                     '${widget.order.number} - ${getOrderStatusText(widget.order.status, widget.appStateModel.blocks.localeText)}',
-                  style: Theme.of(context).textTheme.headline6,
+                  style: Theme.of(context).textTheme.titleLarge,
                 ),
                 widget.order.status == 'pending' ? SizedBox(
                   height: 25,
-                  child: OutlineButton(
-                      padding: EdgeInsets.all(0),
+                  child: OutlinedButton(
+                      style: OutlinedButton.styleFrom(
+                        padding: EdgeInsets.all(0),
+                      ),
                       onPressed: () async {
                         widget.ordersBloc.cancelOrder(widget.order);
                         setState(() {
                           widget.order.status = 'cancelled';
                         });
-                      }, child: Text('Cancel')
+                      }, 
+                      child: Text('Cancel')
                   ),
                 ) : Container()
               ],
@@ -76,7 +81,7 @@ class _OrderDetailState extends State<OrderDetail> {
                 children: <Widget>[
                   Text(
                     widget.appStateModel.blocks.localeText.billing.toUpperCase(),
-                    style: Theme.of(context).textTheme.subtitle2,
+                    style: Theme.of(context).textTheme.titleSmall,
                   ),
                   SizedBox(height: 10.0),
                   Text(
@@ -89,7 +94,7 @@ class _OrderDetailState extends State<OrderDetail> {
                 children: <Widget>[
                   Text(
                     widget.appStateModel.blocks.localeText.shipping.toUpperCase(),
-                    style: Theme.of(context).textTheme.subtitle2,
+                    style: Theme.of(context).textTheme.titleSmall,
                   ),
                   SizedBox(
                     height: 10.0,
@@ -104,7 +109,7 @@ class _OrderDetailState extends State<OrderDetail> {
                 children: <Widget>[
                   Text(
                     widget.appStateModel.blocks.localeText.payment.toUpperCase(),
-                    style: Theme.of(context).textTheme.subtitle2,
+                    style: Theme.of(context).textTheme.titleSmall,
                   ),
                   SizedBox(
                     height: 10.0,
@@ -119,7 +124,7 @@ class _OrderDetailState extends State<OrderDetail> {
                     children: <Widget>[
                         Text(
                           widget.appStateModel.blocks.localeText.products.toUpperCase(),
-                          style: Theme.of(context).textTheme.subtitle2,
+                          style: Theme.of(context).textTheme.titleSmall,
                         ),
                         SizedBox(
                           height: 10.0,
@@ -143,7 +148,7 @@ class _OrderDetailState extends State<OrderDetail> {
           SizedBox(height: 10.0),
           Text(
             widget.appStateModel.blocks.localeText.total.toUpperCase(),
-            style: Theme.of(context).textTheme.subtitle2,
+            style: Theme.of(context).textTheme.titleSmall,
           ),
           SizedBox(height: 10.0),
           Row(
@@ -182,14 +187,14 @@ class _OrderDetailState extends State<OrderDetail> {
               Expanded(
                 child: Text(
                   widget.appStateModel.blocks.localeText.total,
-                  style: Theme.of(context).textTheme.headline6,
+                  style: Theme.of(context).textTheme.titleLarge,
                 ),
               ),
               Text(
                 formatter.format(
                   double.parse(widget.order.total),
                 ),
-                style: Theme.of(context).textTheme.headline6,
+                style: Theme.of(context).textTheme.titleLarge,
               ),
             ],
           ),

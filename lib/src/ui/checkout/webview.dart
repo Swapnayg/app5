@@ -1,3 +1,6 @@
+// ignore_for_file: unnecessary_this, avoid_unnecessary_containers, unused_element, avoid_print, unused_local_variable
+
+import 'dart:async';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:webview_cookie_manager/webview_cookie_manager.dart';
@@ -11,7 +14,7 @@ class WebViewPage extends StatefulWidget {
   final String url;
   final String selectedPaymentMethod;
 
-  const WebViewPage({Key key, this.url, this.selectedPaymentMethod}) : super(key: key);
+  const WebViewPage({super.key, required this.url, required this.selectedPaymentMethod});
 
   @override
   _WebViewPageState createState() => _WebViewPageState(url: url);
@@ -22,10 +25,10 @@ class _WebViewPageState extends State<WebViewPage> {
   final apiProvider = ApiProvider();
   final config = Config();
   bool _isLoadingPage = true;
-  String orderId;
-  String orderKey;
-  WebViewController controller;
-  String redirectUrl;
+  late String orderId;
+  late String orderKey;
+  late WebViewController controller;
+  late String redirectUrl;
   final cookieManager = WebviewCookieManager();
   bool injectCookies = false;
 
@@ -49,12 +52,13 @@ class _WebViewPageState extends State<WebViewPage> {
       redirectUrl = url;
     } else if(widget.selectedPaymentMethod == 'paytmpay') {
       redirectUrl = '${this.config.url}/index.php/checkout/order-pay/$orderId/?key=$orderKey';
+    // ignore: curly_braces_in_flow_control_structures
     } else    redirectUrl = this.config.url + '/checkout/order-pay/' + orderId + '/?key=' + orderKey;
   
     _seCookies();
   }
 
-  _WebViewPageState({this.url});
+  _WebViewPageState({required this.url});
 
   @override
   Widget build(BuildContext context) {
@@ -63,28 +67,28 @@ class _WebViewPageState extends State<WebViewPage> {
       body: Container(
         child: Stack(
           children: <Widget>[
-            injectCookies ? WebView(
-              onPageStarted: (String url) {
-                onUrlChange(url);
-              },
-              initialUrl: redirectUrl,
-              javascriptMode: JavascriptMode.unrestricted,
-              onWebViewCreated: (WebViewController wvc) {
-                //
-              },
-              onPageFinished: (value) async {
-                setState(() {
-                  _isLoadingPage = false;
-                });
-              },
-            ) : Container(),
-            _isLoadingPage
-                ? Container(
-                    color: Colors.white,
-                    alignment: FractionalOffset.center,
-                    child: CircularProgressIndicator(),
-                  )
-                : Container(),
+            // injectCookies ? WebView(
+            //   onPageStarted: (String url) {
+            //     onUrlChange(url);
+            //   },
+            //   initialUrl: redirectUrl,
+            //   javascriptMode: JavascriptMode.unrestricted,
+            //   onWebViewCreated: (WebViewController wvc) {
+            //     //
+            //   },
+            //   onPageFinished: (value) async {
+            //     setState(() {
+            //       _isLoadingPage = false;
+            //     });
+            //   },
+            // ) : Container(),
+            // _isLoadingPage
+            //     ? Container(
+            //         color: Colors.white,
+            //         alignment: FractionalOffset.center,
+            //         child: CircularProgressIndicator(),
+            //       )
+            //     : Container(),
           ],
         ),
       ),
@@ -93,7 +97,7 @@ class _WebViewPageState extends State<WebViewPage> {
 
   void _onNavigationDelegateExample(
       WebViewController controller, BuildContext context) async {
-    controller.currentUrl().then(onUrlChange);
+    controller.currentUrl().then(onUrlChange as FutureOr Function(String? value));
   }
 
   Future onUrlChange(String url) async {

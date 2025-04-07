@@ -6,6 +6,8 @@ import '../../../../../blocs/vendor/vendor_bloc.dart';
 import '../../../../../models/vendor/product_attribute_model.dart';
 import '../../../../../models/vendor/product_variation_model.dart';
 import '../../../../../models/vendor/vendor_product_model.dart';
+import '../../../../../models/vendor/product_variation_model.dart' as variation_model;
+import '../../../../../models/vendor/product_attribute_model.dart' as attribute_model;
 
 class AddVariations extends StatefulWidget {
   final VendorBloc vendorBloc;
@@ -19,8 +21,53 @@ class AddVariations extends StatefulWidget {
 class _AddVariationsState extends State<AddVariations> {
   final _formKey = GlobalKey<FormState>();
 
-  ProductVariation variationProduct = ProductVariation();
-  ProductAttribute attribute = ProductAttribute();
+  ProductVariation variationProduct = ProductVariation(
+    id: 0, // Provide appropriate default or fetched value
+    dateCreated: DateTime.now(), // Example default value
+    dateCreatedGmt: DateTime.now(), // Example default value
+    dateModified: DateTime.now(), // Example default value
+    dateModifiedGmt: DateTime.now(), // Example default value
+    description: '', // Provide appropriate default or fetched value
+    permalink: '', // Provide appropriate default or fetched value
+    sku: '', // Provide appropriate default or fetched value
+    price: '', // Provide appropriate default or fetched value
+    regularPrice: '', // Provide appropriate default or fetched value
+    salePrice: '', // Provide appropriate default or fetched value
+    onSale: false, // Example default value
+    status: '', // Provide appropriate default or fetched value
+    purchasable: false, // Example default value
+    virtual: false, // Example default value
+    downloadable: false, // Example default value
+    downloads: [], // Example default value
+    downloadLimit: 0, // Example default value
+    downloadExpiry: 0, // Example default value
+    taxStatus: '', // Provide appropriate default or fetched value
+    taxClass: '', // Provide appropriate default or fetched value
+    manageStock: false, // Example default value
+    stockStatus: '', // Provide appropriate default or fetched value
+    backorders: '', // Provide appropriate default or fetched value
+    backordersAllowed: false, // Example default value
+    backordered: false, // Example default value
+    weight: '', // Provide appropriate default or fetched value
+    dimensions: variation_model.Dimensions(length: '', width: '', height: ''), // Example default value
+    shippingClass: '', // Provide appropriate default or fetched value
+    shippingClassId: 0, // Example default value
+    image: VariationImage(id: 0, dateCreated: DateTime(0), dateCreatedGmt: DateTime(0), dateModified: DateTime(0), dateModifiedGmt: DateTime(0), src: '', name: '', alt: ''), // Example default value
+    attributes: [], // Example default value
+    menuOrder: 0, // Example default value
+    metaData: [], // Example default value
+    links: variation_model.Links(collection: [], self: [], up: []), // Example default value
+    images: [], // Example default value
+  );
+  ProductAttribute attribute = ProductAttribute(
+    id: 0, // Provide appropriate default or fetched value
+    name: '', // Provide appropriate default or fetched value
+    slug: '', // Provide appropriate default or fetched value
+    type: '', // Provide appropriate default or fetched value
+    orderBy: '', // Provide appropriate default or fetched value
+    hasArchives: false, // Example default value
+    links: attribute_model.Links(collection: [], self: []), // Example default value
+  );
 
   @override
   void initState() {
@@ -85,7 +132,7 @@ class _AddVariationsState extends State<AddVariations> {
               onChanged: (String? newValue) {
                 if (newValue != null) {
                   VariationAttribute variationAttribute =
-                      VariationAttribute();
+                      VariationAttribute(id: 0, name: '', option: '');
                   variationAttribute.id = attribute.id;
                   variationAttribute.name = attribute.name;
                   variationAttribute.option = newValue;

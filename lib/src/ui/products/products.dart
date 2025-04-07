@@ -53,7 +53,7 @@ class _ProductsWidgetState extends State<ProductsWidget>
         .toList();
     if (subCategories.length != 0) {
       subCategories.insert(
-          0, Category(name: 'All', id: int.parse(widget.filter['id'])));
+          0, Category(name: 'All', id: int.parse(widget.filter['id']), description: '', parent: 0, count: 0, image: ''));
     }
     _tabController = TabController(vsync: this, length: subCategories.length);
     _tabController.index = 0;

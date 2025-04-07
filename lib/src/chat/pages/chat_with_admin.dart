@@ -202,7 +202,7 @@ class _AdminChatPageState extends State<AdminChatPage> {
               InkWell(
                 onTap: () {
                   Navigator.push(context, MaterialPageRoute(builder: (context) {
-                    return ImageView(url: _imageURL);
+                    return ImageView(url: _imageURL, key: UniqueKey(),);
                   }));
                 },
                 child: Stack(

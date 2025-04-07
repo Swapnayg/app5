@@ -13,7 +13,7 @@ class SearchStoreStateModel extends Model {
 
   SearchStoreStateModel._internal();
   final apiProvider = ApiProvider();
-  List<StoreModel> stores;
+  List<StoreModel> stores = [];
   int page = 1;
   bool loading = false;
   var filter = <String, String>{};

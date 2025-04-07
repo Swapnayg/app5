@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api, avoid_unnecessary_containers, deprecated_member_use, use_build_context_synchronously, avoid_print, unused_field, unused_element
+
 import 'dart:async';
 import 'dart:io';
 
@@ -6,7 +8,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_icons/flutter_icons.dart';
+import 'package:flutter_font_icons/flutter_font_icons.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
@@ -16,7 +18,6 @@ import '../../../../models/register_model.dart';
 import '../../../../resources/api_provider.dart';
 import 'phone_verification.dart';
 import '../social/apple_login.dart';
-import '../social/facebook_login.dart';
 import '../social/google_login.dart';
 import '../../../color_override.dart';
 import '../../../widgets/buttons/base_text_field.dart';
@@ -27,7 +28,7 @@ class Login3 extends StatefulWidget {
 
   final AppStateModel model;
 
-  const Login3({Key key, this.model}) : super(key: key);
+  const Login3({super.key, required this.model});
   @override
   _Login3State createState() => _Login3State();
 }
@@ -35,7 +36,7 @@ class Login3 extends StatefulWidget {
 class _Login3State extends State<Login3> {
 
   AppStateModel appStateModel  = AppStateModel();
-  ScreenState screenState;
+  late ScreenState screenState;
   TextEditingController emailController = TextEditingController();
 
   @override
@@ -60,7 +61,7 @@ class _Login3State extends State<Login3> {
                         children: [
                           LoginPage( model: model,),
                           SizedBox(height: 15.0,),
-                          FlatButton(
+                          TextButton(
                               onPressed: () {
                                 setState(() {
                                   screenState = ScreenState.ForgotPassword;
@@ -68,12 +69,11 @@ class _Login3State extends State<Login3> {
                               },
                               child: Text(
                                   'Forgot Password',
-                                  style: Theme.of(context).textTheme.bodyMedium.copyWith(
+                                  style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                                       fontSize: 15,
                                       color: Colors.grey
                                   ))),
-                          FlatButton(
-                              padding: EdgeInsets.all(16.0),
+                          TextButton(
                               onPressed: () {
                                 setState(() {
                                   screenState = ScreenState.Register;
@@ -84,7 +84,7 @@ class _Login3State extends State<Login3> {
                                 children: [
                                   Text(
                                       'Don\'t have an account?',
-                                      style: Theme.of(context).textTheme.bodyMedium.copyWith(
+                                      style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                                           fontSize: 15,
                                           color: Colors.grey
                                       )),
@@ -93,7 +93,7 @@ class _Login3State extends State<Login3> {
                                     const EdgeInsets.symmetric(horizontal: 8.0),
                                     child: Text(
                                         'Sign Up',
-                                        style: Theme.of(context).textTheme.bodyMedium.copyWith(color:
+                                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(color:
                                         Theme.of(context).colorScheme.secondary)),
                                   ),
                                 ],
@@ -118,22 +118,7 @@ class _Login3State extends State<Login3> {
                                     ),
                                   ),
                                 ),
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Card(
-                                    color: Colors.white,
-                                    elevation: 2,
-                                    shadowColor: Colors.black,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(50.0),
-                                    ),
-                                    child: SizedBox(
-                                      height: 50.0, // height of the button
-                                      width: 50.0,
-                                      child: FacebookLoginWidget(),
-                                    ),
-                                  ),
-                                ),
+                                
                                 Platform.isIOS ? Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Card(
@@ -197,8 +182,8 @@ class _Login3State extends State<Login3> {
                         children: [
                           RegisterPage( model: model,),
                           SizedBox(height: 15.0,),
-                          FlatButton(
-                              padding: EdgeInsets.all(16.0),
+                          TextButton(
+                              style: TextButton.styleFrom(padding: EdgeInsets.all(16.0)),
                               onPressed: () {
                                 setState(() {
                                   screenState = ScreenState.Login;
@@ -209,7 +194,7 @@ class _Login3State extends State<Login3> {
                                 children: [
                                   Text(
                                       'Already have an account?',
-                                      style: Theme.of(context).textTheme.bodyMedium.copyWith(
+                                      style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                                           fontSize: 15,
                                           color: Colors.grey)),
                                   Padding(
@@ -217,7 +202,7 @@ class _Login3State extends State<Login3> {
                                     const EdgeInsets.symmetric(horizontal: 8.0),
                                     child: Text(
                                         'Sign In',
-                                        style: Theme.of(context).textTheme.bodyMedium.copyWith(
+                                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                                             color:
                                             Theme.of(context).colorScheme.secondary)),
                                   ),
@@ -248,22 +233,7 @@ class _Login3State extends State<Login3> {
                                     ),
                                   ),
                                 ),
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Card(
-                                    color: Colors.white,
-                                    elevation: 2,
-                                    shadowColor: Colors.black,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(50.0),
-                                    ),
-                                    child: SizedBox(
-                                      height: 50.0, // height of the button
-                                      width: 50.0,
-                                      child: FacebookLoginWidget(),
-                                    ),
-                                  ),
-                                ),
+                                
                                 Platform.isIOS ? Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Card(
@@ -422,7 +392,7 @@ enum ScreenState { Login, Register, ResetPassWord, ForgotPassword, PhoneVerifica
 
 class LoginPage extends StatefulWidget {
 
-  LoginPage({Key key,@required this.model,}) : super(key: key);
+  LoginPage({super.key,required this.model,});
 
   final AppStateModel model;
   final appStateModel = AppStateModel();
@@ -433,7 +403,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
 
 
-  bool _obscureText;
+  late bool _obscureText;
 
   final _formKey = GlobalKey<FormState>();
 
@@ -441,7 +411,7 @@ class _LoginPageState extends State<LoginPage> {
   TextEditingController passwordController = TextEditingController();
 
   var isLoading = false;
-  ScreenState screenState;
+  late ScreenState screenState;
 
 
   @override
@@ -473,6 +443,7 @@ class _LoginPageState extends State<LoginPage> {
             ),
             SizedBox(height: 60.0),
             PrimaryColorOverride(
+              key: UniqueKey(),
               child: TextFormField(
                 controller: usernameController,
                 decoration: InputDecoration(
@@ -512,7 +483,7 @@ class _LoginPageState extends State<LoginPage> {
                     //fillColor: Colors.white
                 ),
                 validator: (value) {
-                  if (value.isEmpty) {
+                  if (value!.isEmpty) {
                     return widget.model.blocks.localeText.pleaseEnterUsername;
                   }
                   return null;
@@ -523,11 +494,12 @@ class _LoginPageState extends State<LoginPage> {
             SizedBox(
               height: 12,),
             PrimaryColorOverride(
+              key: UniqueKey(),
               child: TextFormField(
                 obscureText: _obscureText,
                 controller: passwordController,
                 validator: (value) {
-                  if (value.isEmpty) {
+                  if (value!.isEmpty) {
                     return widget.model.blocks.localeText.pleaseEnterPassword;
                   }
                   return null;
@@ -586,8 +558,10 @@ class _LoginPageState extends State<LoginPage> {
             SizedBox(height: 30.0),
             SizedBox(
               width: double.infinity,
-              child: RaisedButton(
-                shape: StadiumBorder(),
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  shape: StadiumBorder(),
+                ),
                 child: ButtonText(isLoading: isLoading, text: widget.model.blocks.localeText.signIn),
                 onPressed: () => isLoading ? null : _login(),
               ),
@@ -600,7 +574,7 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Container buildIcon(child) {
+  SizedBox buildIcon(child) {
     return SizedBox(
       width: 30,
       height: 30,
@@ -608,8 +582,8 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
   _login() async {
-    var login = Map<String, dynamic>();
-    if (_formKey.currentState.validate()) {
+    var login = <String, dynamic>{};
+    if (_formKey.currentState!.validate()) {
       login["username"] = usernameController.text;
       login["password"] = passwordController.text;
       setState(() {
@@ -629,7 +603,7 @@ class _LoginPageState extends State<LoginPage> {
 
 class RegisterPage extends StatefulWidget {
 
-  RegisterPage({Key key, @required this.model,}) : super(key: key);
+  RegisterPage({super.key, required this.model,});
 
   final AppStateModel model;
   final appStateModel = AppStateModel();
@@ -640,9 +614,17 @@ class RegisterPage extends StatefulWidget {
 class _RegisterPageState extends State<RegisterPage> {
   //Country _selected = Country.IN;
   Map loginData =  <String, dynamic>{};
-  final _register = RegisterModel();
+  final _register = RegisterModel(
+    firstName: '',
+    lastName: '',
+    email: '',
+    phoneNumber: '',
+    password: '',
+    username: '',
+    companyName: '',
+  );
   var isLoading = false;
-  bool _obscureText;
+  late bool _obscureText;
 
   final _formKey = GlobalKey<FormState>();
   @override
@@ -675,6 +657,7 @@ class _RegisterPageState extends State<RegisterPage> {
             SizedBox(
               height: 60,),
             PrimaryColorOverride(
+              key: UniqueKey(),
               child: TextFormField(
                 decoration:InputDecoration(
                     enabledBorder: OutlineInputBorder(
@@ -713,9 +696,9 @@ class _RegisterPageState extends State<RegisterPage> {
                     //fillColor: Colors.white
                 ),
                 onSaved: (val) =>
-                    setState(() => _register.firstName = val),
+                    setState(() => _register.firstName = val!),
                 validator: (value) {
-                  if (value.isEmpty) {
+                  if (value!.isEmpty) {
                     return widget.model.blocks.localeText.pleaseEnterFirstName;
                   }
                   return null;
@@ -724,6 +707,7 @@ class _RegisterPageState extends State<RegisterPage> {
             ),
             SizedBox(height: 12,),
             PrimaryColorOverride(
+              key: UniqueKey(),
               child: TextFormField(
                 decoration:InputDecoration(
                     enabledBorder: OutlineInputBorder(
@@ -762,9 +746,9 @@ class _RegisterPageState extends State<RegisterPage> {
                     //fillColor: Colors.white
                 ),
                 onSaved: (val) =>
-                    setState(() => _register.lastName = val),
+                    setState(() => _register.lastName = val!),
                 validator: (value) {
-                  if (value.isEmpty) {
+                  if (value!.isEmpty) {
                     return widget.model.blocks.localeText.pleaseEnterLastName;
                   }
                   return null;
@@ -773,6 +757,7 @@ class _RegisterPageState extends State<RegisterPage> {
             ),
             SizedBox(height: 12,),
             PrimaryColorOverride(
+              key: UniqueKey(),
               child: TextFormField(
                 decoration: InputDecoration(
                     enabledBorder: OutlineInputBorder(
@@ -811,9 +796,9 @@ class _RegisterPageState extends State<RegisterPage> {
                     //fillColor: Colors.white
                 ),
                 onSaved: (val) =>
-                    setState(() => _register.email = val),
+                    setState(() => _register.email = val!),
                 validator: (value) {
-                  if (value.isEmpty) {
+                  if (value!.isEmpty) {
                     return widget.model.blocks.localeText.pleaseEnterValidEmail;
                   }
                   return null;
@@ -823,6 +808,7 @@ class _RegisterPageState extends State<RegisterPage> {
             ),
             SizedBox(height: 12,),
             PrimaryColorOverride(
+              key: UniqueKey(),
               child: TextFormField(
                 obscureText: _obscureText,
                 decoration: InputDecoration(
@@ -875,9 +861,9 @@ class _RegisterPageState extends State<RegisterPage> {
                   //fillColor: Colors.white,
                 ),
                 onSaved: (val) =>
-                    setState(() => _register.password = val),
+                    setState(() => _register.password = val!),
                 validator: (value) {
-                  if (value.isEmpty) {
+                  if (value!.isEmpty) {
                     return widget.model.blocks.localeText.pleaseEnterPassword;
                   }
                   return null;
@@ -888,8 +874,10 @@ class _RegisterPageState extends State<RegisterPage> {
             SizedBox(height: 30.0),
             SizedBox(
               width: double.infinity,
-              child: RaisedButton(
+              child: ElevatedButton(
+                 style: ElevatedButton.styleFrom(
                 shape: StadiumBorder(),
+              ),
                 child: ButtonText(isLoading: isLoading, text: widget.model.blocks.localeText.signUp),
                 onPressed: () => isLoading ? null : _registerUser(context),
               ),
@@ -902,8 +890,8 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   Future _registerUser(BuildContext context) async {
-    if (_formKey.currentState.validate()) {
-      _formKey.currentState.save();
+    if (_formKey.currentState!.validate()) {
+      _formKey.currentState!.save();
       setState(() {
         isLoading = true;
       });
@@ -918,7 +906,7 @@ class _RegisterPageState extends State<RegisterPage> {
     }
   }
 
-  Container buildIcon(child) {
+  SizedBox buildIcon(child) {
     return SizedBox(
       width: 30,
       height: 30,
@@ -950,10 +938,10 @@ class _RegisterPageState extends State<RegisterPage> {
 
 class ForgotPassword extends StatefulWidget {
 
-  const ForgotPassword({Key key,
-    @required this.model,
-    this.emailController,
-  }) : super(key: key);
+  const ForgotPassword({super.key,
+    required this.model,
+    required this.emailController,
+  });
 
   final AppStateModel model;
   final TextEditingController emailController;
@@ -968,7 +956,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
   final _formKey = GlobalKey<FormState>();
   var isLoading = false;
   final apiProvider = ApiProvider();
-  ScreenState screenState;
+  late ScreenState screenState;
 
   @override
   Widget build(BuildContext context) {
@@ -993,6 +981,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
             SizedBox(
               height: 30,),
             PrimaryColorOverride(
+              key: UniqueKey(),
               child: TextFormField(
                 decoration: InputDecoration(
                     enabledBorder: OutlineInputBorder(
@@ -1033,7 +1022,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                 obscureText: false,
                 controller: widget.emailController,
                 validator: (value) {
-                  if (value.isEmpty) {
+                  if (value!.isEmpty) {
                     return widget.model.blocks.localeText.pleaseEnterValidEmail;
                   }
                   return null;
@@ -1044,8 +1033,10 @@ class _ForgotPasswordState extends State<ForgotPassword> {
             SizedBox(height: 24.0),
             SizedBox(
               width: double.infinity,
-              child: RaisedButton(
+              child: ElevatedButton(
+                 style: ElevatedButton.styleFrom(
                 shape: StadiumBorder(),
+              ),
                 child: ButtonText(isLoading: isLoading, text: widget.model.blocks.localeText.sendOtp),
                 onPressed: () => isLoading ? null : _sendOtp(),
               ),
@@ -1059,7 +1050,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
 
   _sendOtp() async {
     var data = <String, dynamic>{};
-    if (_formKey.currentState.validate()) {
+    if (_formKey.currentState!.validate()) {
       data["email"] = widget.emailController.text;
       setState(() {
         isLoading = true;
@@ -1078,7 +1069,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
     }
   }
 
-  Container buildIcon(child) {
+  SizedBox buildIcon(child) {
     return SizedBox(
       width: 30,
       height: 30,
@@ -1090,10 +1081,10 @@ class _ForgotPasswordState extends State<ForgotPassword> {
 
 class ResetPassword extends StatefulWidget {
   const ResetPassword({
-    Key key,
-    @required this.model,
-    @required this.emailController,
-  }) : super(key: key);
+    super.key,
+    required this.model,
+    required this.emailController,
+  });
 
   final AppStateModel model;
   final TextEditingController emailController;
@@ -1102,7 +1093,7 @@ class ResetPassword extends StatefulWidget {
   _ResetPasswordState createState() => _ResetPasswordState();
 }
 class _ResetPasswordState extends State<ResetPassword> {
-  ScreenState screenState;
+  late ScreenState screenState;
   final _formKey = GlobalKey<FormState>();
   var isLoading = false;
   final apiProvider = ApiProvider();
@@ -1127,7 +1118,7 @@ class _ResetPasswordState extends State<ResetPassword> {
               widget.model.blocks.localeText.pleaseEnterOtp,
               password: false,
               inputType: TextInputType.text,
-              icon: Icons.code,
+              icon: Icons.code, obscureText: false, suffix: IconButton(icon: Icon(Icons.clear), onPressed: () {}), onSaved: (newValue) {  },
             ),
             Padding(padding: EdgeInsets.symmetric(vertical: 5.0)),
             CustomTextFormField(
@@ -1138,10 +1129,13 @@ class _ResetPasswordState extends State<ResetPassword> {
               password: true,
               inputType: TextInputType.text,
               icon: Icons.vpn_key,
+              obscureText: false, suffix: IconButton(icon: Icon(Icons.clear), onPressed: () {}), onSaved: (newValue) {  },
             ),
             SizedBox(height: 24.0),
-            RaisedButton(
-              shape: StadiumBorder(),
+            ElevatedButton(
+               style: ElevatedButton.styleFrom(
+                shape: StadiumBorder(),
+              ),
               child: ButtonText(isLoading: isLoading, text: widget.model.blocks.localeText.resetPassword),
               onPressed: () => isLoading ? null : _resetPassword(widget.model),
             ),
@@ -1152,8 +1146,8 @@ class _ResetPasswordState extends State<ResetPassword> {
   }
 
   _resetPassword(AppStateModel model) async {
-    var data = Map<String, dynamic>();
-    if (_formKey.currentState.validate()) {
+    var data = <String, dynamic>{};
+    if (_formKey.currentState!.validate()) {
       data["email"] = widget.emailController.text;
       data["password"] = newPasswordController.text;
       data["otp"] = otpController.text;
@@ -1186,17 +1180,17 @@ class CustomTextFormField extends StatelessWidget {
   TextEditingController controller;
   IconData icon;
   TextInputType inputType;
-  FormFieldSetter onSaved;
+  final FormFieldSetter onSaved;
 
   CustomTextFormField(
-      {super.key, this.label,
-        this.validationMsg,
-        this.controller,
-        this.icon,
-        this.obscureText,
-        this.inputType,
-        this.password,
-        this.suffix,});
+      {super.key, required this.label,
+        required this.validationMsg,
+        required this.controller,
+        required this.icon,
+        required this.obscureText,
+        required this.inputType,
+        required this.password,
+        required this.suffix, required this.onSaved,});
 
   @override
   Widget build(BuildContext context) {
@@ -1241,7 +1235,7 @@ class CustomTextFormField extends StatelessWidget {
       obscureText: obscureText,
       controller: controller,
       validator: (value) {
-        if (value.isEmpty) {
+        if (value!.isEmpty) {
           return validationMsg;
         }
         return null;
@@ -1257,7 +1251,7 @@ class PhoneVerificationPage extends StatefulWidget {
 
   final appStateModel = AppStateModel();
 
-  PhoneVerificationPage({Key key}) : super(key: key);
+  PhoneVerificationPage({super.key});
 
 
   @override
@@ -1277,15 +1271,15 @@ class _PhoneVerificationPageState extends State<PhoneVerificationPage> {
   var _loadingOtp = false;
   String prefixCode = '+91';
 
-  String verificationId;
+  late String verificationId;
 
-  String smsOTP;
+  late String smsOTP;
 
   String errorMessage = '';
 
   var _loadingNumber = false;
 
-  String _phoneNumber;
+  late String _phoneNumber;
 
   @override
   void initState() {
@@ -1340,16 +1334,20 @@ class _PhoneVerificationPageState extends State<PhoneVerificationPage> {
                       key: _formKey,
                       child: BaseTextField(
                         labelText: widget.appStateModel.blocks.localeText.phoneNumber,
-                        validator: (String value) {
-                          if (value.trim().isEmpty) return widget.appStateModel.blocks.localeText.pleaseEnterPhoneNumber;
+                        validator: (String? value) {
+                          if (value!.trim().isEmpty) return widget.appStateModel.blocks.localeText.pleaseEnterPhoneNumber;
                           return value.length == 0 ? null : widget.appStateModel.blocks.localeText.pleaseEnterPhoneNumber;
                         },
-                        onSaved: (String value) {
-                          _phoneNumber = value;
+                        onSaved: (String? value) {
+                          _phoneNumber = value!;
                         },
                         inputFormatters: [
-                          WhitelistingTextInputFormatter.digitsOnly,
+                          FilteringTextInputFormatter.digitsOnly,
                         ],
+                        suffix: Icon(Icons.phone),
+                        hintText: 'Enter your phone number',
+                        controller: TextEditingController(),
+                        initialValue: '',
                       )
                   ),
                 ),
@@ -1361,8 +1359,10 @@ class _PhoneVerificationPageState extends State<PhoneVerificationPage> {
           ),
           SizedBox(
             width: double.infinity,
-            child: RaisedButton(
-              shape: StadiumBorder(),
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                shape: StadiumBorder(),
+              ),
               child:
               ButtonText(isLoading: _loadingNumber, text: widget.appStateModel.blocks.localeText.verifyNumber),
               onPressed: () => _loadingNumber ? null : _validateInputs(),
@@ -1384,16 +1384,20 @@ class _PhoneVerificationPageState extends State<PhoneVerificationPage> {
               height: 15.0,
             ),
             BaseTextField(
+              suffix: Icon(Icons.phone),
+              hintText: 'Enter your phone number',
+              controller: TextEditingController(),
+              initialValue: '',
               labelText: widget.appStateModel.blocks.localeText.enterOtp,//'ENTER OTP(6 digits)',
-              validator: (String value) {
-                if (value.trim().isEmpty) return widget.appStateModel.blocks.localeText.inValidCode;
+              validator: (String? value) {
+                if (value!.trim().isEmpty) return widget.appStateModel.blocks.localeText.inValidCode;
                 return value.length == 6 ? null : widget.appStateModel.blocks.localeText.inValidCode;
               },
-              onSaved: (String value) {
-                smsOTP = value;
+              onSaved: (String? value) {
+                smsOTP = value!;
               },
               inputFormatters: [
-                WhitelistingTextInputFormatter.digitsOnly,
+                FilteringTextInputFormatter.digitsOnly,
                 LengthLimitingTextInputFormatter(6),
               ],
             ),
@@ -1402,7 +1406,7 @@ class _PhoneVerificationPageState extends State<PhoneVerificationPage> {
             ),
             SizedBox(
               width: double.infinity,
-              child: RaisedButton(
+              child: ElevatedButton(
                 child: ButtonText(isLoading: _loadingOtp, text: widget.appStateModel.blocks.localeText.verifyOtp),
                 onPressed: () => _loadingOtp ? null : _verifyOTP(context),
               ),
@@ -1433,7 +1437,7 @@ class _PhoneVerificationPageState extends State<PhoneVerificationPage> {
   }
 
   Future<void> _verifyOTP(BuildContext context) async {
-    _formKey.currentState.save();
+    _formKey.currentState!.save();
 
     setState(() {
       _loadingOtp = true;
@@ -1500,11 +1504,11 @@ class _PhoneVerificationPageState extends State<PhoneVerificationPage> {
 
 
   Future<void> _validateInputs() async {
-    _formKey.currentState.save();
+    _formKey.currentState!.save();
     setState(() {
       _loadingNumber = true;
     });
-    smsOTPSent(String verId, [int forceCodeResend]) {
+    smsOTPSent(String verId, [int? forceCodeResend]) {
       verificationId = verId;
       setState(() {
         _loadingNumber = false;
@@ -1532,7 +1536,7 @@ class _PhoneVerificationPageState extends State<PhoneVerificationPage> {
       setState(() {
         _loadingNumber = false;
       });
-      handlePhoneNumberError(e);
+      handlePhoneNumberError(e as PlatformException);
     }
   }
 
@@ -1582,7 +1586,7 @@ class _OTPPageState extends State<OTPPage> {
   TextEditingController textEditingController = TextEditingController();
   // ..text = "123456";
 
-  StreamController<ErrorAnimationType> errorController;
+  late StreamController<ErrorAnimationType> errorController;
 
   bool hasError = false;
   String currentText = "";
@@ -1677,7 +1681,7 @@ class _OTPPageState extends State<OTPPage> {
                     obscureText: false,
                     animationType: AnimationType.fade,
                     validator: (v) {
-                      if (v.length < 6) {
+                      if (v!.length < 6) {
                         return "I'm from validator";
                       } else {
                         return null;
@@ -1741,11 +1745,13 @@ class _OTPPageState extends State<OTPPage> {
           ),
           ButtonTheme(
             height: 50,
-            child: RaisedButton(
-              color: Theme.of(context).colorScheme.secondary,
-              shape: StadiumBorder(),
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Theme.of(context).colorScheme.secondary,
+                shape: StadiumBorder(),
+              ),
               onPressed: () {
-                formKey.currentState.validate();
+                formKey.currentState!.validate();
                 //conditions for validating
                 if (currentText.length != 4 || currentText != "towtow") {
                   errorController.add(ErrorAnimationType
@@ -1756,7 +1762,7 @@ class _OTPPageState extends State<OTPPage> {
                 } else {
                   setState(() {
                     hasError = false;
-                    scaffoldKey.currentState.showSnackBar(SnackBar(
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                       content: Text("Aye!!"),
                       duration: Duration(seconds: 2),
                     ));

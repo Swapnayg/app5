@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api, unused_local_variable, avoid_unnecessary_containers
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
@@ -25,7 +27,7 @@ class _WalletState extends State<Wallet> {
   final _formKey = GlobalKey<FormState>();
   bool isLoading = false;
   final TextEditingController _balanceAmountController = TextEditingController();
-  NumberFormat formatter;
+  late NumberFormat formatter;
 
   @override
   void initState() {
@@ -45,7 +47,7 @@ class _WalletState extends State<Wallet> {
 
   @override
   Widget build(BuildContext context) {
-    TextStyle menuTextStyle = Theme.of(context).textTheme.bodyLarge;
+    TextStyle? menuTextStyle = Theme.of(context).textTheme.bodyLarge;
     Color onPrimaryColor = Colors.white;
     Color headerBackgroundColor = Theme.of(context).primaryColor;
 
@@ -74,10 +76,10 @@ class _WalletState extends State<Wallet> {
                         stream: widget.walletBloc.allTransactions,
                         builder: (context,
                             AsyncSnapshot<List<WalletModel>> snapshot) {
-                          if (snapshot.hasData && snapshot.data.length > 0) {
+                          if (snapshot.hasData && snapshot.data!.length > 0) {
                               return Container(
                                   child: Text(
-                                      '${appStateModel.blocks.localeText.balance} ${formatter.format(double.parse(snapshot.data[0].balance))}',
+                                      '${appStateModel.blocks.localeText.balance} ${formatter.format(double.parse(snapshot.data![0].balance))}',
                                     style: TextStyle(color: onPrimaryColor),
                                   ));
                           } else {
@@ -98,17 +100,17 @@ class _WalletState extends State<Wallet> {
                   builder:
                       (context, AsyncSnapshot<List<WalletModel>> snapshot) {
                     if (snapshot.hasData) {
-                      if (snapshot.data.length == 0) {
+                      if (snapshot.data!.length == 0) {
                         double balance = 0;
                         return SliverToBoxAdapter(
                           child: SizedBox(
                             height: MediaQuery.of(context).size.height - 225,
                             child: Center(
-                              child: RaisedButton(
+                              child: ElevatedButton(
                                 onPressed: () {
                                   _addBalance(context, balance);
                                 },
-                                  child: Text(appStateModel.blocks.localeText.addBalance)
+                                child: Text(appStateModel.blocks.localeText.addBalance),
                               ),
                             ),
                           ),
@@ -133,8 +135,8 @@ class _WalletState extends State<Wallet> {
             builder: (context,
                 AsyncSnapshot<List<WalletModel>> snapshot) {
               double balance = 0;
-              if(snapshot.hasData && snapshot.data.length > 0) {
-                balance = double.parse(snapshot.data[0].balance);
+              if(snapshot.hasData && snapshot.data!.length > 0) {
+                balance = double.parse(snapshot.data![0].balance);
               }
 
             return FloatingActionButton(
@@ -160,26 +162,26 @@ class _WalletState extends State<Wallet> {
                 dense: false,
                 title: Row(
                   children: [
-                    Text(snapshot.data[index].type.toUpperCase()),
+                    Text(snapshot.data![index].type.toUpperCase()),
                     SizedBox(width: 8),
                     Text(formatter
-                        .format(double.parse(snapshot.data[index].amount))),
+                        .format(double.parse(snapshot.data![index].amount))),
                   ],
                 ),
                 subtitle: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     SizedBox(height: 4),
-                    Text(snapshot.data[index].details),
+                    Text(snapshot.data![index].details),
                     SizedBox(height: 4),
-                    Text(dateFormatter.format(snapshot.data[index].date)),
+                    Text(dateFormatter.format(snapshot.data![index].date)),
                   ],
                 ),
                 trailing: Text(formatter
-                    .format(double.parse(snapshot.data[index].balance))),
+                    .format(double.parse(snapshot.data![index].balance))),
               ));
         },
-        childCount: snapshot.data.length,
+        childCount: snapshot.data!.length,
       ),
     );
   }
@@ -230,7 +232,7 @@ class _WalletState extends State<Wallet> {
                           TextFormField(
                             controller: _balanceAmountController,
                             validator: (value) {
-                              if (value.isEmpty) {
+                              if (value!.isEmpty) {
                                 return appStateModel.blocks.localeText.pleaseEnterRechargeAmount;
                               }
                               return null;
@@ -243,9 +245,9 @@ class _WalletState extends State<Wallet> {
                           SizedBox(
                             height: 20,
                           ),
-                          RaisedButton(
+                          ElevatedButton(
                             onPressed: () async {
-                              if (_formKey.currentState.validate()) {
+                              if (_formKey.currentState!.validate()) {
                                 var data = <String, dynamic>{};
                                 data['woo_wallet_balance_to_add'] =
                                     _balanceAmountController.text;

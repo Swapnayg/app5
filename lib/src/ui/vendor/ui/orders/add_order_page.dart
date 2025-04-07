@@ -11,7 +11,70 @@ import 'add_product.dart';
 
 class AddOrderPage extends StatefulWidget {
   final VendorBloc vendorBloc;
- final order = Order();
+ final order = Order(
+   id: 0,
+   parentId: 0,
+   number: '',
+   orderKey: '',
+   createdVia: '',
+   version: '',
+   status: '',
+   currency: '',
+   dateCreated: DateTime.now(),
+   dateCreatedGmt: DateTime.now().toUtc(),
+   dateModified: DateTime.now(),
+   dateModifiedGmt: DateTime.now().toUtc(),
+   discountTotal: '0.0',
+   discountTax: '0.0',
+   shippingTotal: '0.0',
+   shippingTax: '0.0',
+   cartTax: '0.0',
+   total: '0.0',
+   totalTax: '0.0',
+   pricesIncludeTax: false,
+   customerId: 0,
+   customerIpAddress: '',
+   customerUserAgent: '',
+   customerNote: '',
+   billing: Address(
+    firstName: '',
+    lastName: '',
+    company: '',
+    address1: '',
+    address2: '',
+    city: '',
+    postcode: '',
+    country: '',
+    state: '',
+    email: '',
+    phone: '',
+  ),
+   shipping: Address(
+    firstName: '',
+    lastName: '',
+    company: '',
+    address1: '',
+    address2: '',
+    city: '',
+    postcode: '',
+    country: '',
+    state: '',
+    email: '',
+    phone: '',
+  ),
+   paymentMethod: '',
+   paymentMethodTitle: '',
+   transactionId: '',
+   cartHash: '',
+   metaData: [],
+   lineItems: [],
+   taxLines: [],
+   shippingLines: [],
+   feeLines: [],
+   couponLines: [],
+   refunds: [],
+   decimals: 2,
+ );
 
 
   AddOrderPage({super.key, required this.vendorBloc});
@@ -31,8 +94,32 @@ class _AddOrderPageState extends State<AddOrderPage> {
     widget.vendorBloc.fetchAllProducts();
     widget.vendorBloc.getVendorOrderForm();
     widget.order.lineItems = List<LineItem>.empty(growable: true);
-    widget.order.billing = Address();
-    widget.order.shipping = Address();
+    widget.order.billing = Address(
+    firstName: '',
+    lastName: '',
+    company: '',
+    address1: '',
+    address2: '',
+    city: '',
+    postcode: '',
+    country: '',
+    state: '',
+    email: '',
+    phone: '',
+  );
+    widget.order.shipping = Address(
+    firstName: '',
+    lastName: '',
+    company: '',
+    address1: '',
+    address2: '',
+    city: '',
+    postcode: '',
+    country: '',
+    state: '',
+    email: '',
+    phone: '',
+  );
   }
 
   @override

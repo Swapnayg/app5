@@ -11,12 +11,12 @@ class CustomTextFormField extends StatelessWidget {
   TextInputType inputType;
 
   CustomTextFormField(
-      {super.key, this.label,
-        this.validationMsg,
-        this.controller,
-        this.icon,
-        this.inputType,
-        this.password});
+      {super.key, required this.label,
+        required this.validationMsg,
+        required this.controller,
+        required this.icon,
+        required this.inputType,
+        required this.password});
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +24,7 @@ class CustomTextFormField extends StatelessWidget {
       obscureText: password,
       controller: controller,
       validator: (value) {
-        if (value.isEmpty) {
+        if (value!.isEmpty) {
           return validationMsg;
         }
         return null;

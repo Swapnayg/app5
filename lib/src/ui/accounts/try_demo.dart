@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api, deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:url_launcher/url_launcher.dart';
@@ -10,7 +12,7 @@ import '../../config.dart';
 import '../color_override.dart';
 
 class TryDemo extends StatefulWidget {
-  const TryDemo({Key key}) : super(key: key);
+  const TryDemo({super.key});
 
   @override
   _TryDemoState createState() => _TryDemoState();
@@ -43,13 +45,14 @@ class _TryDemoState extends State<TryDemo> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
                 PrimaryColorOverride(
+                  key:UniqueKey(),
                   child: TextFormField(
                     controller: urlController,
                     decoration: InputDecoration(
                       hintText: 'http://example.com',
                     ),
                     validator: (value) {
-                      if (value.isEmpty) {
+                      if (value!.isEmpty) {
                         return 'Site url';
                       }
                       return null;
@@ -60,10 +63,10 @@ class _TryDemoState extends State<TryDemo> {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: <Widget>[
-                    RaisedButton(
+                    ElevatedButton(
                       child: ButtonText(isLoading: isLoading, text: appStateModel.blocks.localeText.localeTextContinue),
                       onPressed: () async {
-                        if (_formKey.currentState.validate()) {
+                        if (_formKey.currentState!.validate()) {
                           setState(() {
                             isLoading = true;
                             error = '';

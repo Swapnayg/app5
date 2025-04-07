@@ -2,6 +2,8 @@
 //
 //     final order = orderFromJson(jsonString);
 
+// ignore_for_file: unnecessary_null_comparison
+
 import 'dart:convert';
 
 import 'customer_model.dart';
@@ -55,48 +57,48 @@ class Order {
   int decimals;
 
   Order({
-    this.id,
-    this.parentId,
-    this.number,
-    this.orderKey,
-    this.createdVia,
-    this.version,
-    this.status,
-    this.currency,
-    this.dateCreated,
-    this.dateCreatedGmt,
-    this.dateModified,
-    this.dateModifiedGmt,
-    this.discountTotal,
-    this.discountTax,
-    this.shippingTotal,
-    this.shippingTax,
-    this.cartTax,
-    this.total,
-    this.totalTax,
-    this.pricesIncludeTax,
-    this.customerId,
-    this.customerIpAddress,
-    this.customerUserAgent,
-    this.customerNote,
-    this.billing,
-    this.shipping,
-    this.paymentMethod,
-    this.paymentMethodTitle,
-    this.transactionId,
+    required this.id,
+    required this.parentId,
+    required this.number,
+    required this.orderKey,
+    required this.createdVia,
+    required this.version,
+    required this.status,
+    required this.currency,
+    required this.dateCreated,
+    required this.dateCreatedGmt,
+    required this.dateModified,
+    required this.dateModifiedGmt,
+    required this.discountTotal,
+    required this.discountTax,
+    required this.shippingTotal,
+    required this.shippingTax,
+    required this.cartTax,
+    required this.total,
+    required this.totalTax,
+    required this.pricesIncludeTax,
+    required this.customerId,
+    required this.customerIpAddress,
+    required this.customerUserAgent,
+    required this.customerNote,
+    required this.billing,
+    required this.shipping,
+    required this.paymentMethod,
+    required this.paymentMethodTitle,
+    required this.transactionId,
     this.datePaid,
     this.datePaidGmt,
     this.dateCompleted,
     this.dateCompletedGmt,
-    this.cartHash,
-    this.metaData,
-    this.lineItems,
-    this.taxLines,
-    this.shippingLines,
-    this.feeLines,
-    this.couponLines,
-    this.refunds,
-    this.decimals,
+    required this.cartHash,
+    required this.metaData,
+    required this.lineItems,
+    required this.taxLines,
+    required this.shippingLines,
+    required this.feeLines,
+    required this.couponLines,
+    required this.refunds,
+    required this.decimals,
   });
 
   factory Order.fromJson(Map<String, dynamic> json) => Order(
@@ -108,10 +110,10 @@ class Order {
     version: json["version"],
     status: json["status"],
     currency: json["currency"],
-    dateCreated: json["date_created"] == null ? null : DateTime.parse(json["date_created"]),
-    dateCreatedGmt: json["date_created_gmt"] == null ? null : DateTime.parse(json["date_created_gmt"]),
-    dateModified: json["date_modified"] == null ? null : DateTime.parse(json["date_modified"]),
-    dateModifiedGmt: json["date_modified_gmt"] == null ? null : DateTime.parse(json["date_modified_gmt"]),
+    dateCreated: json["date_created"] == null ? DateTime.now() : DateTime.parse(json["date_created"]),
+    dateCreatedGmt: json["date_created_gmt"] == null ? DateTime.now() : DateTime.parse(json["date_created_gmt"]),
+    dateModified: json["date_modified"] == null ? DateTime.now() : DateTime.parse(json["date_modified"]),  
+    dateModifiedGmt: json["date_modified_gmt"] == null ? DateTime.now() : DateTime.parse(json["date_modified_gmt"]),
     discountTotal: json["discount_total"],
     discountTax: json["discount_tax"],
     shippingTotal: json["shipping_total"],
@@ -124,8 +126,34 @@ class Order {
     customerIpAddress: json["customer_ip_address"],
     customerUserAgent: json["customer_user_agent"],
     customerNote: json["customer_note"],
-    billing: json["billing"] == null ? null : Address.fromJson(json["billing"]),
-    shipping: json["shipping"] == null ? null : Address.fromJson(json["shipping"]),
+    billing: json["billing"] == null
+        ? Address(
+            firstName: '',
+            lastName: '',
+            company: '',
+            address1: '',
+            address2: '',
+            city: '',
+            postcode: '',
+            country: '',
+            state: '',
+            email: '',
+            phone: '',
+          )
+        : Address.fromJson(json["billing"]),
+    shipping: json["shipping"] == null ? Address(
+            firstName: '',
+            lastName: '',
+            company: '',
+            address1: '',
+            address2: '',
+            city: '',
+            postcode: '',
+            country: '',
+            state: '',
+            email: '',
+            phone: '',
+          ) : Address.fromJson(json["shipping"]),
     paymentMethod: json["payment_method"],
     paymentMethodTitle: json["payment_method_title"],
     transactionId: json["transaction_id"],
@@ -134,13 +162,13 @@ class Order {
     dateCompleted: json["date_completed"],
     dateCompletedGmt: json["date_completed_gmt"],
     cartHash: json["cart_hash"],
-    metaData: json["meta_data"] == null ? null : List<MetaDatum>.from(json["meta_data"].map((x) => MetaDatum.fromJson(x))),
-    lineItems: json["line_items"] == null ? null : List<LineItem>.from(json["line_items"].map((x) => LineItem.fromJson(x))),
-    taxLines: json["tax_lines"] == null ? null : List<dynamic>.from(json["tax_lines"].map((x) => x)),
-    shippingLines: json["shipping_lines"] == null ? null : List<ShippingLine>.from(json["shipping_lines"].map((x) => ShippingLine.fromJson(x))),
-    feeLines: json["fee_lines"] == null ? null : List<dynamic>.from(json["fee_lines"].map((x) => x)),
-    couponLines: json["coupon_lines"] == null ? null : List<dynamic>.from(json["coupon_lines"].map((x) => x)),
-    refunds: json["refunds"] == null ? null : List<dynamic>.from(json["refunds"].map((x) => x)),
+    metaData: json["meta_data"] == null ? [] : List<MetaDatum>.from(json["meta_data"].map((x) => MetaDatum.fromJson(x))),
+    lineItems: json["line_items"] == null ? [] : List<LineItem>.from(json["line_items"].map((x) => LineItem.fromJson(x))),
+    taxLines:json["tax_lines"] == null ? [] : List<dynamic>.from(json["tax_lines"].map((x) => x)),
+    shippingLines:json["shipping_lines"] == null ? [] : List<ShippingLine>.from(json["shipping_lines"].map((x) => ShippingLine.fromJson(x))),
+    feeLines: json["fee_lines"] == null ? [] : List<dynamic>.from(json["fee_lines"].map((x) => x)),
+    couponLines: json["coupon_lines"] == null ? [] : List<dynamic>.from(json["coupon_lines"].map((x) => x)),
+    refunds: json["refunds"] == null ? [] : List<dynamic>.from(json["refunds"].map((x) => x)),
     decimals: json["decimals"],
   );
 
@@ -153,10 +181,10 @@ class Order {
     "version": version,
     "status": status,
     "currency": currency,
-    "date_created": dateCreated?.toIso8601String(),
-    "date_created_gmt": dateCreatedGmt?.toIso8601String(),
-    "date_modified": dateModified?.toIso8601String(),
-    "date_modified_gmt": dateModifiedGmt?.toIso8601String(),
+    "date_created": dateCreated.toIso8601String(),
+    "date_created_gmt": dateCreatedGmt.toIso8601String(),
+    "date_modified": dateModified.toIso8601String(),
+    "date_modified_gmt": dateModifiedGmt.toIso8601String(),
     "discount_total": discountTotal,
     "discount_tax": discountTax,
     "shipping_total": shippingTotal,
@@ -169,8 +197,8 @@ class Order {
     "customer_ip_address": customerIpAddress,
     "customer_user_agent": customerUserAgent,
     "customer_note": customerNote,
-    "billing": billing?.toJson(),
-    "shipping": shipping?.toJson(),
+    "billing": billing.toJson(),
+    "shipping": shipping.toJson(),
     "payment_method": paymentMethod,
     "payment_method_title": paymentMethodTitle,
     "transaction_id": transactionId,
@@ -206,20 +234,20 @@ class LineItem {
   double price;
 
   LineItem({
-    this.id,
-    this.name,
-    this.productId,
-    this.variationId,
-    this.quantity,
-    this.taxClass,
-    this.subtotal,
-    this.subtotalTax,
-    this.total,
-    this.totalTax,
-    this.taxes,
-    this.metaData,
-    this.sku,
-    this.price,
+    required this.id,
+    required this.name,
+    required this.productId,
+    required this.variationId,
+    required this.quantity,
+    required this.taxClass,
+    required this.subtotal,
+    required this.subtotalTax,
+    required this.total,
+    required this.totalTax,
+    required this.taxes,
+    required this.metaData,
+    required this.sku,
+    required this.price,
   });
 
   factory LineItem.fromJson(Map<String, dynamic> json) => LineItem(
@@ -233,8 +261,8 @@ class LineItem {
     subtotalTax: json["subtotal_tax"],
     total: json["total"],
     totalTax: json["total_tax"],
-    metaData: json["meta_data"] == null ? null : List<LineItemMetaDatum>.from(json["meta_data"].map((x) => LineItemMetaDatum.fromMap(x))),
-    taxes: json["taxes"] == null ? null : List<dynamic>.from(json["taxes"].map((x) => x)),
+    metaData: json["meta_data"] == null ? [] : List<LineItemMetaDatum>.from(json["meta_data"].map((x) => LineItemMetaDatum.fromJson(x))),
+    taxes: json["taxes"] == null ? [] : List<dynamic>.from(json["taxes"].map((x) => x)),
     sku: json["sku"],
     price: json["price"]?.toDouble(),
   );
@@ -260,9 +288,9 @@ class LineItem {
 
 class LineItemMetaDatum {
   LineItemMetaDatum({
-    this.id,
-    this.key,
-    this.value,
+    required this.id,
+    required this.key,
+    required this.value,
   });
 
   int id;
@@ -292,9 +320,9 @@ class MetaDatum {
   String value;
 
   MetaDatum({
-    this.id,
-    this.key,
-    this.value,
+    required this.id,
+    required this.key,
+    required this.value,
   });
 
   factory MetaDatum.fromJson(Map<String, dynamic> json) {
@@ -308,7 +336,7 @@ class MetaDatum {
       return MetaDatum(
         id: json["id"],
         key: json["key"],
-        value: null,
+        value: '',
       );
     }
   }
@@ -331,14 +359,14 @@ class ShippingLine {
   List<MetaDatum> metaData;
 
   ShippingLine({
-    this.id,
-    this.methodTitle,
-    this.methodId,
-    this.instanceId,
-    this.total,
-    this.totalTax,
-    this.taxes,
-    this.metaData,
+    required this.id,
+    required this.methodTitle,
+    required this.methodId,
+    required this.instanceId,
+    required this.total,
+    required this.totalTax,
+    required this.taxes,
+    required this.metaData,
   });
 
   factory ShippingLine.fromJson(Map<String, dynamic> json) => ShippingLine(
@@ -348,8 +376,8 @@ class ShippingLine {
     instanceId: json["instance_id"],
     total: json["total"],
     totalTax: json["total_tax"],
-    taxes: json["taxes"] == null ? null : List<dynamic>.from(json["taxes"].map((x) => x)),
-    metaData: json["meta_data"] == null ? null : List<MetaDatum>.from(json["meta_data"].map((x) => MetaDatum.fromJson(x))),
+    taxes: json["taxes"] == null ? [] : List<dynamic>.from(json["taxes"].map((x) => x)),
+    metaData:json["meta_data"] == null ? [] : List<MetaDatum>.from(json["meta_data"].map((x) => MetaDatum.fromJson(x))),
   );
 
   Map<String, dynamic> toJson() => {

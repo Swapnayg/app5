@@ -2,6 +2,8 @@
 //
 //     final customer = customerFromJson(jsonString);
 
+// ignore_for_file: unnecessary_null_comparison
+
 import 'dart:convert';
 
 Customer customerFromJson(String str) => Customer.fromJson(json.decode(str));
@@ -25,20 +27,20 @@ class Customer {
   String guest;
 
   Customer({
-    this.id,
-    this.email,
-    this.firstName,
-    this.lastName,
-    this.role,
-    this.username,
-    this.billing,
-    this.shipping,
-    this.isPayingCustomer,
-    this.ordersCount,
-    this.totalSpent,
-    this.avatarUrl,
-    this.metaData,
-    this.guest
+    required this.id,
+    required this.email,
+    required this.firstName,
+    required this.lastName,
+    required this.role,
+    required this.username,
+    required this.billing,
+    required this.shipping,
+    required this.isPayingCustomer,
+    required this.ordersCount,
+    required this.totalSpent,
+    required this.avatarUrl,
+    required this.metaData,
+    required this.guest
   });
 
   factory Customer.fromJson(Map<String, dynamic> json) => Customer(
@@ -48,13 +50,13 @@ class Customer {
     lastName: json["last_name"],
     role: json["role"],
     username: json["username"],
-    billing: json["billing"] == null ? null : Address.fromJson(json["billing"]),
-    shipping: json["shipping"] == null ? null : Address.fromJson(json["shipping"]),
+    billing: json["billing"] == null ? Address.empty() : Address.fromJson(json["billing"]),
+    shipping: json["shipping"] == null ? Address.empty() : Address.fromJson(json["shipping"]),
     isPayingCustomer: json["is_paying_customer"],
     ordersCount: json["orders_count"],
     totalSpent: json["total_spent"],
     avatarUrl: json["avatar_url"],
-    metaData: json["meta_data"] == null ? null : List<MetaDatum>.from(json["meta_data"].map((x) => MetaDatum.fromJson(x))),
+    metaData: json["meta_data"] == null ? [] : List<MetaDatum>.from(json["meta_data"].map((x) => MetaDatum.fromJson(x))),
     guest: json["guest"],
   );
 
@@ -65,8 +67,8 @@ class Customer {
     "last_name": lastName,
     "role": role,
     "username": username,
-    "billing": billing?.toJson(),
-    "shipping": shipping?.toJson(),
+    "billing": billing.toJson(),
+    "shipping": shipping.toJson(),
     "is_paying_customer": isPayingCustomer,
     "orders_count": ordersCount,
     "total_spent": totalSpent,
@@ -89,17 +91,17 @@ class Address {
   String phone;
 
   Address({
-    this.firstName,
-    this.lastName,
-    this.company,
-    this.address1,
-    this.address2,
-    this.city,
-    this.postcode,
-    this.country,
-    this.state,
-    this.email,
-    this.phone,
+    required this.firstName,
+    required this.lastName,
+    required this.company,
+    required this.address1,
+    required this.address2,
+    required this.city,
+    required this.postcode,
+    required this.country,
+    required this.state,
+    required this.email,
+    required this.phone,
   });
 
   factory Address.fromJson(Map<String, dynamic> json) => Address(
@@ -129,6 +131,8 @@ class Address {
     "email": email,
     "phone": phone,
   };
+  
+  static empty() {}
 }
 
 class MetaDatum {
@@ -137,9 +141,9 @@ class MetaDatum {
   dynamic value;
 
   MetaDatum({
-    this.id,
-    this.key,
-    this.value,
+    required this.id,
+    required this.key,
+    required this.value,
   });
 
   factory MetaDatum.fromJson(Map<String, dynamic> json) => MetaDatum(

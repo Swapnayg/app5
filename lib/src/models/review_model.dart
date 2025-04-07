@@ -20,13 +20,13 @@ class ReviewModel {
   DateTime  date;
 
   ReviewModel({
-    this.id,
-    this.author,
-    this.email,
-    this.content,
-    this.rating,
-    this.avatar,
-    this.date,
+    required this.id,
+    required this.author,
+    required this.email,
+    required this.content,
+    required this.rating,
+    required this.avatar,
+    required this.date,
   });
 
   factory ReviewModel.fromJson(Map<String, dynamic> json) => ReviewModel(
@@ -36,7 +36,7 @@ class ReviewModel {
     content: json["content"],
     rating: (json["rating"] == null || json["rating"] == '') ? '0' : json["rating"],
     avatar: json["avatar"],
-    date: json["date"] == null ? null : DateTime.parse(json["date"]),
+    date: json["date"] == null ? DateTime.now() : DateTime.parse(json["date"]),
   );
 
   Map<String, dynamic> toJson() => {

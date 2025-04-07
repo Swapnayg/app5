@@ -1,7 +1,9 @@
+// ignore_for_file: prefer_typing_uninitialized_variables, library_private_types_in_public_api, unused_local_variable, deprecated_member_use
+
 import '../../../functions.dart';
 import './../../checkout/webview_checkout/webview_checkout.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_icons/flutter_icons.dart';
+import 'package:flutter_font_icons/flutter_font_icons.dart';
 import 'package:scoped_model/scoped_model.dart';
 import '../../../models/app_state_model.dart';
 import '../../../ui/accounts/login/buttons.dart';
@@ -20,7 +22,7 @@ class CartPage extends StatefulWidget {
   final homeBloc = CheckoutBloc();
   final appStateModel = AppStateModel();
   final hideArrowButton;
-  CartPage({Key key, this.hideArrowButton}) : super(key: key);
+  CartPage({super.key, this.hideArrowButton});
 
   @override
   _CartPageState createState() => _CartPageState();
@@ -106,24 +108,20 @@ class _CartPageState extends State<CartPage> {
               Expanded(
                 child: ScopedModelDescendant<AppStateModel>(
                     builder: (context, child, model) {
-                  if (model.shoppingCart.cartContents == null) {
-                    return Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  } else if (model.shoppingCart.cartContents.length != 0) {
-                    return buildCart(localTheme, model.shoppingCart);
-                  } else {
-                    return Stack(
-                      children: <Widget>[
-                        ListView(
-                          children: <Widget>[
-                            Container(),
-                          ],
-                        ),
-                        Center(child: Icon(FlutterIcons.shopping_cart_fea, size: 150, color: Theme.of(context).focusColor,))
-                      ],
-                    );
-                  }
+                  if (model.shoppingCart.cartContents.length != 0) {
+                  return buildCart(localTheme, model.shoppingCart);
+                } else {
+                  return Stack(
+                    children: <Widget>[
+                      ListView(
+                        children: <Widget>[
+                          Container(),
+                        ],
+                      ),
+                      Center(child: Icon(Icons.shopping_cart, size: 150, color: Theme.of(context).focusColor,))
+                    ],
+                  );
+                }
                 }),
               ),
             ],
@@ -156,6 +154,7 @@ class _CartPageState extends State<CartPage> {
                         padding:
                             const EdgeInsets.fromLTRB(0.0, 0.0, 16.0, 16.0),
                         child: PrimaryColorOverride(
+                          key: UniqueKey(),
                           child: TextFormField(
                             controller: _couponCodeController,
                             decoration: InputDecoration(
@@ -170,21 +169,21 @@ class _CartPageState extends State<CartPage> {
                                         .toUpperCase()),
                                   ),
                                   onTap: () {
-                                    if (_formKey.currentState.validate()) {
-                                      _formKey.currentState.save();
+                                    if (_formKey.currentState!.validate()) {
+                                      _formKey.currentState!.save();
                                       widget.appStateModel.applyCoupon(
                                           _couponCodeController.text);
                                     }
                                   },
                                 )),
                             validator: (value) {
-                              if (value.isEmpty) {
+                              if (value!.isEmpty) {
                                 return widget.appStateModel.blocks.localeText.pleaseEnterCouponCode;
                               }
                               return null;
                             },
                             onSaved: (value) {
-                              widget.homeBloc.formData['coupon_code'] = value;
+                              widget.homeBloc.formData['coupon_code'] = value!;
                             },
                           ),
                         ),
@@ -208,36 +207,38 @@ class _CartPageState extends State<CartPage> {
           child:Center(
             child: SizedBox(
               width: MediaQuery.of(context).size.width,
-              child: RaisedButton(
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(50.0),
-                    side: BorderSide(color: Colors.red)
+                  borderRadius: BorderRadius.circular(50.0),
+                  side: BorderSide(color: Colors.red),
                 ),
-                elevation:0,
-                color: Colors.deepOrangeAccent,
-                child: const Padding(
-                  padding: EdgeInsets.symmetric(horizontal:0, vertical: 10.0),
-                  child:  Text("Checkout", style:TextStyle(
-                      fontFamily: 'Monteserrat',
-                      fontSize: 22,
-                      fontWeight: FontWeight.w400,
-                      color: Colors.white
-                  ),),
+                elevation: 0,
+                backgroundColor: Colors.deepOrangeAccent,
+                padding: EdgeInsets.symmetric(horizontal: 0, vertical: 10.0),
+              ),
+              child: const Text(
+                "Checkout",
+                style: TextStyle(
+                  fontFamily: 'Monteserrat',
+                  fontSize: 22,
+                  fontWeight: FontWeight.w400,
+                  color: Colors.white,
                 ),
-                onPressed: () async {
-              if(widget.appStateModel.blocks.settings.switchWebViewCheckout == 1 && widget.appStateModel.loggedIn) {
-                Navigator.push(context, MaterialPageRoute(builder: (context) =>
-                    WebViewCheckout()
-                ));
-              } else {
-                Navigator.push(
+              ),
+              onPressed: () async {
+                if (widget.appStateModel.blocks.settings.switchWebViewCheckout == 1 && widget.appStateModel.loggedIn) {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => WebViewCheckout()));
+                } else {
+                  Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) =>
-                            Address(homeBloc: widget.homeBloc)));
-              }
-            },
-              ),
+                      builder: (context) => Address(homeBloc: widget.homeBloc),
+                    ),
+                  );
+                }
+              },
+            ),
             ),
           )
 //          AccentButton(
@@ -293,7 +294,7 @@ class _CartPageState extends State<CartPage> {
       if (country.regions.any((item) => item.value == onData.billingState)) {
         widget.homeBloc.formData['billing_state'] = onData.billingState;
       } else {
-        widget.homeBloc.formData['billing_state'] = null;
+        widget.homeBloc.formData['billing_state'] = '';
       }
     }
   }
@@ -301,9 +302,9 @@ class _CartPageState extends State<CartPage> {
 
 class ShoppingCartSummary extends StatelessWidget {
   const ShoppingCartSummary({super.key, 
-    @required this.cartTotals,
-    @required this.currency,
-    @required this.model,
+    required this.cartTotals,
+    required this.currency,
+    required this.model,
   });
 
   final CartTotals cartTotals;
@@ -312,8 +313,8 @@ class ShoppingCartSummary extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final smallAmountStyle = Theme.of(context).textTheme.bodyText2;
-    final largeAmountStyle = Theme.of(context).textTheme.headline6;
+    final smallAmountStyle = Theme.of(context).textTheme.bodyMedium;
+    final largeAmountStyle = Theme.of(context).textTheme.titleLarge;
 
     return Row(
       children: <Widget>[
@@ -394,10 +395,10 @@ class ShoppingCartSummary extends StatelessWidget {
 
 class ShoppingCartRow extends StatefulWidget {
    ShoppingCartRow(
-      {super.key, @required this.product,
-      this.onPressed,
-      this.onIncreaseQty,
-      this.onDecreaseQty});
+      {super.key, required this.product,
+      required this.onPressed,
+      required this.onIncreaseQty,
+      required this.onDecreaseQty});
 
   final CartContent product;
   final VoidCallback onPressed;
@@ -417,7 +418,7 @@ class _ShoppingCartRowState extends State<ShoppingCartRow> {
   Widget build(BuildContext context) {
     final ThemeData localTheme = Theme.of(context);
 
-    final iconColor = Theme.of(context).iconTheme.color.withOpacity(0.4);
+    final iconColor = Theme.of(context).iconTheme.color!.withOpacity(0.4);
 
     return Padding(
       padding: const EdgeInsets.only(bottom: 16.0),
@@ -454,7 +455,7 @@ class _ShoppingCartRowState extends State<ShoppingCartRow> {
                           children: <Widget>[
                             Text(
                               widget.product.name,
-                              style: localTheme.textTheme.bodyLarge
+                              style: localTheme.textTheme.bodyLarge!
                                   .copyWith(fontWeight: FontWeight.w600),
                             ),
                             Text(parseHtmlString(widget.product.formattedPrice)),

@@ -13,7 +13,7 @@ class StoreStateModel extends Model {
 
   StoreStateModel._internal();
   final apiProvider = ApiProvider();
-  List<StoreModel> stores;
+  List<StoreModel> stores = [];
   int page = 1;
   var filter = <String, String>{};
   bool hasMoreItems = false;

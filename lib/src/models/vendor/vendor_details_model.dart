@@ -17,16 +17,15 @@ class VendorDetailsModel {
 
 
   VendorDetailsModel({
-    this.store,
-    this.blocks,
-    this.recentProducts,
+    required this.store,
+    required this.blocks,
+    required this.recentProducts,
   });
 
   factory VendorDetailsModel.fromJson(Map<String, dynamic> json) => VendorDetailsModel(
-    store: json["store"] == null ? null : Store.fromJson(json["store"]),
-    blocks: json["blocks"] == null ? null : List<Block>.from(json["blocks"].map((x) => Block.fromJson(x))),
-    recentProducts: json["recentProducts"] == null ? null : List<Product>.from(json["recentProducts"].map((x) => Product.fromJson(x))),
-
+    store: json["store"] == null ? Store(id: 0, name: '', icon: '', banner: '', banners: [], video: '', address: [], social: [], email: '', phone: '', description: '', latitude: '0', longitude: '0', averageRating: 0.0, ratingCount: 0, productsCount: 0) : Store.fromJson(json["store"]),
+    blocks: json["blocks"] == null ? [] : List<Block>.from(json["blocks"].map((x) => Block.fromJson(x))),
+    recentProducts: json["recentProducts"] == null ? [] : List<Product>.from(json["recentProducts"].map((x) => Product.fromJson(x))),
   );
 
 }
@@ -38,8 +37,8 @@ class Store {
   String banner;
   List<Banner> banners;
   String video;
-  Address address;
-  Social social;
+  List<Address> address;
+  List<Social> social;
   String email;
   String phone;
   String description;
@@ -50,22 +49,22 @@ class Store {
   int productsCount;
 
   Store({
-    this.id,
-    this.name,
-    this.icon,
-    this.banner,
-    this.banners,
-    this.video,
-    this.address,
-    this.social,
-    this.email,
-    this.description,
-    this.latitude,
-    this.longitude,
-    this.averageRating,
-    this.ratingCount,
-    this.productsCount,
-    this.phone
+    required this.id,
+    required this.name,
+    required this.icon,
+    required this.banner,
+    required this.banners,
+    required this.video,
+    required this.address,
+    required this.social,
+    required this.email,
+    required this.description,
+    required this.latitude,
+    required this.longitude,
+    required this.averageRating,
+    required this.ratingCount,
+    required this.productsCount,
+    required this.phone
   });
 
   factory Store.fromJson(Map<String, dynamic> json) => Store(
@@ -74,8 +73,8 @@ class Store {
     icon: json["icon"],
     banner: json["banner"] == null || json["banner"] == false ? null : json["banner"],
     video: json["video"],
-    address: json["address"] == null ? null : Address.fromJson(json["address"]),
-    social: json["social"] == null ? null : Social.fromJson(json["social"]),
+    address: json["address"] == null ? [] : List<Address>.from(json["address"].map((x) => Address.fromJson(x))),
+    social: json["social"] == null ? [] : List<Social>.from(json["social"].map((x) => Social.fromJson(x))),
     email: json["email"],
     phone: json["phone"],
     description: json["description"],
@@ -83,7 +82,7 @@ class Store {
     longitude: json["longitude"] ?? '0',
     averageRating: json["average_rating"]?.toDouble(),
     ratingCount: json["rating_count"],
-    productsCount: json["products_count"],
+    productsCount: json["products_count"], banners: [],
   );
 
 }
@@ -97,12 +96,12 @@ class Address {
   String state;
 
   Address({
-    this.street1,
-    this.street2,
-    this.city,
-    this.zip,
-    this.country,
-    this.state,
+    required this.street1,
+    required this.street2,
+    required this.city,
+    required this.zip,
+    required this.country,
+    required this.state,
   });
 
   factory Address.fromJson(Map<String, dynamic> json) => Address(
@@ -129,8 +128,8 @@ class Banner {
   String link;
 
   Banner({
-    this.image,
-    this.link,
+    required this.image,
+    required this.link,
   });
 
   factory Banner.fromJson(Map<String, dynamic> json) => Banner(
@@ -157,16 +156,16 @@ class Social {
   String facebook;
 
   Social({
-    this.twitter,
-    this.fb,
-    this.instagram,
-    this.youtube,
-    this.linkedin,
-    this.gplus,
-    this.snapchat,
-    this.pinterest,
-    this.googleplus,
-    this.facebook,
+    required this.twitter,
+    required this.fb,
+    required this.instagram,
+    required this.youtube,
+    required this.linkedin,
+    required this.gplus,
+    required this.snapchat,
+    required this.pinterest,
+    required this.googleplus,
+    required this.facebook,
   });
 
   factory Social.fromJson(Map<String, dynamic> json) => Social(

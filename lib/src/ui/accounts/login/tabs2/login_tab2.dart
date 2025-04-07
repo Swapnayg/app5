@@ -1,20 +1,20 @@
+// ignore_for_file: library_private_types_in_public_api, deprecated_member_use
+
 import 'dart:io';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import './../../../../models/app_state_model.dart';
 import './../../login/social/apple_login.dart';
-import './../../login/social/facebook_login.dart';
 import './../../login/social/google_login.dart';
 import './../../login/social/sms_login.dart';
 import '../../../widgets/buttons/button_text.dart';
 
 class LoginTab extends StatefulWidget {
 
-  LoginTab({Key key, @required this.context,
-    @required this.model,
-    @required this.tabController,}) : super(key: key);
+  LoginTab({super.key, required this.context,
+    required this.model,
+    required this.tabController,});
 
   final BuildContext context;
   final AppStateModel model;
@@ -27,7 +27,7 @@ class LoginTab extends StatefulWidget {
 class _LoginTabState extends State<LoginTab> {
 
 
-  bool _obscureText;
+  late bool _obscureText;
   final _formKey = GlobalKey<FormState>();
   TextEditingController usernameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
@@ -36,7 +36,6 @@ class _LoginTabState extends State<LoginTab> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _obscureText = true;
   }
@@ -78,7 +77,10 @@ class _LoginTabState extends State<LoginTab> {
                             label: widget.model.blocks.localeText.username,
                             validationMsg: widget
                                 .model.blocks.localeText.pleaseEnterUsername,
-                            password: false,
+                            password: false, icon: Icons.code, suffix: IconButton(
+                            icon: Icon(Icons.clear),
+                            onPressed: () {},
+                          ),
                           )
                       ),
                     ],
@@ -107,30 +109,35 @@ class _LoginTabState extends State<LoginTab> {
                                   _obscureText = !_obscureText;
                                 });
                               }
-                          ),
+                          ), icon: Icons.code,
 
                         ),
                       )
                     ],
                   ),
                   SizedBox(height: 30.0),
-                  RaisedButton(
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      padding: EdgeInsets.symmetric(vertical: 16.0),
+                    ),
                     child: ButtonText(isLoading: isLoading, text: widget.model.blocks.localeText.signIn),
                     onPressed: () => isLoading ? null : _login(context),
                   ),
                   SizedBox(height: 12.0),
-                  FlatButton(
+                  TextButton(
                       onPressed: () {
                         widget.tabController.animateTo(2);
                       },
                       child: Text(
                           widget.model.blocks.localeText.forgotPassword,
-                          style: Theme.of(context).textTheme.bodyMedium.copyWith(
+                          style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                               fontSize: 15,
                               color: Colors.grey
                           ))),
-                  FlatButton(
-                      padding: EdgeInsets.all(16.0),
+                  TextButton(
+                      style: TextButton.styleFrom(
+                        padding: EdgeInsets.all(16.0),
+                      ),
                       onPressed: () {
                         widget.tabController.animateTo(1);
                       },
@@ -140,7 +147,7 @@ class _LoginTabState extends State<LoginTab> {
                           Text(
                               widget.model.blocks.localeText
                                   .dontHaveAnAccount,
-                              style: Theme.of(context).textTheme.bodyMedium.copyWith(
+                              style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                                   fontSize: 15,
                                   color: Colors.grey
                               )),
@@ -151,80 +158,14 @@ class _LoginTabState extends State<LoginTab> {
                                 widget.model.blocks.localeText.signUp,
                                 style: Theme.of(context)
                                     .textTheme
-                                    .bodyMedium
+                                    .bodyMedium!
                                     .copyWith(
                                     color:
                                     Theme.of(context).colorScheme.secondary)),
                           ),
                         ],
                       )),
-                  Center(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Card(
-                            elevation: 2,
-                            shadowColor: Colors.black,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(50.0),
-                            ),
-                            child: SizedBox(
-                              height: 50.0, // height of the button
-                              width: 50.0,
-                              child: GoogleLoginWidget(),
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Card(
-                            elevation: 2,
-                            shadowColor: Colors.black,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(50.0),
-                            ),
-                            child: SizedBox(
-                              height: 50.0, // height of the button
-                              width: 50.0,
-                              child: FacebookLoginWidget(),
-                            ),
-                          ),
-                        ),
-                        Platform.isIOS ? Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Card(
-                            elevation: 2,
-                            shadowColor: Colors.black,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(50.0),
-                            ),
-                            child: SizedBox(
-                              height: 50.0, // height of the button
-                              width: 50.0,
-                              child: AppleLogin(),
-                            ),
-                          ),
-                        ): Container(),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Card(
-                            elevation: 2,
-                            shadowColor: Colors.black,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(50.0),
-                            ),
-                            child: SizedBox(
-                              height: 50.0, // height of the button
-                              width: 50.0,
-                              child: SmsLogin(),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+                  
                 ],
               ),
             ),
@@ -232,7 +173,7 @@ class _LoginTabState extends State<LoginTab> {
         ]);
   }
 
-  Container buildIcon(child) {
+  SizedBox buildIcon(child) {
     return SizedBox(
       width: 30,
       height: 30,
@@ -241,7 +182,7 @@ class _LoginTabState extends State<LoginTab> {
   }
   _login(BuildContext context) async {
     var login = <String, dynamic>{};
-    if (_formKey.currentState.validate()) {
+    if (_formKey.currentState!.validate()) {
       login["username"] = usernameController.text;
       login["password"] = passwordController.text;
       setState(() {
@@ -269,14 +210,15 @@ class CustomTextFormField extends StatelessWidget {
   TextInputType inputType;
 
   CustomTextFormField(
-      {super.key, this.label,
-        this.validationMsg,
-        this.controller,
-        this.icon,
-        this.obscureText,
-        this.inputType,
-        this.password,
-        this.suffix,});
+      {super.key, 
+        required this.label,
+        required this.validationMsg,
+        required this.controller,
+        required this.icon,
+        required this.obscureText,
+        required this.inputType,
+        required this.password,
+        required this.suffix,});
 
   @override
   Widget build(BuildContext context) {
@@ -284,7 +226,7 @@ class CustomTextFormField extends StatelessWidget {
       obscureText: obscureText,
       controller: controller,
       validator: (value) {
-        if (value.isEmpty) {
+        if (value!.isEmpty) {
           return validationMsg;
         }
         return null;

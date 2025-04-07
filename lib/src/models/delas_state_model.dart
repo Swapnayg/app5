@@ -14,7 +14,7 @@ class DealsStateModel extends Model {
   DealsStateModel._internal();
 
   final apiProvider = ApiProvider();
-  List<Product> products;
+  List<Product> products = [];
   var filter = <String, dynamic>{};
   int page = 1;
   bool hasMoreItems = true;

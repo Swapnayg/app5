@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import '../../../functions.dart';
 import '../../../models/app_state_model.dart';
 
@@ -12,7 +14,7 @@ class OrderList extends StatefulWidget {
   AppStateModel appStateModel = AppStateModel();
 
   final ordersBloc = OrdersBloc();
-  OrderList({Key key}) : super(key: key);
+  OrderList({super.key});
   @override
   _OrderListState createState() => _OrderListState();
 }
@@ -50,7 +52,7 @@ class _OrderListState extends State<OrderList> {
           stream: widget.ordersBloc.allOrders,
           builder: (context, AsyncSnapshot<List<Order>> snapshot) {
             if (snapshot.hasData) {
-              if (snapshot.data.length == 0) {
+              if (snapshot.data!.length == 0) {
                 return Center(child: Text(widget.appStateModel.blocks.localeText.noOrders));
               } else {
                 return CustomScrollView(
@@ -75,7 +77,7 @@ class _OrderListState extends State<OrderList> {
         delegate: SliverChildBuilderDelegate(
           (BuildContext context, int index) {
             final NumberFormat formatter = NumberFormat.currency(
-                decimalDigits: snapshot.data[index].decimals, locale: Localizations.localeOf(context).toString(), name: snapshot.data[index].currency);
+                decimalDigits: snapshot.data![index].decimals, locale: Localizations.localeOf(context).toString(), name: snapshot.data![index].currency);
             return Padding(
               padding: const EdgeInsets.all(0.0),
               child: Card(
@@ -86,7 +88,7 @@ class _OrderListState extends State<OrderList> {
                   ),
                   child: InkWell(
                     borderRadius: BorderRadius.circular(0.0),
-                    onTap: () => openDetailPage(snapshot.data, index),
+                    onTap: () => openDetailPage(snapshot.data!, index),
                     child: Padding(
                       padding: const EdgeInsets.all(12.0),
                       child:
@@ -94,26 +96,26 @@ class _OrderListState extends State<OrderList> {
                               title: Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: <Widget>[
-                                  Text('${widget.appStateModel.blocks.localeText.order}-${snapshot.data[index].id}', style: Theme.of(context).textTheme.bodyLarge,),
+                                  Text('${widget.appStateModel.blocks.localeText.order}-${snapshot.data![index].id}', style: Theme.of(context).textTheme.bodyLarge,),
                                   Text(formatter.format(
-                                      double.parse(snapshot.data[index].total,)), style: Theme.of(context).textTheme.bodyLarge,),
+                                      double.parse(snapshot.data![index].total,)), style: Theme.of(context).textTheme.bodyLarge,),
                                 ],
                               ),
                               subtitle: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
                                   SizedBox(height: 5,),
-                                  Text(getOrderStatusText(snapshot.data[index].status, widget.appStateModel.blocks.localeText)),
+                                  Text(getOrderStatusText(snapshot.data![index].status, widget.appStateModel.blocks.localeText)),
                                   SizedBox(height: 5,),
                                   Text(formatter1
-                                      .format(snapshot.data[index].dateCreated)),
+                                      .format(snapshot.data![index].dateCreated)),
                                 ],
                               )),
                     ),
                   )),
             );
           },
-          childCount: snapshot.data.length,
+          childCount: snapshot.data!.length,
         ),
       ),
     );

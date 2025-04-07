@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class ThemeOverride extends StatelessWidget {
-  const ThemeOverride({Key key, this.child}) : super(key: key);
+  const ThemeOverride({super.key, required this.child});
   final Widget child;
   @override
   Widget build(BuildContext context) {
@@ -48,7 +48,7 @@ class ThemeOverride extends StatelessWidget {
             BorderSide(color: Colors.red, width: 1.0),
           ),
           contentPadding: EdgeInsets.symmetric(vertical: 20, horizontal: 16),
-        ), colorScheme: ColorScheme.fromSwatch().copyWith(secondary: Colors.cyan[600]), colorScheme: ColorScheme(background: isDark ? Colors.black : Colors.white),
+        ), colorScheme: ColorScheme.fromSwatch().copyWith(secondary: Colors.cyan[600]),
       ),
       child: child,
     ) : Theme(
@@ -93,7 +93,7 @@ class ThemeOverride extends StatelessWidget {
             BorderSide(color: Colors.red, width: 1.0),
           ),
           contentPadding: EdgeInsets.symmetric(vertical: 20, horizontal: 16),
-        ), colorScheme: ColorScheme.fromSwatch().copyWith(secondary: Colors.cyan[600]), colorScheme: ColorScheme(background: isDark ? Colors.black : Colors.white),
+        ), colorScheme: ColorScheme.fromSwatch().copyWith(secondary: Colors.cyan[600]),
       ),
       child: child,
     );

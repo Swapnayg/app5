@@ -15,12 +15,12 @@ class Category {
   String image;
 
   Category({
-    this.id,
-    this.name,
-    this.description,
-    this.parent,
-    this.count,
-    this.image,
+    required this.id,
+    required this.name,
+    required this.description,
+    required this.parent,
+    required this.count,
+    required this.image,
   });
 
   factory Category.fromJson(Map<String, dynamic> json) => Category(

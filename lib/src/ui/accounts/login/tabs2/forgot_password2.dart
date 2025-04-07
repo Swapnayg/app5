@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api, deprecated_member_use, avoid_print, sort_child_properties_last
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -7,12 +9,12 @@ import '../../../widgets/buttons/button_text.dart';
 
 class ForgotPassword extends StatefulWidget {
 
-  const ForgotPassword({Key key,
-    @required this.context,
-    @required this.model,
-    @required this.tabController,
-    this.emailController,
-  }) : super(key: key);
+  const ForgotPassword({super.key,
+    required this.context,
+    required this.model,
+    required this.tabController,
+    required this.emailController,
+  });
 
   final BuildContext context;
   final AppStateModel model;
@@ -67,23 +69,24 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                             validationMsg: widget
                                 .model.blocks.localeText.pleaseEnterValidEmail,
                             password: false,
+                            suffix: null, icon: Icons.code,
                           )
                       ),
                     ],
                   ),
                   SizedBox(height: 24.0),
-                  RaisedButton(
+                  ElevatedButton(
                     child: ButtonText(isLoading: isLoading, text: 'Send OTP'),
-                    onPressed: () => isLoading ? null : _sendOtp(),
+                    onPressed: isLoading ? null : _sendOtp,
                   ),
                   SizedBox(height: 12.0),
-                  FlatButton(
+                  TextButton(
                       onPressed: () {
                         widget.tabController.animateTo(0);
                       },
                       child: Text(
                           widget.model.blocks.localeText.signIn,
-                          style: Theme.of(context).textTheme.bodyMedium.copyWith(
+                          style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                               color:
                               Theme.of(context).colorScheme.secondary
                           ))),
@@ -95,8 +98,8 @@ class _ForgotPasswordState extends State<ForgotPassword> {
   }
 
   _sendOtp() async {
-    var data = Map<String, dynamic>();
-    if (_formKey.currentState.validate()) {
+    var data = <String, dynamic>{};
+    if (_formKey.currentState!.validate()) {
       data["email"] = widget.emailController.text;
       setState(() {
         isLoading = true;
@@ -113,7 +116,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
     }
   }
 
-  Container buildIcon(child) {
+  SizedBox buildIcon(child) {
     return SizedBox(
       width: 30,
       height: 30,
@@ -122,10 +125,11 @@ class _ForgotPasswordState extends State<ForgotPassword> {
   }
 
 }
+
 class CustomTextFormField extends StatelessWidget {
   bool password;
   bool obscureText;
-  IconButton suffix;
+  IconButton? suffix;
   String label;
   String validationMsg;
   TextEditingController controller;
@@ -133,14 +137,14 @@ class CustomTextFormField extends StatelessWidget {
   TextInputType inputType;
 
   CustomTextFormField(
-      {super.key, this.label,
-        this.validationMsg,
-        this.controller,
-        this.icon,
-        this.obscureText,
-        this.inputType,
-        this.password,
-        this.suffix,});
+      {super.key, required this.label,
+        required this.validationMsg,
+        required this.controller,
+        required this.icon,
+        required this.obscureText,
+        required this.inputType,
+        required this.password,
+        required this.suffix,});
 
   @override
   Widget build(BuildContext context) {
@@ -148,7 +152,7 @@ class CustomTextFormField extends StatelessWidget {
       obscureText: password,
       controller: controller,
       validator: (value) {
-        if (value.isEmpty) {
+        if (value!.isEmpty) {
           return validationMsg;
         }
         return null;
@@ -172,12 +176,12 @@ class CustomTextFormField extends StatelessWidget {
 
 class ResetPassword extends StatefulWidget {
   const ResetPassword({
-    Key key,
-    @required this.context,
-    @required this.model,
-    @required this.emailController,
-    @required this.tabController,
-  }) : super(key: key);
+    super.key,
+    required this.context,
+    required this.model,
+    required this.emailController,
+    required this.tabController,
+  });
 
   final BuildContext context;
   final AppStateModel model;
@@ -216,6 +220,7 @@ class _ResetPasswordState extends State<ResetPassword> {
                       password: false,
                       inputType: TextInputType.text,
                       icon: Icons.code,
+                      obscureText: false, suffix: null,
                     ),
                   Padding(padding: EdgeInsets.symmetric(vertical: 5.0)),
                   CustomTextFormField(
@@ -226,11 +231,12 @@ class _ResetPasswordState extends State<ResetPassword> {
                       password: true,
                       inputType: TextInputType.text,
                       icon: Icons.vpn_key,
+                      obscureText: false, suffix: null,
                     ),
                   SizedBox(height: 24.0),
-                  RaisedButton(
+                  ElevatedButton(
                     child: ButtonText(isLoading: isLoading, text: widget.model.blocks.localeText.resetPassword,),
-                    onPressed: () => isLoading ? null : _resetPassword(widget.model),
+                    onPressed: isLoading ? null : () => _resetPassword(widget.model),
                   ),
                 ],
               ),
@@ -243,7 +249,7 @@ class _ResetPasswordState extends State<ResetPassword> {
 
   _resetPassword(AppStateModel model) async {
     var data = <String, dynamic>{};
-    if (_formKey.currentState.validate()) {
+    if (_formKey.currentState!.validate()) {
       data["email"] = widget.emailController.text;
       data["password"] = newPasswordController.text;
       data["otp"] = otpController.text;
@@ -261,6 +267,5 @@ class _ResetPasswordState extends State<ResetPassword> {
         isLoading = false;
       });
     }
-    //TODO Call api to send otp
   }
 }

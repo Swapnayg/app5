@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api, avoid_unnecessary_containers, deprecated_member_use, use_build_context_synchronously, unused_field, sort_child_properties_last
+
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart' hide ErrorWidget;
@@ -16,7 +18,7 @@ class PhoneVerification extends StatefulWidget {
   final appStateModel = AppStateModel();
 
   PhoneVerification({super.key, 
-    @required this.fullscreen,
+    required this.fullscreen,
   });
 
   @override
@@ -28,9 +30,9 @@ class _PhoneVerificationState extends State<PhoneVerification>
   static const tabBorderRadius = BorderRadius.all(Radius.circular(4.0));
   var _currentIndex = 0;
   var _showTabs = true;
-  TabController _tabController;
+  late TabController _tabController;
   final double _tabHeight = kFullTabHeight;
-  AnimationController _animationController;
+  late AnimationController _animationController;
   final appStateModel = AppStateModel();
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -40,15 +42,15 @@ class _PhoneVerificationState extends State<PhoneVerification>
   var _loadingOtp = false;
   String prefixCode = '+91';
 
-  String verificationId;
+  late String verificationId;
 
-  String smsOTP;
+  late String smsOTP;
 
   String errorMessage = '';
 
   var _loadingNumber = false;
 
-  String _phoneNumber;
+  late String _phoneNumber;
 
 
   @override
@@ -112,16 +114,20 @@ class _PhoneVerificationState extends State<PhoneVerification>
               height: 15.0,
             ),
             BaseTextField(
-              labelText: widget.appStateModel.blocks.localeText.enterOtp,//'ENTER OTP(6 digits)',
-              validator: (String value) {
-                if (value.trim().isEmpty) return widget.appStateModel.blocks.localeText.inValidCode;
+              labelText: widget.appStateModel.blocks.localeText.enterOtp, // 'ENTER OTP(6 digits)',
+              hintText: widget.appStateModel.blocks.localeText.enterOtpHint, // Provide a hint text
+              controller: TextEditingController(), // Provide a controller
+              initialValue: '', // Provide an initial value
+              suffix: Icon(Icons.lock), // Provide a suffix widget
+              validator: (String? value) {
+                if (value!.trim().isEmpty) return widget.appStateModel.blocks.localeText.inValidCode;
                 return value.length == 6 ? null : widget.appStateModel.blocks.localeText.inValidCode;
               },
-              onSaved: (String value) {
-                smsOTP = value;
+              onSaved: (String? value) {
+                smsOTP = value!;
               },
               inputFormatters: [
-                WhitelistingTextInputFormatter.digitsOnly,
+                FilteringTextInputFormatter.digitsOnly,
                 LengthLimitingTextInputFormatter(6),
               ],
             ),
@@ -130,9 +136,9 @@ class _PhoneVerificationState extends State<PhoneVerification>
             ),
             SizedBox(
               width: double.infinity,
-              child: RaisedButton(
+              child: ElevatedButton(
                 child: ButtonText(isLoading: _loadingOtp, text: widget.appStateModel.blocks.localeText.verifyOtp),
-                onPressed: () => _loadingOtp ? null : _verifyOTP(context),
+                onPressed: _loadingOtp ? null : () => _verifyOTP(context),
               ),
             ),
           ],
@@ -168,7 +174,7 @@ class _PhoneVerificationState extends State<PhoneVerification>
   }
 
   Future<void> _verifyOTP(BuildContext context) async {
-    _formKey.currentState.save();
+    _formKey.currentState!.save();
 
     setState(() {
       _loadingOtp = true;
@@ -265,15 +271,19 @@ class _PhoneVerificationState extends State<PhoneVerification>
                     key: _formKey,
                     child: BaseTextField(
                       labelText: widget.appStateModel.blocks.localeText.phoneNumber,
-                      validator: (String value) {
-                        if (value.trim().isEmpty) return widget.appStateModel.blocks.localeText.pleaseEnterPhoneNumber;
+                      hintText: widget.appStateModel.blocks.localeText.enterPhoneNumberHint, // Provide a hint text
+                      controller: TextEditingController(), // Provide a controller
+                      initialValue: '', // Provide an initial value
+                      suffix: Icon(Icons.phone), // Provide a suffix widget
+                      validator: (String? value) {
+                        if (value!.trim().isEmpty) return widget.appStateModel.blocks.localeText.pleaseEnterPhoneNumber;
                         return value.length == 0 ? null : widget.appStateModel.blocks.localeText.pleaseEnterPhoneNumber;
                       },
-                      onSaved: (String value) {
-                        _phoneNumber = value;
+                      onSaved: (String? value) {
+                        _phoneNumber = value!;
                       },
                       inputFormatters: [
-                        WhitelistingTextInputFormatter.digitsOnly,
+                        FilteringTextInputFormatter.digitsOnly,
                       ],
                     )
                   ),
@@ -286,10 +296,10 @@ class _PhoneVerificationState extends State<PhoneVerification>
           ),
           SizedBox(
             width: double.infinity,
-            child: RaisedButton(
+            child: ElevatedButton(
               child:
                   ButtonText(isLoading: _loadingNumber, text: widget.appStateModel.blocks.localeText.verifyNumber),
-              onPressed: () => _loadingNumber ? null : _validateInputs(),
+              onPressed: _loadingNumber ? null : _validateInputs,
             ),
           ),
         ],
@@ -298,11 +308,11 @@ class _PhoneVerificationState extends State<PhoneVerification>
   }
 
   Future<void> _validateInputs() async {
-    _formKey.currentState.save();
+    _formKey.currentState!.save();
     setState(() {
       _loadingNumber = true;
     });
-    smsOTPSent(String verId, [int forceCodeResend]) {
+    smsOTPSent(String verId, [int? forceCodeResend]) {
       verificationId = verId;
       setState(() {
         _loadingNumber = false;
@@ -332,7 +342,7 @@ class _PhoneVerificationState extends State<PhoneVerification>
       setState(() {
         _loadingNumber = false;
       });
-      handlePhoneNumberError(e);
+      handlePhoneNumberError(e as PlatformException) ;
     }
   }
 

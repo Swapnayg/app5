@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:flutter/material.dart';
 
 import './../../../blocs/customer_bloc.dart';
@@ -11,7 +13,7 @@ class CustomerAddress extends StatefulWidget {
   final appStateModel = AppStateModel();
 
   CustomerBloc customerBloc = CustomerBloc();
-  CustomerAddress({Key key}) : super(key: key);
+  CustomerAddress({super.key});
   @override
   _CustomerAddressState createState() => _CustomerAddressState();
 }
@@ -60,7 +62,7 @@ class _CustomerAddressState extends State<CustomerAddress> {
               subtitle: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
-                    '''${snapshot.data.billing.firstName} ${snapshot.data.billing.lastName} ${snapshot.data.billing.address1} ${snapshot.data.billing.address2} ${snapshot.data.billing.city} ${snapshot.data.billing.state} ${snapshot.data.billing.postcode} ${snapshot.data.billing.country} ${snapshot.data.billing.email} ${snapshot.data.billing.phone}
+                    '''${snapshot.data!.billing.firstName} ${snapshot.data!.billing.lastName} ${snapshot.data!.billing.address1} ${snapshot.data!.billing.address2} ${snapshot.data!.billing.city} ${snapshot.data!.billing.state} ${snapshot.data!.billing.postcode} ${snapshot.data!.billing.country} ${snapshot.data!.billing.email} ${snapshot.data!.billing.phone}
                         '''),
               ),
             ),

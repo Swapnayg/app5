@@ -6,9 +6,6 @@ import 'login2/login.dart';
 import 'login3/login3.dart';
 import 'login4/login.dart';
 import 'login5/login.dart';
-import 'login6/login.dart';
-import 'login7/login.dart';
-import 'login11/login.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -28,16 +25,12 @@ class _LoginState extends State<Login> {
           } else if (model.blocks.pageLayout.login == 'layout2') {
             return Login2();
           } else if (model.blocks.pageLayout.login == 'layout3') {
-            return Login3();
+            return Login3(model: model,);
           } else if (model.blocks.pageLayout.login == 'layout4') {
             return Login4();
           } else if (model.blocks.pageLayout.login == 'layout5') {
             return Login5();
-          } else if (model.blocks.pageLayout.login == 'layout6') {
-            return Login6();
-          } else if (model.blocks.pageLayout.login == 'layout7') {
-            return Login7();
-          } else {
+          }  else {
             return Login5();
           }
         });

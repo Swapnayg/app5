@@ -11,7 +11,7 @@ class StoreModel {
   String name;
   String icon;
   String banner;
-  Address address;
+  Address? address;
   String description;
   String latitude;
   String longitude;
@@ -20,17 +20,17 @@ class StoreModel {
   int productsCount;
 
   StoreModel({
-    this.id,
-    this.name,
-    this.icon,
-    this.banner,
-    this.address,
-    this.description,
-    this.latitude,
-    this.longitude,
-    this.averageRating,
-    this.ratingCount,
-    this.productsCount,
+    required this.id,
+    required this.name,
+    required this.icon,
+    required this.banner,
+    required this.address,
+    required this.description,
+    required this.latitude,
+    required this.longitude,
+    required this.averageRating,
+    required this.ratingCount,
+    required this.productsCount,
   });
 
   factory StoreModel.fromJson(Map<String, dynamic> json) => StoreModel(
@@ -44,7 +44,7 @@ class StoreModel {
     longitude: json["longitude"],
     averageRating: json["average_rating"]?.toDouble(),
     ratingCount: json["rating_count"],
-    productsCount: json["products_count"],
+    productsCount: json["products_count"], address: json["address"] == null ? null : Address.fromJson(json["address"]),
   );
 
 }
@@ -58,12 +58,12 @@ class Address {
   String state;
 
   Address({
-    this.street1,
-    this.street2,
-    this.city,
-    this.zip,
-    this.country,
-    this.state,
+    required this.street1,
+    required this.street2,
+    required this.city,
+    required this.zip,
+    required this.country,
+    required this.state,
   });
 
   factory Address.fromJson(Map<String, dynamic> json) => Address(

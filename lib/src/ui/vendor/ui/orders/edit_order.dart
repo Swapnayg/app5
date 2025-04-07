@@ -21,8 +21,32 @@ class EditOrder extends StatefulWidget {
 
 class _EditOrderState extends State<EditOrder> {
   final _formKey = GlobalKey<FormState>();
-  final billing = Address();
-  final shipping = Address();
+  final billing = Address(
+    firstName: '',
+    lastName: '',
+    company: '',
+    address1: '',
+    address2: '',
+    city: '',
+    postcode: '',
+    country: '',
+    state: '',
+    email: '',
+    phone: '',
+  );
+  final shipping = Address(
+    firstName: '',
+    lastName: '',
+    company: '',
+    address1: '',
+    address2: '',
+    city: '',
+    postcode: '',
+    country: '',
+    state: '',
+    email: '',
+    phone: '',
+  );
   late List<Region> regions;
 
   @override

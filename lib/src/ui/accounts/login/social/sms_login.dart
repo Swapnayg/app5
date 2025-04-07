@@ -5,8 +5,8 @@ import '../login3/phone_verification.dart';
 
 class SmsLogin extends StatelessWidget {
   const SmsLogin({
-    Key key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

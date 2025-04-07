@@ -10,16 +10,16 @@ String walletModelToJson(List<WalletModel> data) => json.encode(List<dynamic>.fr
 
 class WalletModel {
   WalletModel({
-    this.transactionId,
-    this.blogId,
-    this.userId,
-    this.type,
-    this.amount,
-    this.balance,
-    this.currency,
-    this.details,
-    this.deleted,
-    this.date,
+    required this.transactionId,
+    required this.blogId,
+    required this.userId,
+    required this.type,
+    required this.amount,
+    required this.balance,
+    required this.currency,
+    required this.details,
+    required this.deleted,
+    required this.date,
   });
 
   String transactionId;
@@ -43,7 +43,7 @@ class WalletModel {
     currency: json["currency"],
     details: json["details"],
     deleted: json["deleted"],
-    date: json["date"] == null ? null : DateTime.parse(json["date"]),
+    date: json["date"] == null ? DateTime.now() : DateTime.parse(json["date"]),
   );
 
   Map<String, dynamic> toJson() => {
@@ -56,6 +56,6 @@ class WalletModel {
     "currency": currency,
     "details": details,
     "deleted": deleted,
-    "date": date?.toIso8601String(),
+    "date": date.toIso8601String(),
   };
 }

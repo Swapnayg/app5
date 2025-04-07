@@ -1,3 +1,5 @@
+// ignore_for_file: unnecessary_null_comparison
+
 import 'dart:math' as math;
 
 import 'package:flutter/foundation.dart';
@@ -7,14 +9,14 @@ import 'package:flutter/material.dart';
 /// to retain the dialog feel and look while adding the close IconButton
 class CustomAlertDialog extends StatelessWidget {
   const CustomAlertDialog({
-    Key key,
-    this.title,
-    this.titlePadding,
-    this.onCancelPress,
+    Key? key,
+    required this.title,
+    required this.titlePadding,
+    required this.onCancelPress,
     this.contentPadding = const EdgeInsets.symmetric(vertical: 10.0),
     this.expanded = false,
     this.fullscreen = false,
-    @required this.content,
+    required this.content,
   })  : super(key: key);
 
   final Widget title;
@@ -29,21 +31,19 @@ class CustomAlertDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     final List<Widget> children = <Widget>[];
 
-    if (titlePadding != null) {
-      children.add(Padding(
-        padding: titlePadding,
-        child: DefaultTextStyle(
-          style: Theme.of(context).textTheme.headline6,
-          child: Semantics(namesRoute: true, child: title),
-        ),
-      ));
-    }
-
+    children.add(Padding(
+      padding: titlePadding,
+      child: DefaultTextStyle(
+        style: Theme.of(context).textTheme.titleLarge ?? const TextStyle(),
+        child: Semantics(namesRoute: true, child: title),
+      ),
+    ));
+  
     children.add(Flexible(
       child: Padding(
         padding: contentPadding,
         child: DefaultTextStyle(
-          style: Theme.of(context).textTheme.titleMedium,
+          style: Theme.of(context).textTheme.titleMedium ?? const TextStyle(),
           child: content,
         ),
       ),
@@ -137,12 +137,12 @@ class CustomAlertDialog extends StatelessWidget {
 /// elevation and changing the Material type.
 class CustomDialog extends StatelessWidget {
   const CustomDialog({
-    Key key,
-    @required this.child,
-    @required this.expanded,
+    super.key,
+    required this.child,
+    required this.expanded,
     this.insetAnimationDuration = const Duration(milliseconds: 100),
     this.insetAnimationCurve = Curves.decelerate,
-  }) : super(key: key);
+  });
 
   final Widget child;
   final Duration insetAnimationDuration;

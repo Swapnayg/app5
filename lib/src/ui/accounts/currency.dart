@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -6,14 +8,14 @@ import '../../../src/models/app_state_model.dart';
 import '../../models/blocks_model.dart';
 
 class CurrencyPage extends StatefulWidget {
-  const CurrencyPage({Key key}) : super(key: key);
+  const CurrencyPage({super.key});
   @override
   _CurrencyPageState createState() => _CurrencyPageState();
 }
 
 class _CurrencyPageState extends State<CurrencyPage> {
 
-  String _selectedCurrency;
+  late String _selectedCurrency;
   AppStateModel appStateModel = AppStateModel();
 
   @override

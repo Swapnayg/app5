@@ -1,13 +1,15 @@
+// ignore_for_file: library_private_types_in_public_api, deprecated_member_use, unnecessary_null_comparison
+
 import 'dart:io' show Platform;
 
 import 'package:fab_circular_menu/fab_circular_menu.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_icons/flutter_icons.dart';
+import 'package:flutter_font_icons/flutter_font_icons.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:scoped_model/scoped_model.dart';
-import 'package:share/share.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../../ui/pages/page_detail.dart';
 import '../../../ui/pages/webview.dart';
@@ -42,7 +44,7 @@ class _UserAccount7State extends State<UserAccount7> {
 
   @override
   Widget build(BuildContext context) {
-    TextStyle menuTextStyle = Theme.of(context).textTheme.bodyLarge;
+    TextStyle? menuTextStyle = Theme.of(context).textTheme.bodyLarge;
     Color onPrimaryColor = Colors.white;
     Color headerBackgroundColor = Theme.of(context).primaryColor;
     return Scaffold(
@@ -54,8 +56,8 @@ class _UserAccount7State extends State<UserAccount7> {
           CustomScrollView(
             slivers: <Widget>[
               buildSliverAppBar(onPrimaryColor, context, headerBackgroundColor),
-              buildUserMenu(context, menuTextStyle),
-              buildVendorList(context, menuTextStyle),
+              buildUserMenu(context, menuTextStyle ?? TextStyle()),
+              buildVendorList(context, menuTextStyle!),
               buildPages(context, menuTextStyle)
             ],
           ),
@@ -77,7 +79,7 @@ class _UserAccount7State extends State<UserAccount7> {
                   ringColor: Theme.of(context).colorScheme.secondary,
                   ringDiameter: 250.0,
                   ringWidth: 100.0,
-                  options: <Widget>[
+                  children: <Widget>[
                     IconButton(
                         icon: Icon(
                           Icons.chat_bubble,
@@ -91,30 +93,27 @@ class _UserAccount7State extends State<UserAccount7> {
                                 MaterialPageRoute(
                                     builder: (context) => AdminChatPage(
                                         userId:
-                                            appStateModel.user.id.toString())));
+                                            appStateModel.user.id.toString(), key: UniqueKey(),)));
                           } else {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => Login()));
                           }
-                          /*openLink(
-                              'sms:' + model.blocks.settings.whatsappNumber);*/
                         },
                         iconSize: 20.0,
                         color: Colors.black),
-                    model.blocks.settings.supportEmail != null
-                        ? IconButton(
-                            icon: Icon(
-                              Icons.mail,
-                              color: Theme.of(context).colorScheme.onSecondary,
-                            ),
-                            onPressed: () {
-                              openLink('mailto:${model.blocks.settings.supportEmail}');
-                            },
-                            iconSize: 20.0,
-                            color: Colors.black)
-                        : null,
+                    if (model.blocks.settings.supportEmail != null)
+                      IconButton(
+                          icon: Icon(
+                            Icons.mail,
+                            color: Theme.of(context).colorScheme.onSecondary,
+                          ),
+                          onPressed: () {
+                            openLink('mailto:${model.blocks.settings.supportEmail}');
+                          },
+                          iconSize: 20.0,
+                          color: Colors.black),
                     IconButton(
                         icon: Icon(
                           FontAwesomeIcons.whatsapp,
@@ -138,7 +137,8 @@ class _UserAccount7State extends State<UserAccount7> {
                         iconSize: 20.0,
                         color: Colors.black),
                   ],
-                  child: Container());
+                  
+                   );
             }),
           )
         ],
@@ -197,7 +197,7 @@ class _UserAccount7State extends State<UserAccount7> {
                         }
                       },
                       leading: ExcludeSemantics(
-                          child: Icon(FlutterIcons.ios_wallet_ion)),
+                          child: Icon(Icons.account_balance_wallet)),
                       title: Text(
                         appStateModel.blocks.localeText.wallet.toUpperCase(),
                         style: menuTextStyle,
@@ -353,6 +353,7 @@ class _UserAccount7State extends State<UserAccount7> {
                               context,
                               MaterialPageRoute(
                                   builder: (context) => ChatRoomList(
+                                    key:UniqueKey(),
                                       id: appStateModel.user.id.toString())));
                         } else {
                           Navigator.push(context,
@@ -454,6 +455,7 @@ class _UserAccount7State extends State<UserAccount7> {
                         context,
                         MaterialPageRoute(
                             builder: (context) => VendorDetails(
+                              key:UniqueKey(),
                                 vendorId: model.user.id.toString())))),
               ],
             ),
@@ -679,7 +681,7 @@ class _UserAccount7State extends State<UserAccount7> {
                     ListTile(
                       onTap: () => _onPressItem(pages[index], context),
                       leading: ExcludeSemantics(
-                        child: Icon(FlutterIcons.info_circle_faw5s),
+                        child: Icon(Icons.info),
                       ),
                       title: Text(
                         pages[index].title,
@@ -721,7 +723,67 @@ class _UserAccount7State extends State<UserAccount7> {
 
   _onPressItem(Child page, BuildContext context) {
     if(page.description == 'page') {
-      var post = Post();
+      var post = Post(
+                      id: 0,
+                      date: DateTime(0),
+                      dateGmt: DateTime(0),
+                      guid: Guid('',rendered: ''),
+                      modified: DateTime(0),
+                      modifiedGmt: DateTime(0),
+                      slug: '',
+                      status: '',
+                      type: '',
+                      link: '',
+                      title: Guid('',rendered: ''),
+                      content: Content('',rendered: '',protected: false),
+                      excerpt: Content('',rendered: '',protected: false),
+                      author: 0,
+                      featuredMedia: 0,
+                      commentStatus: '',
+                      pingStatus: '',
+                      sticky: false,
+                      template: '',
+                      format: '',
+                      meta: Meta(likes: 0),
+                      categories: [],
+                      tags: [],
+                      featuredUrl: '',
+                      authorDetails: AuthorDetails(name: '', avatar: '', avatarUrl: '', id: 0),
+                      featuredDetails: FeaturedDetails(
+                        width: 0,
+                        height: 0,
+                        file: '',
+                        imageMeta: ImageMeta(
+                          aperture: '',
+                          credit: '',
+                          camera: '',
+                          caption: '',
+                          createdTimestamp: '',
+                          copyright: '',
+                          focalLength: '',
+                          iso: '',
+                          shutterSpeed: '',
+                          title: '',
+                          orientation: '',
+                          keywords: [],
+                        ),
+                      ), // Provide a default ImageMeta instance
+                      excerptData: '',
+                      commentCount: '',
+                      links: Links(
+                        self: [],
+                        collection: [],
+                        about: [],
+                        author: [],
+                        replies: [],
+                        versionHistory: [],
+                        predecessorVersion: [],
+                        wpFeaturedmedia: [],
+                        wpAttachment: [],
+                        wpTerm: [],
+                        curies: [],
+                      )
+                    );
       post.id = int.parse(page.url);
       Navigator.push(
           context,
@@ -729,7 +791,67 @@ class _UserAccount7State extends State<UserAccount7> {
               builder: (context) =>
                   PageDetail(post: post)));
     } else if(page.description == 'post') {
-      var post = Post();
+      var post = Post(
+                      id: 0,
+                      date: DateTime(0),
+                      dateGmt: DateTime(0),
+                      guid: Guid('',rendered: ''),
+                      modified: DateTime(0),
+                      modifiedGmt: DateTime(0),
+                      slug: '',
+                      status: '',
+                      type: '',
+                      link: '',
+                      title: Guid('',rendered: ''),
+                      content: Content('',rendered: '',protected: false),
+                      excerpt: Content('',rendered: '',protected: false),
+                      author: 0,
+                      featuredMedia: 0,
+                      commentStatus: '',
+                      pingStatus: '',
+                      sticky: false,
+                      template: '',
+                      format: '',
+                      meta: Meta(likes: 0),
+                      categories: [],
+                      tags: [],
+                      featuredUrl: '',
+                      authorDetails: AuthorDetails(name: '', avatar: '', avatarUrl: '', id: 0),
+                      featuredDetails: FeaturedDetails(
+                        width: 0,
+                        height: 0,
+                        file: '',
+                        imageMeta: ImageMeta(
+                          aperture: '',
+                          credit: '',
+                          camera: '',
+                          caption: '',
+                          createdTimestamp: '',
+                          copyright: '',
+                          focalLength: '',
+                          iso: '',
+                          shutterSpeed: '',
+                          title: '',
+                          orientation: '',
+                          keywords: [],
+                        ),
+                      ), // Provide a default ImageMeta instance
+                      excerptData: '',
+                      commentCount: '',
+                      links: Links(
+                        self: [],
+                        collection: [],
+                        about: [],
+                        author: [],
+                        replies: [],
+                        versionHistory: [],
+                        predecessorVersion: [],
+                        wpFeaturedmedia: [],
+                        wpAttachment: [],
+                        wpTerm: [],
+                        curies: [],
+                      )
+                    );
       post.id = int.parse(page.url);
       Navigator.push(
           context,

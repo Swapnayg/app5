@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class CurvePainter extends CustomPainter {
   CurvePainter({
-    @required this.color,
+    required this.color,
   });
 
   final Color color;
@@ -35,7 +35,7 @@ class CurvePainter extends CustomPainter {
 
 class CurvePainter2 extends CustomPainter {
   CurvePainter2({
-    @required this.color,
+    required this.color,
   });
 
   final Color color;

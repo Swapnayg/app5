@@ -1,11 +1,13 @@
+// ignore_for_file: library_private_types_in_public_api, deprecated_member_use, avoid_unnecessary_containers, unnecessary_null_comparison
+
 import 'dart:io' show Platform;
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter_icons/flutter_icons.dart';
+import 'package:flutter_font_icons/flutter_font_icons.dart'; // Ensure this package is added in pubspec.yaml
 import 'package:scoped_model/scoped_model.dart';
-import 'package:share/share.dart';
+import 'package:share_plus/share_plus.dart';
 
 import '../../../models/app_state_model.dart';
 import '../../../models/blocks_model.dart';
@@ -27,8 +29,7 @@ import '../wishlist.dart';
 class UserAccount9 extends StatefulWidget {
 
 
-  const UserAccount9({Key key})
-      : super(key: key);
+  const UserAccount9({super.key});
 
   @override
   _UserAccount9State createState() => _UserAccount9State();
@@ -80,7 +81,7 @@ class _UserAccount9State extends State<UserAccount9> {
                                   return SliverToBoxAdapter(child: Container());
                                 }
                               }),
-                          (model.user.id != null && model.user.id > 0)
+                          (model.user.id > 0)
                               ? buildLogoutList(context)
                               : SliverToBoxAdapter(child: Container()),
                           //buildOtherList(context),
@@ -124,14 +125,14 @@ class _UserAccount9State extends State<UserAccount9> {
               child: CircleAvatar(
                 backgroundColor: Colors.white30,
                 child: Icon(
-                  FlutterIcons.user_fea,
+                  Icons.person,
                   size: 40,
-                  color: Theme.of(context).textTheme.bodySmall.color.withOpacity(0.4),
+                  color: Theme.of(context).textTheme.bodySmall!.color!.withOpacity(0.4),
                 ),
               ),
             ),
             SizedBox(height: 10,),
-            (model.user.id != null && model.user.id > 0)
+            (model.user.id > 0)
                 ? Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -140,7 +141,7 @@ class _UserAccount9State extends State<UserAccount9> {
                   children: <Widget>[
                     (model.user.billing.firstName != '' || model.user.billing.lastName != '') ? Text(
                       '${model.user.billing.firstName[0].toUpperCase()}${model.user.billing.firstName.substring(1)} ${model.user.billing.lastName[0].toUpperCase()}${model.user.billing.lastName.substring(1)}',
-                      style: Theme.of(context).textTheme.titleLarge.copyWith(color: Colors.white,fontWeight: FontWeight.w700),
+                      style: Theme.of(context).textTheme.titleLarge!.copyWith(color: Colors.white,fontWeight: FontWeight.w700),
                     ) : Container(child: Text('Welcome', style: Theme.of(context).textTheme.titleLarge,),),
                     model.user.billing.phone != '' ? Column(
                       children: [
@@ -165,12 +166,12 @@ class _UserAccount9State extends State<UserAccount9> {
                   ],
                 ),
               ],
-            ) : Container(child: FlatButton(
+            ) : Container(child: TextButton(
               onPressed: () => Navigator.push(
                   context, MaterialPageRoute(builder: (context) => Login())),
               child: Text(
                 appStateModel.blocks.localeText.signIn,
-                style: Theme.of(context).textTheme.bodyLarge.copyWith(
+                style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                     fontSize: 18,
                     fontWeight: FontWeight.w600,
                     color: Colors.white
@@ -219,7 +220,7 @@ class _UserAccount9State extends State<UserAccount9> {
                               Login()));
                 }
               },
-              leading: ExcludeSemantics(child: Icon(FlutterIcons.heart_fea)),
+              leading: ExcludeSemantics(child: Icon(Icons.favorite_border)),
               title: Text(
                 model.blocks.localeText.wishlist,
               ),
@@ -245,7 +246,7 @@ class _UserAccount9State extends State<UserAccount9> {
                               Login()));
                 }
               },
-              leading: ExcludeSemantics(child: Icon(FlutterIcons.wallet_ant)),
+              leading: ExcludeSemantics(child: Icon(Icons.account_balance_wallet)),
               title: Text(
                 'Wallet',
               ),
@@ -271,7 +272,7 @@ class _UserAccount9State extends State<UserAccount9> {
                               Login()));
                 }
               },
-              leading: ExcludeSemantics(child: Icon(FlutterIcons.shopping_cart_fea)),
+              leading: ExcludeSemantics(child: Icon(FontAwesome.shopping_cart)),
               title: Text(
                 model.blocks.localeText.orders,
               ),
@@ -298,7 +299,7 @@ class _UserAccount9State extends State<UserAccount9> {
                               Login()));
                 }
               },
-              leading: ExcludeSemantics(child: Icon(FlutterIcons.map_pin_fea)),
+              leading: ExcludeSemantics(child: Icon(Icons.location_on)),
               title: Text(
                 model.blocks.localeText.address,
               ),
@@ -341,7 +342,7 @@ class _UserAccount9State extends State<UserAccount9> {
                   context,
                   MaterialPageRoute(
                       builder: (context) => SettingsPage())),
-              leading: ExcludeSemantics(child: Icon(FlutterIcons.settings_fea)),
+              leading: ExcludeSemantics(child: Icon(Icons.settings)),
               title: Text(
                 appStateModel.blocks.localeText.settings,
               ),
@@ -415,7 +416,7 @@ class _UserAccount9State extends State<UserAccount9> {
                 }),
             ListTile(
               onTap: () => _shareApp(),
-              leading: ExcludeSemantics(child: Icon(FlutterIcons.share_fea)),
+              leading: ExcludeSemantics(child: Icon(Feather.share)),
               title: Text(
                 appStateModel.blocks.localeText.shareApp,
               ),
@@ -432,8 +433,8 @@ class _UserAccount9State extends State<UserAccount9> {
   }
 
   Widget buildVendorDashboard(BuildContext context) {
-    TextStyle itemTextStyle = Theme.of(context).textTheme.titleMedium;
-    TextStyle itemTextStyle2 = Theme.of(context).textTheme.bodyLarge;
+    TextStyle? itemTextStyle = Theme.of(context).textTheme.titleMedium;
+    TextStyle? itemTextStyle2 = Theme.of(context).textTheme.bodyLarge;
     return  Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 0),
       child: Container(
@@ -470,7 +471,7 @@ class _UserAccount9State extends State<UserAccount9> {
                     Column(
                       children: [
                         ListTile(
-                            leading:Icon(FlutterIcons.grid_fea),
+                            leading:Icon(Icons.grid_view),
                             title: Text('Products', style: itemTextStyle),
                             trailing: Icon(Icons.arrow_forward_ios, size: 15, color: Theme.of(context).focusColor,),
                             onTap: () => Navigator.push(
@@ -492,7 +493,7 @@ class _UserAccount9State extends State<UserAccount9> {
                                         vendorId: model.user.id.toString())))),
                         Divider(height: 1, thickness: 0.3),
                         ListTile(
-                            leading: Icon(FlutterIcons.info_fea),
+                            leading: Icon(Icons.info),
                             title: Text(
                                 appStateModel.blocks.localeText.info,
                                 style: itemTextStyle),
@@ -501,7 +502,7 @@ class _UserAccount9State extends State<UserAccount9> {
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => VendorDetails(
-                                        vendorId: model.user.id.toString())))),
+                                        vendorId: model.user.id.toString(), key: UniqueKey(),)))),
                       ],
                     ),
                   ],
@@ -533,7 +534,7 @@ class _UserAccount9State extends State<UserAccount9> {
             children:[
               ListTile(
                 onTap: () => logout(),
-                leading: Icon(FlutterIcons.log_out_fea, color: Colors.red,),
+                leading: Icon(Icons.logout, color: Colors.red,),
                 title: Text(
                   appStateModel.blocks.localeText.logout,
                   style: TextStyle(
@@ -592,7 +593,67 @@ class _UserAccount9State extends State<UserAccount9> {
               children: <Widget>[
                 ListTile(
                   onTap: () {
-                    var post = Post();
+                    var post = Post(
+                      id: 0,
+                      date: DateTime(0),
+                      dateGmt: DateTime(0),
+                      guid: Guid('',rendered: ''),
+                      modified: DateTime(0),
+                      modifiedGmt: DateTime(0),
+                      slug: '',
+                      status: '',
+                      type: '',
+                      link: '',
+                      title: Guid('',rendered: ''),
+                      content: Content('',rendered: '',protected: false),
+                      excerpt: Content('',rendered: '',protected: false),
+                      author: 0,
+                      featuredMedia: 0,
+                      commentStatus: '',
+                      pingStatus: '',
+                      sticky: false,
+                      template: '',
+                      format: '',
+                      meta: Meta(likes: 0),
+                      categories: [],
+                      tags: [],
+                      featuredUrl: '',
+                      authorDetails: AuthorDetails(name: '', avatar: '', avatarUrl: '', id: 0),
+                      featuredDetails: FeaturedDetails(
+                        width: 0,
+                        height: 0,
+                        file: '',
+                        imageMeta: ImageMeta(
+                          aperture: '',
+                          credit: '',
+                          camera: '',
+                          caption: '',
+                          createdTimestamp: '',
+                          copyright: '',
+                          focalLength: '',
+                          iso: '',
+                          shutterSpeed: '',
+                          title: '',
+                          orientation: '',
+                          keywords: [],
+                        ),
+                      ), // Provide a default ImageMeta instance
+                      excerptData: '',
+                      commentCount: '',
+                      links: Links(
+                        self: [],
+                        collection: [],
+                        about: [],
+                        author: [],
+                        replies: [],
+                        versionHistory: [],
+                        predecessorVersion: [],
+                        wpFeaturedmedia: [],
+                        wpAttachment: [],
+                        wpTerm: [],
+                        curies: [],
+                      )
+                    );
                     post.id = int.parse(pages[index].url);
                     Navigator.push(
                         context,

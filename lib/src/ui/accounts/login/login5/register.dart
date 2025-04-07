@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
@@ -61,11 +63,11 @@ class _RegisterState extends State<Register> {
                           SizedBox(
                             height: height * 0.10,
                           ),
-                          Text('Hearty Welcome !', style: Theme.of(context).textTheme.titleLarge.copyWith(
+                          Text('Hearty Welcome !', style: Theme.of(context).textTheme.titleLarge!.copyWith(
                             //color: Colors.white,
                               fontSize: 32
                           )),
-                          Text('Sign up to create an account', style: Theme.of(context).textTheme.bodySmall.copyWith(
+                          Text('Sign up to create an account', style: Theme.of(context).textTheme.bodySmall!.copyWith(
                             //color: Colors.white,
                               fontSize: 14
                           )),
@@ -73,10 +75,11 @@ class _RegisterState extends State<Register> {
                             height: height * 0.05,
                           ),
                           PrimaryColorOverride(
+                            key:UniqueKey(),
                             child: TextFormField(
                               onSaved: (value) => setState(() => formData['first_name'] = value),
                               validator: (value) {
-                                if (value.isEmpty) {
+                                if (value!.isEmpty) {
                                   return appStateModel.blocks.localeText.pleaseEnterFirstName;
                                 }
                                 return null;
@@ -91,10 +94,11 @@ class _RegisterState extends State<Register> {
                           SizedBox(
                             height: MediaQuery.of(context).size.height * 0.025,),
                           PrimaryColorOverride(
+                            key:UniqueKey(),
                             child: TextFormField(
                               onSaved: (value) => setState(() => formData['last_name'] = value),
                               validator: (value) {
-                                if (value.isEmpty) {
+                                if (value!.isEmpty) {
                                   return appStateModel.blocks.localeText.pleaseEnterLastName;
                                 }
                                 return null;
@@ -109,10 +113,11 @@ class _RegisterState extends State<Register> {
                           SizedBox(
                             height: MediaQuery.of(context).size.height * 0.025,),
                           PrimaryColorOverride(
+                            key:UniqueKey(),
                             child: TextFormField(
                               onSaved: (value) => setState(() => formData['email'] = value),
                               validator: (value) {
-                                if (value.isEmpty) {
+                                if (value!.isEmpty) {
                                   return appStateModel.blocks.localeText.pleaseEnterValidEmail;
                                 }
                                 return null;
@@ -127,10 +132,11 @@ class _RegisterState extends State<Register> {
                           SizedBox(
                             height: MediaQuery.of(context).size.height * 0.025,),
                           PrimaryColorOverride(
+                            key:UniqueKey(),
                             child: TextFormField(
                               onSaved: (value) => setState(() => formData['password'] = value),
                               validator: (value) {
-                                if (value.isEmpty) {
+                                if (value!.isEmpty) {
                                   return appStateModel.blocks.localeText.pleaseEnterPassword;
                                 }
                                 return null;
@@ -145,13 +151,13 @@ class _RegisterState extends State<Register> {
                           SizedBox(
                             height: MediaQuery.of(context).size.height * 0.025,),
                           RoundedLoadingButton(
-                            color: Theme.of(context).buttonColor,
+                            color: Theme.of(context).colorScheme.primary,
                             elevation: 0,
-                            valueColor: Theme.of(context).buttonTheme.colorScheme.onPrimary,
+                            valueColor: Theme.of(context).buttonTheme.colorScheme!.onPrimary,
                             controller: _btnController,
                             onPressed: () {
-                              if(_formKey.currentState.validate()) {
-                                _formKey.currentState.save();
+                              if(_formKey.currentState!.validate()) {
+                                _formKey.currentState!.save();
                                 _submit(context);
                               }
                             },
@@ -160,8 +166,10 @@ class _RegisterState extends State<Register> {
                             child: Text(appStateModel.blocks.localeText.signUp),
                           ),
                           SizedBox(height: 10.0),
-                          FlatButton(
-                              padding: EdgeInsets.all(16.0),
+                          TextButton(
+                              style: TextButton.styleFrom(
+                                padding: EdgeInsets.all(16.0),
+                              ),
                               onPressed: () {
                                 Navigator.of(context).pop();
                               },
@@ -170,7 +178,7 @@ class _RegisterState extends State<Register> {
                                 children: [
                                   Text(
                                       'Already registered?',
-                                      style: Theme.of(context).textTheme.bodyMedium.copyWith(
+                                      style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                                           fontSize: 15,
                                         color: Colors.white,
                                       )),
@@ -179,7 +187,7 @@ class _RegisterState extends State<Register> {
                                     const EdgeInsets.symmetric(horizontal: 8.0),
                                     child: Text(
                                         'Sign In',
-                                        style: Theme.of(context).textTheme.titleMedium.copyWith(
+                                        style: Theme.of(context).textTheme.titleMedium!.copyWith(
                                             color: Colors.white,
                                             fontWeight: FontWeight.w500)),
                                   ),

@@ -1,7 +1,8 @@
+// ignore_for_file: unused_element, curly_braces_in_flow_control_structures, use_build_context_synchronously
+
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
@@ -27,7 +28,7 @@ class _Login5State extends State<Login5> {
   final GoogleSignIn _googleSignIn = GoogleSignIn();
   final appStateModel = AppStateModel();
   final _formKey = GlobalKey<FormState>();
-  var formData = Map<String, dynamic>();
+  var formData = <String, dynamic>{};
   TextEditingController usernameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   final RoundedLoadingButtonController _btnController =
@@ -59,7 +60,7 @@ class _Login5State extends State<Login5> {
                     height: MediaQuery.of(context).size.height,
                     width: MediaQuery.of(context).size.width,
                     child: CustomPaint(
-                      painter: CurvePainter(color: Theme.of(context).colorScheme.background),
+                      painter: CurvePainter(color: Theme.of(context).colorScheme.surface),
                     ),
                   ),
                   Container(
@@ -71,21 +72,22 @@ class _Login5State extends State<Login5> {
                           SizedBox(
                             height: height * 0.10,
                           ),
-                          Text('Welcome Back!', style: Theme.of(context).textTheme.titleLarge.copyWith(
+                          Text('Welcome Back!', style: Theme.of(context).textTheme.titleLarge!.copyWith(
                               fontSize: 32
                           )),
-                          Text('Sign in to your account', style: Theme.of(context).textTheme.bodySmall.copyWith(
+                          Text('Sign in to your account', style: Theme.of(context).textTheme.bodySmall!.copyWith(
                               fontSize: 14
                           )),
                           SizedBox(
                             height: height * 0.05,
                           ),
                           PrimaryColorOverride(
+                            key:UniqueKey(),
                             child: TextFormField(
                               controller: usernameController,
                               onSaved: (value) => setState(() => formData['username'] = value),
                               validator: (value) {
-                                if (value.isEmpty) {
+                                if (value!.isEmpty) {
                                   return appStateModel.blocks.localeText.pleaseEnterUsername;
                                 }
                                 return null;
@@ -100,12 +102,13 @@ class _Login5State extends State<Login5> {
                           SizedBox(
                             height: MediaQuery.of(context).size.height * 0.025,),
                           PrimaryColorOverride(
+                            key:UniqueKey(),
                             child: TextFormField(
                               controller: passwordController,
                               obscureText: true,
                               onSaved: (value) => setState(() => formData['password'] = value),
                               validator: (value) {
-                                if (value.isEmpty) {
+                                if (value!.isEmpty) {
                                   return appStateModel.blocks.localeText.pleaseEnterPassword;
                                 }
                                 return null;
@@ -120,13 +123,13 @@ class _Login5State extends State<Login5> {
                           SizedBox(
                             height: MediaQuery.of(context).size.height * 0.025,),
                           RoundedLoadingButton(
-                            color: Theme.of(context).buttonColor,
+                            color: Theme.of(context).colorScheme.primary,
                             elevation: 0,
-                            valueColor: Theme.of(context).buttonTheme.colorScheme.onPrimary,
+                            valueColor: Theme.of(context).buttonTheme.colorScheme!.onPrimary,
                             controller: _btnController,
                             onPressed: () {
-                              if(_formKey.currentState.validate()) {
-                                _formKey.currentState.save();
+                              if(_formKey.currentState!.validate()) {
+                                _formKey.currentState!.save();
                                 _submit(context);
                               }
                             },
@@ -135,8 +138,10 @@ class _Login5State extends State<Login5> {
                             child: Text(appStateModel.blocks.localeText.signIn),
                           ),
                           SizedBox(height: 10.0),
-                          FlatButton(
-                              padding: EdgeInsets.all(16.0),
+                          TextButton(
+                              style: TextButton.styleFrom(
+                                padding: EdgeInsets.all(16.0),
+                              ),
                               onPressed: () {
                                 Navigator.of(context).push(
                                     MaterialPageRoute(builder: (context) => Material(child: Register())));
@@ -147,7 +152,7 @@ class _Login5State extends State<Login5> {
                                   Text(
                                       appStateModel.blocks.localeText
                                           .dontHaveAnAccount,
-                                      style: Theme.of(context).textTheme.bodyMedium.copyWith(
+                                      style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                                           fontSize: 15,
                                           color: Colors.white
                                       )),
@@ -156,12 +161,14 @@ class _Login5State extends State<Login5> {
                                     const EdgeInsets.symmetric(horizontal: 8.0),
                                     child: Text(
                                         appStateModel.blocks.localeText.signUp,
-                                        style: Theme.of(context).textTheme.bodyMedium.copyWith(color: Colors.white,fontWeight: FontWeight.w500)),
+                                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(color: Colors.white,fontWeight: FontWeight.w500)),
                                   ),
                                 ],
                               )),
-                          FlatButton(
-                              padding: EdgeInsets.only(left:16.0),
+                          TextButton(
+                              style: TextButton.styleFrom(
+                                padding: EdgeInsets.only(left: 16.0),
+                              ),
                               onPressed: () {
                                 Navigator.of(context).push(
                                     MaterialPageRoute(builder: (context) => Material(child: ForgotPassword())));
@@ -171,7 +178,7 @@ class _Login5State extends State<Login5> {
                                 children: [
                                   Text(
                                       appStateModel.blocks.localeText.forgotPassword,
-                                      style: Theme.of(context).textTheme.bodyMedium.copyWith(
+                                      style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                                           fontSize: 15,
                                           color: Colors.white,
                                           fontWeight: FontWeight.w500
@@ -213,29 +220,7 @@ class _Login5State extends State<Login5> {
                                     ),
                                   ),
                                 ),
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Card(
-                                    shape: StadiumBorder(),
-                                    margin: EdgeInsets.all(0),
-                                    color: Color(0xFF3b5998),
-                                    child: SizedBox(
-                                      height: 50,
-                                      width: 50,
-                                      child: IconButton(
-                                        splashRadius: 25.0,
-                                        icon: Icon(
-                                          FontAwesomeIcons.facebook,
-                                          size: 20,
-                                          color: Colors.white,
-                                        ),
-                                        onPressed: () {
-                                          fbLogin(context);
-                                        },
-                                      ),
-                                    ),
-                                  ),
-                                ),
+                                
                                 Platform.isIOS ? Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Card(
@@ -355,9 +340,16 @@ class _Login5State extends State<Login5> {
   }
 
   void _googleAuthentication(BuildContext context) async {
-    final GoogleSignInAccount googleUser = await _googleSignIn.signIn();
-    googleUser.authentication
-        .then((value) => _loginGoogleUser(value.idToken, googleUser, context));
+    final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
+    googleUser!.authentication
+        .then((value) {
+          if (value.idToken != null) {
+            _loginGoogleUser(value.idToken!, googleUser, context);
+          } else {
+            // Handle the case where idToken is null
+            print('Google Sign-In failed: idToken is null');
+          }
+        });
   }
 
   _loginGoogleUser(String idToken, GoogleSignInAccount googleUser,
@@ -374,22 +366,6 @@ class _Login5State extends State<Login5> {
     }
   }
 
-  //Facebook Login
-  fbLogin(BuildContext context) async {
-    final facebookLogin = FacebookLogin();
-    final result = await facebookLogin.logIn(['email']);
-    switch (result.status) {
-      case FacebookLoginStatus.loggedIn:
-        _sendTokenToServer(result.accessToken.token, context);
-        break;
-      case FacebookLoginStatus.cancelledByUser:
-        _showCancelledMessage();
-        break;
-      case FacebookLoginStatus.error:
-        _showErrorOnUI(result.errorMessage);
-        break;
-    }
-  }
 
   void _showCancelledMessage() {}
 
@@ -422,10 +398,9 @@ class _Login5State extends State<Login5> {
       ),
     );
 
-    var login = new Map<String, dynamic>();
+    var login = <String, dynamic>{};
     login["userIdentifier"] = credential.userIdentifier;
-    if(credential.authorizationCode != null)
-      login["authorizationCode"] = credential.authorizationCode;
+    login["authorizationCode"] = credential.authorizationCode;
     if(credential.email != null) {
       login["email"] = credential.email;
     } else {

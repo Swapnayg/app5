@@ -1,3 +1,5 @@
+// ignore_for_file: unused_local_variable
+
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -29,12 +31,57 @@ class AppStateModel extends Model {
 
   SelectedPage selectedPage = SelectedPage(type: 'home', name: 'Home', id: 0);
 
-  BlocksModel blocks;
+  late BlocksModel blocks;
   Locale appLocale = Locale('en');
   static WooCommerceAPI wc_api = WooCommerceAPI();
   List<ProductAddonsModel> productAddons = [];
   final apiProvider = ApiProvider();
-  CartModel shoppingCart = CartModel(cartContents: List<CartContent>(), cartTotals: CartTotals());
+  CartModel shoppingCart = CartModel(
+    cartContents: <CartContent>[],
+    cartTotals: CartTotals(
+      subtotal: '0.0',
+      subtotalTax: '0.0',
+      shippingTotal: '0.0',
+      shippingTax: '0.0',
+      discountTotal: '0.0',
+      discountTax: '0.0',
+      cartContentsTotal: '0.0',
+      cartContentsTax: '0.0',
+      feeTotal: '0.0',
+      feeTax: '0.0',
+      total: '0.0',
+      totalTax: '0.0',
+    ),
+    appliedCoupons: [],
+    taxDisplayCart: '',
+    cartSessionData: CartSessionData(
+      cartContentsTotal: 0,
+      total: 0,
+      subtotal: 0,
+      subtotalExTax: 0,
+      taxTotal: 0,
+      taxes: [],
+      shippingTaxes: [],
+      discountCart: 0,
+      discountCartTax: 0,
+      shippingTotal: 0,
+      shippingTaxTotal: 0,
+      couponDiscountAmounts: [],
+      couponDiscountTaxAmounts: [],
+      feeTotal: 0,
+      fees: [],
+    ),
+    couponAppliedCount: [],
+    couponDiscountTotals: [],
+    couponDiscountTaxTotals: [],
+    cartNonce: '',
+    chosenShipping: [],
+    points: Points(value: 0, discountAvailable: 0.0, message: '', points: 0),
+    purchasePoint: 0,
+    currency: '',
+    cartFees: [],
+    coupons: [],
+  );
   int count = 0;
   bool isCartLoading = false;
   bool loggedIn = false;
@@ -43,35 +90,35 @@ class AppStateModel extends Model {
   var selectedRange = RangeValues(0, 1000000);
   String selectedCurrency = 'USD';
   int page = 1;
-  var filter = Map<String, dynamic>();
+  var filter = <String, dynamic>{};
   bool hasMoreRecentItem = true;
   List<String> isVendor = ['seller', 'wcfm_vendor', 'dc_vendor', 'administrator'];
   bool loginLoading = false;
   List<Category> subCategories = [];
   List<Category> mainCategories = [];
   Map<String, dynamic> customerLocation = {};
-  bool hasSeenIntro;
-  String oneSignalPlayerId;
-  String fcmToken;
+  late bool hasSeenIntro;
+  late String oneSignalPlayerId;
+  late String fcmToken;
   bool loading = false;
 
   //For delivery Date time
-  DeliveryDate deliveryDate = DeliveryDate();
+  DeliveryDate deliveryDate = DeliveryDate(success: true, bookableDates: []);
   Map<String, DeliveryTime> deliverySlot = <String, DeliveryTime>{};
-  String selectedDate;
-  String selectedDateFormatted;
-  String selectedTime;
+  late String selectedDate;
+  late String selectedDateFormatted;
+  late String selectedTime;
 
   getLocalData() async {
 
     var prefs = await SharedPreferences.getInstance();
-    hasSeenIntro = prefs.getBool('hasSeenIntro');
+    hasSeenIntro = prefs.getBool('hasSeenIntro')!;
     if (prefs.getString('language_code') != null) {
-      appLocale = Locale(prefs.getString('language_code'));
+      appLocale = Locale(prefs.getString('language_code') ?? 'en');
     }
     apiProvider.filter['lan'] = appLocale.languageCode;
 
-    Map<String, dynamic> location = prefs.getString('customerLocation') != null ? json.decode(prefs.getString('customerLocation')) : {};
+    Map<String, dynamic> location = json.decode(prefs.getString('customerLocation') ?? '{}');
     if(location['latitude'] != null && location['longitude'] != null) {
       customerLocation['address'] = location['address'];
       customerLocation['latitude'] = location['latitude'].toString();
@@ -81,7 +128,7 @@ class AppStateModel extends Model {
       var searchData = <String, String>{};
       searchData['wcfmmp_radius_lat'] = customerLocation['latitude'];
       searchData['wcfmmp_radius_lng'] = customerLocation['longitude'];
-      var distance = prefs.getString('distance') != null ? json.decode(prefs.getString('distance')) : '10';
+      var distance = prefs.getString('distance') != null ? json.decode(prefs.getString('distance')!) : '10';
       searchData['wcfmmp_radius_range'] = distance.toString();
       apiProvider.filter['search_data'] = Uri(queryParameters: searchData).query;
     }
@@ -92,20 +139,20 @@ class AppStateModel extends Model {
   fetchAllBlocks() async {
     page = 1;
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String blocksString = prefs.getString('blocks');
-    String storedCurrency = prefs.getString('currency');
-    if (storedCurrency.isNotEmpty &&
+    String? blocksString = prefs.getString('blocks');
+    String? storedCurrency = prefs.getString('currency');
+    if (storedCurrency!.isNotEmpty &&
         storedCurrency != '0') {
       selectedCurrency = storedCurrency;
       await switchCurrency(storedCurrency);
     }
-    if (blocksString.isNotEmpty &&
+    if (blocksString!.isNotEmpty &&
         blocksString != '0') {
       try {
         blocks = BlocksModel.fromJson(json.decode(blocksString));
         if(mainCategories.length == 0 || (blocks.categories.where((cat) => cat.parent == 0).toList().length == (mainCategories.length - 1))) {
           mainCategories = blocks.categories.where((cat) => cat.parent == 0).toList();
-          mainCategories.insert(0, Category(name: blocks.localeText.all, id: 0,  parent: 0, image: ''));
+          mainCategories.insert(0, Category(name: blocks.localeText.all, id: 0,  parent: 0, image: '', description: '', count: 0));
         }
         notifyListeners();
       } catch (e) {}
@@ -116,10 +163,10 @@ class AppStateModel extends Model {
       blocks = BlocksModel.fromJson(json.decode(response.body));
       if(mainCategories.length == 0 || (blocks.categories.where((cat) => cat.parent == 0).toList().length == (mainCategories.length - 1))) {
         mainCategories = blocks.categories.where((cat) => cat.parent == 0).toList();
-        mainCategories.insert(0, Category(name: blocks.localeText.all, id: 0,  parent: 0, image: ''));
+        mainCategories.insert(0, Category(name: blocks.localeText.all, id: 0,  parent: 0, image: '', description: '', count: 0));
       }
       user = blocks.user;
-      if (user.id != null && user.id > 0) {
+      if (user.id > 0) {
         loggedIn = true;
       }
       //selectedCurrency = blocks.currency; // Uncomment once backend currency switcher is working with WPML
@@ -151,10 +198,10 @@ class AppStateModel extends Model {
       blocks = BlocksModel.fromJson(json.decode(response.body));
       if(mainCategories.length == 0 || (blocks.categories.where((cat) => cat.parent == 0).toList().length == mainCategories.length)) {
         mainCategories = blocks.categories.where((cat) => cat.parent == 0).toList();
-        mainCategories.insert(0, Category(name: blocks.localeText.all, id: 0,  parent: 0, image: ''));
+        mainCategories.insert(0, Category(name: blocks.localeText.all, id: 0,  parent: 0, image: '', description: '', count: 0));
       }
       user = blocks.user;
-      if (user.id != null && user.id > 0) {
+      if (user.id > 0) {
         loggedIn = true;
       }
       //selectedCurrency = blocks.currency; // Uncomment once backend currency switcher is working with WPML
@@ -218,7 +265,45 @@ class AppStateModel extends Model {
   }
 
   //Account
-  Customer user = Customer( email: '');
+  Customer user = Customer(
+    id: 0,
+    email: '',
+    firstName: '',
+    lastName: '',
+    role: '',
+    billing: Address(
+      firstName: '',
+      lastName: '',
+      address1: '',
+      address2: '',
+      city: '',
+      state: '',
+      postcode: '',
+      country: '',
+      email: '',
+      phone: '',
+      company: "",
+    ),
+    shipping: Address(
+      firstName: '',
+      lastName: '',
+      address1: '',
+      address2: '',
+      city: '',
+      state: '',
+      postcode: '',
+      country: '',
+      email: '',
+      phone: '',
+      company: '',
+    ),
+    isPayingCustomer: false,
+    ordersCount: 0,
+    totalSpent: '',
+    avatarUrl: '',
+    metaData: [],
+    guest: 'false', username: '',
+  );
 
   Future<bool> login(Map<String, dynamic> data, BuildContext context) async {
     final response = await apiProvider.postWithCookies(
@@ -358,7 +443,46 @@ class AppStateModel extends Model {
   }
 
   Future logout() async {
-    user = Customer(id: 0);
+    user = Customer(
+      id: 0,
+      email: '',
+      firstName: '',
+      lastName: '',
+      role: '',
+      username: '',
+      billing: Address(
+      firstName: '',
+      lastName: '',
+      address1: '',
+      address2: '',
+      city: '',
+      state: '',
+      postcode: '',
+      country: '',
+      email: '',
+      phone: '',
+      company: '',
+    ), // Replace with appropriate Billing instance
+      shipping: Address(
+      firstName: '',
+      lastName: '',
+      address1: '',
+      address2: '',
+      city: '',
+      state: '',
+      postcode: '',
+      country: '',
+      email: '',
+      phone: '',
+      company: '',
+    ),
+      isPayingCustomer: false,
+      ordersCount: 0,
+      totalSpent: '',
+      avatarUrl: '',
+      metaData: [], // Replace with appropriate metadata list
+      guest: "false",
+    );
     wishListIds = [];
     loggedIn = false;
     notifyListeners();
@@ -397,6 +521,7 @@ class AppStateModel extends Model {
       Notice notice = noticeFromJson(response.body);
       Fluttertoast.showToast(msg: parseHtmlString(notice.data[0].notice));
     }
+    return false;
   }
 
   void getCart() async {
@@ -499,7 +624,6 @@ class AppStateModel extends Model {
     final response = await apiProvider.postWithCookies(
         '/wp-admin/admin-ajax.php?action=mstore_flutter-customer', {});
     //Customer customers = Customer.fromJson(json.decode(response.body));
-    //TODO Set is Loggedin if logged in
   }
 
   getProducts() {
@@ -522,7 +646,52 @@ class AppStateModel extends Model {
   }
 
   Future<void> clearCart() async {
-    shoppingCart = CartModel(cartContents: List<CartContent>(), cartTotals: CartTotals());
+    shoppingCart = CartModel(
+      cartContents: <CartContent>[],
+      cartTotals: CartTotals(
+        subtotal: 0.0.toString(),
+        subtotalTax: 0.0.toString(),
+        shippingTotal: 0.0.toString(),
+        shippingTax: 0.0.toString(),
+        discountTotal: 0.0.toString(),
+        discountTax: 0.0.toString(),
+        cartContentsTotal: 0.0.toString(),
+        cartContentsTax: 0.0.toString(),
+        feeTotal: 0.0.toString(),
+        feeTax: 0.0.toString(),
+        total: 0.0.toString(),
+        totalTax: 0.0.toString(),
+      ),
+      appliedCoupons: [],
+      taxDisplayCart: '',
+      cartSessionData: CartSessionData(
+        cartContentsTotal: 0,
+        total: 0,
+        subtotal: 0,
+        subtotalExTax: 0,
+        taxTotal: 0,
+        taxes: [],
+        shippingTaxes: [],
+        discountCart: 0,
+        discountCartTax: 0,
+        shippingTotal: 0,
+        shippingTaxTotal: 0,
+        couponDiscountAmounts: [],
+        couponDiscountTaxAmounts: [],
+        feeTotal: 0,
+        fees: [],
+      ), // Replace with an appropriate CartSessionData instance
+      couponAppliedCount: [],
+      couponDiscountTotals: [].toList(),
+      couponDiscountTaxTotals: [].toList(),
+      cartNonce: '',
+      chosenShipping: [],
+      points: Points(value: 0, discountAvailable: 0.0, message: '', points: 0), // Replace with appropriate Points instance
+      purchasePoint: 0,
+      currency: '',
+      cartFees: [],
+      coupons: []
+    );
     notifyListeners();
     final response = await apiProvider
         .get('/wp-admin/admin-ajax.php?action=mstore_flutter-clearCart');
@@ -552,7 +721,7 @@ class AppStateModel extends Model {
   setSubCategories(int id) {
     subCategories = blocks.categories.where((cat) => cat.parent == id).toList();
     if (subCategories.length != 0) {
-      subCategories.insert(0, Category(name: 'All', id: id));
+      subCategories.insert(0, Category(name: 'All', id: id, description: '', parent: 0, count: 0, image: ''));
     }
   }
 
@@ -563,7 +732,7 @@ class AppStateModel extends Model {
   List<AttributesModel> attributes = [];
   var productsFilter = <String, dynamic>{};
   var hasMoreItems = <String, dynamic>{};
-  TabController tabController;
+  late TabController tabController;
 
   fetchAllProducts() async {
     if(!products.containsKey(productsFilter['id'])) {
@@ -577,10 +746,10 @@ class AppStateModel extends Model {
   loadMore() async {
     hasMoreItems[productsFilter['id']] = true;
     notifyListeners();
-    productsPage[productsFilter['id']] = productsPage[productsFilter['id']] + 1;
+    productsPage[productsFilter['id']] = (productsPage[productsFilter['id']]! + 1);
     productsFilter['page'] = productsPage[productsFilter['id']].toString();
     List<Product> moreProducts = await apiProvider.fetchProductList(productsFilter);
-    products[productsFilter['id']].addAll(moreProducts);
+    products[productsFilter['id']]!.addAll(moreProducts);
     if(moreProducts.length < 10){
       hasMoreItems[productsFilter['id']] = false;
     }
@@ -608,15 +777,15 @@ class AppStateModel extends Model {
 
   void applyFilter(int id, double minPrice, double maxPrice) {
     if(products[productsFilter['id']] != null) {
-      products[productsFilter['id']].clear();
+      products[productsFilter['id']]!.clear();
     }
     productsFilter['min_price'] = minPrice.toString();
     productsFilter['max_price'] = maxPrice.toString();
     for(var i = 0; i < attributes.length; i++) {
     for(var j = 0; j < attributes[i].terms.length; j++) {
       if(attributes[i].terms[j].selected) {
-        productsFilter['attribute_term' + j.toString()] = attributes[i].terms[j].termId.toString();
-        productsFilter['attributes' + j.toString()] = attributes[i].terms[j].taxonomy;
+        productsFilter['attribute_term$j'] = attributes[i].terms[j].termId.toString();
+        productsFilter['attributes$j'] = attributes[i].terms[j].taxonomy;
       }
     }
   }
@@ -671,14 +840,29 @@ class AppStateModel extends Model {
 
 }
 
+class Shipping {
+  get methods => null;
+
+  get chosenMethod => null;
+
+  get shippingMethods => null;
+
+  static Widget fromJson(Map<String, dynamic> json) {
+    throw UnimplementedError('fromJson method is not implemented.');
+  }
+}
+
+class Billing {
+}
+
 class SelectedPage {
   int id;
   String type;
   String name;
 
   SelectedPage({
-    this.id,
-    this.type,
-    this.name,
+    required this.id,
+    required this.type,
+    required this.name,
   });
 }

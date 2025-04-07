@@ -234,9 +234,8 @@ class CheckoutBloc {
   }
 
   void addAddToCarErrorMessage(String message) {
-    AddToCartErrorModel addToCartError = AddToCartErrorModel();
-    addToCartError.data = AddToCartErrorData();
-    addToCartError.data.notice = message;
+    AddToCartErrorModel addToCartError = AddToCartErrorModel(success: false, data: AddToCartErrorData(error: false, productUrl: '', notice: ''));
+    addToCartError.data!.notice = message;
     //_addToCartErrorFetcher.sink.add(addToCartError);
   }
 

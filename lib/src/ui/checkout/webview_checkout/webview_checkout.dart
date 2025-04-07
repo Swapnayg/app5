@@ -1,4 +1,7 @@
 //import 'dart:async';
+// ignore_for_file: library_private_types_in_public_api, unused_element
+
+import 'dart:async';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:webview_cookie_manager/webview_cookie_manager.dart';
@@ -16,11 +19,11 @@ class WebViewCheckout extends StatefulWidget {
 }
 
 class _WebViewCheckoutState extends State<WebViewCheckout> {
-  String orderId;
+  late String orderId;
   final apiProvider = ApiProvider();
   final config = Config();
   bool _isLoadingPage = true;
-  WebViewController controller;
+  late WebViewController controller;
   final cookieManager = WebviewCookieManager();
   bool injectCookies = false;
 
@@ -37,28 +40,26 @@ class _WebViewCheckoutState extends State<WebViewCheckout> {
       body: Container(
         child: Stack(
           children: <Widget>[
-            injectCookies ? WebView(
-              onPageStarted: (String url) {
-                onUrlChange(url);
-              },
-              initialUrl: '${config.url}/checkout/',
-              javascriptMode: JavascriptMode.unrestricted,
-              onWebViewCreated: (WebViewController wvc) {
-                //
-              },
-              onPageFinished: (value) async {
-                setState(() {
-                  _isLoadingPage = false;
-                });
-              },
-            ) : Container(),
-            _isLoadingPage
-                ? Container(
-              color: Colors.white,
-              alignment: FractionalOffset.center,
-              child: CircularProgressIndicator(),
-            )
-                : Container(),
+            // injectCookies ? WebViewWidget(
+            //   onPageStarted: null, // Remove or replace with a valid parameter if needed
+            //   initialUrl: '${config.url}/checkout/',
+            //   javascriptMode: JavascriptMode.unrestricted,
+            //   onWebViewCreated: (WebViewController wvc) {
+            //     controller = wvc;
+            //   },
+            //   onPageFinished: (value) async {
+            //     setState(() {
+            //       _isLoadingPage = false;
+            //     });
+            //   }, controller: null,
+            // ) : Container(),
+            // _isLoadingPage
+            //     ? Container(
+            //   color: Colors.white,
+            //   alignment: FractionalOffset.center,
+            //   child: CircularProgressIndicator(),
+            // )
+                //: Container(),
           ],
         ),
       ),
@@ -67,7 +68,7 @@ class _WebViewCheckoutState extends State<WebViewCheckout> {
 
   void _onNavigationDelegateExample(
       WebViewController controller, BuildContext context) async {
-    controller.currentUrl().then(onUrlChange);
+    controller.currentUrl().then(onUrlChange as FutureOr Function(String? value));
   }
 
   Future onUrlChange(String url) async {

@@ -1,21 +1,21 @@
+// ignore_for_file: library_private_types_in_public_api, deprecated_member_use, sort_child_properties_last, avoid_print
+
 import 'dart:io';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import './../../../../models/app_state_model.dart';
 import './../../../../models/register_model.dart';
 import './../../login/social/apple_login.dart';
-import './../../login/social/facebook_login.dart';
 import './../../login/social/google_login.dart';
 import './../../login/social/sms_login.dart';
 import '../../../widgets/buttons/button_text.dart';
 
 class RegisterTab extends StatefulWidget {
 
-  RegisterTab({Key key, @required this.context,
-    @required this.model,
-    @required this.tabController,}) : super(key: key);
+  RegisterTab({super.key, required this.context,
+    required this.model,
+    required this.tabController,});
 
   final BuildContext context;
   final AppStateModel model;
@@ -28,15 +28,22 @@ class RegisterTab extends StatefulWidget {
 class _RegisterTabState extends State<RegisterTab> {
   //Country _selected = Country.IN;
   Map loginData =  <String, dynamic>{};
-  bool _obscureText;
+  late bool _obscureText;
   String radioItem = '';
-  final _register = RegisterModel();
+  final _register = RegisterModel(
+    firstName: '',
+    lastName: '',
+    email: '',
+    phoneNumber: '',
+    password: '',
+    username: '',
+    companyName: '',
+  );
   var isLoading = false;
 
   final _formKey = GlobalKey<FormState>();
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _obscureText = true;
   }
@@ -72,7 +79,7 @@ class _RegisterTabState extends State<RegisterTab> {
                       buildIcon(Icon(Icons.person,color: Colors.grey.withOpacity(.6),)),
                       SizedBox(width: 20,),
                       Flexible(
-                        child: CustomTextFormField(
+                          child: CustomTextFormField(
                           obscureText: false,
                           label: widget.model.blocks.localeText.firstName,
                           onSaved: (val) =>
@@ -81,6 +88,16 @@ class _RegisterTabState extends State<RegisterTab> {
                               .model.blocks.localeText.pleaseEnterFirstName,
                           password: false,
                           inputType: TextInputType.text,
+                          prefix: IconButton(
+                            icon: Icon(Icons.person),
+                            onPressed: () {},
+                          ),
+                          suffix: IconButton(
+                            icon: Icon(Icons.clear),
+                            onPressed: () {},
+                          ),
+                          controller: TextEditingController(),
+                          icon: Icons.person,
                         ),
                       ),
                       SizedBox(width: 20,),
@@ -94,6 +111,16 @@ class _RegisterTabState extends State<RegisterTab> {
                               .model.blocks.localeText.pleaseEnterLastName,
                           password: false,
                           inputType: TextInputType.text,
+                          prefix: IconButton(
+                            icon: Icon(Icons.person),
+                            onPressed: () {},
+                          ),
+                          suffix: IconButton(
+                            icon: Icon(Icons.clear),
+                            onPressed: () {},
+                          ),
+                          controller: TextEditingController(),
+                          icon: Icons.person,
                         ),
                       )
                     ],
@@ -113,6 +140,16 @@ class _RegisterTabState extends State<RegisterTab> {
                                 .model.blocks.localeText.pleaseEnterValidEmail,
                             password: false,
                             inputType: TextInputType.emailAddress,
+                            prefix: IconButton(
+                            icon: Icon(Icons.person),
+                            onPressed: () {},
+                          ),
+                          suffix: IconButton(
+                            icon: Icon(Icons.clear),
+                            onPressed: () {},
+                          ),
+                          controller: TextEditingController(),
+                          icon: Icons.person,
                           )
                       ),
                     ],
@@ -142,15 +179,22 @@ class _RegisterTabState extends State<RegisterTab> {
                                 });
                               }
                           ),
+                          prefix: IconButton(
+                            icon: Icon(Icons.person),
+                            onPressed: () {},
+                          ),
+                          
+                          controller: TextEditingController(),
+                          icon: Icons.person,
                           inputType: TextInputType.text,
                         ),
                       )
                     ],
                   ),
                   SizedBox(height: 30.0),
-                  RaisedButton(
+                  ElevatedButton(
                     child: ButtonText(isLoading: isLoading, text: widget.model.blocks.localeText.signUp),
-                    onPressed: () => isLoading ? null : _registerUser(context),
+                    onPressed: isLoading ? null : () => _registerUser(context),
                   ),
                   SizedBox(height: 30.0),
                   Center(
@@ -160,76 +204,10 @@ class _RegisterTabState extends State<RegisterTab> {
                           color: Colors.grey),),
                   ),
                   SizedBox(height: 30.0),
-                  Center(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Card(
-                            elevation: 2,
-                            shadowColor: Colors.black,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(50.0),
-                            ),
-                            child: SizedBox(
-                              height: 50.0, // height of the button
-                              width: 50.0,
-                              child: GoogleLoginWidget(),
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Card(
-                            elevation: 2,
-                            shadowColor: Colors.black,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(50.0),
-                            ),
-                            child: SizedBox(
-                              height: 50.0, // height of the button
-                              width: 50.0,
-                              child: FacebookLoginWidget(),
-                            ),
-                          ),
-                        ),
-                        Platform.isIOS ? Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Card(
-                            elevation: 2,
-                            shadowColor: Colors.black,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(50.0),
-                            ),
-                            child: SizedBox(
-                              height: 50.0, // height of the button
-                              width: 50.0,
-                              child: AppleLogin(),
-                            ),
-                          ),
-                        ) : Container(),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Card(
-                            elevation: 2,
-                            shadowColor: Colors.black,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(50.0),
-                            ),
-                            child: SizedBox(
-                              height: 50.0, // height of the button
-                              width: 50.0,
-                              child: SmsLogin(),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  SizedBox(height: 15.0),
-                  FlatButton(
-                      padding: EdgeInsets.all(16.0),
+                  TextButton(
+                      style: TextButton.styleFrom(
+                        padding: EdgeInsets.all(16.0),
+                      ),
                       onPressed: () {
                         widget.tabController.animateTo(0);
                       },
@@ -239,7 +217,7 @@ class _RegisterTabState extends State<RegisterTab> {
                           Text(
                               widget.model.blocks.localeText
                                   .alreadyHaveAnAccount,
-                              style: Theme.of(context).textTheme.bodyMedium.copyWith(
+                              style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                                   fontSize: 15,
                                   color: Colors.grey)),
                           Padding(
@@ -247,7 +225,7 @@ class _RegisterTabState extends State<RegisterTab> {
                             const EdgeInsets.symmetric(horizontal: 8.0),
                             child: Text(
                                 widget.model.blocks.localeText.signIn,
-                                style: Theme.of(context).textTheme.bodyMedium.copyWith(
+                                style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                                     color:
                                     Theme.of(context).colorScheme.secondary)),
                           ),
@@ -261,8 +239,8 @@ class _RegisterTabState extends State<RegisterTab> {
   }
 
   Future _registerUser(BuildContext context) async {
-    if (_formKey.currentState.validate()) {
-      _formKey.currentState.save();
+    if (_formKey.currentState!.validate()) {
+      _formKey.currentState!.save();
       setState(() {
         isLoading = true;
       });
@@ -277,7 +255,7 @@ class _RegisterTabState extends State<RegisterTab> {
     }
   }
 
-  Container buildIcon(child) {
+  SizedBox buildIcon(child) {
     return SizedBox(
       width: 30,
       height: 30,
@@ -319,16 +297,16 @@ class CustomTextFormField extends StatelessWidget {
   FormFieldSetter onSaved;
 
   CustomTextFormField(
-      {super.key, this.label,
-        this.prefix,
-        this.validationMsg,
-        this.controller,
-        this.icon,
-        this.obscureText,
-        this.inputType,
-        this.password,
-        this.suffix,
-        this.onSaved});
+      {super.key, required this.label,
+        required this.prefix,
+        required this.validationMsg,
+        required this.controller,
+        required this.icon,
+        required this.obscureText,
+        required this.inputType,
+        required this.password,
+        required this.suffix,
+        required this.onSaved});
 
   @override
   Widget build(BuildContext context) {
@@ -337,7 +315,7 @@ class CustomTextFormField extends StatelessWidget {
       controller: controller,
       onSaved: onSaved,
       validator: (value) {
-        if (value.isEmpty) {
+        if (value!.isEmpty) {
           return validationMsg;
         }
         return null;

@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
 import './../../../models/app_state_model.dart';
@@ -14,7 +16,7 @@ class Login2 extends StatefulWidget {
 }
 
 class _Login2State extends State<Login2> with SingleTickerProviderStateMixin {
-  TabController _tabController;
+  late TabController _tabController;
   TextEditingController emailController = TextEditingController();
   AppStateModel appStateModel  = AppStateModel();
 

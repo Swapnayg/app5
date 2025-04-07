@@ -38,12 +38,14 @@ class _AddToCartState extends State<AddToCart> {
               SizedBox(
                 height: 30,
                 width: 30,
-                child: RaisedButton(
-                  elevation: 0,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(4),
-                        bottomLeft: Radius.circular(4)),
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    elevation: 0,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(4),
+                          bottomLeft: Radius.circular(4)),
+                    ),
                   ),
                   child: Icon(Icons.remove),
                   onPressed: () {
@@ -59,10 +61,12 @@ class _AddToCartState extends State<AddToCart> {
               SizedBox(
                 height: 30,
                 width: 30,
-                child: RaisedButton(
-                  elevation: 0,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(0.0),
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    elevation: 0,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(0.0),
+                    ),
                   ),
                   child: isLoading
                       ? SizedBox(
@@ -88,26 +92,26 @@ class _AddToCartState extends State<AddToCart> {
                 ),
               ),
               SizedBox(
-                height: 30,
-                width: 30,
-                child: RaisedButton(
-                  elevation: 0,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.only(
-                        topRight: Radius.circular(4),
-                        bottomRight: Radius.circular(4)),
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    elevation: 0,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.only(
+                          topRight: Radius.circular(4),
+                          bottomRight: Radius.circular(4)),
+                    ),
                   ),
-                  child: Icon(Icons.add),
-                  onPressed: () {
-                    if (widget.product.type == 'variable' ||
-                        widget.product.type == 'grouped') {
-                      _bottomSheet(context);
-                    } else {
-                      increaseQty();
-                    }
-                  },
+                    onPressed: () {
+                      if (widget.product.type == 'variable' ||
+                          widget.product.type == 'grouped') {
+                        _bottomSheet(context);
+                      } else {
+                        increaseQty();
+                      }
+                    },
+                    child: Icon(Icons.add),
+                  ), 
                 ),
-              ),
             ],
           ),
         ],
@@ -117,18 +121,22 @@ class _AddToCartState extends State<AddToCart> {
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           OverflowBar(
+            children: [
               SizedBox(
                 height: 30,
                 width: 60,
-                child: RaisedButton(
-                  elevation: 0,
-                  shape: RoundedRectangleBorder(
+                child: 
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    elevation: 0,
+                    shape:  RoundedRectangleBorder(
                     borderRadius: BorderRadius.only(
                         topLeft: Radius.circular(4),
                         bottomLeft: Radius.circular(4)),
                   ),
+                  ),
                   child: Text(widget.model.blocks.localeText.add.toUpperCase()),
-                  onPressed: widget.product.stockStatus == 'outofstock'
+                 onPressed: widget.product.stockStatus == 'outofstock'
                       ? null
                       : () {
                     if (widget.product.type == 'variable' ||
@@ -143,12 +151,15 @@ class _AddToCartState extends State<AddToCart> {
               SizedBox(
                 height: 30,
                 width: 30,
-                child: RaisedButton(
-                  elevation: 0,
-                  shape: RoundedRectangleBorder(
+                child: 
+                  ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    elevation: 0,
+                    shape:  RoundedRectangleBorder(
                     borderRadius: BorderRadius.only(
                         topRight: Radius.circular(4),
                         bottomRight: Radius.circular(4)),
+                  ),
                   ),
                   child: Icon(Icons.add),
                   onPressed: widget.product.stockStatus == 'outofstock'
@@ -163,9 +174,10 @@ class _AddToCartState extends State<AddToCart> {
                   },
                 ),
               ),
-      ]
-          ),
-        ],
+            ],
+          )
+              
+      ]       
       );
     }
   }

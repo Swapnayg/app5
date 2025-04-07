@@ -14,6 +14,7 @@ import '../../../../../models/app_state_model.dart';
 import '../../../../../models/vendor/vendor_product_model.dart';
 import 'attributes.dart';
 import 'select_categories.dart';
+import '../../../../../models/vendor/vendor_product_model.dart' as variation_model;
 
 class AddVendorProduct extends StatefulWidget {
   final VendorBloc vendorBloc;
@@ -23,7 +24,72 @@ class AddVendorProduct extends StatefulWidget {
 }
 
 class _AddVendorProductState extends State<AddVendorProduct> {
-  VendorProduct product = VendorProduct();
+  VendorProduct product = VendorProduct(
+    id: 0,
+    name: '',
+    slug: '',
+    permalink: '',
+    dateCreated: DateTime.now(),
+    dateCreatedGmt: DateTime.now(),
+    dateModified: DateTime.now(),
+    dateModifiedGmt: DateTime.now(),
+    type: 'simple',
+    status: 'publish',
+    featured: false,
+    catalogVisibility: 'visible',
+    description: '',
+    shortDescription: '',
+    sku: '',
+    price: '',
+    regularPrice: '',
+    salePrice: '',
+    priceHtml: '',
+    onSale: false,
+    purchasable: false,
+    totalSales: 0,
+    virtual: false,
+    downloadable: false,
+    downloads: [],
+    downloadLimit: 0,
+    downloadExpiry: 0,
+    externalUrl: '',
+    buttonText: '',
+    taxStatus: 'taxable',
+    taxClass: '',
+    manageStock: false,
+    stockQuantity: 0,
+    stockStatus: 'instock',
+    backOrders: 'no',
+    backordersAllowed: false,
+    backordered: false,
+    soldIndividually: false,
+    weight: '',
+    dimensions: variation_model.Dimensions(length: '', width: '', height: ''),
+    shippingRequired: false,
+    shippingTaxable: false,
+    shippingClass: '',
+    shippingClassId: 0,
+    reviewsAllowed: false,
+    averageRating: '',
+    ratingCount: 0,
+    relatedIds: [],
+    upsellIds: [],
+    crossSellIds: [],
+    parentId: 0,
+    purchaseNote: '',
+    categories: [],
+    tags: [],
+    images: [],
+    attributes: [],
+    defaultAttributes: [],
+    variations: [],
+    groupedProducts: [],
+    menuOrder: 0,
+    metaData: [],
+    links: variation_model.Links(collection: [], self: []),
+    decimals: 0,
+    vendor: '',
+  );
   AppStateModel appStateModel = AppStateModel();
   final _formKey = GlobalKey<FormState>();
   Config config = Config();
@@ -480,7 +546,16 @@ class _AddVendorProductState extends State<AddVendorProduct> {
     FileUploadResponse uploadedFile = FileUploadResponse.fromJson(fileUpload);
 
 
-    ProductImage picture = ProductImage();
+    ProductImage picture = ProductImage(
+      id: 0,
+      dateCreated: DateTime.now(),
+      dateCreatedGmt: DateTime.now().toUtc(),
+      dateModified: DateTime.now(),
+      dateModifiedGmt: DateTime.now().toUtc(),
+      src: uploadedFile.url,
+      name: '',
+      alt: '',
+    );
     picture.src = uploadedFile.url;
     setState(() {
       product.images.add(picture);

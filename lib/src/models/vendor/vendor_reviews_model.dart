@@ -21,29 +21,29 @@ class VendorReviews {
   DateTime created;
 
   VendorReviews({
-    this.id,
-    this.vendorId,
-    this.authorId,
-    this.authorName,
-    this.authorEmail,
-    this.reviewTitle,
-    this.reviewDescription,
-    this.reviewRating,
-    this.approved,
-    this.created,
+    required this.id,
+    required this.vendorId,
+    required this.authorId,
+    required this.authorName,
+    required this.authorEmail,
+    required this.reviewTitle,
+    required this.reviewDescription,
+    required this.reviewRating,
+    required this.approved,
+    required this.created,
   });
 
   VendorReviews copyWith({
-    String id,
-    String vendorId,
-    String authorId,
-    String authorName,
-    String authorEmail,
-    String reviewTitle,
-    String reviewDescription,
-    String reviewRating,
-    String approved,
-    DateTime created,
+    String? id,
+    String? vendorId,
+    String? authorId,
+    String? authorName,
+    String? authorEmail,
+    String? reviewTitle,
+    String? reviewDescription,
+    String? reviewRating,
+    String? approved,
+    DateTime? created,
   }) =>
       VendorReviews(
         id: id ?? this.id,
@@ -68,7 +68,7 @@ class VendorReviews {
     reviewDescription: json["review_description"],
     reviewRating: json["review_rating"],
     approved: json["approved"],
-    created: json["created"] == null ? null : DateTime.parse(json["created"]),
+    created:  json["created"] == null ? DateTime.now() : DateTime.parse(json["created"]),
   );
 
   Map<String, dynamic> toJson() => {

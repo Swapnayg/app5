@@ -64,7 +64,7 @@ class _CategoryListState extends State<CategoryList> {
   }
 
   void onCategoryClick(Category category) {
-      ProductCategory productCategory= ProductCategory();
+      ProductCategory productCategory= ProductCategory(id: 0, name: '', slug: '');
       productCategory.id = category.id;
       productCategory.name = category.name;
       if(!widget.product.categories.any((value) => value.id == category.id)) {
@@ -105,7 +105,7 @@ class _CategoryListState extends State<CategoryList> {
           value: widget.product.categories.any((item) => item.id == category.id),
           onChanged: (bool? value) {
             if (value == true) {
-              ProductCategory productCategory = ProductCategory();
+              ProductCategory productCategory = ProductCategory(id: 0, name: '', slug: '');
               productCategory.id = category.id;
               productCategory.name = category.name;
               if (!widget.product.categories.any((value) => value.id == category.id)) {
@@ -148,7 +148,7 @@ class _CategoryListState extends State<CategoryList> {
             value: widget.product.categories.any((item) => item.id == category.id),
             onChanged: (bool? value) {
               if(value == true) {
-                ProductCategory productCategory= ProductCategory();
+                ProductCategory productCategory= ProductCategory(id: 0, name: '', slug: '');
                 productCategory.id = category.id;
                 productCategory.name = category.name;
                 if(!widget.product.categories.any((value) => value.id == category.id)) {

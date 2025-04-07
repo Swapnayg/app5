@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -21,7 +23,7 @@ class _PhoneNumberState extends State<PhoneNumber> {
 
   String prefixCode = '+91';
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  String verificationId;
+  late String verificationId;
   final appStateModel = AppStateModel();
   TextEditingController phoneNumberController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
@@ -147,7 +149,7 @@ class _PhoneNumberState extends State<PhoneNumber> {
                             obscureText: false,
                             controller: phoneNumberController,
                             validator: (value) {
-                              if (value.isEmpty) {
+                              if (value!.isEmpty) {
                                 return appStateModel
                                     .blocks.localeText.pleaseEnterPhoneNumber;
                               }
@@ -170,7 +172,7 @@ class _PhoneNumberState extends State<PhoneNumber> {
                       valueColor: Colors.black,
                       controller: _btnController,
                       onPressed: () {
-                        if (_formKey.currentState.validate()) {
+                        if (_formKey.currentState!.validate()) {
                           sendOTP(context);
                         }
                       },
@@ -214,7 +216,7 @@ class _PhoneNumberState extends State<PhoneNumber> {
             verificationId = verId;
             //onOTPSent(verId, phoneController.text);
           },
-          codeSent: (String verId, [int forceCodeResend]) {
+          codeSent: (String verId, [int? forceCodeResend]) {
             _btnController.stop();
             onOTPSent(verId);
           },
@@ -284,7 +286,7 @@ class _PhoneNumberState extends State<PhoneNumber> {
     final snackBar = SnackBar(
         backgroundColor: Colors.red,
         content: Text(message));
-    Scaffold.of(context).showSnackBar(snackBar);
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
 }

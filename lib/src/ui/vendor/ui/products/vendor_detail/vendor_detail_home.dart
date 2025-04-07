@@ -25,6 +25,7 @@ import '../../../../../ui/blocks/vendor_category_scroll_list.dart';
 import '../../../../../ui/products/product_detail/product_detail.dart';
 import '../../../../../ui/products/product_grid/product_item13.dart';
 import '../../../../../ui/products/products.dart';
+import '../../..../../../../../models/product_model.dart' as variation_model;
 
 class VendorHome extends StatefulWidget {
   final VendorDetailStateModel vendorDetailsModel;
@@ -138,7 +139,7 @@ class _VendorHomeState extends State<VendorHome> {
                               SizedBox(
                                 height: 5,
                               ),
-                              Text(vendorDetails.store.address.city,
+                              Text(vendorDetails.store.address.first.city,
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
@@ -376,6 +377,53 @@ class _VendorHomeState extends State<VendorHome> {
                       product: Product(
                         id: int.parse(data.url),
                         name: data.title,
+                        type: '', // Provide appropriate type
+                        status: '', // Provide appropriate status
+                        featured: false, // Default value
+                        catalogVisibility: '', // Provide appropriate visibility
+                        description: '', // Provide appropriate description
+                        shortDescription: '', // Provide appropriate short description
+                        permalink: '', // Provide appropriate permalink
+                        sku: '', // Provide appropriate SKU
+                        price: 0, // Provide appropriate price
+                        regularPrice: 0, // Provide appropriate regular price
+                        salePrice: 0, // Provide appropriate sale price
+                        onSale: false, // Default value
+                        purchasable: false, // Default value
+                        totalSales: 0, // Default value
+                        virtual: false, // Default value
+                        downloadable: false, // Default value
+                        externalUrl: '', // Provide appropriate URL
+                        buttonText: '', // Provide appropriate button text
+                        manageStock: false, // Default value
+                        stockQuantity: 0, // Default value
+                        stockStatus: '', // Provide appropriate stock status
+                        backorders: '', // Provide appropriate backorders
+                        backordersAllowed: false, // Default value
+                        backordered: false, // Default value
+                        soldIndividually: false, // Default value
+                        weight: '', // Provide appropriate weight
+                        dimensions: variation_model.Dimensions(length: '', width: '', height: ''), // Provide appropriate dimensions
+                        reviewsAllowed: false, // Default value
+                        averageRating: '', // Default value
+                        ratingCount: 0, // Default value
+                        relatedIds: [], // Default value
+                        upsellIds: [], // Default value
+                        crossSellIds: [], // Default value
+                        purchaseNote: '', // Provide appropriate note
+                        categories: [], // Default value
+                        tags: [], // Default value
+                        images: [], // Default value
+                        attributes: [], // Default value
+                        groupedProducts: [], // Default value
+                        metaData: [], // Default value
+                        availableVariations: [], // Default value
+                        variationOptions: [], // Default value
+                        variationId: '', // Default value
+                        formattedPrice: '', // Provide appropriate formatted price
+                        formattedSalesPrice: '', // Provide appropriate formatted sales price
+                        vendor: Vendor(name: '', icon: ''), // Provide appropriate vendor
+                        children: [], // Default value
                       ),
                     )));
       }

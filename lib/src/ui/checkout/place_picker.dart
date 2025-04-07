@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_adjacent_string_concatenation, unnecessary_brace_in_string_interps, avoid_print, dead_code
+
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
@@ -25,7 +27,7 @@ class PlacePicker extends StatefulWidget {
   /// map does not pan to the user's current location.
   final LatLng displayLocation;
 
-  const PlacePicker(this.apiKey, {super.key, this.displayLocation});
+  const PlacePicker(this.apiKey, {super.key, required this.displayLocation});
 
   @override
   State<StatefulWidget> createState() => PlacePickerState();
@@ -39,12 +41,12 @@ class PlacePickerState extends State<PlacePicker> {
   final Set<Marker> markers = {};
 
   /// Result returned after user completes selection
-  LocationResult locationResult;
+  late LocationResult locationResult;
 
   /// Overlay to display autocomplete suggestions
-  OverlayEntry overlayEntry;
+  OverlayEntry? overlayEntry;
 
-  List<NearbyPlace> nearbyPlaces = List();
+  List nearbyPlaces = List.empty(growable: true);
 
   /// Session token required for autocomplete API call
   String sessionToken = Uuid().generateV4();
@@ -74,14 +76,14 @@ class PlacePickerState extends State<PlacePicker> {
   void initState() {
     super.initState();
     markers.add(Marker(
-      position: widget.displayLocation ?? LatLng(5.6037, 0.1870),
+      position: widget.displayLocation,
       markerId: MarkerId("selected-location"),
     ));
   }
 
   @override
   void dispose() {
-    overlayEntry.remove();
+    overlayEntry!.remove();
     super.dispose();
   }
 
@@ -99,7 +101,7 @@ class PlacePickerState extends State<PlacePicker> {
         children: <Widget>[
           Expanded(
             child: GoogleMap(
-              initialCameraPosition: CameraPosition(target: widget.displayLocation ?? LatLng(5.6037, 0.1870), zoom: 15),
+              initialCameraPosition: CameraPosition(target: widget.displayLocation, zoom: 15),
               myLocationButtonEnabled: true,
               myLocationEnabled: true,
               onMapCreated: onMapCreated,
@@ -136,11 +138,9 @@ class PlacePickerState extends State<PlacePicker> {
 
   /// Hides the autocomplete overlay
   void clearOverlay() {
-    if (overlayEntry != null) {
-      overlayEntry.remove();
-      overlayEntry = null;
+    overlayEntry!.remove();
+    overlayEntry = null; // Assigning null to a nullable OverlayEntry
     }
-  }
 
   /// Begins the search process by displaying a "wait" overlay then
   /// proceeds to fetch the autocomplete list. The bottom "dialog"
@@ -165,14 +165,14 @@ class PlacePickerState extends State<PlacePicker> {
       return;
     }
 
-    final RenderBox renderBox = context.findRenderObject();
-    final size = renderBox.size;
+    final RenderObject? renderBox = context.findRenderObject();
+    final size = renderBox!.size;
 
-    final RenderBox appBarBox = appBarKey.currentContext.findRenderObject();
+    final RenderObject? appBarBox = appBarKey.currentContext!.findRenderObject();
 
     overlayEntry = OverlayEntry(
       builder: (context) => Positioned(
-        top: appBarBox.size.height,
+        top: appBarBox!.size.height,
         width: size.width,
         child: Material(
           elevation: 1,
@@ -190,7 +190,7 @@ class PlacePickerState extends State<PlacePicker> {
       ),
     );
 
-    Overlay.of(context).insert(overlayEntry);
+    Overlay.of(context).insert(overlayEntry!);
 
     autoCompleteSearch(place);
   }
@@ -202,11 +202,9 @@ class PlacePickerState extends State<PlacePicker> {
 
       var endpoint = "https://maps.googleapis.com/maps/api/place/autocomplete/json?" "key=${widget.apiKey}&" +
           "input={$place}&sessiontoken=${sessionToken}";
-      if (locationResult != null) {
-        endpoint += "&location=${locationResult.latLng.latitude}," "${locationResult.latLng.longitude}";
-      }
-
-      final response = await http.get(endpoint);
+      endpoint += "&location=${locationResult.latLng!.latitude}," "${locationResult.latLng!.longitude}";
+    
+      final response = await http.get(endpoint as Uri);
 
       if (response.statusCode != 200) {
         throw Error();
@@ -239,7 +237,9 @@ class PlacePickerState extends State<PlacePicker> {
 
           suggestions.add(RichSuggestion(aci, () {
             FocusScope.of(context).requestFocus(FocusNode());
-            decodeAndSelectPlace(aci.id);
+            if (aci.id != null) {
+              decodeAndSelectPlace(aci.id!);
+            }
           }));
         }
       }
@@ -258,7 +258,7 @@ class PlacePickerState extends State<PlacePicker> {
 
     try {
       final response = await http
-          .get("https://maps.googleapis.com/maps/api/place/details/json?key=${widget.apiKey}" "&placeid=$placeId");
+          .get("https://maps.googleapis.com/maps/api/place/details/json?key=${widget.apiKey}" "&placeid=$placeId" as Uri);
 
       if (response.statusCode != 200) {
         throw Error();
@@ -279,22 +279,22 @@ class PlacePickerState extends State<PlacePicker> {
 
   /// Display autocomplete suggestions with the overlay.
   void displayAutoCompleteSuggestions(List<RichSuggestion> suggestions) {
-    final RenderBox renderBox = context.findRenderObject();
-    Size size = renderBox.size;
+    final RenderObject? renderBox = context.findRenderObject();
+    Size size = renderBox!.size;
 
-    final RenderBox appBarBox = appBarKey.currentContext.findRenderObject();
+    final RenderObject? appBarBox = appBarKey.currentContext?.findRenderObject();
 
     clearOverlay();
 
     overlayEntry = OverlayEntry(
       builder: (context) => Positioned(
         width: size.width,
-        top: appBarBox.size.height,
+        top: appBarBox!.size.height,
         child: Material(elevation: 1, child: Column(children: suggestions)),
       ),
     );
 
-    Overlay.of(context).insert(overlayEntry);
+    Overlay.of(context).insert(overlayEntry!);
   }
 
   /// Utility function to get clean readable name of a location. First checks
@@ -303,10 +303,6 @@ class PlacePickerState extends State<PlacePicker> {
   /// result, instead of road name). If no name is found from the nearby list,
   /// then the road name returned is used instead.
   String getLocationName() {
-    if (locationResult == null) {
-      return "Unnamed location";
-    }
-
     for (NearbyPlace np in nearbyPlaces) {
       if (np.latLng == locationResult.latLng && np.name != locationResult.locality) {
         locationResult.name = np.name;
@@ -329,8 +325,8 @@ class PlacePickerState extends State<PlacePicker> {
   /// Fetches and updates the nearby places to the provided lat,lng
   void getNearbyPlaces(LatLng latLng) async {
     try {
-      final response = await http.get("https://maps.googleapis.com/maps/api/place/nearbysearch/json?" "key=${widget.apiKey}&" +
-          "location=${latLng.latitude},${latLng.longitude}&radius=150");
+      final response = await http.get(("https://maps.googleapis.com/maps/api/place/nearbysearch/json?" "key=${widget.apiKey}&" +
+          "location=${latLng.latitude},${latLng.longitude}&radius=150") as Uri);
 
       if (response.statusCode != 200) {
         throw Error();
@@ -367,8 +363,8 @@ class PlacePickerState extends State<PlacePicker> {
   /// to be the road name and the locality.
   void reverseGeocodeLatLng(LatLng latLng) async {
     try {
-      final response = await http.get("https://maps.googleapis.com/maps/api/geocode/json?" "latlng=${latLng.latitude},${latLng.longitude}&" +
-          "key=${widget.apiKey}");
+      final response = await http.get(("https://maps.googleapis.com/maps/api/geocode/json?" "latlng=${latLng.latitude},${latLng.longitude}&" +
+          "key=${widget.apiKey}") as Uri);
 
       if (response.statusCode != 200) {
         throw Error();
@@ -423,11 +419,14 @@ class PlacePickerState extends State<PlacePicker> {
     return;
   
     Location().getLocation().then((locationData) {
-      LatLng target = LatLng(locationData.latitude, locationData.longitude);
+      LatLng target = LatLng(locationData.latitude ?? 0.0, locationData.longitude ?? 0.0);
       moveToLocation(target);
     }).catchError((error) {
-      // TODO: Handle the exception here
       print(error);
     });
   }
+}
+
+extension on RenderObject {
+   get size => null;
 }

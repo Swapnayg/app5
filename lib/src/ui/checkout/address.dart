@@ -1,4 +1,7 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:place_picker/entities/entities.dart';
 import 'place_picker.dart';
 
@@ -13,7 +16,7 @@ import 'checkout_one_page.dart';
 class Address extends StatefulWidget {
   final CheckoutBloc homeBloc;
   final appStateModel = AppStateModel();
-  Address({Key key, this.homeBloc}) : super(key: key);
+  Address({super.key, required this.homeBloc});
 
   @override
   _AddressState createState() => _AddressState();
@@ -21,7 +24,7 @@ class Address extends StatefulWidget {
 
 class _AddressState extends State<Address> {
 
-  List<Region> regions;
+  late List<Region> regions;
   final TextEditingController _billingAddress1Controller = TextEditingController();
   final TextEditingController _billingCityController = TextEditingController();
   final TextEditingController _billingPostCodeController = TextEditingController();
@@ -54,33 +57,33 @@ class _AddressState extends State<Address> {
 
   buildCheckoutForm(BuildContext context, AsyncSnapshot<CheckoutFormModel> snapshot) {
 
-    if(snapshot.data.countries.length > 0) {
-      if(snapshot.data.countries.length == 1) {
-        regions = snapshot.data.countries[0].regions;
-        snapshot.data.billingCountry = snapshot.data.countries.first.value;
-        widget.homeBloc.formData['billing_country'] = snapshot.data.countries.first.value;
+    if(snapshot.data!.countries.isNotEmpty) {
+      if(snapshot.data!.countries.length == 1) {
+        regions = snapshot.data!.countries[0].regions;
+        snapshot.data!.billingCountry = snapshot.data!.countries.first.value;
+        widget.homeBloc.formData['billing_country'] = snapshot.data!.countries.first.value;
       }
-      else if(snapshot.data.countries.indexWhere((country) => country.value == snapshot.data.billingCountry) != -1) {
-        regions = snapshot.data.countries.singleWhere((country) => country.value == snapshot.data.billingCountry).regions;
-      } else if(snapshot.data.countries.indexWhere((country) => country.value == snapshot.data.billingCountry) == -1) {
-        snapshot.data.billingCountry = snapshot.data.countries.first.value;
+      else if(snapshot.data!.countries.indexWhere((country) => country.value == snapshot.data!.billingCountry) != -1) {
+        regions = snapshot.data!.countries.singleWhere((country) => country.value == snapshot.data!.billingCountry).regions;
+      } else if(snapshot.data!.countries.indexWhere((country) => country.value == snapshot.data!.billingCountry) == -1) {
+        snapshot.data!.billingCountry = snapshot.data!.countries.first.value;
       }
     }
 
     if(regions.length != 0) {
-      snapshot.data.billingState = regions.any((z) => z.value == snapshot.data.billingState) ? snapshot.data.billingState
+      snapshot.data!.billingState = regions.any((z) => z.value == snapshot.data!.billingState) ? snapshot.data!.billingState
           : regions.first.value;
-      widget.homeBloc.formData['billing_state'] = snapshot.data.billingState;
+      widget.homeBloc.formData['billing_state'] = snapshot.data!.billingState;
     }
 
     if(_billingAddress1Controller.text.isEmpty) {
-      _billingAddress1Controller.text = snapshot.data.billingAddress1;
+      _billingAddress1Controller.text = snapshot.data!.billingAddress1;
     }
     if(_billingCityController.text.isEmpty) {
-      _billingCityController.text = snapshot.data.billingCity;
+      _billingCityController.text = snapshot.data!.billingCity;
     }
     if(_billingPostCodeController.text.isEmpty) {
-      _billingPostCodeController.text = snapshot.data.billingPostcode;
+      _billingPostCodeController.text = snapshot.data!.billingPostcode;
     }
 
     return ListView(
@@ -93,8 +96,12 @@ class _AddressState extends State<Address> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
 
-                FlatButton(
-                  colorBrightness: Theme.of(context).brightness,
+                TextButton(
+                  style: TextButton.styleFrom(
+                    foregroundColor: Theme.of(context).brightness == Brightness.dark
+                        ? Colors.white
+                        : Colors.black,
+                  ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children:<Widget>[
@@ -106,130 +113,138 @@ class _AddressState extends State<Address> {
                   },
                 ),
                 PrimaryColorOverride(
+                  key: UniqueKey(),
                   child: TextFormField(
-                    initialValue: snapshot.data.billingFirstName,
+                    initialValue: snapshot.data!.billingFirstName,
                     decoration: InputDecoration(labelText: widget.appStateModel.blocks.localeText.firstName),
                     validator: (value) {
-                      if (value.isEmpty) {
+                      if (value!.isEmpty) {
                         return widget.appStateModel.blocks.localeText.pleaseEnterFirstName;
                       }
                       return null;
                     },
                     onSaved: (value) {
-                      widget.homeBloc.formData['billing_first_name'] = value;
+                      widget.homeBloc.formData['billing_first_name'] = value!;
                     },
                   ),
                 ),
                 SizedBox(height: 12.0),
                 PrimaryColorOverride(
+                  key: UniqueKey(),
                   child: TextFormField(
-                    initialValue: snapshot.data.billingLastName,
+                    initialValue: snapshot.data!.billingLastName,
                     decoration: InputDecoration(labelText: widget.appStateModel.blocks.localeText.lastName),
                     validator: (value) {
-                      if (value.isEmpty) {
+                      if (value!.isEmpty) {
                         return widget.appStateModel.blocks.localeText.pleaseEnterLastName;
                       }
                       return null;
                     },
                     onSaved: (value) {
-                      widget.homeBloc.formData['billing_last_name'] = value;
+                      widget.homeBloc.formData['billing_last_name'] = value!;
                     },
                   ),
                 ),
                 SizedBox(height: 12.0),
                 PrimaryColorOverride(
+                  key: UniqueKey(),
                   child: TextFormField(
                     controller: _billingAddress1Controller,
                     decoration: InputDecoration(labelText: widget.appStateModel.blocks.localeText.address),
                     validator: (value) {
-                      if (value.isEmpty) {
+                      if (value!.isEmpty) {
                         return widget.appStateModel.blocks.localeText.pleaseEnterAddress;
                       }
                       return null;
                     },
                     onSaved: (value) {
-                      widget.homeBloc.formData['billing_address_1'] = value;
+                      widget.homeBloc.formData['billing_address_1'] = value!;
                     },
                   ),
                 ),
                 SizedBox(height: 12.0),
                 PrimaryColorOverride(
+                  key: UniqueKey(),
                   child: TextFormField(
-                    initialValue: snapshot.data.billingAddress2,
+                    initialValue: snapshot.data!.billingAddress2,
                     decoration: InputDecoration(labelText: '${widget.appStateModel.blocks.localeText.address} 2'),
                     onSaved: (value) {
-                      widget.homeBloc.formData['billing_address_2'] = value;
+                      widget.homeBloc.formData['billing_address_2'] = value!;
                     },
                   ),
                 ),
                 SizedBox(height: 12.0),
                 PrimaryColorOverride(
+                  key: UniqueKey(),
                   child: TextFormField(
                     controller: _billingCityController,
                     decoration: InputDecoration(
                       labelText: widget.appStateModel.blocks.localeText.city,
                     ),
                     validator: (value) {
-                      if (value.isEmpty) {
+                      if (value!.isEmpty) {
                         return widget.appStateModel.blocks.localeText.pleaseEnterCity;
                       }
                       return null;
                     },
                     onSaved: (value) {
-                      widget.homeBloc.formData['billing_city'] = value;
+                      widget.homeBloc.formData['billing_city'] = value!;
                     },
                   ),
                 ),
                 SizedBox(height: 12.0),
                 PrimaryColorOverride(
+                  key: UniqueKey(),
                   child: TextFormField(
                     controller: _billingPostCodeController,
                     decoration: InputDecoration(labelText: widget.appStateModel.blocks.localeText.pincode),
                     validator: (value) {
-                      if (value.isEmpty) {
+                      if (value!.isEmpty) {
                         return widget.appStateModel.blocks.localeText.pleaseEnterPincode;
                       }
                       return null;
                     },
                     onSaved: (value) {
-                      widget.homeBloc.formData['billing_postcode'] = value;
+                      widget.homeBloc.formData['billing_postcode'] = value!;
                     },
                   ),
                 ),
                 SizedBox(height: 12.0),
                 PrimaryColorOverride(
+                  key: UniqueKey(),
                   child: TextFormField(
-                    initialValue: snapshot.data.billingEmail,
+                    initialValue: snapshot.data!.billingEmail,
                     decoration: InputDecoration(labelText: widget.appStateModel.blocks.localeText.email),
                     onSaved: (value) {
-                      widget.homeBloc.formData['billing_email'] = value;
+                      widget.homeBloc.formData['billing_email'] = value!;
                     },
                     keyboardType: TextInputType.emailAddress,
                   ),
                 ),
                 SizedBox(height: 12.0),
                 PrimaryColorOverride(
+                  key: UniqueKey(),
                   child: TextFormField(
-                    initialValue: snapshot.data.billingPhone,
+                    initialValue: snapshot.data!.billingPhone,
                     decoration: InputDecoration(labelText: widget.appStateModel.blocks.localeText.phoneNumber),
                     validator: (value) {
-                      if (value.isEmpty) {
+                      if (value!.isEmpty) {
                         return widget.appStateModel.blocks.localeText.pleaseEnterPhoneNumber;
                       }
                       return null;
                     },
                     onSaved: (value) {
-                      widget.homeBloc.formData['billing_phone'] = value;
+                      widget.homeBloc.formData['billing_phone'] = value!;
                     },
                     keyboardType: TextInputType.phone,
                   ),
                 ),
                 SizedBox(height: 10,),
-                snapshot.data.countries.length > 1 ? Column(
+                snapshot.data!.countries.length > 1 ? Column(
                   children: [
                     SizedBox(height: 10,),
                     DropdownButton<String>(
-                      value: snapshot.data.billingCountry,
+                      value: snapshot.data!.billingCountry,
                       hint: Text(widget.appStateModel.blocks.localeText.country),
                       isExpanded: true,
                       icon: Icon(Icons.arrow_drop_down),
@@ -239,22 +254,24 @@ class _AddressState extends State<Address> {
                         height: 2,
                         color: Theme.of(context).dividerColor,
                       ),
-                      onChanged: (String newValue) {
-                        widget.homeBloc.formData['billing_state'] = '';
-                        widget.homeBloc.formData['shipping_state'] = '';
-                        setState(() {
-                          snapshot.data.billingCountry = newValue;
-                        });
-                        widget.homeBloc.formData['billing_country'] = snapshot.data.billingCountry;
-                        //*** Remove When Shipping ADDRESS is different ***//
-                        widget.homeBloc.formData['shipping_country'] = snapshot.data.billingCountry;
-                        widget.homeBloc.updateOrderReview2();
+                      onChanged: (String? newValue) {
+                        if (newValue != null) {
+                          widget.homeBloc.formData['billing_state'] = '';
+                          widget.homeBloc.formData['shipping_state'] = '';
+                          setState(() {
+                            snapshot.data!.billingCountry = newValue;
+                          });
+                          widget.homeBloc.formData['billing_country'] = snapshot.data!.billingCountry;
+                          //*** Remove When Shipping ADDRESS is different ***//
+                          widget.homeBloc.formData['shipping_country'] = snapshot.data!.billingCountry;
+                          widget.homeBloc.updateOrderReview2();
+                        }
                       },
-                      items: snapshot.data.countries
+                      items: snapshot.data!.countries
                           .map<DropdownMenuItem<String>>(
                               (value) {
                             return DropdownMenuItem<String>(
-                              value: value.value ?? '',
+                              value: value.value,
                               child: Text(parseHtmlString(value.label)),
                             );
                           }).toList(),
@@ -265,7 +282,7 @@ class _AddressState extends State<Address> {
                   children: <Widget>[
                     SizedBox(height: 20,),
                     DropdownButton<String>(
-                      value: snapshot.data.billingState,
+                      value: snapshot.data!.billingState,
                       hint: Text(widget.appStateModel.blocks.localeText.state),
                       isExpanded: true,
                       icon: Icon(Icons.arrow_drop_down),
@@ -275,36 +292,37 @@ class _AddressState extends State<Address> {
                         height: 2,
                         color: Theme.of(context).dividerColor,
                       ),
-                      onChanged: (String newValue) {
+                      onChanged: (String? newValue) {
                         setState(() {
-                          snapshot.data.billingState = newValue;
+                          snapshot.data!.billingState = newValue!;
                         });
-                        widget.homeBloc.formData['billing_state'] = snapshot.data.billingState;
+                        widget.homeBloc.formData['billing_state'] = snapshot.data!.billingState;
                         //*** Remove When Shipping ADDRESS is different ***//
-                        widget.homeBloc.formData['shipping_state'] = snapshot.data.billingState;
+                        widget.homeBloc.formData['shipping_state'] = snapshot.data!.billingState;
                         widget.homeBloc.updateOrderReview2();
                       },
                       items: regions
                           .map<DropdownMenuItem<String>>(
                               (value) {
                             return DropdownMenuItem<String>(
-                              value: value.value ?? '',
+                              value: value.value,
                               child: Text(parseHtmlString(value.label)),
                             );
                           }).toList(),
                     ),
                   ],
                 ) : PrimaryColorOverride(
+                key: UniqueKey(),
                   child: TextFormField(
                     initialValue: widget.homeBloc.formData['billing_state'],
                     decoration: InputDecoration(labelText: widget.appStateModel.blocks.localeText.state),
                     validator: (value) {
-                      if (value.isEmpty) {
+                      if (value!.isEmpty) {
                         return widget.appStateModel.blocks.localeText.pleaseEnterState;
                       }
                       return null;
                     },
-                    onSaved: (val) => setState(() => widget.homeBloc.formData['billing_state'] = val),
+                    onSaved: (val) => setState(() => widget.homeBloc.formData['billing_state'] = val!),
                   ),
                 ),
               ],
@@ -316,22 +334,22 @@ class _AddressState extends State<Address> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
-              RaisedButton(
+              ElevatedButton(
                 child: Text(widget.appStateModel.blocks.localeText.localeTextContinue),
                 onPressed: () {
-                  widget.homeBloc.formData['security'] = snapshot.data.nonce.updateOrderReviewNonce;
-                  widget.homeBloc.formData['woocommerce-process-checkout-nonce'] = snapshot.data.wpnonce;
+                  widget.homeBloc.formData['security'] = snapshot.data!.nonce.updateOrderReviewNonce;
+                  widget.homeBloc.formData['woocommerce-process-checkout-nonce'] = snapshot.data!.wpnonce;
                   widget.homeBloc.formData['wc-ajax'] = 'update_order_review';
 
-                  widget.homeBloc.formData['billing_country'] = snapshot.data.billingCountry;
+                  widget.homeBloc.formData['billing_country'] = snapshot.data!.billingCountry;
 
                   //*** Remove When Shipping ADDRESS is different ***//
-                  widget.homeBloc.formData['shipping_country'] = snapshot.data.billingCountry;
-                  widget.homeBloc.formData['shipping_postcode'] = widget.homeBloc.formData['billing_postcode'];
+                  widget.homeBloc.formData['shipping_country'] = snapshot.data!.billingCountry;
+                  widget.homeBloc.formData['shipping_postcode'] = widget.homeBloc.formData['billing_postcode']!;
 
 
-                  if (_formKey.currentState.validate()) {
-                    _formKey.currentState.save();
+                  if (_formKey.currentState!.validate()) {
+                    _formKey.currentState!.save();
                     widget.homeBloc.updateOrderReview2();
                     Navigator.push(
                         context,
@@ -351,23 +369,22 @@ class _AddressState extends State<Address> {
 
   void showPlacePicker(AsyncSnapshot<CheckoutFormModel> snapshot) async {
     LocationResult result = await Navigator.of(context).push(
-        MaterialPageRoute(builder: (context) => PlacePicker(config.mapApiKey)));
+        MaterialPageRoute(builder: (context) => PlacePicker(config.mapApiKey, displayLocation: LatLng(0.0, 0.0),)));
     setState(() {
-      _billingAddress1Controller.text = result.formattedAddress;
-      _billingCityController.text = result.city.name;
-      _billingPostCodeController.text = result.postalCode;
+      _billingAddress1Controller.text = result.formattedAddress!;
+      _billingCityController.text = result.city!.name!;
+      _billingPostCodeController.text = result.postalCode!;
     });
-    if(snapshot.data.countries.indexWhere((country) => country.value == result.country.shortName) != -1) {
+    if(snapshot.data!.countries.indexWhere((country) => country.value == result.country!.shortName) != -1) {
       setState(() {
-        snapshot.data.billingCountry = result.country.shortName;
+        snapshot.data!.billingCountry = result.country!.shortName!;
       });
-      regions = snapshot.data.countries.singleWhere((country) => country.value == result.country.shortName).regions;
-    } else if(snapshot.data.countries.length != 0) {
-      snapshot.data.billingCountry = snapshot.data.countries.first.value;
-    } if(regions != null) {
-      snapshot.data.billingState = regions.any((z) => z.value == result.administrativeAreaLevel1.shortName) ? result.administrativeAreaLevel1.shortName
-          : regions.first.value;
-    }
+      regions = snapshot.data!.countries.singleWhere((country) => country.value == result.country!.shortName).regions;
+    } else if(snapshot.data!.countries.isNotEmpty) {
+      snapshot.data!.billingCountry = snapshot.data!.countries.first.value;
+    }    snapshot.data!.billingState = (regions.any((z) => z.value == result.administrativeAreaLevel1!.shortName) ? result.administrativeAreaLevel1!.shortName
+        : regions.first.value)!;
+  
     }
 }
 

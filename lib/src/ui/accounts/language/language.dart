@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
 
@@ -8,8 +10,7 @@ import '../../../data/gallery_options.dart';
 
 class LanguagePage extends StatefulWidget {
   const LanguagePage(
-      {Key key})
-      : super(key: key);
+      {super.key});
   @override
   _LanguagePageState createState() => _LanguagePageState();
 }
@@ -35,12 +36,8 @@ class _LanguagePageState extends State<LanguagePage> {
         ),
         body: ScopedModelDescendant<AppStateModel>(
             builder: (context, child, model) {
-              if (model.blocks.languages != null) {
-                return buildLanguageItems(model.blocks.languages);
-              } else {
-                return Container();
-              }
-            }));
+              return buildLanguageItems(model.blocks.languages);
+                        }));
   }
 
   Widget buildLanguageItems(List<Language> languages) {
@@ -58,17 +55,29 @@ class _LanguagePageState extends State<LanguagePage> {
                     appStateModel.updateLanguage(languages[index].code);
                     GalleryOptions.update(
                       context,
-                      options.copyWith(locale: Locale(languages[index].code),
-                    ));
+                      options!.copyWith(
+                        locale: Locale(languages[index].code),
+                        themeMode: options.themeMode,
+                        textScaleFactor: options.textScaleFactor(context),
+                        customTextDirection: options.customTextDirection,
+                        platform: options.platform, timeDilation: 1.0,
+                      ),
+                    );
                   },
                 ),
                 title: Text(languages[index].nativeName),
                 onTap: () async {
                   appStateModel.updateLanguage(languages[index].code);
                   GalleryOptions.update(
-                    context,
-                    options.copyWith(locale: Locale(languages[index].code),
-                  ));
+                      context,
+                      options!.copyWith(
+                        locale: Locale(languages[index].code),
+                        themeMode: options.themeMode,
+                        textScaleFactor: options.textScaleFactor(context),
+                        customTextDirection: options.customTextDirection,
+                        platform: options.platform, timeDilation: 1.0,
+                      ),
+                    );
                 },
               ),
               Divider(

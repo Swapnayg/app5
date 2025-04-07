@@ -1,13 +1,15 @@
+// ignore_for_file: library_private_types_in_public_api, unused_local_variable, deprecated_member_use, avoid_unnecessary_containers, unnecessary_null_comparison
+
 import 'dart:io' show Platform;
 
 import 'package:fab_circular_menu/fab_circular_menu.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_icons/flutter_icons.dart';
+import 'package:flutter_font_icons/flutter_font_icons.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:scoped_model/scoped_model.dart';
-import 'package:share/share.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../../ui/pages/page_detail.dart';
 import '../../../ui/pages/webview.dart';
@@ -42,7 +44,7 @@ class _UserAccount8State extends State<UserAccount8> {
 
   @override
   Widget build(BuildContext context) {
-    TextStyle menuTextStyle = Theme.of(context).textTheme.bodyLarge;
+    TextStyle? menuTextStyle = Theme.of(context).textTheme.bodyLarge;
     Color onPrimaryColor = Colors.white;
     Color headerBackgroundColor = Theme.of(context).primaryColor;
     return AnnotatedRegion<SystemUiOverlayStyle>(
@@ -87,20 +89,19 @@ class _UserAccount8State extends State<UserAccount8> {
                         ScopedModelDescendant<AppStateModel>(
                             builder: (context, child, model) {
                               return Container(
-                                  child: (model.user.id != null &&
-                                      model.user.id > 0)
+                                  child: (model.user.id > 0)
                                       ? (model.user.billing.firstName != '' ||
                                       model.user.billing.lastName != '')
                                       ? Text(
                                     '${model.user.billing.firstName} ${model.user.billing.lastName}',
-                                    style: Theme.of(context).textTheme.titleLarge.copyWith(
+                                    style: Theme.of(context).textTheme.titleLarge!.copyWith(
                                         color: Colors.white, fontSize: 24
                                     ),
                                   )
                                       : Container(
                                     child: Text(
                                       model.blocks.localeText.welcome,
-                                      style: Theme.of(context).textTheme.titleLarge.copyWith(
+                                      style: Theme.of(context).textTheme.titleLarge!.copyWith(
                                           color: Colors.white, fontSize: 24
                                       ),
                                     ),
@@ -113,7 +114,7 @@ class _UserAccount8State extends State<UserAccount8> {
                                               builder: (context) => Login())),
                                       child: Text(
                                         model.blocks.localeText.signIn,
-                                        style: Theme.of(context).textTheme.titleLarge.copyWith(
+                                        style: Theme.of(context).textTheme.titleLarge!.copyWith(
                                             color: Colors.white, fontSize: 24
                                         ),
                                       ),
@@ -132,7 +133,7 @@ class _UserAccount8State extends State<UserAccount8> {
               child: CustomScrollView(
                 slivers: <Widget>[
                   //buildSliverAppBar(onPrimaryColor, context, headerBackgroundColor),
-                  buildUserMenu(context, menuTextStyle),
+                  buildUserMenu(context, menuTextStyle!),
                   buildVendorList(context, menuTextStyle),
                   buildPages(context, menuTextStyle)
                 ],
@@ -156,7 +157,7 @@ class _UserAccount8State extends State<UserAccount8> {
                     ringColor: Theme.of(context).colorScheme.secondary,
                     ringDiameter: 250.0,
                     ringWidth: 100.0,
-                    options: <Widget>[
+                    children: <Widget>[
                       IconButton(
                           icon: Icon(
                             Icons.chat_bubble,
@@ -170,7 +171,7 @@ class _UserAccount8State extends State<UserAccount8> {
                                   MaterialPageRoute(
                                       builder: (context) => AdminChatPage(
                                           userId:
-                                              appStateModel.user.id.toString())));
+                                              appStateModel.user.id.toString(), key: UniqueKey(),)));
                             } else {
                               Navigator.push(
                                   context,
@@ -193,7 +194,7 @@ class _UserAccount8State extends State<UserAccount8> {
                               },
                               iconSize: 20.0,
                               color: Colors.black)
-                          : null,
+                          : SizedBox(),
                       IconButton(
                           icon: Icon(
                             FontAwesomeIcons.whatsapp,
@@ -217,7 +218,8 @@ class _UserAccount8State extends State<UserAccount8> {
                           iconSize: 20.0,
                           color: Colors.black),
                     ],
-                    child: Container());
+                    
+                    );
               }),
             )
           ],
@@ -293,7 +295,7 @@ class _UserAccount8State extends State<UserAccount8> {
                         }
                       },
                       leading: ExcludeSemantics(
-                          child: Icon(FlutterIcons.ios_wallet_ion)),
+                          child: Icon(Icons.wallet)),
                       title: Text(
                         appStateModel.blocks.localeText.wallet.toUpperCase(),
                         style: menuTextStyle,
@@ -449,7 +451,7 @@ class _UserAccount8State extends State<UserAccount8> {
                               context,
                               MaterialPageRoute(
                                   builder: (context) => ChatRoomList(
-                                      id: appStateModel.user.id.toString())));
+                                      id: appStateModel.user.id.toString(), key: UniqueKey(),)));
                         } else {
                           Navigator.push(context,
                               MaterialPageRoute(builder: (context) => Login()));
@@ -566,7 +568,7 @@ class _UserAccount8State extends State<UserAccount8> {
                         context,
                         MaterialPageRoute(
                             builder: (context) => VendorDetails(
-                                vendorId: model.user.id.toString())))),
+                                vendorId: model.user.id.toString(), key: UniqueKey(),)))),
               ],
             ),
           );
@@ -791,7 +793,7 @@ class _UserAccount8State extends State<UserAccount8> {
                     ListTile(
                       onTap: () => _onPressItem(pages[index], context),
                       leading: ExcludeSemantics(
-                        child: Icon(FlutterIcons.info_circle_faw5s),
+                        child: Icon(Icons.info),
                       ),
                       title: Text(
                         pages[index].title,
@@ -833,7 +835,67 @@ class _UserAccount8State extends State<UserAccount8> {
 
   _onPressItem(Child page, BuildContext context) {
     if(page.description == 'page') {
-      var post = Post();
+      var post = Post(
+                      id: 0,
+                      date: DateTime(0),
+                      dateGmt: DateTime(0),
+                      guid: Guid('',rendered: ''),
+                      modified: DateTime(0),
+                      modifiedGmt: DateTime(0),
+                      slug: '',
+                      status: '',
+                      type: '',
+                      link: '',
+                      title: Guid('',rendered: ''),
+                      content: Content('',rendered: '',protected: false),
+                      excerpt: Content('',rendered: '',protected: false),
+                      author: 0,
+                      featuredMedia: 0,
+                      commentStatus: '',
+                      pingStatus: '',
+                      sticky: false,
+                      template: '',
+                      format: '',
+                      meta: Meta(likes: 0),
+                      categories: [],
+                      tags: [],
+                      featuredUrl: '',
+                      authorDetails: AuthorDetails(name: '', avatar: '', avatarUrl: '', id: 0),
+                      featuredDetails: FeaturedDetails(
+                        width: 0,
+                        height: 0,
+                        file: '',
+                        imageMeta: ImageMeta(
+                          aperture: '',
+                          credit: '',
+                          camera: '',
+                          caption: '',
+                          createdTimestamp: '',
+                          copyright: '',
+                          focalLength: '',
+                          iso: '',
+                          shutterSpeed: '',
+                          title: '',
+                          orientation: '',
+                          keywords: [],
+                        ),
+                      ), // Provide a default ImageMeta instance
+                      excerptData: '',
+                      commentCount: '',
+                      links: Links(
+                        self: [],
+                        collection: [],
+                        about: [],
+                        author: [],
+                        replies: [],
+                        versionHistory: [],
+                        predecessorVersion: [],
+                        wpFeaturedmedia: [],
+                        wpAttachment: [],
+                        wpTerm: [],
+                        curies: [],
+                      )
+                    );
       post.id = int.parse(page.url);
       Navigator.push(
           context,
@@ -841,7 +903,67 @@ class _UserAccount8State extends State<UserAccount8> {
               builder: (context) =>
                   PageDetail(post: post)));
     } else if(page.description == 'post') {
-      var post = Post();
+      var post =Post(
+                      id: 0,
+                      date: DateTime(0),
+                      dateGmt: DateTime(0),
+                      guid: Guid('',rendered: ''),
+                      modified: DateTime(0),
+                      modifiedGmt: DateTime(0),
+                      slug: '',
+                      status: '',
+                      type: '',
+                      link: '',
+                      title: Guid('',rendered: ''),
+                      content: Content('',rendered: '',protected: false),
+                      excerpt: Content('',rendered: '',protected: false),
+                      author: 0,
+                      featuredMedia: 0,
+                      commentStatus: '',
+                      pingStatus: '',
+                      sticky: false,
+                      template: '',
+                      format: '',
+                      meta: Meta(likes: 0),
+                      categories: [],
+                      tags: [],
+                      featuredUrl: '',
+                      authorDetails: AuthorDetails(name: '', avatar: '', avatarUrl: '', id: 0),
+                      featuredDetails: FeaturedDetails(
+                        width: 0,
+                        height: 0,
+                        file: '',
+                        imageMeta: ImageMeta(
+                          aperture: '',
+                          credit: '',
+                          camera: '',
+                          caption: '',
+                          createdTimestamp: '',
+                          copyright: '',
+                          focalLength: '',
+                          iso: '',
+                          shutterSpeed: '',
+                          title: '',
+                          orientation: '',
+                          keywords: [],
+                        ),
+                      ), // Provide a default ImageMeta instance
+                      excerptData: '',
+                      commentCount: '',
+                      links: Links(
+                        self: [],
+                        collection: [],
+                        about: [],
+                        author: [],
+                        replies: [],
+                        versionHistory: [],
+                        predecessorVersion: [],
+                        wpFeaturedmedia: [],
+                        wpAttachment: [],
+                        wpTerm: [],
+                        curies: [],
+                      )
+                    );
       post.id = int.parse(page.url);
       Navigator.push(
           context,

@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api, unused_local_variable
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -8,13 +10,13 @@ class PaytmPage extends StatefulWidget {
   final String id;
   final OrderSummaryBloc orderSummary = OrderSummaryBloc();
 
- PaytmPage({Key key, this.id}) : super(key: key);
+ PaytmPage({super.key, required this.id});
   @override
   _PaytmPageState createState() => _PaytmPageState();
 }
 
 class _PaytmPageState extends State<PaytmPage> {
-  String payment_response;
+  late String payment_response;
   //Paytm _paytm;
 
 
@@ -33,7 +35,7 @@ class _PaytmPageState extends State<PaytmPage> {
 
   void checkout(String url) async {
 
-    final response = await http.post('https://us-central1-mrdishant-4819c.cloudfunctions.net/generateCheckSum', headers: {
+    final response = await http.post('https://us-central1-mrdishant-4819c.cloudfunctions.net/generateCheckSum' as Uri, headers: {
       "Content-Type": "application/x-www-form-urlencoded"
     },
         body: {
@@ -94,10 +96,9 @@ class _PaytmPageState extends State<PaytmPage> {
             SizedBox(
               width: 10.0,
             ),
-            RaisedButton(
+            ElevatedButton(
               child: Text('Make Payment'),
               onPressed: () {
-
                 checkout(callBackUrl);
               },
             )

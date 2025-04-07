@@ -1,7 +1,8 @@
 // ignore_for_file: library_private_types_in_public_api, no_leading_underscores_for_local_identifiers, deprecated_member_use, avoid_print
 
+import 'dart:io';
+
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
@@ -299,15 +300,146 @@ class _AppState extends State<App> with TickerProviderStateMixin {
                   product: Product(
                     id: message['product'],
                     name: '',
+                    type: '', // Provide appropriate type
+                    status: '', // Provide appropriate status
+                    featured: false, // Default value
+                    catalogVisibility: '', // Provide appropriate visibility
+                    description: '', // Provide appropriate description
+                    shortDescription: '', // Provide appropriate short description
+                    permalink: '', // Provide appropriate permalink
+                    sku: '', // Provide appropriate SKU
+                    price: 0.0, // Provide appropriate price
+                    regularPrice: 0.0, // Provide appropriate regular price
+                    salePrice:0.0, // Provide appropriate sale price
+                    onSale: false, // Default value
+                    purchasable: false, // Default value
+                    totalSales: 0, // Default value
+                    virtual: false, // Default value
+                    downloadable: false, // Default value
+                    externalUrl: '', // Provide appropriate external URL
+                    buttonText: '', // Provide appropriate button text
+                    manageStock: false, // Default value
+                    stockQuantity: 0, // Default value
+                    stockStatus: '', // Provide appropriate stock status
+                    backorders: '', // Provide appropriate backorders
+                    backordersAllowed: false, // Default value
+                    backordered: false, // Default value
+                    soldIndividually: false, // Default value
+                    weight: '', // Provide appropriate weight
+                    dimensions: Dimensions(length: '', width: '', height: ''), // Provide appropriate dimensions
+                    reviewsAllowed: false, // Default value
+                    averageRating: '', // Provide appropriate average rating
+                    ratingCount: 0, // Default value
+                    relatedIds: [], // Default value
+                    upsellIds: [], // Default value
+                    crossSellIds: [], // Default value
+                    purchaseNote: '', // Provide appropriate purchase note
+                    categories: [], // Default value
+                    tags: [], // Default value
+                    images: [], // Default value
+                    attributes: [], // Default value
+                    groupedProducts: [], // Default value
+                    metaData: [], // Default value
+                    availableVariations: [], // Default value
+                    variationOptions: [], // Default value
+                    variationId: '', // Default value
+                    formattedPrice: '', // Provide appropriate formatted price
+                    formattedSalesPrice: '', // Provide appropriate formatted sales price
+                    vendor: Vendor(name: '', icon: ''), // Provide appropriate vendor
+                    children: [], // Default value
                   ),
                 )));
       } else if (message['page'] != null) {
-        var post = Post();
+        var post = Post(
+          id: 0,
+          date: DateTime.now(),
+          dateGmt: DateTime.now().toUtc(),
+          guid: Guid('', rendered: ''), // Replace '' with a valid GUID string if needed
+          modified: DateTime.now(),
+          modifiedGmt: DateTime.now().toUtc(),
+          slug: '',
+          status: '',
+          type: '',
+          link: '',
+          title:  Guid('', rendered: ''),
+          content:  Content('', rendered: '', protected: false),
+          excerpt: Content('', rendered: '', protected: false),
+          author: 0,
+          featuredMedia: 0,
+          commentStatus: '',
+          pingStatus: '',
+          sticky: false,
+          template: '',
+          format: '',
+          meta: Meta(likes: 0),
+          categories: [],
+          tags: [],
+          featuredUrl: '',
+          authorDetails: AuthorDetails(avatar: '',avatarUrl:'', name:'',id:0),
+          featuredDetails: FeaturedDetails(width: 0, height: 0, file: '', imageMeta: ImageMeta(aperture: '', credit: '', camera: '', caption: '', createdTimestamp: DateTime(0).toIso8601String(), copyright: '', focalLength: '', iso: '', shutterSpeed: '', title: '', orientation: '', keywords: [])),
+          excerptData: '',
+          commentCount: '',
+          links: Links(
+            about: [],
+            self: [],
+            collection: [],
+            author: [],
+            replies: [],
+            versionHistory: [],
+            predecessorVersion: [],
+            wpFeaturedmedia: [],
+            wpAttachment: [],
+            wpTerm: [],
+            curies: [],
+          ), // Replace with the correct type or initialize appropriately
+        );
         post.id = int.parse(message['page']);
         Navigator.push(context,
             MaterialPageRoute(builder: (context) => PageDetail(post: post)));
       } else if (message['post'] != null) {
-        var post = Post();
+        var post = Post(
+          id: 0,
+          date: DateTime.now(),
+          dateGmt: DateTime.now().toUtc(),
+          guid: Guid('', rendered: ''), // Replace '' with a valid GUID string if needed
+          modified: DateTime.now(),
+          modifiedGmt: DateTime.now().toUtc(),
+          slug: '',
+          status: '',
+          type: '',
+          link: '',
+          title:  Guid('', rendered: ''),
+          content:  Content('', rendered: '', protected: false),
+          excerpt: Content('', rendered: '', protected: false),
+          author: 0,
+          featuredMedia: 0,
+          commentStatus: '',
+          pingStatus: '',
+          sticky: false,
+          template: '',
+          format: '',
+          meta: Meta(likes: 0),
+          categories: [],
+          tags: [],
+          featuredUrl: '',
+          authorDetails: AuthorDetails(avatar: '',avatarUrl:'', name:'',id:0),
+          featuredDetails: FeaturedDetails(width: 0, height: 0, file: '', imageMeta: ImageMeta(aperture: '', credit: '', camera: '', caption: '', createdTimestamp: DateTime(0).toIso8601String(), copyright: '', focalLength: '', iso: '', shutterSpeed: '', title: '', orientation: '', keywords: [])),
+          excerptData: '',
+          commentCount: '',
+          links: Links(
+            about: [],
+            self: [],
+            collection: [],
+            author: [],
+            replies: [],
+            versionHistory: [],
+            predecessorVersion: [],
+            wpFeaturedmedia: [],
+            wpAttachment: [],
+            wpTerm: [],
+            curies: [],
+          ), // Replace with the correct type or initialize appropriately
+        );
         post.id = int.parse(message['post']);
         Navigator.push(context,
             MaterialPageRoute(builder: (context) => PostDetail(post: post)));

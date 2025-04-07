@@ -1,3 +1,5 @@
+// ignore_for_file: curly_braces_in_flow_control_structures, use_build_context_synchronously, unused_element
+
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -12,8 +14,8 @@ class AppleLogin extends StatelessWidget {
   TextEditingController emailController = TextEditingController();
 
   AppleLogin({
-    Key key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -57,10 +59,9 @@ class AppleLogin extends StatelessWidget {
       ),
     );
 
-    var login = new Map<String, dynamic>();
+    var login = <String, dynamic>{};
     login["userIdentifier"] = credential.userIdentifier;
-    if(credential.authorizationCode != null)
-      login["authorizationCode"] = credential.authorizationCode;
+    login["authorizationCode"] = credential.authorizationCode;
     if(credential.email != null) {
       login["email"] = credential.email;
     } else {
@@ -81,27 +82,27 @@ class AppleLogin extends StatelessWidget {
 
   _showDialog(BuildContext context) async {
     await showDialog<String>(
-      builder: (context) => new _SystemPadding(child: new AlertDialog(
+      builder: (context) => _SystemPadding(child: AlertDialog(
         contentPadding: const EdgeInsets.all(16.0),
-        content: new Row(
+        content: Row(
           children: <Widget>[
-            new Expanded(
-              child: new TextField(
+            Expanded(
+              child: TextField(
                 controller: emailController,
                 autofocus: true,
-                decoration: new InputDecoration(
+                decoration: InputDecoration(
                     labelText: 'Enter you email', hintText: ''),
               ),
             )
           ],
         ),
         actions: <Widget>[
-          new FlatButton(
+          TextButton(
               child: const Text('CANCEL'),
               onPressed: () {
                 Navigator.pop(context);
               }),
-          new FlatButton(
+          TextButton(
               child: const Text('Continue'),
               onPressed: () {
                 Navigator.pop(context, );
@@ -115,7 +116,7 @@ class AppleLogin extends StatelessWidget {
 class _SystemPadding extends StatelessWidget {
   final Widget child;
 
-  const _SystemPadding({Key key, this.child}) : super(key: key);
+  const _SystemPadding({super.key, required this.child});
 
   @override
   Widget build(BuildContext context) {

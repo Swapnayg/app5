@@ -559,7 +559,16 @@ class _EditVendorProductState extends State<EditVendorProduct> {
     Map<String, dynamic> fileUpload = jsonDecode(responseString);
     FileUploadResponse uploadedFile = FileUploadResponse.fromJson(fileUpload);
 
-    ProductImage picture = ProductImage();
+    ProductImage picture = ProductImage(
+      id: 0, // Replace with appropriate value
+      dateCreated: DateTime.now(), // Replace with appropriate value
+      dateCreatedGmt: DateTime.now().toUtc(), // Replace with appropriate value
+      dateModified: DateTime.now(), // Replace with appropriate value
+      dateModifiedGmt: DateTime.now().toUtc(), // Replace with appropriate value
+      src: '', // Replace with appropriate value
+      name: '', // Replace with appropriate value
+      alt: '', // Replace with appropriate value
+    );
     picture.src = uploadedFile.url;
     setState(() {
       widget.product.images.add(picture);

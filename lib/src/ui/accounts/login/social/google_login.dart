@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -10,8 +12,8 @@ class GoogleLoginWidget extends StatelessWidget {
   final appStateModel = AppStateModel();
 
   GoogleLoginWidget({
-    Key key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -41,9 +43,16 @@ class GoogleLoginWidget extends StatelessWidget {
   }
 
   void _googleAuthentication(BuildContext context) async {
-    final GoogleSignInAccount googleUser = await _googleSignIn.signIn();
-    googleUser.authentication
-        .then((value) => _loginGoogleUser(value.idToken, googleUser, context));
+    final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
+    googleUser!.authentication
+        .then((value) {
+          if (value.idToken != null) {
+            _loginGoogleUser(value.idToken!, googleUser, context);
+          } else {
+            // Handle the case where idToken is null
+            debugPrint('Google Sign-In failed: idToken is null');
+          }
+        });
   }
 
   _loginGoogleUser(String idToken, GoogleSignInAccount googleUser,

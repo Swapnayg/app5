@@ -131,13 +131,22 @@ class _ProductItemState extends State<ProductItem> {
                 )),
       );
     } else {
-      final lineItem = LineItem();
-      lineItem.productId = widget.product.id;
-      lineItem.quantity = 1;
-      lineItem.name = widget.product.name;
-      lineItem.price = double.parse(widget.product.price);
-      lineItem.total =
-          (lineItem.quantity * double.parse(widget.product.price)).toString();
+      final lineItem = LineItem(
+        id: 0, // Provide a unique ID or leave empty if not required
+        name: widget.product.name,
+        productId: widget.product.id,
+        variationId: 0, // Set to null or provide a variation ID if applicable
+        quantity: 1,
+        taxClass: '', // Provide a tax class or leave empty if not required
+        subtotal: (1 * double.parse(widget.product.price)).toString(),
+        subtotalTax: '0', // Set to '0' or provide a value if applicable
+        total: (1 * double.parse(widget.product.price)).toString(),
+        totalTax: '0', // Set to '0' or provide a value if applicable
+        taxes: [], // Provide a list of taxes if applicable
+        metaData: [], // Provide metadata if applicable
+        sku: widget.product.sku , // Use product SKU or leave empty
+        price: double.parse(widget.product.price),
+      );
       setState(() {
         widget.order.lineItems.add(lineItem);
       });

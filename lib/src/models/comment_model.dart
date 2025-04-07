@@ -1,16 +1,18 @@
 // To parse this JSON data, do
 //
 //     final comment = commentFromJson(jsonString);
+// ignore_for_file: unnecessary_null_comparison
+
 class CommentsModel {
   final List<Comment> comments;
 
   CommentsModel({
-    this.comments,
+    required this.comments,
   });
 
   factory CommentsModel.fromJson(List<dynamic> parsedJson) {
 
-    List<Comment> comments = List<Comment>();
+    List<Comment> comments = [];
     comments = parsedJson.map((i)=>Comment.fromJson(i)).toList();
 
     return CommentsModel(comments : comments);
@@ -36,21 +38,21 @@ class Comment {
   Links links;
 
   Comment({
-    this.id,
-    this.post,
-    this.parent,
-    this.author,
-    this.authorName,
-    this.authorUrl,
-    this.date,
-    this.dateGmt,
-    this.content,
-    this.link,
-    this.status,
-    this.type,
-    this.authorAvatarUrls,
-    this.meta,
-    this.links,
+    required this.id,
+    required this.post,
+    required this.parent,
+    required this.author,
+    required this.authorName,
+    required this.authorUrl,
+    required this.date,
+    required this.dateGmt,
+    required this.content,
+    required this.link,
+    required this.status,
+    required this.type,
+    required this.authorAvatarUrls,
+    required this.meta,
+    required this.links,
   });
 
   factory Comment.fromJson(Map<String, dynamic> json) => Comment(
@@ -60,15 +62,15 @@ class Comment {
     author: json["author"],
     authorName: json["author_name"],
     authorUrl: json["author_url"],
-    date: json["date"] == null ? null : DateTime.parse(json["date"]),
-    dateGmt: json["date_gmt"] == null ? null : DateTime.parse(json["date_gmt"]),
-    content: json["content"] == null ? null : Content.fromJson(json["content"]),
+    date: json["date"] == null ? DateTime.now() : DateTime.parse(json["date"]),
+    dateGmt: json["date_gmt"] == null ? DateTime.now() : DateTime.parse(json["date_gmt"]),
+    content: json["content"] == null ? Content(rendered: "") : Content.fromJson(json["content"]),
     link: json["link"],
     status: json["status"],
     type: json["type"],
-    authorAvatarUrls: json["author_avatar_urls"] == null ? null : Map.from(json["author_avatar_urls"]).map((k, v) => MapEntry<String, String>(k, v)),
-    meta: json["meta"] == null ? null : List<dynamic>.from(json["meta"].map((x) => x)),
-    links: json["_links"] == null ? null : Links.fromJson(json["_links"]),
+    authorAvatarUrls: json["author_avatar_urls"] == null ? {} : Map.from(json["author_avatar_urls"]).map((k, v) => MapEntry<String, String>(k, v)),
+    meta: json["meta"] == null ? [] : List<dynamic>.from(json["meta"].map((x) => x)),  
+    links: json["_links"] == null ? Links(self: [], collection: [], author: [], up: []) : Links.fromJson(json["_links"]),
   );
 
   Map<String, dynamic> toJson() => {
@@ -78,15 +80,15 @@ class Comment {
     "author": author,
     "author_name": authorName,
     "author_url": authorUrl,
-    "date": date?.toIso8601String(),
-    "date_gmt": dateGmt?.toIso8601String(),
-    "content": content?.toJson(),
+    "date": date.toIso8601String(),
+    "date_gmt": dateGmt.toIso8601String(),
+    "content": content.toJson(),
     "link": link,
     "status": status,
     "type": type,
     "author_avatar_urls": authorAvatarUrls == null ? null : Map.from(authorAvatarUrls).map((k, v) => MapEntry<String, dynamic>(k, v)),
     "meta": meta == null ? null : List<dynamic>.from(meta.map((x) => x)),
-    "_links": links?.toJson(),
+    "_links": links.toJson(),
   };
 }
 
@@ -94,7 +96,7 @@ class Content {
   String rendered;
 
   Content({
-    this.rendered,
+    required this.rendered,
   });
 
   factory Content.fromJson(Map<String, dynamic> json) => Content(
@@ -113,17 +115,17 @@ class Links {
   List<Up> up;
 
   Links({
-    this.self,
-    this.collection,
-    this.author,
-    this.up,
+    required this.self,
+    required this.collection,
+    required this.author,
+    required this.up,
   });
 
   factory Links.fromJson(Map<String, dynamic> json) => Links(
-    self: json["self"] == null ? null : List<Collection>.from(json["self"].map((x) => Collection.fromJson(x))),
-    collection: json["collection"] == null ? null : List<Collection>.from(json["collection"].map((x) => Collection.fromJson(x))),
-    author: json["author"] == null ? null : List<Author>.from(json["author"].map((x) => Author.fromJson(x))),
-    up: json["up"] == null ? null : List<Up>.from(json["up"].map((x) => Up.fromJson(x))),
+    self: json["self"] == null ? [] : List<Collection>.from(json["self"].map((x) => Collection.fromJson(x))),
+    collection: json["collection"] == null ? [] : List<Collection>.from(json["collection"].map((x) => Collection.fromJson(x))),
+    author: json["author"] == null ? [] : List<Author>.from(json["author"].map((x) => Author.fromJson(x))),
+    up: json["up"] == null ? [] : List<Up>.from(json["up"].map((x) => Up.fromJson(x))),
   );
 
   Map<String, dynamic> toJson() => {
@@ -139,8 +141,8 @@ class Author {
   String href;
 
   Author({
-    this.embeddable,
-    this.href,
+    required this.embeddable,
+    required this.href,
   });
 
   factory Author.fromJson(Map<String, dynamic> json) => Author(
@@ -158,7 +160,7 @@ class Collection {
   String href;
 
   Collection({
-    this.href,
+    required this.href,
   });
 
   factory Collection.fromJson(Map<String, dynamic> json) => Collection(
@@ -176,9 +178,9 @@ class Up {
   String href;
 
   Up({
-    this.embeddable,
-    this.postType,
-    this.href,
+    required this.embeddable,
+    required this.postType,
+    required this.href,
   });
 
   factory Up.fromJson(Map<String, dynamic> json) => Up(

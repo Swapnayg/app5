@@ -391,7 +391,7 @@ class _PageDetailState extends State<PageDetail> {
   void openWebView(String url) {
     Navigator.push(context, MaterialPageRoute(builder: (context) {
       return WebViewPage(
-        url: url,
+        url: url, selectedPaymentMethod: '',
       );
     }));
   }

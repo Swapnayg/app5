@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:flutter/material.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
 import './../../../../models/app_state_model.dart';
@@ -16,7 +18,15 @@ class Register extends StatefulWidget {
 class _RegisterState extends State<Register> {
 
   final appStateModel = AppStateModel();
-  final RegisterModel _register = RegisterModel();
+  final RegisterModel _register = RegisterModel(
+    firstName: '',
+    lastName: '',
+    email: '',
+    phoneNumber: '',
+    password: '',
+    username: '',
+    companyName: '',
+  );
   bool _obscureText = true;
   var isLoading = false;
   final _formKey = GlobalKey<FormState>();
@@ -52,11 +62,12 @@ class _RegisterState extends State<Register> {
                       SizedBox(
                         height: 16,),
                       PrimaryColorOverride(
+                        key:UniqueKey(),
                         child: TextFormField(
                           onSaved: (val) =>
-                              setState(() => _register.firstName = val),
+                              setState(() => _register.firstName = val!),
                           validator: (value) {
-                            if (value.isEmpty) {
+                            if (value!.isEmpty) {
                               return appStateModel.blocks.localeText.pleaseEnterFirstName;
                             }
                             return null;
@@ -66,11 +77,12 @@ class _RegisterState extends State<Register> {
                       ),
                       SizedBox(height: 12,),
                       PrimaryColorOverride(
+                        key:UniqueKey(),
                         child: TextFormField(
                           onSaved: (val) =>
-                              setState(() => _register.lastName = val),
+                              setState(() => _register.lastName = val!),
                           validator: (value) {
-                            if (value.isEmpty) {
+                            if (value!.isEmpty) {
                               return appStateModel.blocks.localeText.pleaseEnterLastName;
                             }
                             return null;
@@ -80,11 +92,12 @@ class _RegisterState extends State<Register> {
                       ),
                       SizedBox(height: 12,),
                       PrimaryColorOverride(
+                        key:UniqueKey(),
                         child: TextFormField(
                           onSaved: (val) =>
-                              setState(() => _register.email = val),
+                              setState(() => _register.email = val!),
                           validator: (value) {
-                            if (value.isEmpty) {
+                            if (value!.isEmpty) {
                               return appStateModel.blocks.localeText.pleaseEnterValidEmail;
                             }
                             return null;
@@ -95,12 +108,13 @@ class _RegisterState extends State<Register> {
                       ),
                       SizedBox(height: 12,),
                       PrimaryColorOverride(
+                        key:UniqueKey(),
                         child: TextFormField(
                           obscureText: _obscureText,
                           onSaved: (val) =>
-                              setState(() => _register.password = val),
+                              setState(() => _register.password = val!),
                           validator: (value) {
-                            if (value.isEmpty) {
+                            if (value!.isEmpty) {
                               return appStateModel.blocks.localeText.pleaseEnterPassword;
                             }
                             return null;
@@ -124,15 +138,17 @@ class _RegisterState extends State<Register> {
                       RoundedLoadingButton(
                         elevation: 0,
                         controller: _btnController,
-                        valueColor: Theme.of(context).buttonTheme.colorScheme.onPrimary,
+                        valueColor: Theme.of(context).buttonTheme.colorScheme!.onPrimary,
                         onPressed: () => _submit(context),
                         animateOnTap: false,
                         width: 200,
-                        child: Text(appStateModel.blocks.localeText.signIn, style: TextStyle(color: Theme.of(context).buttonTheme.colorScheme.onPrimary)),
+                        child: Text(appStateModel.blocks.localeText.signIn, style: TextStyle(color: Theme.of(context).buttonTheme.colorScheme!.onPrimary)),
                       ),
                       SizedBox(height: 30.0),
-                      FlatButton(
-                          padding: EdgeInsets.all(16.0),
+                      TextButton(
+                          style: TextButton.styleFrom(
+                            padding: EdgeInsets.all(16.0),
+                          ),
                           onPressed: () {
                             Navigator.of(context).pop();
                           },
@@ -142,7 +158,7 @@ class _RegisterState extends State<Register> {
                               Text(
                                   appStateModel.blocks.localeText
                                       .alreadyHaveAnAccount,
-                                  style: Theme.of(context).textTheme.bodyMedium.copyWith(
+                                  style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                                       fontSize: 15,
                                       color: Colors.grey)),
                               Padding(
@@ -150,7 +166,7 @@ class _RegisterState extends State<Register> {
                                 const EdgeInsets.symmetric(horizontal: 8.0),
                                 child: Text(
                                     appStateModel.blocks.localeText.signIn,
-                                    style: Theme.of(context).textTheme.bodyMedium.copyWith(
+                                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                                         color:
                                         Theme.of(context).colorScheme.secondary)),
                               ),
@@ -166,8 +182,8 @@ class _RegisterState extends State<Register> {
   }
 
   Future _submit(BuildContext context) async {
-    if (_formKey.currentState.validate()) {
-      _formKey.currentState.save();
+    if (_formKey.currentState!.validate()) {
+      _formKey.currentState!.save();
       _btnController.start();
       bool status = await appStateModel.register(_register.toJson(), context);
       _btnController.stop();

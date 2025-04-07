@@ -82,11 +82,14 @@ class _AttributeOptionsPageState extends State<AttributeOptionsPage> {
         });
       }
     } else {
-      Attribute attribute = Attribute();
-      attribute.options = [];
-      attribute.id = widget.productAttribute.id;
-      attribute.name = widget.productAttribute.name;
-      attribute.options.add(term.name);
+      Attribute attribute = Attribute(
+        id: widget.productAttribute.id,
+        name: widget.productAttribute.name,
+        position: 0, // Provide a default or appropriate value
+        visible: true, // Provide a default or appropriate value
+        variation: false, // Provide a default or appropriate value
+        options: [term.name],
+      );
       setState(() {
         widget.product.attributes.add(attribute);
       });

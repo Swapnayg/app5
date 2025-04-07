@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api, unnecessary_null_comparison, unused_local_variable, prefer_interpolation_to_compose_strings
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -13,7 +15,7 @@ class OrderSummary extends StatefulWidget {
   final appStateModel = AppStateModel();
   final OrderSummaryBloc orderSummary = OrderSummaryBloc();
 
-  OrderSummary({Key key, this.id}) : super(key: key);
+  OrderSummary({super.key, required this.id});
   @override
   _OrderSummaryState createState() => _OrderSummaryState();
 }
@@ -36,12 +38,12 @@ class _OrderSummaryState extends State<OrderSummary> {
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             final NumberFormat formatter = NumberFormat.currency(
-                decimalDigits: snapshot.data.decimals, name: snapshot.data.currency);
+                decimalDigits: snapshot.data!.decimals, name: snapshot.data!.currency);
             return CustomScrollView(
             slivers: <Widget>[
-              buildOrderDetails(snapshot.data, context, formatter),
-              buildItemDetails(snapshot.data, context, formatter),
-              buildTotalDetails(snapshot.data, context, formatter),
+              buildOrderDetails(snapshot.data!, context, formatter),
+              buildItemDetails(snapshot.data!, context, formatter),
+              buildTotalDetails(snapshot.data!, context, formatter),
             ],
           );
           } else {
@@ -69,7 +71,7 @@ class _OrderSummaryState extends State<OrderSummary> {
                     Text(getOrderStatusText(order.status, widget.appStateModel.blocks.localeText),
                       style: Theme.of(context).textTheme.titleSmall,
                     ),
-                    order.status == 'pending' ? RaisedButton(
+                    order.status == 'pending' ? ElevatedButton(
                       onPressed: () {
                         Config config = Config();
                         String url = '${config.url}/checkout/order-pay/${order.number}/?key=${order.orderKey}';
@@ -90,7 +92,7 @@ class _OrderSummaryState extends State<OrderSummary> {
                     children: <Widget>[
                       Text(
                         widget.appStateModel.blocks.localeText.billing,
-                        style: Theme.of(context).textTheme.subtitle2,
+                        style: Theme.of(context).textTheme.titleSmall,
                       ),
                       SizedBox(height: 10.0),
                       Text(
@@ -103,7 +105,7 @@ class _OrderSummaryState extends State<OrderSummary> {
                     children: <Widget>[
                       Text(
                         widget.appStateModel.blocks.localeText.shipping,
-                        style: Theme.of(context).textTheme.subtitle2,
+                        style: Theme.of(context).textTheme.titleSmall,
                       ),
                       SizedBox(
                         height: 10.0,
@@ -118,7 +120,7 @@ class _OrderSummaryState extends State<OrderSummary> {
                     children: <Widget>[
                       Text(
                         widget.appStateModel.blocks.localeText.payment,
-                        style: Theme.of(context).textTheme.subtitle2,
+                        style: Theme.of(context).textTheme.titleSmall,
                       ),
                       SizedBox(
                         height: 10.0,
@@ -133,7 +135,7 @@ class _OrderSummaryState extends State<OrderSummary> {
                     children: <Widget>[
                       Text(
                         widget.appStateModel.blocks.localeText.items,
-                        style: Theme.of(context).textTheme.subtitle2,
+                        style: Theme.of(context).textTheme.titleSmall,
                       ),
                       SizedBox(
                         height: 10.0,
@@ -157,7 +159,7 @@ class _OrderSummaryState extends State<OrderSummary> {
               SizedBox(height: 10.0),
               Text(
                 widget.appStateModel.blocks.localeText.total,
-                style: Theme.of(context).textTheme.subtitle2,
+                style: Theme.of(context).textTheme.titleSmall,
               ),
               SizedBox(height: 10.0),
               Row(
@@ -196,14 +198,14 @@ class _OrderSummaryState extends State<OrderSummary> {
                   Expanded(
                     child: Text(
                       widget.appStateModel.blocks.localeText.total,
-                      style: Theme.of(context).textTheme.headline6,
+                      style: Theme.of(context).textTheme.titleLarge,
                     ),
                   ),
                   Text(
                     formatter.format(
                       double.parse(order.total),
                     ),
-                    style: Theme.of(context).textTheme.headline6,
+                    style: Theme.of(context).textTheme.titleLarge,
                   ),
                 ],
               ),
@@ -212,7 +214,7 @@ class _OrderSummaryState extends State<OrderSummary> {
                 children: <Widget>[
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 16.0),
-                    child: RaisedButton(
+                    child: ElevatedButton(
                       child: Text(widget.appStateModel.blocks.localeText.localeTextContinue),
                       onPressed: () {
                         widget.appStateModel.getCart();
@@ -273,11 +275,10 @@ class _OrderSummaryState extends State<OrderSummary> {
 
   void onSuccessMessage(Order order) {
     showDialog(builder: (context) => AlertDialog(
-          title: new Text(widget.appStateModel.blocks.localeText.youOrderHaveBeenReceived),
-          content: new Text(widget.appStateModel.blocks.localeText.thankYouForShoppingWithUs+'!'+widget.appStateModel.blocks.localeText.thankYouOrderIdIs+':'+' #${order.id.toString()}. '+ widget.appStateModel.blocks.localeText.youWillReceiveAConfirmationMessage+'.'),
+          title: Text(widget.appStateModel.blocks.localeText.youOrderHaveBeenReceived),
+          content: Text(widget.appStateModel.blocks.localeText.thankYouForShoppingWithUs+'!'+widget.appStateModel.blocks.localeText.thankYouOrderIdIs+':'+' #${order.id.toString()}. '+ widget.appStateModel.blocks.localeText.youWillReceiveAConfirmationMessage+'.'),
           actions: <Widget>[
-            RaisedButton(
-                elevation: 0,
+            ElevatedButton(
                 child: Text(widget.appStateModel.blocks.localeText.localeTextContinue),
                 onPressed: () {
                   Navigator.of(context).pop();

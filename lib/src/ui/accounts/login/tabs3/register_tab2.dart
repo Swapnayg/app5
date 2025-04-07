@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api, unused_field
+
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
@@ -9,16 +11,15 @@ import './../../../../models/app_state_model.dart';
 import './../../../../models/register_model.dart';
 import './../../../color_override.dart';
 import './../../login/social/apple_login.dart';
-import './../../login/social/facebook_login.dart';
 import './../../login/social/google_login.dart';
 import './../../login/social/sms_login.dart';
 import '../../../widgets/buttons/button_text.dart';
 
 class RegisterTab extends StatefulWidget {
 
-  RegisterTab({Key key, @required this.context,
-    @required this.model,
-    @required this.tabController,}) : super(key: key);
+  RegisterTab({super.key, required this.context,
+    required this.model,
+    required this.tabController,});
 
   final BuildContext context;
   final AppStateModel model;
@@ -32,7 +33,15 @@ class _RegisterTabState extends State<RegisterTab> {
 
   Map loginData =  <String, dynamic>{};
   final bool _obscureText = true;
-  final _register = RegisterModel();
+  final _register = RegisterModel(
+    firstName: '',
+    lastName: '',
+    email: '',
+    phoneNumber: '',
+    password: '',
+    username: '',
+    companyName: '',
+  );
   var isLoading = false;
   final _formKey = GlobalKey<FormState>();
   @override
@@ -67,11 +76,12 @@ class _RegisterTabState extends State<RegisterTab> {
                   SizedBox(
                     height: 16,),
                   PrimaryColorOverride(
+                    key:UniqueKey(),
                     child: TextFormField(
                       onSaved: (val) =>
-                          setState(() => _register.firstName = val),
+                          setState(() => _register.firstName = val!),
                       validator: (value) {
-                        if (value.isEmpty) {
+                        if (value!.isEmpty) {
                           return widget.model.blocks.localeText.pleaseEnterFirstName;
                         }
                         return null;
@@ -81,11 +91,12 @@ class _RegisterTabState extends State<RegisterTab> {
                   ),
                   SizedBox(height: 12,),
                   PrimaryColorOverride(
+                    key:UniqueKey(),
                     child: TextFormField(
                       onSaved: (val) =>
-                          setState(() => _register.lastName = val),
+                          setState(() => _register.lastName = val!),
                       validator: (value) {
-                        if (value.isEmpty) {
+                        if (value!.isEmpty) {
                           return widget.model.blocks.localeText.pleaseEnterLastName;
                         }
                         return null;
@@ -95,11 +106,12 @@ class _RegisterTabState extends State<RegisterTab> {
                   ),
                   SizedBox(height: 12,),
                   PrimaryColorOverride(
+                    key:UniqueKey(),
                     child: TextFormField(
                       onSaved: (val) =>
-                          setState(() => _register.email = val),
+                          setState(() => _register.email = val!),
                       validator: (value) {
-                        if (value.isEmpty) {
+                        if (value!.isEmpty) {
                           return widget.model.blocks.localeText.pleaseEnterValidEmail;
                         }
                         return null;
@@ -110,11 +122,12 @@ class _RegisterTabState extends State<RegisterTab> {
                   ),
                   SizedBox(height: 12,),
                   PrimaryColorOverride(
+                    key:UniqueKey(),
                     child: TextFormField(
                       onSaved: (val) =>
-                          setState(() => _register.password = val),
+                          setState(() => _register.password = val!),
                       validator: (value) {
-                        if (value.isEmpty) {
+                        if (value!.isEmpty) {
                           return widget.model.blocks.localeText.pleaseEnterPassword;
                         }
                         return null;
@@ -139,8 +152,10 @@ class _RegisterTabState extends State<RegisterTab> {
                     ),
                   ),*/
                   SizedBox(height: 30.0),
-                  FlatButton(
-                      padding: EdgeInsets.all(16.0),
+                  TextButton(
+                      style: TextButton.styleFrom(
+                        padding: EdgeInsets.all(16.0),
+                      ),
                       onPressed: () {
                         widget.tabController.animateTo(0);
                       },
@@ -150,7 +165,7 @@ class _RegisterTabState extends State<RegisterTab> {
                           Text(
                               widget.model.blocks.localeText
                                   .alreadyHaveAnAccount,
-                              style: Theme.of(context).textTheme.bodyMedium.copyWith(
+                              style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                                   fontSize: 15,
                                   color: Colors.grey)),
                           Padding(
@@ -158,85 +173,13 @@ class _RegisterTabState extends State<RegisterTab> {
                             const EdgeInsets.symmetric(horizontal: 8.0),
                             child: Text(
                                 widget.model.blocks.localeText.signIn,
-                                style: Theme.of(context).textTheme.bodyMedium.copyWith(
+                                style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                                     color:
                                     Theme.of(context).colorScheme.secondary)),
                           ),
                         ],
                       )),
                   SizedBox(height: 30.0),
-                  Center(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Card(
-                            color: Colors.white,
-                            elevation: 2,
-                            shadowColor: Colors.black,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(50.0),
-                            ),
-                            child: SizedBox(
-                              height: 50.0, // height of the button
-                              width: 50.0,
-                              child: GoogleLoginWidget(),
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Card(
-                            color: Colors.white,
-                            elevation: 2,
-                            shadowColor: Colors.black,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(50.0),
-                            ),
-                            child: SizedBox(
-                              height: 50.0, // height of the button
-                              width: 50.0,
-                              child: FacebookLoginWidget(),
-                            ),
-                          ),
-                        ),
-                        Platform.isIOS ? Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Card(
-                            color: Colors.white,
-                            elevation: 2,
-                            shadowColor: Colors.black,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(50.0),
-                            ),
-                            child: SizedBox(
-                              height: 50.0, // height of the button
-                              width: 50.0,
-                              child: AppleLogin(),
-                            ),
-                          ),
-                        ) : Container(),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Card(
-                            color: Colors.white,
-                            elevation: 2,
-                            shadowColor: Colors.black,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(50.0),
-                            ),
-                            child: SizedBox(
-                              height: 50.0, // height of the button
-                              width: 50.0,
-                              child: SmsLogin(),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  SizedBox(height: 15.0),
                 ],
               ),
             ),
@@ -245,8 +188,8 @@ class _RegisterTabState extends State<RegisterTab> {
   }
 
   Future _registerUser(BuildContext context) async {
-    if (_formKey.currentState.validate()) {
-      _formKey.currentState.save();
+    if (_formKey.currentState!.validate()) {
+      _formKey.currentState!.save();
       setState(() {
         isLoading = true;
       });

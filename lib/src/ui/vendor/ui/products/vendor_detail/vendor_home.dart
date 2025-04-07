@@ -24,6 +24,7 @@ import '../../../../../ui/blocks/vendor_category_scroll_list.dart';
 import '../../../../../ui/products/product_detail/product_detail.dart';
 import '../../../../../ui/products/product_grid/product_item4.dart';
 import '../../../../../ui/products/products.dart';
+import '../../../../../models/product_model.dart' as variation_model;
 
 class VendorHome extends StatefulWidget {
   final VendorDetailStateModel vendorDetailsModel;
@@ -261,6 +262,53 @@ class _VendorHomeState extends State<VendorHome> {
                       product: Product(
                         id: int.parse(data.url),
                         name: data.title,
+                        type: '', // Provide appropriate value
+                        status: '', // Provide appropriate value
+                        featured: false, // Provide appropriate value
+                        catalogVisibility: '', // Provide appropriate value
+                        description: '', // Provide appropriate value
+                        shortDescription: '', // Provide appropriate value
+                        permalink: '', // Provide appropriate value
+                        sku: '', // Provide appropriate value
+                        price: 0, // Provide appropriate value
+                        regularPrice: 0, // Provide appropriate value
+                        salePrice: 0, // Provide appropriate value
+                        onSale: false, // Provide appropriate value
+                        purchasable: false, // Provide appropriate value
+                        totalSales: 0, // Provide appropriate value
+                        virtual: false, // Provide appropriate value
+                        downloadable: false, // Provide appropriate value
+                        externalUrl: '', // Provide appropriate value
+                        buttonText: '', // Provide appropriate value
+                        manageStock: false, // Provide appropriate value
+                        stockQuantity: 0, // Provide appropriate value
+                        stockStatus: '', // Provide appropriate value
+                        backorders: '', // Provide appropriate value
+                        backordersAllowed: false, // Provide appropriate value
+                        backordered: false, // Provide appropriate value
+                        soldIndividually: false, // Provide appropriate value
+                        weight: '', // Provide appropriate value
+                        dimensions: variation_model.Dimensions(length: '', width: '', height: ''), // Provide appropriate value
+                        reviewsAllowed: false, // Provide appropriate value
+                        averageRating: '', // Provide appropriate value
+                        ratingCount: 0, // Provide appropriate value
+                        relatedIds: [], // Provide appropriate value
+                        upsellIds: [], // Provide appropriate value
+                        crossSellIds: [], // Provide appropriate value
+                        purchaseNote: '', // Provide appropriate value
+                        categories: [], // Provide appropriate value
+                        tags: [], // Provide appropriate value
+                        images: [], // Provide appropriate value
+                        attributes: [], // Provide appropriate value
+                        groupedProducts: [], // Provide appropriate value
+                        metaData: [], // Provide appropriate value
+                        availableVariations: [], // Provide appropriate value
+                        variationOptions: [], // Provide appropriate value
+                        variationId: '', // Provide appropriate value
+                        formattedPrice: '', // Provide appropriate value
+                        formattedSalesPrice: '', // Provide appropriate value
+                        vendor: Vendor(name: '', icon: ''), // Provide appropriate value
+                        children: [], // Provide appropriate value
                       ),
                     )));
       }

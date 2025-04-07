@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api, use_build_context_synchronously
+
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -53,11 +55,12 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                       height: 16,
                     ),
                     PrimaryColorOverride(
+                      key:UniqueKey(),
                       child: TextFormField(
                         obscureText: false,
                         controller: emailController,
                         validator: (value) {
-                          if (value.isEmpty) {
+                          if (value!.isEmpty) {
                             return appStateModel
                                 .blocks.localeText.pleaseEnterValidEmail;
                           }
@@ -71,12 +74,12 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                     SizedBox(height: 24.0),
                     RoundedLoadingButton(
                       elevation: 0,
-                      valueColor: Theme.of(context).buttonTheme.colorScheme.onPrimary,
+                      valueColor: Theme.of(context).buttonTheme.colorScheme!.onPrimary,
                       controller: _btnController,
                       onPressed: () => _sendOtp(context),
                       animateOnTap: false,
                       width: 200,
-                      child: Text(appStateModel.blocks.localeText.sendOtp, style: TextStyle(color: Theme.of(context).buttonTheme.colorScheme.onPrimary)),
+                      child: Text(appStateModel.blocks.localeText.sendOtp, style: TextStyle(color: Theme.of(context).buttonTheme.colorScheme!.onPrimary)),
                     ),
                   ],
                 ),
@@ -88,7 +91,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
 
   _sendOtp(BuildContext context) async {
     var data = <String, dynamic>{};
-    if (_formKey.currentState.validate()) {
+    if (_formKey.currentState!.validate()) {
       data["email"] = emailController.text;
       _btnController.start();
       final response = await apiProvider.postWithCookies(
@@ -110,9 +113,9 @@ class _ForgotPasswordState extends State<ForgotPassword> {
 
 class ResetPassword extends StatefulWidget {
   const ResetPassword({
-    Key key,
-    @required this.email,
-  }) : super(key: key);
+    super.key,
+    required this.email,
+  });
 
   final String email;
 
@@ -159,11 +162,12 @@ class _ResetPasswordState extends State<ResetPassword> {
                     SizedBox(
                       height: 16,),
                     PrimaryColorOverride(
+                      key:UniqueKey(),
                       child: TextFormField(
                         obscureText: false,
                         controller: otpController,
                         validator: (value) {
-                          if (value.isEmpty) {
+                          if (value!.isEmpty) {
                             return appStateModel.blocks.localeText.pleaseEnterOtp;
                           }
                           return null;
@@ -173,11 +177,12 @@ class _ResetPasswordState extends State<ResetPassword> {
                       ),
                     ),
                     PrimaryColorOverride(
+                      key:UniqueKey(),
                       child: TextFormField(
                         obscureText: _obscureText,
                         controller: newPasswordController,
                         validator: (value) {
-                          if (value.isEmpty) {
+                          if (value!.isEmpty) {
                             return appStateModel.blocks.localeText.pleaseEnterPassword;
                           }
                           return null;
@@ -199,12 +204,12 @@ class _ResetPasswordState extends State<ResetPassword> {
                     SizedBox(height: 24.0),
                     RoundedLoadingButton(
                       elevation: 0,
-                      valueColor: Theme.of(context).buttonTheme.colorScheme.onPrimary,
+                      valueColor: Theme.of(context).buttonTheme.colorScheme!.onPrimary,
                       controller: _btnController,
                       onPressed: () => _resetPassword(context),
                       animateOnTap: false,
                       width: 200,
-                      child: Text(appStateModel.blocks.localeText.resetPassword, style: TextStyle(color: Theme.of(context).buttonTheme.colorScheme.onPrimary)),
+                      child: Text(appStateModel.blocks.localeText.resetPassword, style: TextStyle(color: Theme.of(context).buttonTheme.colorScheme!.onPrimary)),
                     ),
                   ],
                 ),
@@ -218,7 +223,7 @@ class _ResetPasswordState extends State<ResetPassword> {
 
   _resetPassword(BuildContext context) async {
     var data = <String, dynamic>{};
-    if (_formKey.currentState.validate()) {
+    if (_formKey.currentState!.validate()) {
       data["email"] = widget.email;
       data["password"] = newPasswordController.text;
       data["otp"] = otpController.text;

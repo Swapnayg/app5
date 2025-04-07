@@ -8,6 +8,7 @@ import '../../../../../models/app_state_model.dart';
 import '../../../../../models/vendor/product_attribute_model.dart';
 import '../../../../../models/vendor/product_variation_model.dart';
 import '../../../../../models/vendor/vendor_product_model.dart';
+import '../../../../../models/vendor/product_attribute_model.dart' as attribute_model;
 
 class EditVariationProduct extends StatefulWidget {
   final VendorBloc vendorBloc;
@@ -25,7 +26,15 @@ class _EditVariationProductState extends State<EditVariationProduct> {
 
   final _formKey = GlobalKey<FormState>();
 
-  ProductAttribute attribute = ProductAttribute();
+  ProductAttribute attribute = ProductAttribute(
+    id: 0, // Provide appropriate default or fetched value
+    name: '', // Provide appropriate default or fetched value
+    slug: '', // Provide appropriate default or fetched value
+    type: '', // Provide appropriate default or fetched value
+    orderBy: '', // Provide appropriate default or fetched value
+    hasArchives: false, // Example default value
+    links: attribute_model.Links(collection: [], self: []), // Example default value
+  );
 
   @override
   void initState() {
@@ -86,7 +95,7 @@ class _EditVariationProductState extends State<EditVariationProduct> {
               onChanged: (String? newValue) {
                 if (newValue != null) {
                   VariationAttribute variationAttribute =
-                      VariationAttribute();
+                      VariationAttribute(id: 0, name: '', option: '');
                   variationAttribute.id = attribute.id;
                   variationAttribute.name = attribute.name;
                   variationAttribute.option = newValue;

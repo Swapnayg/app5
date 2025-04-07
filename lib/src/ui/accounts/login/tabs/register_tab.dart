@@ -1,4 +1,6 @@
 //import './../../../../../l10n/gallery_localizations.dart';
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:flutter/material.dart';
 
 import './../../../../models/app_state_model.dart';
@@ -9,11 +11,11 @@ import '../../../widgets/buttons/button_text.dart';
 
 class RegisterTab extends StatefulWidget {
   const RegisterTab({
-    Key key,
-    @required this.context,
-    @required this.model,
-    @required this.tabController,
-  }) : super(key: key);
+    super.key,
+    required this.context,
+    required this.model,
+    required this.tabController,
+  });
 
   final BuildContext context;
   final AppStateModel model;
@@ -26,7 +28,15 @@ class RegisterTab extends StatefulWidget {
 class _RegisterTabState extends State<RegisterTab> {
   final _formKey = GlobalKey<FormState>();
 
-  final _register = RegisterModel();
+  final _register = RegisterModel(
+    firstName: '',
+    lastName: '',
+    email: '',
+    phoneNumber: '',
+    password: '',
+    username: '',
+    companyName: '',
+  );
 
   var isLoading = false;
 
@@ -47,6 +57,7 @@ class _RegisterTabState extends State<RegisterTab> {
                   height: 50,
                 ),
                 PrimaryColorOverride(
+                  key:UniqueKey(),
                   child: CustomTextFormField(
                     label: widget.model.blocks.localeText.firstName,
                     onSaved: (val) =>
@@ -55,11 +66,12 @@ class _RegisterTabState extends State<RegisterTab> {
                         .model.blocks.localeText.pleaseEnterFirstName,
                     password: false,
                     inputType: TextInputType.text,
-                    icon: Icons.person,
+                    icon: Icons.person, controller: TextEditingController(),
                   ),
                 ),
                 Padding(padding: EdgeInsets.symmetric(vertical: 5.0)),
                 PrimaryColorOverride(
+                  key:UniqueKey(),
                   child: CustomTextFormField(
                     label: widget.model.blocks.localeText.lastName,
                     onSaved: (val) =>
@@ -69,10 +81,12 @@ class _RegisterTabState extends State<RegisterTab> {
                     password: false,
                     inputType: TextInputType.text,
                     icon: Icons.person,
+                    controller: TextEditingController(),
                   ),
                 ),
                 Padding(padding: EdgeInsets.symmetric(vertical: 5.0)),
                 PrimaryColorOverride(
+                  key:UniqueKey(),
                   child: CustomTextFormField(
                     label: widget.model.blocks.localeText.phoneNumber,
                     onSaved: (val) =>
@@ -82,10 +96,12 @@ class _RegisterTabState extends State<RegisterTab> {
                     password: false,
                     inputType: TextInputType.phone,
                     icon: Icons.phone,
+                    controller: TextEditingController(),
                   ),
                 ),
                 Padding(padding: EdgeInsets.symmetric(vertical: 5.0)),
                 PrimaryColorOverride(
+                  key:UniqueKey(),
                   child: CustomTextFormField(
                     label: widget.model.blocks.localeText.email,
                     onSaved: (val) =>
@@ -95,10 +111,12 @@ class _RegisterTabState extends State<RegisterTab> {
                     password: false,
                     inputType: TextInputType.emailAddress,
                     icon: Icons.email,
+                    controller: TextEditingController(),
                   ),
                 ),
                 Padding(padding: EdgeInsets.symmetric(vertical: 5.0)),
                 PrimaryColorOverride(
+                  key:UniqueKey(),
                   child: CustomTextFormField(
                     label: widget.model.blocks.localeText.password,
                     onSaved: (val) =>
@@ -108,16 +126,19 @@ class _RegisterTabState extends State<RegisterTab> {
                     password: true,
                     inputType: TextInputType.text,
                     icon: Icons.vpn_key,
+                    controller: TextEditingController(),
                   ),
                 ),
                 SizedBox(height: 24.0),
-                RaisedButton(
+                ElevatedButton(
                   child: ButtonText(isLoading: isLoading, text: widget.model.blocks.localeText.signUp),
-                  onPressed: () => isLoading ? null : _registerUser(context),
+                  onPressed: isLoading ? null : () => _registerUser(context),
                 ),
                 SizedBox(height: 12.0),
-                FlatButton(
-                    padding: EdgeInsets.all(16.0),
+                TextButton(
+                    style: TextButton.styleFrom(
+                      padding: EdgeInsets.all(16.0),
+                    ),
                     onPressed: () {
                       widget.tabController.animateTo(0);
                     },
@@ -133,7 +154,7 @@ class _RegisterTabState extends State<RegisterTab> {
                               const EdgeInsets.symmetric(horizontal: 8.0),
                           child: Text(
                               widget.model.blocks.localeText.signIn,
-                              style: Theme.of(context).textTheme.bodyMedium.copyWith(
+                              style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                                       color:
                                           Theme.of(context).colorScheme.secondary)),
                         ),
@@ -148,8 +169,8 @@ class _RegisterTabState extends State<RegisterTab> {
   }
 
   Future _registerUser(BuildContext context) async {
-    if (_formKey.currentState.validate()) {
-      _formKey.currentState.save();
+    if (_formKey.currentState!.validate()) {
+      _formKey.currentState!.save();
       setState(() {
         isLoading = true;
       });

@@ -1,7 +1,8 @@
+// ignore_for_file: library_private_types_in_public_api, unused_field, avoid_print, unused_local_variable, sort_child_properties_last
+
 import 'package:flutter/material.dart';
-import 'package:flutter_paystack/flutter_paystack.dart';
+//import 'package:flutter_paystack/flutter_paystack.dart';
 import 'package:scoped_model/scoped_model.dart';
-import 'package:stripe_payment/stripe_payment.dart';
 
 import '../widgets/buttons/button_text.dart';
 import '../../blocs/checkout_bloc.dart';
@@ -19,14 +20,14 @@ import 'payment/payment_card.dart';
 class CheckoutOnePage extends StatefulWidget {
   final CheckoutBloc homeBloc;
   final appStateModel = AppStateModel();
-  CheckoutOnePage({super.key, this.homeBloc});
+  CheckoutOnePage({super.key, required this.homeBloc});
   @override
   _CheckoutOnePageState createState() => _CheckoutOnePageState();
 }
 
 class _CheckoutOnePageState extends State<CheckoutOnePage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
-  String _error;
+  late String _error;
 
   var isLoading = false;
 
@@ -70,19 +71,19 @@ class _CheckoutOnePageState extends State<CheckoutOnePage> {
       BuildContext context, AppStateModel model) {
     TextStyle subhead = Theme.of(context)
         .textTheme
-        .titleMedium
+        .titleMedium!
         .copyWith(fontWeight: FontWeight.w600);
 
-    List<Widget> list = List<Widget>();
+    List<Widget> list = [];
 
-    if (snapshot.data.shipping.length > 0) {
-      for (var i = 0; i < snapshot.data.shipping.length; i++) {
-        if (snapshot.data.shipping[i].shippingMethods.length > 0) {
+    if (snapshot.data!.shipping.length > 0) {
+      for (var i = 0; i < snapshot.data!.shipping.length; i++) {
+        if (snapshot.data!.shipping[i].shippingMethods.length > 0) {
           list.add(SliverToBoxAdapter(
               child: Padding(
             padding: const EdgeInsets.fromLTRB(24.0, 16.0, 24.0, 8.0),
             child: Text(
-              snapshot.data.shipping[i].packageName,
+              snapshot.data!.shipping[i].packageName,
               style: subhead,
             ),
           )));
@@ -129,29 +130,29 @@ class _CheckoutOnePageState extends State<CheckoutOnePage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            RaisedButton(
+            ElevatedButton(
               child: ButtonText(
                   isLoading: isLoading,
                   text: widget
                       .appStateModel.blocks.localeText.localeTextContinue),
-              onPressed: () => isLoading ? null : _placeOrder(snapshot),
+              onPressed: isLoading ? null : () => _placeOrder(snapshot),
             ),
             StreamBuilder<OrderResult>(
                 stream: widget.homeBloc.orderResult,
                 builder: (context, snapshot) {
-                  if (snapshot.hasData && snapshot.data.result == "failure") {
+                  if (snapshot.hasData && snapshot.data!.result == "failure") {
                     return Center(
                       child: Container(
                           padding: EdgeInsets.all(4.0),
-                          child: Text(parseHtmlString(snapshot.data.messages),
+                          child: Text(parseHtmlString(snapshot.data!.messages),
                               style: Theme.of(context)
                                   .textTheme
-                                  .subtitle2
+                                  .titleSmall!
                                   .copyWith(
                                       color: Theme.of(context).colorScheme.error))),
                     );
                   } else if (snapshot.hasData &&
-                      snapshot.data.result == "success") {
+                      snapshot.data!.result == "success") {
                     return Container();
                   } else {
                     return Container();
@@ -166,25 +167,25 @@ class _CheckoutOnePageState extends State<CheckoutOnePage> {
   }
 
   _buildShippingList(AsyncSnapshot<OrderReviewModel> snapshot, int i) {
-    print(snapshot.data.shipping[i].shippingMethods.length);
+    print(snapshot.data!.shipping[i].shippingMethods.length);
     return SliverList(
       delegate: SliverChildBuilderDelegate(
         (BuildContext context, int index) {
-          print(snapshot.data.shipping[i].shippingMethods[index].label);
+          print(snapshot.data!.shipping[i].shippingMethods[index].label);
           return RadioListTile<String>(
-            value: snapshot.data.shipping[i].shippingMethods[index].id,
-            groupValue: snapshot.data.shipping[i].chosenMethod,
-            onChanged: (String value) {
+            value: snapshot.data!.shipping[i].shippingMethods[index].id,
+            groupValue: snapshot.data!.shipping[i].chosenMethod,
+            onChanged: (String? value) {
               setState(() {
-                snapshot.data.shipping[i].chosenMethod = value;
+                snapshot.data!.shipping[i].chosenMethod = value!;
               });
               widget.homeBloc.updateOrderReview2();
             },
-            title: Text('${snapshot.data.shipping[i].shippingMethods[index].label} ${parseHtmlString(
-                    snapshot.data.shipping[i].shippingMethods[index].cost)}'),
+            title: Text('${snapshot.data!.shipping[i].shippingMethods[index].label} ${parseHtmlString(
+                    snapshot.data!.shipping[i].shippingMethods[index].cost)}'),
           );
         },
-        childCount: snapshot.data.shipping[i].shippingMethods.length,
+        childCount: snapshot.data!.shipping[i].shippingMethods.length,
       ),
     );
   }
@@ -194,24 +195,24 @@ class _CheckoutOnePageState extends State<CheckoutOnePage> {
     return SliverList(
       delegate: SliverChildBuilderDelegate(
             (BuildContext context, int index) {
-          Widget paymentTitle = snapshot.data.paymentMethods[index].id == 'wallet' ? Row(
+          Widget paymentTitle = snapshot.data!.paymentMethods[index].id == 'wallet' ? Row(
             children: [
-              Text(parseHtmlString(snapshot.data.paymentMethods[index].title)),
+              Text(parseHtmlString(snapshot.data!.paymentMethods[index].title)),
               SizedBox(width: 8),
-              Text(parseHtmlString(snapshot.data.balanceFormatted), style: Theme.of(context).textTheme.titleSmall,)
+              Text(parseHtmlString(snapshot.data!.balanceFormatted), style: Theme.of(context).textTheme.titleSmall,)
             ],
-          ) : Text(parseHtmlString(snapshot.data.paymentMethods[index].title));
+          ) : Text(parseHtmlString(snapshot.data!.paymentMethods[index].title));
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: Row(
               children: <Widget>[
                 Radio<String>(
-                  value: snapshot.data.paymentMethods[index].id,
+                  value: snapshot.data!.paymentMethods[index].id,
                   groupValue: widget.homeBloc.formData['payment_method'],
-                  onChanged: (String value) {
+                  onChanged: (String? value) {
                     setState(() {
                       isLoading = false;
-                      widget.homeBloc.formData['payment_method'] = value;
+                      widget.homeBloc.formData['payment_method'] = value!;
                     });
                     widget.homeBloc.updateOrderReview2();
                   },
@@ -221,14 +222,14 @@ class _CheckoutOnePageState extends State<CheckoutOnePage> {
             ),
           );
         },
-        childCount: snapshot.data.paymentMethods.length,
+        childCount: snapshot.data!.paymentMethods.length,
       ),
     );
   }
 
   _buildOrderList(AsyncSnapshot<OrderReviewModel> snapshot) {
-    final smallAmountStyle = Theme.of(context).textTheme.bodyText2;
-    final largeAmountStyle = Theme.of(context).textTheme.headline6;
+    final smallAmountStyle = Theme.of(context).textTheme.bodyMedium;
+    final largeAmountStyle = Theme.of(context).textTheme.titleLarge;
 
     return SliverToBoxAdapter(
       child: Padding(
@@ -242,7 +243,7 @@ class _CheckoutOnePageState extends State<CheckoutOnePage> {
                       '${widget.appStateModel.blocks.localeText.subtotal}:'),
                 ),
                 Text(
-                  parseHtmlString(snapshot.data.totals.subtotal),
+                  parseHtmlString(snapshot.data!.totals.subtotal),
                   style: smallAmountStyle,
                 ),
               ],
@@ -255,7 +256,7 @@ class _CheckoutOnePageState extends State<CheckoutOnePage> {
                       '${widget.appStateModel.blocks.localeText.shipping}:'),
                 ),
                 Text(
-                  parseHtmlString(snapshot.data.totals.shippingTotal),
+                  parseHtmlString(snapshot.data!.totals.shippingTotal),
                   style: smallAmountStyle,
                 ),
               ],
@@ -267,7 +268,7 @@ class _CheckoutOnePageState extends State<CheckoutOnePage> {
                   child: Text('${widget.appStateModel.blocks.localeText.tax}:'),
                 ),
                 Text(
-                  parseHtmlString(snapshot.data.totals.totalTax),
+                  parseHtmlString(snapshot.data!.totals.totalTax),
                   style: smallAmountStyle,
                 ),
               ],
@@ -279,7 +280,7 @@ class _CheckoutOnePageState extends State<CheckoutOnePage> {
                   child: Text(widget.appStateModel.blocks.localeText.discount),
                 ),
                 Text(
-                  parseHtmlString(snapshot.data.totals.discountTotal),
+                  parseHtmlString(snapshot.data!.totals.discountTotal),
                   style: smallAmountStyle,
                 ),
               ],
@@ -295,7 +296,7 @@ class _CheckoutOnePageState extends State<CheckoutOnePage> {
                   ),
                 ),
                 Text(
-                  parseHtmlString(snapshot.data.totals.total),
+                  parseHtmlString(snapshot.data!.totals.total),
                   style: largeAmountStyle,
                 ),
               ],
@@ -309,6 +310,7 @@ class _CheckoutOnePageState extends State<CheckoutOnePage> {
                 children: [
                   Flexible(
                     child: PrimaryColorOverride(
+                      key: UniqueKey(),
                       child: TextFormField(
                         maxLines: 2,
                         decoration: InputDecoration(
@@ -341,7 +343,7 @@ class _CheckoutOnePageState extends State<CheckoutOnePage> {
             builder: (context) => WebViewPage(
                 url: url,
                 selectedPaymentMethod:
-                    widget.homeBloc.formData['payment_method'])));
+                    widget.homeBloc.formData['payment_method'].toString())));
     setState(() {
       isLoading = false;
     });
@@ -362,7 +364,7 @@ class _CheckoutOnePageState extends State<CheckoutOnePage> {
       isLoading = true;
     });
     if (widget.homeBloc.formData['payment_method'] == 'stripe') {
-      _processStripePayment(snapshot);
+      //_processStripePayment(snapshot);
     } else {
       OrderResult orderResult = await widget.homeBloc.placeOrder();
       if (orderResult.result == 'success') {
@@ -416,151 +418,150 @@ class _CheckoutOnePageState extends State<CheckoutOnePage> {
   Future<void> processPayStack(
       AsyncSnapshot<OrderReviewModel> snapshot, OrderResult orderResult) async {
     var orderId = getOrderIdFromUrl(orderResult.redirect);
-    var publicKey = snapshot.data.paymentMethods
+    var publicKey = snapshot.data!.paymentMethods
         .singleWhere((method) => method.id == 'paystack')
         .payStackPublicKey;
-    await PaystackPlugin.initialize(publicKey: publicKey);
+    //await PaystackPlugin.initialize(publicKey: publicKey);
     setState(() {
       isLoading = false;
     });
-    Charge charge = Charge()
-      ..amount = num.parse(snapshot.data.totalsUnformatted.total).round() * 100
-      ..reference = orderId
-      ..email = widget.homeBloc.formData['billing_email'];
-    CheckoutResponse response = await PaystackPlugin.checkout(
-      context,
-      method: CheckoutMethod.card, // Defaults to CheckoutMethod.selectable
-      charge: charge,
-    );
-    if (response.message == 'success') {}
+    // Charge charge = Charge()
+    //   ..amount = num.parse(snapshot.data.totalsUnformatted.total).round() * 100
+    //   ..reference = orderId
+    //   ..email = widget.homeBloc.formData['billing_email'];
+    // CheckoutResponse response = await PaystackPlugin.checkout(
+    //   context,
+    //   method: CheckoutMethod.card, // Defaults to CheckoutMethod.selectable
+    //   charge: charge,
+    // );
+    // if (response.message == 'success') {}
   }
 
   /// RazorPay Payment.
-  Future<void> processRazorPay(
-      AsyncSnapshot<OrderReviewModel> snapshot, OrderResult orderResult) {
-    /*
-    var orderId = getOrderIdFromUrl(orderResult.redirect);
-    Razorpay _razorPay;
-    _razorPay = Razorpay();
-    _razorPay.on(Razorpay.EVENT_PAYMENT_SUCCESS, (PaymentSuccessResponse response) {
-    Fluttertoast.showToast(msg: "SUCCESS"+response.paymentId);
-      orderDetails(orderResult);
-    });
-    _razorPay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
-    _razorPay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
+  // Future<void> processRazorPay(
+  //     AsyncSnapshot<OrderReviewModel> snapshot, OrderResult orderResult) {
+  //   /*
+  //   var orderId = getOrderIdFromUrl(orderResult.redirect);
+  //   Razorpay _razorPay;
+  //   _razorPay = Razorpay();
+  //   _razorPay.on(Razorpay.EVENT_PAYMENT_SUCCESS, (PaymentSuccessResponse response) {
+  //   Fluttertoast.showToast(msg: "SUCCESS"+response.paymentId);
+  //     orderDetails(orderResult);
+  //   });
+  //   _razorPay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
+  //   _razorPay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
 
-    var options = {
-      'key': snapshot.data.paymentMethods.singleWhere((method) => method.id == 'razorpay').settings.razorPayKeyId,
-      'amount': num.parse(snapshot.data.totalsUnformatted.total) * 100,
-      'name': widget.homeBloc.formData['billing_name'],
-      'description': 'Payment for Order' + orderId,
-      'profile': {'contact': '', 'email': widget.homeBloc.formData['billing_email'],
-        'external': {
-          'wallets': ['paytm']
-        }}
-    };
-    try{
-      _razorPay.open(options);
-      setState(() { isLoading = false; });
-    }
-    catch(e){
-      setState(() { isLoading = false; });
-      debugPrint(e);
-    }*/
-  }
+  //   var options = {
+  //     'key': snapshot.data.paymentMethods.singleWhere((method) => method.id == 'razorpay').settings.razorPayKeyId,
+  //     'amount': num.parse(snapshot.data.totalsUnformatted.total) * 100,
+  //     'name': widget.homeBloc.formData['billing_name'],
+  //     'description': 'Payment for Order' + orderId,
+  //     'profile': {'contact': '', 'email': widget.homeBloc.formData['billing_email'],
+  //       'external': {
+  //         'wallets': ['paytm']
+  //       }}
+  //   };
+  //   try{
+  //     _razorPay.open(options);
+  //     setState(() { isLoading = false; });
+  //   }
+  //   catch(e){
+  //     setState(() { isLoading = false; });
+  //     debugPrint(e);
+  //   }*/
+  // }
 
-  /*void _handlePaymentSuccess(PaymentSuccessResponse response) {
-    Fluttertoast.showToast(msg: "SUCCESS"+response.paymentId);
-  }
+  // /*void _handlePaymentSuccess(PaymentSuccessResponse response) {
+  //   Fluttertoast.showToast(msg: "SUCCESS"+response.paymentId);
+  // }
 
-  void _handlePaymentError(PaymentFailureResponse response) {
-    Fluttertoast.showToast(msg: "ERROR"+response.code.toString()+ '-' + response.message) ;
-  }
+  // void _handlePaymentError(PaymentFailureResponse response) {
+  //   Fluttertoast.showToast(msg: "ERROR"+response.code.toString()+ '-' + response.message) ;
+  // }
 
-  void _handleExternalWallet(ExternalWalletResponse response) {
-    Fluttertoast.showToast(msg: "EXTERNAL WALLET" + response.walletName);
-  }*/
+  // void _handleExternalWallet(ExternalWalletResponse response) {
+  //   Fluttertoast.showToast(msg: "EXTERNAL WALLET" + response.walletName);
+  // }*/
 
-  Future<void> _processStripePayment(
-      AsyncSnapshot<OrderReviewModel> snapshot) async {
-    String stripePublicKey = snapshot.data.paymentMethods
-        .singleWhere((method) => method.id == 'stripe')
-        .stripePublicKey;
+  // Future<void> _processStripePayment(
+  //     AsyncSnapshot<OrderReviewModel> snapshot) async {
+  //   String stripePublicKey = snapshot.data.paymentMethods
+  //       .singleWhere((method) => method.id == 'stripe')
+  //       .stripePublicKey;
 
-    StripePayment.setOptions(StripeOptions(
-        publishableKey: stripePublicKey,
-        merchantId: "Test",
-        androidPayMode: 'test'));
+  //   StripePayment.setOptions(StripeOptions(
+  //       publishableKey: stripePublicKey,
+  //       merchantId: "Test",
+  //       androidPayMode: 'test'));
 
-    Charge charge = Charge()
-      ..amount = num.parse(snapshot.data.totalsUnformatted.total).round()
-      ..email = widget.homeBloc.formData['billing_email'];
+  //   Charge charge = Charge()
+  //     ..amount = num.parse(snapshot.data.totalsUnformatted.total).round()
+  //     ..email = widget.homeBloc.formData['billing_email'];
 
-    PaymentCard paymentMethod = await showDialog(
-        barrierDismissible: false,
-        context: context,
-        builder: (BuildContext context) => CheckoutWidget(
-              charge: charge,
-              fullscreen: false,
-              total: snapshot.data.totals.total,
-              logo: Container(
-                child:
-                    Image.asset('lib/assets/images/stripe_logo_slate_sm.png'),
-              ),
-            ));
-    if (paymentMethod != null) {
-      var stripeTokenParams = <String, dynamic>{};
+  //   PaymentCard paymentMethod = await showDialog(
+  //       barrierDismissible: false,
+  //       context: context,
+  //       builder: (BuildContext context) => CheckoutWidget(
+  //             charge: charge,
+  //             fullscreen: false,
+  //             total: snapshot.data.totals.total,
+  //             logo: Container(
+  //               child:
+  //                   Image.asset('lib/assets/images/stripe_logo_slate_sm.png'),
+  //             ),
+  //           ));
+  //   if (paymentMethod != null) {
+  //     var stripeTokenParams = <String, dynamic>{};
 
-      stripeTokenParams['key'] = stripePublicKey;
-      stripeTokenParams['payment_user_agent'] =
-          'stripe.js/477704d9; stripe-js-v3/477704d9';
-      stripeTokenParams['card[number]'] = paymentMethod.number.toString();
-      stripeTokenParams['card[cvc]'] = paymentMethod.cvc.toString();
-      stripeTokenParams['card[exp_month]'] =
-          paymentMethod.expiryMonth.toString();
-      stripeTokenParams['card[exp_year]'] = paymentMethod.expiryYear.toString();
-      stripeTokenParams['card[name]'] =
-          widget.homeBloc.formData['billing_last_name'];
-      stripeTokenParams['card[address_line1]'] =
-          widget.homeBloc.formData['billing_address_1'] ?? '';
-      stripeTokenParams['card[address_line2]'] =
-          widget.homeBloc.formData['billing_address_2'] ?? '';
-      stripeTokenParams['card[address_state]'] =
-          widget.homeBloc.formData['billing_state'] ?? '';
-      stripeTokenParams['card[address_city]'] =
-          widget.homeBloc.formData['billing_city'] ?? '';
-      stripeTokenParams['card[address_zip]'] =
-          widget.homeBloc.formData['billing_postcode'] ?? '';
-      stripeTokenParams['card[address_country]'] =
-          widget.homeBloc.formData['billing_country'] ?? '';
+  //     stripeTokenParams['key'] = stripePublicKey;
+  //     stripeTokenParams['payment_user_agent'] =
+  //         'stripe.js/477704d9; stripe-js-v3/477704d9';
+  //     stripeTokenParams['card[number]'] = paymentMethod.number.toString();
+  //     stripeTokenParams['card[cvc]'] = paymentMethod.cvc.toString();
+  //     stripeTokenParams['card[exp_month]'] =
+  //         paymentMethod.expiryMonth.toString();
+  //     stripeTokenParams['card[exp_year]'] = paymentMethod.expiryYear.toString();
+  //     stripeTokenParams['card[name]'] =
+  //         widget.homeBloc.formData['billing_last_name'];
+  //     stripeTokenParams['card[address_line1]'] =
+  //         widget.homeBloc.formData['billing_address_1'] ?? '';
+  //     stripeTokenParams['card[address_line2]'] =
+  //         widget.homeBloc.formData['billing_address_2'] ?? '';
+  //     stripeTokenParams['card[address_state]'] =
+  //         widget.homeBloc.formData['billing_state'] ?? '';
+  //     stripeTokenParams['card[address_city]'] =
+  //         widget.homeBloc.formData['billing_city'] ?? '';
+  //     stripeTokenParams['card[address_zip]'] =
+  //         widget.homeBloc.formData['billing_postcode'] ?? '';
+  //     stripeTokenParams['card[address_country]'] =
+  //         widget.homeBloc.formData['billing_country'] ?? '';
 
-      StripeTokenModel stripeToken =
-          await widget.homeBloc.getStripeToken(stripeTokenParams);
+  //     StripeTokenModel stripeToken =
+  //         await widget.homeBloc.getStripeToken(stripeTokenParams);
 
-      var stripeSourceParams = Map<String, dynamic>();
-      stripeSourceParams['type'] = 'card';
-      stripeSourceParams['token'] = stripeToken.id;
-      stripeSourceParams['key'] = stripeTokenParams['key'];
+  //     var stripeSourceParams = Map<String, dynamic>();
+  //     stripeSourceParams['type'] = 'card';
+  //     stripeSourceParams['token'] = stripeToken.id;
+  //     stripeSourceParams['key'] = stripeTokenParams['key'];
 
-      StripeSourceModel stripeSource =
-          await widget.homeBloc.getStripeSource(stripeSourceParams);
+  //     StripeSourceModel stripeSource =
+  //         await widget.homeBloc.getStripeSource(stripeSourceParams);
 
-      widget.homeBloc.formData['stripe_source'] = stripeSource.id;
-      widget.homeBloc.formData['wc-stripe-payment-token'] = 'new';
+  //     widget.homeBloc.formData['stripe_source'] = stripeSource.id;
+  //     widget.homeBloc.formData['wc-stripe-payment-token'] = 'new';
 
-      OrderResult orderResult = await widget.homeBloc.placeOrder();
+  //     OrderResult orderResult = await widget.homeBloc.placeOrder();
 
-      orderDetails(orderResult);
-    } else {
-      setState(() {
-        isLoading = false;
-      });
-    }
-  }
+  //     orderDetails(orderResult);
+  //   } else {
+  //     setState(() {
+  //       isLoading = false;
+  //     });
+  //   }
+  // }
 
   void setError(dynamic error) {
-    _scaffoldKey.currentState
-        .showSnackBar(SnackBar(content: Text(error.toString())));
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(error.toString())));
     setState(() {
       _error = error.toString();
     });

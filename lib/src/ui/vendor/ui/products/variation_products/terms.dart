@@ -65,7 +65,7 @@ class _TermsPageState extends State<TermsPage> {
   }
 
   _onAttributesTermsTap(AttributeTerms term) {
-    VariationAttribute attribute = VariationAttribute();
+    VariationAttribute attribute = VariationAttribute(id: 0, name: '', option: '');
     attribute.id = widget.productAttribute.id;
     attribute.name = widget.productAttribute.name;
     attribute.option = term.name;

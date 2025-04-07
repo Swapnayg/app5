@@ -1,18 +1,21 @@
+// ignore_for_file: library_private_types_in_public_api, unused_local_variable
+
+import 'package:app5/src/models/app_state_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
 import '../../blocs/checkout_bloc.dart';
 import '../../functions.dart';
-import '../../models/app_state_model.dart';
+import '../../models/app_state_model.dart' as appStateModel;
 import '../../models/checkout/order_result_model.dart';
-import '../../models/checkout/order_review_model.dart';
+import '../../models/checkout/order_review_model.dart' as orderReviewModel;
 import '../../ui/checkout/webview.dart';
 import 'order_summary.dart';
 
 class ShippingPayment extends StatefulWidget {
   final CheckoutBloc homeBloc;
   final appStateModel = AppStateModel();
-  ShippingPayment({Key key, this.homeBloc}) : super(key: key);
+  ShippingPayment({super.key, required this.homeBloc});
 
   @override
   _ShippingPaymentState createState() => _ShippingPaymentState();
@@ -28,17 +31,22 @@ class _ShippingPaymentState extends State<ShippingPayment> {
     super.initState();
   }
 
-  void handlePaymentMethodChanged(String value) {
-    widget.homeBloc.choosePayment(value);
-    setState(() {
-      _selectedPaymentMethod = value;
-    });
-    widget.homeBloc.formData['payment_method'] = value;
+  void handlePaymentMethodChanged(String? value) {
+    if (value != null) {
+      widget.homeBloc.choosePayment(value);
+      setState(() {
+        _selectedPaymentMethod = value;
+      });
+      widget.homeBloc.formData['payment_method'] = value;
+    }
   }
 
-  void handleShippingMethodChanged(String value) {
-    widget.homeBloc.chooseShipping(value);
+  void handleShippingMethodChanged(String? value) {
+    if (value != null) {
+      widget.homeBloc.chooseShipping(value);
+    }
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +55,7 @@ class _ShippingPaymentState extends State<ShippingPayment> {
         
         title: Text(widget.appStateModel.blocks.localeText.checkout,),
       ),
-      body: StreamBuilder<OrderReviewModel>(
+      body: StreamBuilder<orderReviewModel.OrderReviewModel>(
           stream: widget.homeBloc.orderReview,
           builder: (context, snapshot) {
             if (snapshot.hasData) {
@@ -65,7 +73,7 @@ class _ShippingPaymentState extends State<ShippingPayment> {
               padding: const EdgeInsets.all(8.0),
               child: snapshot.hasData
                   ? CustomScrollView(slivers: <Widget>[
-                      snapshot.data.shipping.length != 0
+                      snapshot.data!.shipping.length != 0
                           ? SliverToBoxAdapter(
                               child: Padding(
                               padding: const EdgeInsets.all(16.0),
@@ -76,9 +84,11 @@ class _ShippingPaymentState extends State<ShippingPayment> {
                               ),
                             ))
                           : SliverToBoxAdapter(),
-                      snapshot.data.shipping.length != 0
+                      snapshot.data!.shipping.length != 0
                           ? ShippingMethods(
-                              shipping: snapshot.data.shipping,
+                              shipping: snapshot.data!.shipping
+                                  .map((e) => e)
+                                  .toList(),
                               handleShippingMethodChanged:
                                   handleShippingMethodChanged)
                           : SliverToBoxAdapter(),
@@ -92,7 +102,7 @@ class _ShippingPaymentState extends State<ShippingPayment> {
                         ),
                       )),
                       PaymentMethods(
-                          methods: snapshot.data.paymentMethods,
+                          methods: snapshot.data!.paymentMethods,
                           handlePaymentMethodChanged:
                               handlePaymentMethodChanged,
                           selectedPaymentMethod: _selectedPaymentMethod),
@@ -102,11 +112,13 @@ class _ShippingPaymentState extends State<ShippingPayment> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: <Widget>[
-                              RaisedButton(
-                                shape: const RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.all(Radius.circular(2.0)),
+                              ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  shape: const RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.all(Radius.circular(2.0)),
+                                  ),
+                                  padding: EdgeInsets.all(12.0),
                                 ),
-                                padding: EdgeInsets.all(12.0),
                                 onPressed: () {
                                   widget.homeBloc.placeOrder();
                                 },
@@ -132,22 +144,22 @@ class _ShippingPaymentState extends State<ShippingPayment> {
                                   stream: widget.homeBloc.orderResult,
                                   builder: (context, snapshot) {
                                     if (snapshot.hasData &&
-                                        snapshot.data.result == "failure") {
+                                        snapshot.data!.result == "failure") {
                                       return Center(
                                         child: Container(
                                             padding: EdgeInsets.all(4.0),
                                             child: Text(
                                                 parseHtmlString(
-                                                    snapshot.data.messages),
+                                                    snapshot.data!.messages),
                                                 style: Theme.of(context)
                                                     .textTheme
-                                                    .subtitle2
+                                                    .titleSmall!
                                                     .copyWith(
                                                         color: Theme.of(context)
                                                             .colorScheme.error))),
                                       );
                                     } else if (snapshot.hasData &&
-                                        snapshot.data.result == "success") {
+                                        snapshot.data!.result == "success") {
                                       return Container();
                                     } else {
                                       return Container();
@@ -208,14 +220,15 @@ class _ShippingPaymentState extends State<ShippingPayment> {
   }
 }
 
+
 class ShippingMethods extends StatefulWidget {
-  final List<Shipping> shipping;
-  final Function(String value) handleShippingMethodChanged;
+  final List<orderReviewModel.Shipping> shipping;
+  final Function(String? value) handleShippingMethodChanged;
   const ShippingMethods({
-    Key key,
-    this.shipping,
-    this.handleShippingMethodChanged,
-  }) : super(key: key);
+    super.key,
+    required this.shipping,
+    required this.handleShippingMethodChanged,
+  });
 
   @override
   _ShippingMethodsState createState() => _ShippingMethodsState();
@@ -235,9 +248,9 @@ class _ShippingMethodsState extends State<ShippingMethods> {
           return Row(
             children: <Widget>[
               Radio<String>(
-                value: widget.shipping[0].shippingMethods[index].id,
-                groupValue: widget.shipping[0].chosenMethod,
-                onChanged: widget.handleShippingMethodChanged,
+                value: widget.shipping[0].methods[index].id,
+                groupValue: widget.shipping[0].chosenMethod, // Ensure it handles null safely
+                onChanged: (String? value) => widget.handleShippingMethodChanged(value),
               ),
               Text(widget.shipping[0].shippingMethods[index].label)
             ],
@@ -250,15 +263,15 @@ class _ShippingMethodsState extends State<ShippingMethods> {
 }
 
 class PaymentMethods extends StatefulWidget {
-  void Function(String value) handlePaymentMethodChanged;
+  void Function(String? value) handlePaymentMethodChanged;
   String selectedPaymentMethod;
-  List<WooPaymentMethod> methods;
+  List<orderReviewModel.WooPaymentMethod> methods;
   PaymentMethods({
-    Key key,
-    this.handlePaymentMethodChanged,
-    this.selectedPaymentMethod,
-    this.methods,
-  }) : super(key: key);
+    super.key,
+    required this.handlePaymentMethodChanged,
+    required this.selectedPaymentMethod,
+    required this.methods,
+  });
   @override
   _PaymentMethodsState createState() => _PaymentMethodsState();
 }
@@ -274,7 +287,7 @@ class _PaymentMethodsState extends State<PaymentMethods> {
               Radio<String>(
                 value: widget.methods[index].id,
                 groupValue: widget.selectedPaymentMethod,
-                onChanged: widget.handlePaymentMethodChanged,
+                onChanged: (String? value) => widget.handlePaymentMethodChanged(value),
               ),
               Text(widget.methods[index].title),
               Divider(

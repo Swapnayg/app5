@@ -2,6 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+// ignore_for_file: library_private_types_in_public_api, unused_element
+
 import 'dart:collection';
 
 import 'package:flutter/material.dart';
@@ -20,11 +22,11 @@ class SettingsPage extends StatefulWidget {
   AppStateModel appStateModel = AppStateModel();
 
   SettingsPage({
-    Key key,
+    super.key,
     //@required this.openSettingsAnimation,
     //@required this.staggerSettingsItemsAnimation,
     //@required this.isSettingsOpenNotifier,
-  }) : super(key: key);
+  });
 
   //final Animation<double> openSettingsAnimation;
   //final Animation<double> staggerSettingsItemsAnimation;
@@ -35,8 +37,8 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
-  _ExpandableSetting expandedSettingId;
-  Map<String, String> _localeNativeNames;
+  _ExpandableSetting? expandedSettingId;
+  late Map<String, String> _localeNativeNames;
 
   void onTapSetting(_ExpandableSetting settingId) {
     setState(() {
@@ -57,21 +59,28 @@ class _SettingsPageState extends State<SettingsPage> {
     final settingsListItems = [
       SettingsListItem<ThemeMode>(
         title: widget.appStateModel.blocks.localeText.system,
-        selectedOption: options.themeMode,
+        selectedOption: options!.themeMode,
         options: LinkedHashMap.of({
           ThemeMode.system: DisplayOption(
-            widget.appStateModel.blocks.localeText.system,
+            widget.appStateModel.blocks.localeText.system, subtitle: '',
           ),
           ThemeMode.dark: DisplayOption(
-            widget.appStateModel.blocks.localeText.dart,
+            widget.appStateModel.blocks.localeText.dart, subtitle: '',
           ),
           ThemeMode.light: DisplayOption(
-            widget.appStateModel.blocks.localeText.light,
+            widget.appStateModel.blocks.localeText.light, subtitle: '',
           ),
         }),
         onOptionChanged: (newThemeMode) => GalleryOptions.update(
           context,
-          options.copyWith(themeMode: newThemeMode),
+          options.copyWith(
+            themeMode: newThemeMode,
+            textScaleFactor: options.textScaleFactor(context),
+            customTextDirection: options.customTextDirection,
+            locale: options.locale ?? const Locale('en', 'US'),
+            // timeDilation: options.timeDilation, // Removed as it is not defined in GalleryOptions
+            platform: options.platform, timeDilation: 1.0,
+          ),
         ),
         onTapSetting: () => onTapSetting(_ExpandableSetting.theme),
         isExpanded: expandedSettingId == _ExpandableSetting.theme,
@@ -92,19 +101,26 @@ class _SettingsPageState extends State<SettingsPage> {
               selectedOption: options.themeMode,
               options: LinkedHashMap.of({
                 ThemeMode.system: DisplayOption(
-                  widget.appStateModel.blocks.localeText.system,
+                  widget.appStateModel.blocks.localeText.system, subtitle: '',
                 ),
                 ThemeMode.dark: DisplayOption(
-                  widget.appStateModel.blocks.localeText.dart,
+                  widget.appStateModel.blocks.localeText.dart, subtitle: '',
                 ),
                 ThemeMode.light: DisplayOption(
-                  widget.appStateModel.blocks.localeText.light,
+                  widget.appStateModel.blocks.localeText.light, subtitle: '',
                 ),
               }),
-              onOptionChanged: (newThemeMode) => GalleryOptions.update(
-                context,
-                options.copyWith(themeMode: newThemeMode),
+             onOptionChanged: (newThemeMode) => GalleryOptions.update(
+              context,
+              options.copyWith(
+                themeMode: newThemeMode,
+                textScaleFactor: options.textScaleFactor(context),
+                customTextDirection: options.customTextDirection,
+                locale: options.locale ?? const Locale('en', 'US'),
+                // timeDilation: options.timeDilation, // Removed as it is not defined in GalleryOptions
+                platform: options.platform, timeDilation: 1.0,
               ),
+            ),
               onTapSetting: () => onTapSetting(_ExpandableSetting.theme),
               isExpanded: expandedSettingId == _ExpandableSetting.theme,
             ),
@@ -200,7 +216,7 @@ class _SettingsLink extends StatelessWidget {
   final IconData icon;
   final GestureTapCallback onTap;
 
-  const _SettingsLink({this.icon});
+  const _SettingsLink({required this.icon, required this.title, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -231,7 +247,7 @@ class _SettingsLink extends StatelessWidget {
                 ),
                 child: Text(
                   title,
-                  style: textTheme.subtitle2.apply(
+                  style: textTheme.titleSmall!.apply(
                     color: colorScheme.onSecondary,
                   ),
                   textAlign: isDesktop ? TextAlign.end : TextAlign.start,
@@ -248,8 +264,8 @@ class _SettingsLink extends StatelessWidget {
 /// Animate the settings page to slide in from above.
 class _AnimatedSettingsPage extends StatelessWidget {
   const _AnimatedSettingsPage({
-    Key key,
-  }) : super(key: key);
+    super.key, required this.child, required this.animation,
+  });
 
   final Widget child;
   final Animation<double> animation;
@@ -286,8 +302,8 @@ class _AnimatedSettingsPage extends StatelessWidget {
 /// Animate the settings list items to stagger in from above.
 class _AnimateSettingsListItems extends StatelessWidget {
   const _AnimateSettingsListItems({
-    Key key,
-  }) : super(key: key);
+    super.key, required this.animation, required this.children, required this.topPadding, required this.bottomPadding,
+  });
 
   final Animation<double> animation;
   final List<Widget> children;

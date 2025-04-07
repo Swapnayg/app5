@@ -2,6 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+// ignore_for_file: library_private_types_in_public_api, unused_element_parameter
+
 import 'dart:collection';
 
 import 'package:flutter/material.dart';
@@ -15,19 +17,19 @@ class DisplayOption {
   final String title;
   final String subtitle;
 
-  DisplayOption(this.title, {this.subtitle});
+  DisplayOption(this.title, {required this.subtitle});
 }
 
 class SettingsListItem<T> extends StatefulWidget {
   const SettingsListItem({
-    Key key,
-    @required this.title,
-    @required this.options,
-    @required this.selectedOption,
-    @required this.onOptionChanged,
-    @required this.onTapSetting,
-    @required this.isExpanded,
-  }) : super(key: key);
+    super.key,
+    required this.title,
+    required this.options,
+    required this.selectedOption,
+    required this.onOptionChanged,
+    required this.onTapSetting,
+    required this.isExpanded,
+  });
 
   final String title;
   final LinkedHashMap<T, DisplayOption> options;
@@ -45,14 +47,14 @@ class _SettingsListItemState<T> extends State<SettingsListItem<T>>
   static final Animatable<double> _easeInTween =
       CurveTween(curve: Curves.easeIn);
   static const _expandDuration = Duration(milliseconds: 150);
-  AnimationController _controller;
-  Animation<double> _childrenHeightFactor;
-  Animation<double> _headerChevronRotation;
-  Animation<double> _headerSubtitleHeight;
-  Animation<EdgeInsetsGeometry> _headerMargin;
-  Animation<EdgeInsetsGeometry> _headerPadding;
-  Animation<EdgeInsetsGeometry> _childrenPadding;
-  Animation<BorderRadius> _headerBorderRadius;
+  late AnimationController _controller;
+  late Animation<double> _childrenHeightFactor;
+  late Animation<double> _headerChevronRotation;
+  late Animation<double> _headerSubtitleHeight;
+  late Animation<EdgeInsetsGeometry> _headerMargin;
+  late Animation<EdgeInsetsGeometry> _headerPadding;
+  late Animation<EdgeInsetsGeometry> _childrenPadding;
+  late Animation<BorderRadius> _headerBorderRadius;
 
   @override
   void initState() {
@@ -78,7 +80,7 @@ class _SettingsListItemState<T> extends State<SettingsListItem<T>>
     _headerBorderRadius = BorderRadiusTween(
       begin: settingItemBorderRadius,
       end: BorderRadius.zero,
-    ).animate(_controller);
+    ).animate(_controller) as Animation<BorderRadius>;
 
     if (widget.isExpanded) {
       _controller.value = 1.0;
@@ -103,7 +105,7 @@ class _SettingsListItemState<T> extends State<SettingsListItem<T>>
     }
   }
 
-  Widget _buildHeaderWithChildren(BuildContext context, Widget child) {
+  Widget _buildHeaderWithChildren(BuildContext context, Widget? child) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -114,7 +116,7 @@ class _SettingsListItemState<T> extends State<SettingsListItem<T>>
           subtitleHeight: _headerSubtitleHeight,
           chevronRotation: _headerChevronRotation,
           title: widget.title,
-          subtitle: widget.options[widget.selectedOption].title ?? '',
+          subtitle: widget.options[widget.selectedOption]!.title,
           onTap: () => widget.onTapSetting(),
         ),
         Padding(
@@ -146,13 +148,13 @@ class _SettingsListItemState<T> extends State<SettingsListItem<T>>
             children: [
               Text(
                 optionDisplay.title,
-                style: theme.textTheme.bodyLarge.copyWith(
+                style: theme.textTheme.bodyLarge!.copyWith(
                   color: Theme.of(context).colorScheme.onSurface,
                 ),
               ),
               Text(
                 optionDisplay.subtitle,
-                style: theme.textTheme.bodyText1.copyWith(
+                style: theme.textTheme.bodyLarge!.copyWith(
                   fontSize: 12,
                   color: Theme.of(context)
                       .colorScheme
@@ -163,7 +165,7 @@ class _SettingsListItemState<T> extends State<SettingsListItem<T>>
             ],
           ),
           groupValue: widget.selectedOption,
-          onChanged: (newOption) => widget.onOptionChanged(newOption),
+          onChanged: (newOption) => widget.onOptionChanged(newOption!),
           activeColor: Theme.of(context).colorScheme.primary,
           dense: true,
         ),
@@ -188,16 +190,16 @@ class _SettingsListItemState<T> extends State<SettingsListItem<T>>
 
 class _CategoryHeader extends StatelessWidget {
   const _CategoryHeader({
-    Key key,
-    this.margin,
-    this.padding,
-    this.borderRadius,
-    this.subtitleHeight,
-    this.chevronRotation,
-    this.title,
-    this.subtitle,
-    this.onTap,
-  }) : super(key: key);
+    super.key,
+    required this.margin,
+    required this.padding,
+    required this.borderRadius,
+    required this.subtitleHeight,
+    required this.chevronRotation,
+    required this.title,
+    required this.subtitle,
+    required this.onTap,
+  });
 
   final EdgeInsetsGeometry margin;
   final EdgeInsetsGeometry padding;
@@ -233,7 +235,7 @@ class _CategoryHeader extends StatelessWidget {
                     children: [
                       Text(
                         title,
-                        style: textTheme.titleMedium.apply(
+                        style: textTheme.titleMedium!.apply(
                           color: colorScheme.onSurface,
                         ),
                       ),
@@ -243,7 +245,7 @@ class _CategoryHeader extends StatelessWidget {
                           subtitle,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
-                          style: textTheme.labelSmall.apply(
+                          style: textTheme.labelSmall!.apply(
                             color: colorScheme.onSurface,
                           ),
                         ),

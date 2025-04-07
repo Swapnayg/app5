@@ -1,4 +1,6 @@
-import 'package:flutter/cupertino.dart';
+
+// ignore_for_file: library_private_types_in_public_api, unused_field, unused_local_variable, deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -23,13 +25,12 @@ class UserAccount4 extends StatefulWidget {
     brightness: Brightness.dark,
   );
 
-  UserAccount4({Key key, this.homeBloc}) : super(key: key);
+  UserAccount4({super.key, required this.homeBloc});
   @override
   _UserAccount4State createState() => _UserAccount4State();
 }
 
 class _UserAccount4State extends State<UserAccount4> {
-  @override
   final int _cIndex = 0;
   bool switchControl = false;
 
@@ -40,11 +41,11 @@ class _UserAccount4State extends State<UserAccount4> {
         borderRadius: BorderRadius.all(Radius.circular(4.0)));
 
     var iconDecoration = BoxDecoration(
-      color: Theme.of(context).iconTheme.color  .withOpacity(0.03),
+      color: Theme.of(context).iconTheme.color!.withOpacity(0.03),
       shape: BoxShape.circle,
     );
 
-    var iconColor = Theme.of(context).iconTheme.color.withOpacity(0.6);
+    var iconColor = Theme.of(context).iconTheme.color!.withOpacity(0.6);
 
     final bool isDark = Theme.of(context).brightness == Brightness.dark;
 

@@ -41,16 +41,44 @@ class OrderReviewModel {
 
   factory OrderReviewModel.fromJson(Map<String, dynamic> json) => OrderReviewModel(
     result: json["result"],
-    //messages: json["messages"] == null ? null : json["messages"],
-    //reload: json["reload"] == null ? null : json["reload"],
-    //cart: json["cart"] == null ? null : Cart.fromJson(json["cart"]),
-    //checkout: json["checkout"] == null ? null : Checkout.fromJson(json["checkout"]),
+    messages: json["messages"] ?? '',
+    reload: json["reload"] ?? '',
+    cart: json["cart"] == null 
+        ? Cart(
+            cartContents: [], 
+            appliedCoupons: [], 
+            taxDisplayCart: '', 
+            cartSessionData: CartSessionData(
+              cartContentsTotal: 0, 
+              total: 0, 
+              subtotal: 0, 
+              subtotalExTax: 0, 
+              taxTotal: 0, 
+              taxes: [], 
+              shippingTaxes: [], 
+              discountCart: 0, 
+              discountCartTax: 0, 
+              shippingTotal: 0, 
+              shippingTaxTotal: 0, 
+              couponDiscountAmounts: [], 
+              couponDiscountTaxAmounts: [], 
+              feeTotal: 0, 
+              fees: []
+            ), 
+            couponAppliedCount: [], 
+            couponDiscountTotals: [], 
+            couponDiscountTaxTotals: []
+          ) 
+        : Cart.fromJson(json["cart"]),
+    checkout: json["checkout"] == null ? Checkout() : Checkout.fromJson(json["checkout"]),
     balance: json["balance"] == null ? 0.0 : json["balance"].toDouble(),
     balanceFormatted: json["balanceFormatted"] ?? '',
-    totals: json["totals"] == null ? null : Totals.fromJson(json["totals"]),
-    totalsUnformatted: json["totalsUnformatted"] == null ? null : Totals.fromJson(json["totalsUnformatted"]),
-    //chosenShipping: json["chosen_shipping"] == null ? null : new List<dynamic>.from(json["chosen_shipping"].map((x) => x)),
-    shipping: json["shipping"] == null ? null : List<Shipping>.from(json["shipping"].map((x) => Shipping.fromJson(x))),
+    totals: json["totals"] == null ? Totals(subtotal: '', subtotalTax: '', shippingTotal: '', shippingTax: '', shippingTaxes: [], discountTotal: '', discountTax: '', cartContentsTotal: '', cartContentsTax: '', cartContentsTaxes: [], feeTotal: '', feeTax: '', feeTaxes: [], total: '', totalTax: '') : Totals.fromJson(json["totals"]),
+    totalsUnformatted: json["totalsUnformatted"] == null 
+        ? Totals(subtotal: '', subtotalTax: '', shippingTotal: '', shippingTax: '', shippingTaxes: [], discountTotal: '', discountTax: '', cartContentsTotal: '', cartContentsTax: '', cartContentsTaxes: [], feeTotal: '', feeTax: '', feeTaxes: [], total: '', totalTax: '') 
+        : Totals.fromJson(json["totalsUnformatted"]),
+    chosenShipping: json["chosen_shipping"] == null ? [] : List<dynamic>.from(json["chosen_shipping"].map((x) => x)),
+    shipping: json["shipping"] == null ? [] : List<Shipping>.from(json["shipping"].map((x) => Shipping.fromJson(x))),
     paymentMethods: json["paymentMethods"] == null ? [] : List<WooPaymentMethod>.from(json["paymentMethods"].map((x) => WooPaymentMethod.fromJson(x))),
   );
 
@@ -68,7 +96,7 @@ class OrderReviewModel {
 }
 
 class Cart {
-  CartContents cartContents;
+  List<CartContents> cartContents;
   List<dynamic> appliedCoupons;
   String taxDisplayCart;
   CartSessionData cartSessionData;
@@ -87,21 +115,21 @@ class Cart {
   });
 
   factory Cart.fromJson(Map<String, dynamic> json) => Cart(
-    cartContents: json["cart_contents"] == null ? null : CartContents.fromJson(json["cart_contents"]),
-    appliedCoupons: json["applied_coupons"] == null ? null : List<dynamic>.from(json["applied_coupons"].map((x) => x)),
+    cartContents: json["cart_contents"] == null ? [] : List<CartContents>.from(json["cart_contents"].map((x) => CartContents.fromJson(x))),
+    appliedCoupons: json["applied_coupons"] == null ? [] : List<dynamic>.from(json["applied_coupons"].map((x) => x)),
     taxDisplayCart: json["tax_display_cart"],
-    cartSessionData: json["cart_session_data"] == null ? null : CartSessionData.fromJson(json["cart_session_data"]),
-    couponAppliedCount: json["coupon_applied_count"] == null ? null : List<dynamic>.from(json["coupon_applied_count"].map((x) => x)),
-    couponDiscountTotals: json["coupon_discount_totals"] == null ? null : List<dynamic>.from(json["coupon_discount_totals"].map((x) => x)),
-    couponDiscountTaxTotals: json["coupon_discount_tax_totals"] == null ? null : List<dynamic>.from(json["coupon_discount_tax_totals"].map((x) => x)),
+    cartSessionData: json["cart_session_data"] == null ? CartSessionData(cartContentsTotal: 0, total: 0, subtotal: 0, subtotalExTax: 0, taxTotal: 0, taxes: [], shippingTaxes: [], discountCart: 0, discountCartTax: 0, shippingTotal: 0, shippingTaxTotal: 0, couponDiscountAmounts: [], couponDiscountTaxAmounts: [], feeTotal: 0, fees: []) : CartSessionData.fromJson(json["cart_session_data"]),
+    couponAppliedCount:json["coupon_applied_count"] == null ? [] : List<dynamic>.from(json["coupon_applied_count"].map((x) => x)),
+    couponDiscountTotals: json["coupon_discount_totals"] == null ? [] : List<dynamic>.from(json["coupon_discount_totals"].map((x) => x)),
+    couponDiscountTaxTotals:   json["coupon_discount_tax_totals"] == null ? [] : List<dynamic>.from(json["coupon_discount_tax_totals"].map((x) => x)),
   );
 
   Map<String, dynamic> toJson() => {
-    "cart_contents": cartContents?.toJson(),
+    "cart_contents": List<dynamic>.from(cartContents.map((x) => x.toJson())),
     //"removed_cart_contents": removedCartContents == null ? null : new List<dynamic>.from(removedCartContents.map((x) => x)),
     "applied_coupons": appliedCoupons == null ? null : List<dynamic>.from(appliedCoupons.map((x) => x)),
     "tax_display_cart": taxDisplayCart,
-    "cart_session_data": cartSessionData?.toJson(),
+    "cart_session_data": cartSessionData.toJson(),
     "coupon_applied_count": couponAppliedCount == null ? null : List<dynamic>.from(couponAppliedCount.map((x) => x)),
     "coupon_discount_totals": couponDiscountTotals == null ? null : List<dynamic>.from(couponDiscountTotals.map((x) => x)),
     "coupon_discount_tax_totals": couponDiscountTaxTotals == null ? null : List<dynamic>.from(couponDiscountTaxTotals.map((x) => x)),
@@ -202,15 +230,15 @@ class E610F941894B4A6488Cc1E06655862Ee {
     "key": key,
     "product_id": productId,
     "variation_id": variationId,
-    "variation": variation?.toJson(),
+    "variation": variation.toJson(),
     "quantity": quantity,
     "data_hash": dataHash,
-    "line_tax_data": lineTaxData?.toJson(),
+    "line_tax_data": lineTaxData.toJson(),
     "line_subtotal": lineSubtotal,
     "line_subtotal_tax": lineSubtotalTax,
     "line_total": lineTotal,
     "line_tax": lineTax,
-    "data": data?.toJson(),
+    "data": data.toJson(),
     "name": name,
   };
 }
@@ -235,8 +263,8 @@ class LineTaxData {
   });
 
   factory LineTaxData.fromJson(Map<String, dynamic> json) => LineTaxData(
-    subtotal: json["subtotal"] == null ? null : List<dynamic>.from(json["subtotal"].map((x) => x)),
-    total: json["total"] == null ? null : List<dynamic>.from(json["total"].map((x) => x)),
+    subtotal:json["subtotal"] == null ? [] : List<dynamic>.from(json["subtotal"].map((x) => x)),
+    total:  json["total"] == null ? [] : List<dynamic>.from(json["total"].map((x) => x)),
   );
 
   Map<String, dynamic> toJson() => {
@@ -299,19 +327,19 @@ class The8Da153B3917424A1Cf24A9Cd1D7B4E9D {
   });
 
   factory The8Da153B3917424A1Cf24A9Cd1D7B4E9D.fromJson(Map<String, dynamic> json) => The8Da153B3917424A1Cf24A9Cd1D7B4E9D(
-    addons: json["addons"] == null ? null : List<dynamic>.from(json["addons"].map((x) => x)),
+    addons:  json["addons"] == null ? [] : List<dynamic>.from(json["addons"].map((x) => x)),
     key: json["key"],
     productId: json["product_id"],
     variationId: json["variation_id"],
     variation: json["variation"],
     quantity: json["quantity"],
     dataHash: json["data_hash"],
-    lineTaxData: json["line_tax_data"] == null ? null : LineTaxData.fromJson(json["line_tax_data"]),
+    lineTaxData: json["line_tax_data"] == null ? LineTaxData(subtotal: [], total: []) : LineTaxData.fromJson(json["line_tax_data"]),
     lineSubtotal: json["line_subtotal"],
     lineSubtotalTax: json["line_subtotal_tax"],
     lineTotal: json["line_total"],
     lineTax: json["line_tax"],
-    data: json["data"] == null ? null : Checkout.fromJson(json["data"]),
+    data: json["data"] == null ? Checkout() : Checkout.fromJson(json["data"]),
     name: json["name"],
   );
 
@@ -374,16 +402,16 @@ class CartSessionData {
     subtotal: json["subtotal"],
     subtotalExTax: json["subtotal_ex_tax"],
     taxTotal: json["tax_total"],
-    taxes: json["taxes"] == null ? null : List<dynamic>.from(json["taxes"].map((x) => x)),
-    shippingTaxes: json["shipping_taxes"] == null ? null : List<dynamic>.from(json["shipping_taxes"].map((x) => x)),
+    taxes:  json["taxes"] == null ? [] : List<dynamic>.from(json["taxes"].map((x) => x)),
+    shippingTaxes: json["shipping_taxes"] == null ? [] : List<dynamic>.from(json["shipping_taxes"].map((x) => x)),
     discountCart: json["discount_cart"],
     discountCartTax: json["discount_cart_tax"],
     shippingTotal: json["shipping_total"],
     shippingTaxTotal: json["shipping_tax_total"],
-    couponDiscountAmounts: json["coupon_discount_amounts"] == null ? null : List<dynamic>.from(json["coupon_discount_amounts"].map((x) => x)),
-    couponDiscountTaxAmounts: json["coupon_discount_tax_amounts"] == null ? null : List<dynamic>.from(json["coupon_discount_tax_amounts"].map((x) => x)),
+    couponDiscountAmounts: json["coupon_discount_amounts"] == null ? [] : List<dynamic>.from(json["coupon_discount_amounts"].map((x) => x)),
+    couponDiscountTaxAmounts:   json["coupon_discount_tax_amounts"] == null ? [] : List<dynamic>.from(json["coupon_discount_tax_amounts"].map((x) => x)),
     feeTotal: json["fee_total"],
-    fees: json["fees"] == null ? null : List<dynamic>.from(json["fees"].map((x) => x)),
+    fees:   json["fees"] == null ? [] : List<dynamic>.from(json["fees"].map((x) => x)),
   );
 
   Map<String, dynamic> toJson() => {
@@ -424,7 +452,7 @@ class WooPaymentMethod {
   String pluginId;
   String id;
   Settings settings;
-  FormFields formFields;
+  FormFields? formFields;
   String instructions;
   String payStackPublicKey;
   String stripePublicKey;
@@ -448,7 +476,7 @@ class WooPaymentMethod {
     required this.pluginId,
     required this.id,
     required this.settings,
-    required this.formFields,
+    this.formFields,
     required this.instructions,
     required this.payStackPublicKey,
     required this.stripePublicKey
@@ -466,14 +494,14 @@ class WooPaymentMethod {
     countries: json["countries"],
     availability: json["availability"],
     icon: (json["icon"] == null || json["icon"] == false) ? null : json["icon"],
-    supports: json["supports"] == null ? null : List<String>.from(json["supports"].map((x) => x)),
+    supports: json["supports"] == null ? [] : List<String>.from(json["supports"].map((x) => x)),
     maxAmount: json["max_amount"],
     viewTransactionUrl: json["view_transaction_url"],
     newMethodLabel: json["new_method_label"],
     pluginId: json["plugin_id"],
     id: json["id"],
-    settings: json["settings"] == null ? null : Settings.fromJson(json["settings"]),
-    formFields: json["form_fields"] == null ? null : FormFields.fromJson(json["form_fields"]),
+    settings:   json["settings"] == null ? Settings(enabled: '', title: '', description: '', instructions: '', razorPayKeyId: '') : Settings.fromJson(json["settings"]),
+    formFields: json["form_fields"] == null ? null : FormFields.fromJson(json["form_fields"]), 
     instructions: json["instructions"],
     payStackPublicKey: json["public_key"],
     stripePublicKey: json["publishable_key"],
@@ -497,7 +525,7 @@ class WooPaymentMethod {
     "new_method_label": newMethodLabel,
     "plugin_id": pluginId,
     "id": id,
-    "settings": settings?.toJson(),
+    "settings": settings.toJson(),
     "form_fields": formFields?.toJson(),
     "instructions": instructions,
   };
@@ -517,17 +545,17 @@ class FormFields {
   });
 
   factory FormFields.fromJson(Map<String, dynamic> json) => FormFields(
-    enabled: json["enabled"] == null ? null : Enabled.fromJson(json["enabled"]),
-    title: json["title"] == null ? null : Description.fromJson(json["title"]),
-    description: json["description"] == null ? null : Description.fromJson(json["description"]),
-    instructions: json["instructions"] == null ? null : Description.fromJson(json["instructions"]),
+    enabled: json["enabled"] == null ? Enabled(title: '', type: '', label: '', enabledDefault: '') : Enabled.fromJson(json["enabled"]),
+    title: json["title"] == null ? Description(title: '', type: '', description: '', descriptionDefault: '') : Description.fromJson(json["title"]),
+    description: json["enabled"] == null ?  Description(title: '', type: '', description: '', descriptionDefault: '') : Description.fromJson(json["enabled"]),
+    instructions:  json["enabled"] == null ?  Description(title: '', type: '', description: '', descriptionDefault: ''): Description.fromJson(json["enabled"]),
   );
 
   Map<String, dynamic> toJson() => {
-    "enabled": enabled?.toJson(),
-    "title": title?.toJson(),
-    "description": description?.toJson(),
-    "instructions": instructions?.toJson(),
+    "enabled": enabled.toJson(),
+    "title": title.toJson(),
+    "description": description.toJson(),
+    "instructions": instructions.toJson(),
   };
 }
 
@@ -645,18 +673,38 @@ class Shipping {
   });
 
   factory Shipping.fromJson(Map<String, dynamic> json) => Shipping(
-    package: json["package"] == null ? null : Package.fromJson(json["package"]),
+    package: json["package"] == null 
+        ? Package(
+            contentsCost: 0.0, 
+            appliedCoupons: [], 
+            user: User(id: 0), 
+            destination: Destination(
+              country: '', 
+              state: '', 
+              postcode: '', 
+              city: '', 
+              address: '', 
+              address2: ''
+            )
+          ) 
+        : Package.fromJson(json["package"]),
     showPackageDetails: json["show_package_details"],
     showShippingCalculator: json["show_shipping_calculator"],
     packageDetails: json["package_details"],
     packageName: json["package_name"],
-    index: json["index"]?.toString(),
+    index: json["index"]!.toString(),
     chosenMethod: (json["chosen_method"] == null || json["chosen_method"] == false ) ? '' : json["chosen_method"],
     shippingMethods: json["shippingMethods"] == null ? [] : List<ShippingMethod>.from(json["shippingMethods"].map((x) => ShippingMethod.fromJson(x))),
   );
 
+  get id => null;
+
+  get label => null;
+
+  get methods => null;
+
   Map<String, dynamic> toJson() => {
-    "package": package?.toJson(),
+    "package": package.toJson(),
     "show_package_details": showPackageDetails,
     "show_shipping_calculator": showShippingCalculator,
     "package_details": packageDetails,
@@ -685,17 +733,24 @@ class Package {
   factory Package.fromJson(Map<String, dynamic> json) => Package(
     //contents: json["contents"] == null ? null : new List<Content>.from(json["contents"].map((x) => Content.fromJson(x))),
     contentsCost: json["contents_cost"]?.toDouble(),
-    appliedCoupons: json["applied_coupons"] == null ? null : List<dynamic>.from(json["applied_coupons"].map((x) => x)),
-    user: json["user"] == null ? null : User.fromJson(json["user"]),
-    destination: json["destination"] == null ? null : Destination.fromJson(json["destination"]),
+    appliedCoupons: json["applied_coupons"] == null ? [] : List<dynamic>.from(json["applied_coupons"].map((x) => x)),
+    user:  json["user"] == null ? User(id: 0) : User.fromJson(json["user"]),
+    destination:json["destination"] == null ?  Destination(
+              country: '', 
+              state: '', 
+              postcode: '', 
+              city: '', 
+              address: '', 
+              address2: ''
+            ): Destination.fromJson(json["destination"]),
   );
 
   Map<String, dynamic> toJson() => {
     //"contents": contents == null ? null : new List<dynamic>.from(contents.map((x) => x.toJson())),
     "contents_cost": contentsCost,
     "applied_coupons": appliedCoupons == null ? null : List<dynamic>.from(appliedCoupons.map((x) => x)),
-    "user": user?.toJson(),
-    "destination": destination?.toJson(),
+    "user": user.toJson(),
+    "destination": destination.toJson(),
   };
 }
 
@@ -731,19 +786,19 @@ class Content {
   });
 
   factory Content.fromJson(Map<String, dynamic> json) => Content(
-    addons: json["addons"] == null ? null : List<dynamic>.from(json["addons"].map((x) => x)),
+    addons: json["addons"] == null ? [] : List<dynamic>.from(json["addons"].map((x) => x)),
     key: json["key"],
     productId: json["product_id"],
     variationId: json["variation_id"],
     variation: json["variation"],
     quantity: json["quantity"],
     dataHash: json["data_hash"],
-    lineTaxData: json["line_tax_data"] == null ? null : LineTaxData.fromJson(json["line_tax_data"]),
+    lineTaxData: json["line_tax_data"] == null ? LineTaxData(subtotal: [], total: []) : LineTaxData.fromJson(json["line_tax_data"]),
     lineSubtotal: json["line_subtotal"],
     lineSubtotalTax: json["line_subtotal_tax"],
     lineTotal: json["line_total"],
     lineTax: json["line_tax"],
-    data: json["data"] == null ? null : Checkout.fromJson(json["data"]),
+    data: json["data"] == null ? Checkout() : Checkout.fromJson(json["data"]),
   );
 
   Map<String, dynamic> toJson() => {

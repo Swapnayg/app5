@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
@@ -11,13 +13,13 @@ import '../products/product_detail/product_detail.dart';
 class WishList extends StatefulWidget {
   final appStateModel = AppStateModel();
   final wishListBloc = WishListBloc();
-  WishList({Key key}) : super(key: key);
+  WishList({super.key});
   @override
   _WishListState createState() => _WishListState();
 }
 
 class _WishListState extends State<WishList> {
-  int index;
+  late int index;
   final ScrollController _scrollController = ScrollController();
 
   @override
@@ -42,7 +44,7 @@ class _WishListState extends State<WishList> {
           stream: widget.wishListBloc.wishList,
           builder: (context, AsyncSnapshot<List<Product>> snapshot) {
             if (snapshot.hasData) {
-              if (snapshot.data.length == 0) {
+              if (snapshot.data!.length == 0) {
                 return Center(
                   child: Text('${widget.appStateModel.blocks.localeText.noWishlist}!'),
                 );
@@ -50,7 +52,7 @@ class _WishListState extends State<WishList> {
                 return CustomScrollView(
                     controller: _scrollController,
                     slivers: [
-                      ProductGrid(products: snapshot.data, wishListBloc: widget.wishListBloc),
+                      ProductGrid(products: snapshot.data ?? [], wishListBloc: widget.wishListBloc),
                       buildLoadMore(),
                     ]);
               }
@@ -67,7 +69,7 @@ class _WishListState extends State<WishList> {
         (BuildContext context, int index) {
 
           return ProductItem(
-              product: snapshot.data[index]);
+              product: snapshot.data![index], onProductClick: (Product category) {  }, wishListBloc: widget.wishListBloc,);
 
          /* int percentOff = 0;
 
@@ -167,7 +169,7 @@ class _WishListState extends State<WishList> {
             ),
           );*/
         },
-        childCount: snapshot.data.length,
+        childCount: snapshot.data!.length,
       ),
     );
   }
@@ -198,7 +200,7 @@ const double _minWidthPerColumn = 350.0 + _scaffoldPadding * 2;
 class ProductGrid extends StatefulWidget {
   final List<Product> products;
   final WishListBloc wishListBloc;
-  const ProductGrid({Key key, this.products, this.wishListBloc}) : super(key: key);
+  const ProductGrid({super.key, required this.products, required this.wishListBloc});
   @override
   _ProductGridState createState() => _ProductGridState();
 }
@@ -247,10 +249,10 @@ class ProductItem extends StatelessWidget {
   int percentOff = 0;
 
   ProductItem({
-    Key key,
-    this.product,
-    this.onProductClick, this.wishListBloc,
-  }) : super(key: key);
+    super.key,
+    required this.product,
+    required this.onProductClick, required this.wishListBloc,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -337,8 +339,8 @@ class ProductItem extends StatelessWidget {
                           child: Text(
                             '-$percentOff%',
                             style: Theme.of(context)
-                                .accentTextTheme
-                                .body2
+                                .textTheme
+                                .bodyLarge!
                                 .copyWith(fontSize: 12.0),
                           ),
                         ),
@@ -385,7 +387,7 @@ class ProductItem extends StatelessWidget {
                                     product.formattedSalesPrice)
                                     : '',
                                 style:
-                                Theme.of(context).textTheme.bodyText2.copyWith(
+                                Theme.of(context).textTheme.bodyMedium!.copyWith(
                                   fontSize: 16,
                                   //fontWeight: FontWeight.w600,
                                   color: Theme.of(context)

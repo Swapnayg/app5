@@ -88,7 +88,7 @@ class CartModel {
             )
           : CartTotals.fromJson(json["cart_totals"]),
       chosenShipping: json["chosen_shipping"] == null ? [] : List<dynamic>.from(json["chosen_shipping"].map((x) => x)),
-      points: json["points"] == null ? Points(points: 0, discountAvailable: 0.0, message: '') : Points.fromJson(json["points"]),
+      points: json["points"] == null ? Points(value:0,points: 0, discountAvailable: 0.0, message: '') : Points.fromJson(json["points"]),
       purchasePoint: json["purchase_point"] ?? 0,
       currency: json["currency"] ?? 'USD',
       cartFees: json["cart_fees"] == null ? [] : List<CartFee>.from(json["cart_fees"].map((x) => CartFee.fromJson(x))),
@@ -419,10 +419,11 @@ class Points {
   Points({
     required this.points,
     required this.discountAvailable,
-    required this.message,
+    required this.message, required int value,
   });
 
   factory Points.fromJson(Map<String, dynamic> json) => Points(
+    value:json["value"],
     points: json["points"],
     discountAvailable: json["discount_available"] == null || json["discount_available"] == false ? 0.0 : double.parse(json["discount_available"].toString()),
     message: json["message"],

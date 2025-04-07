@@ -2,6 +2,8 @@
 //
 //     final filterModel = filterModelFromJson(jsonString);
 
+// ignore_for_file: unnecessary_null_comparison
+
 import 'dart:convert';
 
 List<AttributesModel> filterModelFromJson(String str) => List<AttributesModel>.from(json.decode(str).map((x) => AttributesModel.fromJson(x)));
@@ -14,15 +16,15 @@ class AttributesModel {
   List<Term> terms;
 
   AttributesModel({
-    this.id,
-    this.name,
-    this.terms,
+    required this.id,
+    required this.name,
+    required this.terms,
   });
 
   factory AttributesModel.fromJson(Map<String, dynamic> json) => AttributesModel(
     id: json["id"],
     name: json["name"],
-    terms: json["terms"] == null ? null : List<Term>.from(json["terms"].map((x) => Term.fromJson(x))),
+    terms: json["terms"] == null ? [] : List<Term>.from(json["terms"].map((x) => Term.fromJson(x))),
   );
 
   Map<String, dynamic> toJson() => {
@@ -46,17 +48,17 @@ class Term {
   bool selected;
 
   Term({
-    this.termId,
-    this.name,
-    this.slug,
-    this.termGroup,
-    this.termTaxonomyId,
-    this.taxonomy,
-    this.description,
-    this.parent,
-    this.count,
-    this.filter,
-    this.selected,
+    required this.termId,
+    required this.name,
+    required this.slug,
+    required this.termGroup,
+    required this.termTaxonomyId,
+    required this.taxonomy,
+    required this.description,
+    required this.parent,
+    required this.count,
+    required this.filter,
+    required this.selected,
   });
 
   factory Term.fromJson(Map<String, dynamic> json) => Term(

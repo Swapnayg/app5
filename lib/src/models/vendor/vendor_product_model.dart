@@ -1,15 +1,17 @@
+// ignore_for_file: unnecessary_null_comparison
+
 import 'dart:convert';
 
 class VendorProductsModel {
   final List<VendorProduct> products;
 
   VendorProductsModel({
-    this.products,
+    required this.products,
   });
 
   factory VendorProductsModel.fromJson(List<dynamic> parsedJson) {
 
-    List<VendorProduct> products = List<VendorProduct>();
+    List<VendorProduct> products = [];
     products = parsedJson.map((i)=>VendorProduct.fromJson(i)).toList();
 
     return VendorProductsModel(products : products);
@@ -95,74 +97,74 @@ class VendorProduct {
   String vendor;
 
   VendorProduct({
-    this.id,
-    this.name,
-    this.slug,
-    this.permalink,
-    this.dateCreated,
-    this.dateCreatedGmt,
-    this.dateModified,
-    this.dateModifiedGmt,
-    this.type,
-    this.status,
-    this.featured,
-    this.catalogVisibility,
-    this.description,
-    this.shortDescription,
-    this.sku,
-    this.price,
-    this.regularPrice,
-    this.salePrice,
+    required this.id,
+    required this.name,
+    required this.slug,
+    required this.permalink,
+    required this.dateCreated,
+    required this.dateCreatedGmt,
+    required this.dateModified,
+    required this.dateModifiedGmt,
+    required this.type,
+    required this.status,
+    required this.featured,
+    required this.catalogVisibility,
+    required this.description,
+    required this.shortDescription,
+    required this.sku,
+    required this.price,
+    required this.regularPrice,
+    required this.salePrice,
     this.dateOnSaleFrom,
     this.dateOnSaleFromGmt,
     this.dateOnSaleTo,
     this.dateOnSaleToGmt,
-    this.priceHtml,
-    this.onSale,
-    this.purchasable,
-    this.totalSales,
-    this.virtual,
-    this.downloadable,
-    this.downloads,
-    this.downloadLimit,
-    this.downloadExpiry,
-    this.externalUrl,
-    this.buttonText,
-    this.taxStatus,
-    this.taxClass,
-    this.manageStock,
-    this.stockQuantity,
-    this.stockStatus,
-    this.backOrders,
-    this.backordersAllowed,
-    this.backordered,
-    this.soldIndividually,
-    this.weight,
-    this.dimensions,
-    this.shippingRequired,
-    this.shippingTaxable,
-    this.shippingClass,
-    this.shippingClassId,
-    this.reviewsAllowed,
-    this.averageRating,
-    this.ratingCount,
-    this.relatedIds,
-    this.upsellIds,
-    this.crossSellIds,
-    this.parentId,
-    this.purchaseNote,
-    this.categories,
-    this.tags,
-    this.images,
-    this.attributes,
-    this.defaultAttributes,
-    this.variations,
-    this.groupedProducts,
-    this.menuOrder,
-    this.metaData,
-    this.links,
-    this.decimals,
-    this.vendor
+    required this.priceHtml,
+    required this.onSale,
+    required this.purchasable,
+    required this.totalSales,
+    required this.virtual,
+    required this.downloadable,
+    required this.downloads,
+    required this.downloadLimit,
+    required this.downloadExpiry,
+    required this.externalUrl,
+    required this.buttonText,
+    required this.taxStatus,
+    required this.taxClass,
+    required this.manageStock,
+    required this.stockQuantity,
+    required this.stockStatus,
+    required this.backOrders,
+    required this.backordersAllowed,
+    required this.backordered,
+    required this.soldIndividually,
+    required this.weight,
+    required this.dimensions,
+    required this.shippingRequired,
+    required this.shippingTaxable,
+    required this.shippingClass,
+    required this.shippingClassId,
+    required this.reviewsAllowed,
+    required this.averageRating,
+    required this.ratingCount,
+    required this.relatedIds,
+    required this.upsellIds,
+    required this.crossSellIds,
+    required this.parentId,
+    required this.purchaseNote,
+    required this.categories,
+    required this.tags,
+    required this.images,
+    required this.attributes,
+    required this.defaultAttributes,
+    required this.variations,
+    required this.groupedProducts,
+    required this.menuOrder,
+    required this.metaData,
+    required this.links,
+    required this.decimals,
+    required this.vendor
   });
 
   factory VendorProduct.fromJson(Map<String, dynamic> json) => VendorProduct(
@@ -170,10 +172,10 @@ class VendorProduct {
     name: json["name"],
     slug: json["slug"],
     permalink: json["permalink"],
-    dateCreated: json["date_created"] == null ? null : DateTime.parse(json["date_created"]),
-    dateCreatedGmt: json["date_created_gmt"] == null ? null : DateTime.parse(json["date_created_gmt"]),
-    dateModified: json["date_modified"] == null ? null : DateTime.parse(json["date_modified"]),
-    dateModifiedGmt: json["date_modified_gmt"] == null ? null : DateTime.parse(json["date_modified_gmt"]),
+    dateCreated: json["date_created"] == null ? DateTime.now() : DateTime.parse(json["date_created"]),
+    dateCreatedGmt: json["date_created_gmt"] == null ? DateTime.now() : DateTime.parse(json["date_created_gmt"]),
+    dateModified: json["date_modified"] == null ? DateTime.now() : DateTime.parse(json["date_modified"]),
+    dateModifiedGmt: json["date_modified_gmt"] == null ? DateTime.now() : DateTime.parse(json["date_modified_gmt"]),
     type: json["type"],
     status: json["status"],
     featured: json["featured"],
@@ -194,7 +196,7 @@ class VendorProduct {
     totalSales: json["total_sales"],
     virtual: json["virtual"],
     downloadable: json["downloadable"],
-    downloads: json["downloads"] == null ? null : List<dynamic>.from(json["downloads"].map((x) => x)),
+    downloads:json["downloads"] == null ? [] : List<dynamic>.from(json["downloads"].map((x) => x)),
     downloadLimit: json["download_limit"],
     downloadExpiry: json["download_expiry"],
     externalUrl: json["external_url"],
@@ -209,7 +211,7 @@ class VendorProduct {
     backordered: json["backordered"],
     soldIndividually: json["sold_individually"],
     weight: json["weight"],
-    dimensions: json["dimensions"] == null ? null : Dimensions.fromJson(json["dimensions"]),
+    dimensions: json["dimensions"] == null ? Dimensions(length: '', width: '', height: '') : Dimensions.fromJson(json["dimensions"]),
     shippingRequired: json["shipping_required"],
     shippingTaxable: json["shipping_taxable"],
     shippingClass: json["shipping_class"],
@@ -217,22 +219,22 @@ class VendorProduct {
     reviewsAllowed: json["reviews_allowed"],
     averageRating: json["average_rating"],
     ratingCount: json["rating_count"],
-    relatedIds: json["related_ids"] == null ? null : List<int>.from(json["related_ids"].map((x) => x)),
-    upsellIds: json["upsell_ids"] == null ? null : List<dynamic>.from(json["upsell_ids"].map((x) => x)),
-    crossSellIds: json["cross_sell_ids"] == null ? null : List<dynamic>.from(json["cross_sell_ids"].map((x) => x)),
+    relatedIds: json["related_ids"] == null ? [] : List<int>.from(json["related_ids"].map((x) => x)),
+    upsellIds: json["upsell_ids"] == null ? [] : List<dynamic>.from(json["upsell_ids"].map((x) => x)),
+    crossSellIds: json["cross_sell_ids"] == null ? [] : List<dynamic>.from(json["cross_sell_ids"].map((x) => x)),
     parentId: json["parent_id"],
     purchaseNote: json["purchase_note"],
-    categories: json["categories"] == null ? null : List<ProductCategory>.from(json["categories"].map((x) => ProductCategory.fromJson(x))),
-    tags: json["tags"] == null ? null : List<dynamic>.from(json["tags"].map((x) => x)),
-    images: json["images"] == null ? null : List<ProductImage>.from(json["images"].map((x) => ProductImage.fromJson(x))),
-    attributes: json["attributes"] == null ? null : List<Attribute>.from(json["attributes"].map((x) => Attribute.fromJson(x))),
-    defaultAttributes: json["default_attributes"] == null ? null : List<DefaultAttribute>.from(json["default_attributes"].map((x) => DefaultAttribute.fromJson(x))),
-    variations: json["variations"] == null ? null : List<dynamic>.from(json["variations"].map((x) => x)),
-    groupedProducts: json["grouped_products"] == null ? null : List<dynamic>.from(json["grouped_products"].map((x) => x)),
+    categories: json["categories"] == null ? [] : List<ProductCategory>.from(json["categories"].map((x) => ProductCategory.fromJson(x))),
+    tags:json["tags"] == null ? [] : List<dynamic>.from(json["tags"].map((x) => x)),
+    images: json["images"] == null ? [] : List<ProductImage>.from(json["images"].map((x) => ProductImage.fromJson(x))),
+    attributes: json["attributes"] == null ? [] : List<Attribute>.from(json["attributes"].map((x) => Attribute.fromJson(x))),
+    defaultAttributes: json["default_attributes"] == null ? [] : List<DefaultAttribute>.from(json["default_attributes"].map((x) => DefaultAttribute.fromJson(x))),
+    variations: json["variations"] == null ? [] : List<dynamic>.from(json["variations"].map((x) => x)),
+    groupedProducts: json["grouped_products"] == null ? [] : List<dynamic>.from(json["grouped_products"].map((x) => x)),
     menuOrder: json["menu_order"],
-    metaData: json["meta_data"] == null ? null : List<dynamic>.from(json["meta_data"].map((x) => x)),
-    links: json["_links"] == null ? null : Links.fromJson(json["_links"]),
-    decimals: json["decimals"],
+    metaData: json["meta_data"] == null ? [] : List<dynamic>.from(json["meta_data"].map((x) => x)),
+    links: json["_links"] == null ? Links(self: [], collection: []) : Links.fromJson(json["_links"]),
+    decimals: json["decimals"], vendor: '',
   );
 
   Map<String, dynamic> toJson() => {
@@ -275,7 +277,7 @@ class VendorProduct {
     "backordered": backordered,
     "sold_individually": soldIndividually,
     "weight": weight,
-    "dimensions": dimensions?.toJson(),
+    "dimensions": dimensions.toJson(),
     "shipping_required": shippingRequired,
     "shipping_taxable": shippingTaxable,
     "shipping_class": shippingClass,
@@ -311,12 +313,12 @@ class Attribute {
   List<String> options;
 
   Attribute({
-    this.id,
-    this.name,
-    this.position,
-    this.visible,
-    this.variation,
-    this.options,
+    required this.id,
+    required this.name,
+    required this.position,
+    required this.visible,
+    required this.variation,
+    required this.options,
   });
 
   factory Attribute.fromJson(Map<String, dynamic> json) => Attribute(
@@ -325,7 +327,7 @@ class Attribute {
     position: json["position"],
     visible: json["visible"],
     variation: json["variation"],
-    options: json["options"] == null ? null : List<String>.from(json["options"].map((x) => x)),
+    options:  json["options"] == null ? [] : List<String>.from(json["options"].map((x) => x)),
   );
 
   Map<String, dynamic> toJson() => {
@@ -344,9 +346,9 @@ class ProductCategory {
   String slug;
 
   ProductCategory({
-    this.id,
-    this.name,
-    this.slug,
+    required this.id,
+    required this.name,
+    required this.slug,
   });
 
   factory ProductCategory.fromJson(Map<String, dynamic> json) => ProductCategory(
@@ -368,9 +370,9 @@ class DefaultAttribute {
   String option;
 
   DefaultAttribute({
-    this.id,
-    this.name,
-    this.option,
+    required this.id,
+    required this.name,
+    required this.option,
   });
 
   factory DefaultAttribute.fromJson(Map<String, dynamic> json) => DefaultAttribute(
@@ -392,9 +394,9 @@ class Dimensions {
   String height;
 
   Dimensions({
-    this.length,
-    this.width,
-    this.height,
+    required this.length,
+    required this.width,
+    required this.height,
   });
 
   factory Dimensions.fromJson(Map<String, dynamic> json) => Dimensions(
@@ -421,22 +423,22 @@ class ProductImage {
   String alt;
 
   ProductImage({
-    this.id,
-    this.dateCreated,
-    this.dateCreatedGmt,
-    this.dateModified,
-    this.dateModifiedGmt,
-    this.src,
-    this.name,
-    this.alt,
+    required this.id,
+    required this.dateCreated,
+    required this.dateCreatedGmt,
+    required this.dateModified,
+    required this.dateModifiedGmt,
+    required this.src,
+    required this.name,
+    required this.alt,
   });
 
   factory ProductImage.fromJson(Map<String, dynamic> json) => ProductImage(
     id: json["id"],
-    dateCreated: json["date_created"] == null ? null : DateTime.parse(json["date_created"]),
-    dateCreatedGmt: json["date_created_gmt"] == null ? null : DateTime.parse(json["date_created_gmt"]),
-    dateModified: json["date_modified"] == null ? null : DateTime.parse(json["date_modified"]),
-    dateModifiedGmt: json["date_modified_gmt"] == null ? null : DateTime.parse(json["date_modified_gmt"]),
+    dateCreated: json["date_created"] == null ? DateTime.now() : DateTime.parse(json["date_created"]),
+    dateCreatedGmt:  json["date_created_gmt"] == null ? DateTime.now() : DateTime.parse(json["date_created_gmt"]),
+    dateModified:  json["date_modified"] == null ? DateTime.now() : DateTime.parse(json["date_modified"]),
+    dateModifiedGmt: json["date_modified_gmt"] == null ? DateTime.now() : DateTime.parse(json["date_modified_gmt"]),
     src: json["src"],
     name: json["name"],
     alt: json["alt"],
@@ -459,13 +461,13 @@ class Links {
   List<Collection> collection;
 
   Links({
-    this.self,
-    this.collection,
+    required this.self,
+    required this.collection,
   });
 
   factory Links.fromJson(Map<String, dynamic> json) => Links(
-    self: json["self"] == null ? null : List<Collection>.from(json["self"].map((x) => Collection.fromJson(x))),
-    collection: json["collection"] == null ? null : List<Collection>.from(json["collection"].map((x) => Collection.fromJson(x))),
+    self: json["self"] == null ? [] : List<Collection>.from(json["self"].map((x) => Collection.fromJson(x))),
+    collection: json["collection"] == null ? [] : List<Collection>.from(json["collection"].map((x) => Collection.fromJson(x))),
   );
 
   Map<String, dynamic> toJson() => {
@@ -478,7 +480,7 @@ class Collection {
   String href;
 
   Collection({
-    this.href,
+    required this.href,
   });
 
   factory Collection.fromJson(Map<String, dynamic> json) => Collection(

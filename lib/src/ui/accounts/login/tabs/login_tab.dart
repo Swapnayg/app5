@@ -1,10 +1,11 @@
+// ignore_for_file: library_private_types_in_public_api, use_build_context_synchronously
+
 import 'dart:io' show Platform;
 
 import 'package:flutter/material.dart';
 
 import './../../../../models/app_state_model.dart';
 import './../../../accounts/login/social/apple_login.dart';
-import './../../../accounts/login/social/facebook_login.dart';
 import './../../../accounts/login/social/google_login.dart';
 import './../../../accounts/login/social/sms_login.dart';
 import './../tabs/login_text_form_field.dart';
@@ -13,11 +14,11 @@ import '../../../widgets/buttons/button_text.dart';
 
 class LoginTab extends StatefulWidget {
   const LoginTab({
-    Key key,
-    @required this.context,
-    @required this.model,
-    @required this.tabController,
-  }) : super(key: key);
+    super.key,
+    required this.context,
+    required this.model,
+    required this.tabController,
+  });
 
   final BuildContext context;
   final AppStateModel model;
@@ -53,6 +54,7 @@ class _LoginTabState extends State<LoginTab> {
                   height: 100,
                 ),
                 PrimaryColorOverride(
+                  key:UniqueKey(),
                   child: CustomTextFormField(
                     controller: usernameController,
                     icon: Icons.email,
@@ -65,6 +67,7 @@ class _LoginTabState extends State<LoginTab> {
                 ),
                 Padding(padding: EdgeInsets.symmetric(vertical: 5.0)),
                 PrimaryColorOverride(
+                  key:UniqueKey(),
                   child: CustomTextFormField(
                     controller: passwordController,
                     icon: Icons.vpn_key,
@@ -76,20 +79,22 @@ class _LoginTabState extends State<LoginTab> {
                   ),
                 ),
                 SizedBox(height: 24.0),
-                RaisedButton(
+                ElevatedButton(
                   child: ButtonText(isLoading: isLoading, text: widget.model.blocks.localeText.signIn),
-                  onPressed: () => isLoading ? null : _login(context),
+                  onPressed: isLoading ? null : () => _login(context),
                 ),
                 SizedBox(height: 12.0),
-                FlatButton(
+                TextButton(
                     onPressed: () {
                       widget.tabController.animateTo(2);
                     },
                     child: Text(
                         widget.model.blocks.localeText.forgotPassword,
                         style: Theme.of(context).textTheme.bodyMedium)),
-                FlatButton(
-                    padding: EdgeInsets.all(16.0),
+                TextButton(
+                    style: TextButton.styleFrom(
+                      padding: EdgeInsets.all(16.0),
+                    ),
                     onPressed: () {
                       widget.tabController.animateTo(1);
                     },
@@ -107,40 +112,14 @@ class _LoginTabState extends State<LoginTab> {
                               widget.model.blocks.localeText.signUp,
                               style: Theme.of(context)
                                   .textTheme
-                                  .bodyMedium
+                                  .bodyMedium!
                                   .copyWith(
                                       color:
                                           Theme.of(context).colorScheme.secondary)),
                         ),
                       ],
                     )),
-                Center(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Card(
-                        shape: StadiumBorder(),
-                        margin: const EdgeInsets.all(8.0),
-                        child: GoogleLoginWidget(),
-                      ),
-                      Card(
-                        shape: StadiumBorder(),
-                        margin: const EdgeInsets.all(8.0),
-                        child: FacebookLoginWidget(),
-                      ),
-                      Platform.isIOS ? Card(
-                        shape: StadiumBorder(),
-                        margin: const EdgeInsets.all(8.0),
-                        child: AppleLogin(),
-                      ) : Container(),
-                      Card(
-                        shape: StadiumBorder(),
-                        margin: const EdgeInsets.all(8.0),
-                        child: SmsLogin(),
-                      ),
-                    ],
-                  ),
-                )
+                
               ],
             ),
           ),
@@ -151,7 +130,7 @@ class _LoginTabState extends State<LoginTab> {
 
   _login(BuildContext) async {
     var login = <String, dynamic>{};
-    if (_formKey.currentState.validate()) {
+    if (_formKey.currentState!.validate()) {
       login["username"] = usernameController.text;
       login["password"] = passwordController.text;
       setState(() {

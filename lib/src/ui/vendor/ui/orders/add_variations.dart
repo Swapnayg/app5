@@ -7,6 +7,7 @@ import '../../../../models/orders_model.dart';
 import '../../../../models/vendor/product_variation_model.dart' hide VariationImage;
 import '../../../../models/vendor/vendor_product_model.dart';
 import 'variation_item.dart';
+import '../../../../models/vendor/product_variation_model.dart' as variation_model;
 
 
 class AddVariations extends StatefulWidget {
@@ -72,7 +73,49 @@ class _AddVariationsState extends State<AddVariations> {
       name = '$name ${value.option}';
     }
 
-    return VariationItem(vendorBloc: widget.vendorBloc, product: widget.product, order: widget.order, variation: ProductVariation(),);
+    return VariationItem(
+      vendorBloc: widget.vendorBloc,
+      product: widget.product,
+      order: widget.order,
+      variation: ProductVariation(
+        id: 0,
+        dateCreated: DateTime.now(),
+        dateCreatedGmt: DateTime.now().toUtc(),
+        dateModified: DateTime.now(),
+        dateModifiedGmt: DateTime.now().toUtc(),
+        description: '',
+        permalink: '',
+        sku: '',
+        price: '',
+        regularPrice: '',
+        salePrice: '',
+        onSale: false,
+        status: '',
+        purchasable: false,
+        virtual: false,
+        downloadable: false,
+        downloads: [],
+        downloadLimit: 0,
+        downloadExpiry: 0,
+        taxStatus: '',
+        taxClass: '',
+        manageStock: false,
+        stockStatus: '',
+        backorders: '',
+        backordersAllowed: false,
+        backordered: false,
+        weight: '',
+        dimensions: variation_model.Dimensions(length: '', width: '', height: ''),
+        shippingClass: '',
+        shippingClassId: 0,
+        image: variation_model.VariationImage(id: 0, dateCreated: DateTime(0), dateCreatedGmt: DateTime(0), dateModified: DateTime(0), dateModifiedGmt: DateTime(0), src: '', name: '', alt: ''),
+        attributes: [],
+        menuOrder: 0,
+        metaData: [],
+        links:  variation_model.Links(collection: [], self: [], up: []), 
+        images: [],
+      ),
+    );
   }
 
   Widget buildItemList(AsyncSnapshot<List<ProductVariation>> snapshot) {

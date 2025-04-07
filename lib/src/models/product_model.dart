@@ -2,6 +2,8 @@
 //
 //     final productModel = productModelFromJson(jsonString);
 
+// ignore_for_file: unnecessary_null_comparison
+
 import 'dart:convert';
 
 List<Product> productModelFromJson(String str) => List<Product>.from(json.decode(str).map((x) => Product.fromJson(x)));
@@ -66,63 +68,63 @@ class Product {
   List<Product> children;
 
   Product({
-    this.id,
-    this.name,
-    this.type,
-    this.status,
-    this.featured,
-    this.catalogVisibility,
-    this.description,
-    this.shortDescription,
-    this.permalink,
-    this.sku,
-    this.price,
-    this.regularPrice,
-    this.salePrice,
+    required this.id,
+    required this.name,
+    required this.type,
+    required this.status,
+    required this.featured,
+    required this.catalogVisibility,
+    required this.description,
+    required this.shortDescription,
+    required this.permalink,
+    required this.sku,
+    required this.price,
+    required this.regularPrice,
+    required this.salePrice,
     //this.dateOnSaleFromGmt,
     //this.dateOnSaleToGmt,
-    this.onSale,
-    this.purchasable,
-    this.totalSales,
-    this.virtual,
-    this.downloadable,
-    this.externalUrl,
-    this.buttonText,
-    this.manageStock,
-    this.stockQuantity,
-    this.stockStatus,
-    this.backorders,
-    this.backordersAllowed,
-    this.backordered,
-    this.soldIndividually,
-    this.weight,
-    this.dimensions,
+    required this.onSale,
+    required this.purchasable,
+    required this.totalSales,
+    required this.virtual,
+    required this.downloadable,
+    required this.externalUrl,
+    required this.buttonText,
+    required this.manageStock,
+    required this.stockQuantity,
+    required this.stockStatus,
+    required this.backorders,
+    required this.backordersAllowed,
+    required this.backordered,
+    required this.soldIndividually,
+    required this.weight,
+    required this.dimensions,
     //this.shippingRequired,
     //this.shippingTaxable,
     //this.shippingClass,
-    this.reviewsAllowed,
-    this.averageRating,
-    this.ratingCount,
-    this.relatedIds,
-    this.upsellIds,
-    this.crossSellIds,
+    required this.reviewsAllowed,
+    required this.averageRating,
+    required this.ratingCount,
+    required this.relatedIds,
+    required this.upsellIds,
+    required this.crossSellIds,
     //this.parentId,
-    this.purchaseNote,
-    this.categories,
-    this.tags,
-    this.images,
-    this.attributes,
-    this.groupedProducts,
+    required this.purchaseNote,
+    required this.categories,
+    required this.tags,
+    required this.images,
+    required this.attributes,
+    required this.groupedProducts,
     //this.menuOrder,
-    this.metaData,
+    required this.metaData,
     //this.storeName,
-    this.availableVariations,
-    this.variationOptions,
-    this.variationId,
-    this.formattedPrice,
-    this.formattedSalesPrice,
-    this.vendor,
-    this.children
+    required this.availableVariations,
+    required this.variationOptions,
+    required this.variationId,
+    required this.formattedPrice,
+    required this.formattedSalesPrice,
+    required this.vendor,
+    required this.children
   });
 
   factory Product.fromJson(Map<String, dynamic> json) => Product(
@@ -158,31 +160,31 @@ class Product {
     backordered: json["backordered"],
     soldIndividually: json["sold_individually"],
     weight: json["weight"],
-    dimensions: json["dimensions"] == null ? null : Dimensions.fromJson(json["dimensions"]),
+    dimensions: json["dimensions"] == null ? Dimensions(length: '', width: '', height: '') : Dimensions.fromJson(json["dimensions"]),
     //shippingRequired: json["shipping_required"] == null ? null : json["shipping_required"],
     //shippingTaxable: json["shipping_taxable"] == null ? null : json["shipping_taxable"],
     //shippingClass: json["shipping_class"] == null ? null : json["shipping_class"],
     reviewsAllowed: json["reviews_allowed"],
     averageRating: json["average_rating"],
     ratingCount: json["rating_count"],
-    relatedIds: json["related_ids"] == null ? null : List<int>.from(json["related_ids"].map((x) => x)),
-    upsellIds: json["upsell_ids"] == null ? null : List<int>.from(json["upsell_ids"].map((x) => x)),
-    crossSellIds: json["cross_sell_ids"] == null ? null : List<int>.from(json["cross_sell_ids"].map((x) => x)),
+    relatedIds: json["related_ids"] == null ? [] : List<int>.from(json["related_ids"].map((x) => x)),
+    upsellIds: json["upsell_ids"] == null ? [] : List<int>.from(json["upsell_ids"].map((x) => x)),
+    crossSellIds: json["cross_sell_ids"] == null ? [] : List<int>.from(json["cross_sell_ids"].map((x) => x)),
     //parentId: json["parent_id"] == null ? null : json["parent_id"],
     purchaseNote: json["purchase_note"],
     categories: json["categories"] == null ? [] :  List<int>.from(json["categories"].map((x) => x)),
-    tags: json["tags"] == null ? null : List<dynamic>.from(json["tags"].map((x) => x)),
-    images: json["images"] == null ? null : List<Mage>.from(json["images"].map((x) => Mage.fromJson(x))),
-    attributes: json["attributes"] == null ? null : List<Attribute>.from(json["attributes"].map((x) => Attribute.fromJson(x))),
-    groupedProducts: json["grouped_products"] == null ? null : List<dynamic>.from(json["grouped_products"].map((x) => x)),
+    tags:  json["tags"] == null ? [] : List<dynamic>.from(json["tags"].map((x) => x)),
+    images:   json["images"] == null ? [] : List<Mage>.from(json["images"].map((x) => Mage.fromJson(x))),
+    attributes: json["attributes"] == null ? [] : List<Attribute>.from(json["attributes"].map((x) => Attribute.fromJson(x))),
+    groupedProducts:json["grouped_products"] == null ? [] : List<dynamic>.from(json["grouped_products"].map((x) => x)),
     //menuOrder: json["menu_order"] == null ? null : json["menu_order"],
-    metaData: json["meta_data"] == null ? null : List<MetaDatum>.from(json["meta_data"].map((x) => MetaDatum.fromJson(x))),
+    metaData: json["meta_data"] == null ? [] : List<MetaDatum>.from(json["meta_data"].map((x) => MetaDatum.fromJson(x))),
     //storeName: json["store_name"] == null ? null : json["store_name"],
-    availableVariations: json["availableVariations"] == null ? null : List<AvailableVariation>.from(json["availableVariations"].map((x) => AvailableVariation.fromJson(x))),
-    variationOptions: json["variationOptions"] == null ? null : List<VariationOption>.from(json["variationOptions"].map((x) => VariationOption.fromJson(x))),
-    variationId: null,
-    vendor: json["vendor"] == null ? null : Vendor.fromJson(json["vendor"]),
-    children: json['children'] == null ? null : List<Product>.from(json["children"].map((x) => Product.fromJson(x))),
+    availableVariations: json["availableVariations"] == null ? [] : List<AvailableVariation>.from(json["availableVariations"].map((x) => AvailableVariation.fromJson(x))),
+    variationOptions: json["variationOptions"] == null ? [] : List<VariationOption>.from(json["variationOptions"].map((x) => VariationOption.fromJson(x))),
+    variationId: "",
+    vendor: json["vendor"] == null ? Vendor(name: '', icon: '') : Vendor.fromJson(json["vendor"]),
+    children: json["children"] == null ? [] : List<Product>.from(json["children"].map((x) => Product.fromJson(x))),
   );
 }
 
@@ -194,8 +196,8 @@ class Vendor {
 
   Vendor({
     this.id,
-    this.name,
-    this.icon,
+    required this.name,
+    required this.icon,
   });
 
   factory Vendor.fromJson(Map<String, dynamic> json) => Vendor(
@@ -220,12 +222,12 @@ class Attribute {
   List<String> options;
 
   Attribute({
-    this.id,
-    this.name,
-    this.position,
-    this.visible,
-    this.variation,
-    this.options,
+    required this.id,
+    required this.name,
+    required this.position,
+    required this.visible,
+    required this.variation,
+    required this.options,
   });
 
   factory Attribute.fromJson(Map<String, dynamic> json) => Attribute(
@@ -234,7 +236,7 @@ class Attribute {
     position: json["position"],
     visible: json["visible"],
     variation: json["variation"],
-    options: json["options"] == null ? null : List<String>.from(json["options"].map((x) => x)),
+    options:  json["options"] == null ? [] : List<String>.from(json["options"].map((x) => x)),
   );
 
   Map<String, dynamic> toJson() => {
@@ -253,9 +255,9 @@ class ProductCategory {
   String slug;
 
   ProductCategory({
-    this.id,
-    this.name,
-    this.slug,
+    required this.id,
+    required this.name,
+    required this.slug,
   });
 
   factory ProductCategory.fromJson(Map<String, dynamic> json) => ProductCategory(
@@ -277,9 +279,9 @@ class Dimensions {
   String height;
 
   Dimensions({
-    this.length,
-    this.width,
-    this.height,
+    required this.length,
+    required this.width,
+    required this.height,
   });
 
   factory Dimensions.fromJson(Map<String, dynamic> json) => Dimensions(
@@ -306,22 +308,22 @@ class Mage {
   String alt;
 
   Mage({
-    this.id,
-    this.dateCreated,
-    this.dateCreatedGmt,
-    this.dateModified,
-    this.dateModifiedGmt,
-    this.src,
-    this.name,
-    this.alt,
+    required this.id,
+    required this.dateCreated,
+    required this.dateCreatedGmt,
+    required this.dateModified,
+    required this.dateModifiedGmt,
+    required this.src,
+    required this.name,
+    required this.alt,
   });
 
   factory Mage.fromJson(Map<String, dynamic> json) => Mage(
     id: json["id"],
-    dateCreated: json["date_created"] == null ? null : DateTime.parse(json["date_created"]),
-    dateCreatedGmt: json["date_created_gmt"] == null ? null : DateTime.parse(json["date_created_gmt"]),
-    dateModified: json["date_modified"] == null ? null : DateTime.parse(json["date_modified"]),
-    dateModifiedGmt: json["date_modified_gmt"] == null ? null : DateTime.parse(json["date_modified_gmt"]),
+    dateCreated: json["date_created"] == null ? DateTime.now() : DateTime.parse(json["date_created"]),
+    dateCreatedGmt:  json["date_created_gmt"] == null ? DateTime.now() : DateTime.parse(json["date_created_gmt"]),
+    dateModified:  json["date_modified"] == null ? DateTime.now() : DateTime.parse(json["date_modified"]),
+    dateModifiedGmt: json["date_modified_gmt"] == null ? DateTime.now() : DateTime.parse(json["date_modified_gmt"]),
     src: json["src"],
     name: json["name"],
     alt: json["alt"],
@@ -329,10 +331,10 @@ class Mage {
 
   Map<String, dynamic> toJson() => {
     "id": id,
-    "date_created": dateCreated?.toIso8601String(),
-    "date_created_gmt": dateCreatedGmt?.toIso8601String(),
-    "date_modified": dateModified?.toIso8601String(),
-    "date_modified_gmt": dateModifiedGmt?.toIso8601String(),
+    "date_created": dateCreated.toIso8601String(),
+    "date_created_gmt": dateCreatedGmt.toIso8601String(),
+    "date_modified": dateModified.toIso8601String(),
+    "date_modified_gmt": dateModifiedGmt.toIso8601String(),
     "src": src,
     "name": name,
     "alt": alt,
@@ -345,9 +347,9 @@ class MetaDatum {
   dynamic value;
 
   MetaDatum({
-    this.id,
-    this.key,
-    this.value,
+    required this.id,
+    required this.key,
+    required this.value,
   });
 
   factory MetaDatum.fromJson(Map<String, dynamic> json) => MetaDatum(
@@ -392,43 +394,60 @@ class AvailableVariation {
   String formattedSalesPrice;
 
   AvailableVariation({
-    this.availabilityHtml,
-    this.backordersAllowed,
-    this.dimensions,
-    this.dimensionsHtml,
-    this.displayPrice,
-    this.displayRegularPrice,
-    this.image,
-    this.imageId,
-    this.isDownloadable,
-    this.isInStock,
-    this.isPurchasable,
-    this.isSoldIndividually,
-    this.isVirtual,
-    this.maxQty,
-    this.minQty,
-    this.priceHtml,
-    this.sku,
-    this.variationDescription,
-    this.variationId,
-    this.variationIsActive,
-    this.variationIsVisible,
-    this.weight,
-    this.weightHtml,
-    this.option,
-    this.formattedPrice,
-    this.formattedSalesPrice
+    required this.availabilityHtml,
+    required this.backordersAllowed,
+    required this.dimensions,
+    required this.dimensionsHtml,
+    required this.displayPrice,
+    required this.displayRegularPrice,
+    required this.image,
+    required this.imageId,
+    required this.isDownloadable,
+    required this.isInStock,
+    required this.isPurchasable,
+    required this.isSoldIndividually,
+    required this.isVirtual,
+    required this.maxQty,
+    required this.minQty,
+    required this.priceHtml,
+    required this.sku,
+    required this.variationDescription,
+    required this.variationId,
+    required this.variationIsActive,
+    required this.variationIsVisible,
+    required this.weight,
+    required this.weightHtml,
+    required this.option,
+    required this.formattedPrice,
+    required this.formattedSalesPrice
   });
 
   factory AvailableVariation.fromJson(Map<String, dynamic> json) {
     return AvailableVariation(
     //availabilityHtml: json["availability_html"] == null ? null : json["availability_html"],
     backordersAllowed: json["backorders_allowed"],
-    dimensions: json["dimensions"] == null ? null : Dimensions.fromJson(json["dimensions"]),
+    dimensions: json["dimensions"] == null ? Dimensions(length: '', width: '', height: '') : Dimensions.fromJson(json["dimensions"]),
     //dimensionsHtml: json["dimensions_html"] == null ? null : json["dimensions_html"],
     displayPrice: json["display_price"]?.toDouble(),
     displayRegularPrice: json["display_regular_price"]?.toDouble(),
-    image: json['image'] is Map<String, dynamic> ? AvailableVariationImage.fromJson(json["image"]) : null,
+    image: json['image'] is Map<String, dynamic> ? AvailableVariationImage.fromJson(json["image"]) : AvailableVariationImage(
+      title: '',
+      caption: '',
+      url: '',
+      src: '',
+      sizes: '',
+      fullSrc: '',
+      fullSrcW: 0,
+      fullSrcH: 0,
+      galleryThumbnailSrc: '',
+      galleryThumbnailSrcW: 0,
+      galleryThumbnailSrcH: 0,
+      thumbSrc: '',
+      thumbSrcW: 0,
+      thumbSrcH: 0,
+      srcW: 0,
+      srcH: 0,
+    ),
     //imageId: json["image_id"] == null ? null : json["image_id"],
     //isDownloadable: json["is_downloadable"] == null ? null : json["is_downloadable"],
     isInStock: json["is_in_stock"],
@@ -445,9 +464,9 @@ class AvailableVariation {
     //variationIsVisible: json["variation_is_visible"] == null ? null : json["variation_is_visible"],
     //weight: json["weight"] == null ? null : json["weight"],
     //weightHtml: json["weight_html"] == null ? null : json["weight_html"],
-    option: json["option"] == null ? null : List<Option>.from(json["option"].map((x) => Option.fromJson(x))),
+    option: json["option"] == null ? [] : List<Option>.from(json["option"].map((x) => Option.fromJson(x))),
     formattedPrice: json["formated_price"],
-    formattedSalesPrice: json["formated_sales_price"],
+    formattedSalesPrice: json["formated_sales_price"], availabilityHtml: '', dimensionsHtml: '', imageId: '', isDownloadable: false,isSoldIndividually: "",isVirtual: false,maxQty: 0,minQty: 0,priceHtml: "",variationIsActive: false,variationIsVisible: false,weight: "",weightHtml: ""
   );
   }
 }
@@ -457,8 +476,8 @@ class Option {
   String value;
 
   Option({
-    this.key,
-    this.value,
+    required this.key,
+    required this.value,
   });
 
   factory Option.fromJson(Map<String, dynamic> json) => Option(
@@ -493,24 +512,24 @@ class AvailableVariationImage {
   int srcH;
 
   AvailableVariationImage({
-    this.title,
-    this.caption,
-    this.url,
+    required this.title,
+    required this.caption,
+    required this.url,
     //this.alt,
-    this.src,
+    required this.src,
     //this.srcset,
-    this.sizes,
-    this.fullSrc,
-    this.fullSrcW,
-    this.fullSrcH,
-    this.galleryThumbnailSrc,
-    this.galleryThumbnailSrcW,
-    this.galleryThumbnailSrcH,
-    this.thumbSrc,
-    this.thumbSrcW,
-    this.thumbSrcH,
-    this.srcW,
-    this.srcH,
+    required this.sizes,
+    required this.fullSrc,
+    required this.fullSrcW,
+    required this.fullSrcH,
+    required this.galleryThumbnailSrc,
+    required this.galleryThumbnailSrcW,
+    required this.galleryThumbnailSrcH,
+    required this.thumbSrc,
+    required this.thumbSrcW,
+    required this.thumbSrcH,
+    required this.srcW,
+    required this.srcH,
   });
 
   factory AvailableVariationImage.fromJson(Map<String, dynamic> json) => AvailableVariationImage(
@@ -527,7 +546,7 @@ class AvailableVariationImage {
     galleryThumbnailSrc: json["gallery_thumbnail_src"],
     //galleryThumbnailSrcW: json["gallery_thumbnail_src_w"] == null ? null : json["gallery_thumbnail_src_w"],
     //galleryThumbnailSrcH: json["gallery_thumbnail_src_h"] == null ? null : json["gallery_thumbnail_src_h"],
-    thumbSrc: json["thumb_src"],
+    thumbSrc: json["thumb_src"], caption: '', sizes: '', fullSrcW: 0, fullSrcH: 0, galleryThumbnailSrcW: 0, galleryThumbnailSrcH: 0, thumbSrcW: 0, thumbSrcH: 0, srcW: 0, srcH: 0,
     //thumbSrcW: json["thumb_src_w"] == null ? null : json["thumb_src_w"],
     //thumbSrcH: json["thumb_src_h"] == null ? null : json["thumb_src_h"],
     //srcW: json["src_w"] == null ? null : json["src_w"],
@@ -542,17 +561,17 @@ class VariationOption {
   String selected;
 
   VariationOption({
-    this.name,
-    this.options,
-    this.attribute,
-    this.selected,
+    required this.name,
+    required this.options,
+    required this.attribute,
+    required this.selected,
   });
 
   factory VariationOption.fromJson(Map<String, dynamic> json) => VariationOption(
     name: json["name"],
-    options: json["options"] == null ? null : List<String>.from(json["options"].map((x) => x)),
+    options: json["options"] == null ? [] : List<String>.from(json["options"].map((x) => x)),
     attribute: json["attribute"],
-    selected: null,
+    selected: "",
   );
 }
 

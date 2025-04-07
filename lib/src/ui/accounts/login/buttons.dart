@@ -1,18 +1,21 @@
+// ignore_for_file: unnecessary_null_comparison
+
 import 'package:flutter/material.dart';
 
 class WhiteButton extends _BaseButton {
   final bool flat;
   @override
-  final IconData iconData;
+  // ignore: overridden_fields
+
   final bool bold;
 
   WhiteButton({
-    @required super.onPressed,
-    super.text,
-    super.child,
+    required super.onPressed,
+    required super.text,
+    required super.child,
     this.flat = false,
     this.bold = true,
-    this.iconData,
+    required IconData iconData,
   }) : super(
           showProgress: false,
           iconData: iconData,
@@ -34,8 +37,8 @@ class AccentButton extends StatelessWidget {
   final bool showProgress;
 
   const AccentButton({super.key, 
-    @required this.onPressed,
-    @required this.text,
+    required this.onPressed,
+    required this.text,
     this.showProgress = false,
   });
 
@@ -44,14 +47,14 @@ class AccentButton extends StatelessWidget {
     return _BaseButton(
       onPressed: onPressed,
       showProgress: showProgress,
-      color: Theme.of(context).buttonColor,
+      color: Theme.of(context).colorScheme.primary,
       borderSide: BorderSide.none,
       borderRadius: const BorderRadius.all(Radius.circular(0.0)),
       textStyle: TextStyle(
           fontSize: 14.0,
           color: Theme.of(context).colorScheme.onSecondary,
           fontWeight: FontWeight.bold),
-      text: text.toUpperCase(),
+      text: text.toUpperCase(), iconData: null, child: const SizedBox.shrink(),
     );
   }
 }
@@ -63,10 +66,10 @@ class AccountButton extends StatelessWidget {
   final BorderRadius borderRadius;
 
   const AccountButton({super.key, 
-    @required this.onPressed,
-    @required this.text,
+    required this.onPressed,
+    required this.text,
     this.showProgress = false,
-    this.borderRadius,
+    required this.borderRadius,
   });
 
   @override
@@ -74,14 +77,14 @@ class AccountButton extends StatelessWidget {
     return _BaseButton(
       onPressed: onPressed,
       showProgress: showProgress,
-      color: Theme.of(context).buttonColor,
+      color: Theme.of(context).colorScheme.primary,
       borderSide: BorderSide.none,
       borderRadius: borderRadius,
       textStyle: TextStyle(
           fontSize: 14.0,
           color: Theme.of(context).colorScheme.onSecondary,
           fontWeight: FontWeight.bold),
-      text: text.toUpperCase(),
+      text: text.toUpperCase(),iconData: null, child: const SizedBox.shrink(),
     );
   }
 }
@@ -92,8 +95,8 @@ class AddToCartButton extends StatelessWidget {
   final bool showProgress;
 
   const AddToCartButton({super.key, 
-    @required this.onPressed,
-    @required this.text,
+    required this.onPressed,
+    required this.text,
     this.showProgress = false,
   });
 
@@ -102,14 +105,14 @@ class AddToCartButton extends StatelessWidget {
     return _BaseButton(
       onPressed: onPressed,
       showProgress: showProgress,
-      color: Theme.of(context).buttonColor,
+      color: Theme.of(context).colorScheme.primary,
       borderSide: BorderSide.none,
       borderRadius: const BorderRadius.all(Radius.circular(0.0)),
       textStyle: TextStyle(
           fontSize: 14.0,
           color: Theme.of(context).colorScheme.onSecondary,
           fontWeight: FontWeight.bold),
-      text: text.toUpperCase(),
+      text: text.toUpperCase(),iconData: null, child: const SizedBox.shrink(),
     );
   }
 }
@@ -120,8 +123,8 @@ class PrimaryButton extends StatelessWidget {
   final bool showProgress;
 
   const PrimaryButton({super.key, 
-    @required this.onPressed,
-    @required this.text,
+    required this.onPressed,
+    required this.text,
     this.showProgress = false,
   });
 
@@ -137,7 +140,7 @@ class PrimaryButton extends StatelessWidget {
           fontSize: 14.0,
           color: Theme.of(context).colorScheme.onPrimary,
           fontWeight: FontWeight.bold),
-      text: text,
+      text: text,iconData: null, child: const SizedBox.shrink(),
     );
   }
 }
@@ -146,13 +149,13 @@ class BlackButton extends StatelessWidget {
   final VoidCallback onPressed;
   final String text;
   final bool showProgress;
-  final IconData iconData;
+  final IconData? iconData;
 
   const BlackButton(
-      {super.key, @required this.onPressed,
-      @required this.text,
+      {super.key, required this.onPressed,
+      required this.text,
       this.showProgress = false,
-      this.iconData});
+      required this.iconData});
 
   @override
   Widget build(BuildContext context) {
@@ -171,7 +174,7 @@ class BlackButton extends StatelessWidget {
               : Colors.white,
           fontWeight: FontWeight.bold),
       text: text,
-      iconData: iconData,
+      iconData: null, child: const SizedBox.shrink(),
     );
   }
 }
@@ -184,19 +187,19 @@ class _BaseButton extends StatelessWidget {
   final Color color;
   final BorderSide borderSide;
   final BorderRadius borderRadius;
-  final IconData iconData;
+  final IconData? iconData;
   final Widget child;
 
   const _BaseButton({
-    @required this.onPressed,
-    @required this.showProgress,
-    @required this.text,
-    @required this.textStyle,
-    @required this.color,
-    @required this.borderSide,
-    @required this.borderRadius,
-    this.iconData,
-    this.child,
+    required this.onPressed,
+    required this.showProgress,
+    required this.text,
+    required this.textStyle,
+    required this.color,
+    required this.borderSide,
+    required this.borderRadius,
+    required this.iconData,
+    required this.child,
   });
 
   @override
@@ -219,10 +222,12 @@ class _BaseButton extends StatelessWidget {
         child: SizedBox(
           width: double.infinity,
           height: double.infinity,
-          child: RaisedButton(
+          child: ElevatedButton(
               onPressed: showProgress ? null : onPressed,
-              shape: RoundedRectangleBorder(
-                  borderRadius: borderRadius, side: borderSide),
+              style: ElevatedButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                    borderRadius: borderRadius, side: borderSide), backgroundColor: color,
+              ),
               child: showProgress
                   ? SizedBox(
                       width: 20.0,
@@ -235,13 +240,13 @@ class _BaseButton extends StatelessWidget {
                           )),
                     )
                   : iconData == null
-                      ? child ?? textWidget
+                      ? child
                       : Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
                             Icon(
                               iconData,
-                              color: textStyle.color.withOpacity(0.5),
+                              color: textStyle.color!.withOpacity(0.5),
                             ),
                             const SizedBox(width: 2.0),
                             textWidget,

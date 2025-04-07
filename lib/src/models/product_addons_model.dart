@@ -2,17 +2,19 @@
 //
 //     final productAddons = productAddonsFromJson(jsonString);
 
+// ignore_for_file: unnecessary_null_comparison
+
 import 'dart:convert';
 
 List<ProductAddonsModel> productAddonsFromJson(String str) => List<ProductAddonsModel>.from(json.decode(str).map((x) => ProductAddonsModel.fromJson(x)));
 
 class ProductAddonsModel {
   ProductAddonsModel({
-    this.id,
-    this.name,
-    this.priority,
-    this.restrictToCategories,
-    this.fields,
+    required this.id,
+    required this.name,
+    required this.priority,
+    required this.restrictToCategories,
+    required this.fields,
   });
 
   int id;
@@ -28,10 +30,9 @@ class ProductAddonsModel {
         name: json["name"],
         priority: json["priority"],
         restrictToCategories: json["restrict_to_categories"] == null
-            ? null
+            ? {}
             : (json["restrict_to_categories"] as Map).cast<String, String>(),
-        fields: json["fields"] == null ? null : List<AddonField>.from(
-            json["fields"].map((x) => AddonField.fromJson(x))),
+        fields: json["fields"] == null ? [] : List<AddonField>.from(json["fields"].map((x) => AddonField.fromJson(x))),
       );
     } catch (e) {
       return ProductAddonsModel(
@@ -39,7 +40,7 @@ class ProductAddonsModel {
         name: json["name"],
         priority: json["priority"],
         restrictToCategories: {},
-        fields: json["fields"] == null ? null : List<AddonField>.from(
+        fields: json["fields"] == null ? [] : List<AddonField>.from(
             json["fields"].map((x) => AddonField.fromJson(x))),
       );
     }
@@ -48,13 +49,13 @@ class ProductAddonsModel {
 
 class AddonField {
   AddonField({
-    this.name,
-    this.description,
-    this.type,
-    this.display,
-    this.position,
-    this.options,
-    this.required,
+    required this.name,
+    required this.description,
+    required this.type,
+    required this.display,
+    required this.position,
+    required this.options,
+    required this.required,
   });
 
   String name;
@@ -71,7 +72,8 @@ class AddonField {
     type: json["type"],
     display: json["display"] ?? 'radiobutton',
     position: json["position"],
-    options: json["options"] == null ? null : List<AddonOption>.from(json["options"].map((x) => AddonOption.fromJson(x))),
+    options: json["options"] == null ? [] : List<AddonOption>.from(
+            json["options"].map((x) => AddonOption.fromJson(x))),
     required: json["required"],
   );
 
@@ -79,10 +81,10 @@ class AddonField {
 
 class AddonOption {
   AddonOption({
-    this.label,
-    this.price,
-    this.min,
-    this.max,
+    required this.label,
+    required this.price,
+    required this.min,
+    required this.max,
   });
 
   String label;

@@ -114,7 +114,7 @@ class _StoreCardState extends State<StoreCard> {
                             maxLines: 1,
                             style: Theme.of(context).textTheme.bodySmall) : Container(),
                         SizedBox(height: 2,),
-                        widget.store.address.city != null ? Text(widget.store.address.city,
+                        widget.store.address!.city != null ? Text(widget.store.address!.city,
                             style: TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.w400,

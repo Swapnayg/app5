@@ -2,6 +2,8 @@
 //
 //     final productAttribute = productAttributeFromJson(jsonString);
 
+// ignore_for_file: unnecessary_null_comparison
+
 import 'dart:convert';
 
 List<ProductAttribute> productAttributeFromJson(String str) => List<ProductAttribute>.from(json.decode(str).map((x) => ProductAttribute.fromJson(x)));
@@ -18,13 +20,13 @@ class ProductAttribute {
   Links links;
 
   ProductAttribute({
-    this.id,
-    this.name,
-    this.slug,
-    this.type,
-    this.orderBy,
-    this.hasArchives,
-    this.links,
+    required this.id,
+    required this.name,
+    required this.slug,
+    required this.type,
+    required this.orderBy,
+    required this.hasArchives,
+    required this.links,
   });
 
   factory ProductAttribute.fromJson(Map<String, dynamic> json) => ProductAttribute(
@@ -34,7 +36,7 @@ class ProductAttribute {
     type: json["type"],
     orderBy: json["order_by"],
     hasArchives: json["has_archives"],
-    links: json["_links"] == null ? null : Links.fromJson(json["_links"]),
+    links: json["_links"] == null ? Links(self: [], collection: []) : Links.fromJson(json["_links"]),
   );
 
   Map<String, dynamic> toJson() => {
@@ -44,7 +46,7 @@ class ProductAttribute {
     "type": type,
     "order_by": orderBy,
     "has_archives": hasArchives,
-    "_links": links?.toJson(),
+    "_links": links.toJson(),
   };
 }
 
@@ -53,13 +55,13 @@ class Links {
   List<Collection> collection;
 
   Links({
-    this.self,
-    this.collection,
+    required this.self,
+    required this.collection,
   });
 
   factory Links.fromJson(Map<String, dynamic> json) => Links(
-    self: json["self"] == null ? null : List<Collection>.from(json["self"].map((x) => Collection.fromJson(x))),
-    collection: json["collection"] == null ? null : List<Collection>.from(json["collection"].map((x) => Collection.fromJson(x))),
+    self: json["self"] == null ? [] : List<Collection>.from(json["self"].map((x) => Collection.fromJson(x))),
+    collection: json["collection"] == null ? [] : List<Collection>.from(json["collection"].map((x) => Collection.fromJson(x))),
   );
 
   Map<String, dynamic> toJson() => {
@@ -72,7 +74,7 @@ class Collection {
   String href;
 
   Collection({
-    this.href,
+    required this.href,
   });
 
   factory Collection.fromJson(Map<String, dynamic> json) => Collection(
@@ -99,13 +101,13 @@ class AttributeTerms {
   Links links;
 
   AttributeTerms({
-    this.id,
-    this.name,
-    this.slug,
-    this.description,
-    this.menuOrder,
-    this.count,
-    this.links,
+    required this.id,
+    required this.name,
+    required this.slug,
+    required this.description,
+    required this.menuOrder,
+    required this.count,
+    required this.links,
   });
 
   factory AttributeTerms.fromJson(Map<String, dynamic> json) => AttributeTerms(
@@ -115,7 +117,7 @@ class AttributeTerms {
     description: json["description"],
     menuOrder: json["menu_order"],
     count: json["count"],
-    links: json["_links"] == null ? null : Links.fromJson(json["_links"]),
+    links:  json["_links"] == null ? Links(self: [], collection: []) : Links.fromJson(json["_links"]),
   );
 
   Map<String, dynamic> toJson() => {
@@ -125,6 +127,6 @@ class AttributeTerms {
     "description": description,
     "menu_order": menuOrder,
     "count": count,
-    "_links": links?.toJson(),
+    "_links": links.toJson(),
   };
 }

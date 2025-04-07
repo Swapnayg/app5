@@ -14,14 +14,14 @@ class ReleatedProductsModel {
   List<Product> crossProducts;
 
   ReleatedProductsModel({
-    this.relatedProducts,
-    this.upsellProducts,
-    this.crossProducts,
+    required this.relatedProducts,
+    required this.upsellProducts,
+    required this.crossProducts,
   });
 
   factory ReleatedProductsModel.fromJson(Map<String, dynamic> json) => ReleatedProductsModel(
-    relatedProducts: json["relatedProducts"] == null ? null : List<Product>.from(json["relatedProducts"].map((x) => Product.fromJson(x))),
-    upsellProducts: json["upsellProducts"] == null ? null : List<Product>.from(json["upsellProducts"].map((x) => Product.fromJson(x))),
-    crossProducts: json["crossProducts"] == null ? null : List<Product>.from(json["crossProducts"].map((x) => Product.fromJson(x))),
+    relatedProducts: json["relatedProducts"] == null ? [] : List<Product>.from(json["relatedProducts"].map((x) => Product.fromJson(x))),
+    upsellProducts: json["upsellProducts"] == null ? [] : List<Product>.from(json["upsellProducts"].map((x) => Product.fromJson(x))),
+    crossProducts:   json["crossProducts"] == null ? [] : List<Product>.from(json["crossProducts"].map((x) => Product.fromJson(x))),
   );
 }

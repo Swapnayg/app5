@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api, unused_local_variable, deprecated_member_use
+
 import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -11,10 +13,10 @@ import 'theme_override.dart';
 class OTPVerification extends StatefulWidget {
 
   OTPVerification({
-    Key key,
-    @required this.verificationId,
-    @required this.phoneNumber,
-  }) : super(key: key);
+    super.key,
+    required this.verificationId,
+    required this.phoneNumber,
+  });
 
   String verificationId;
   final String phoneNumber;
@@ -31,7 +33,7 @@ class _OTPVerificationState extends State<OTPVerification> {
   TextEditingController otpController = TextEditingController();
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final RoundedLoadingButtonController _btnController = RoundedLoadingButtonController();
-  StreamController<ErrorAnimationType> errorController;
+  late StreamController<ErrorAnimationType> errorController;
 
   @override
   void initState() {
@@ -81,11 +83,11 @@ class _OTPVerificationState extends State<OTPVerification> {
                           SizedBox(
                             height: height * 0.15,
                           ),
-                          Text('Enter OTP!', style: Theme.of(context).textTheme.titleLarge.copyWith(
+                          Text('Enter OTP!', style: Theme.of(context).textTheme.titleLarge!.copyWith(
                             //color: Colors.white,
                               fontSize: 32
                           )),
-                          Text('Enter OTP to SignIn', style: Theme.of(context).textTheme.bodySmall.copyWith(
+                          Text('Enter OTP to SignIn', style: Theme.of(context).textTheme.bodySmall!.copyWith(
                             //color: Colors.white,
                               fontSize: 14
                           )),
@@ -105,7 +107,7 @@ class _OTPVerificationState extends State<OTPVerification> {
                                 obscureText: false,
                                 animationType: AnimationType.fade,
                                 validator: (v) {
-                                  if (v.length < 6) {
+                                  if (v!.length < 6) {
                                     showSnackBar(context, 'Invalid Code');
                                     return null;
                                   } else {
@@ -147,9 +149,9 @@ class _OTPVerificationState extends State<OTPVerification> {
                           ),
                           SizedBox(height: 30.0),
                           RoundedLoadingButton(
-                            color: Theme.of(context).buttonColor,
+                            color: Theme.of(context).colorScheme.primary,
                             elevation: 0,
-                            valueColor: Theme.of(context).buttonTheme.colorScheme.onPrimary,
+                            valueColor: Theme.of(context).buttonTheme.colorScheme!.onPrimary,
                             controller: _btnController,
                             onPressed: () {
                               verifyOTP(context);
@@ -159,13 +161,13 @@ class _OTPVerificationState extends State<OTPVerification> {
                             child: Text(appStateModel.blocks.localeText.signIn),
                           ),
                           SizedBox(height: 30.0),
-                          FlatButton(
+                          TextButton(
                               onPressed: () {
                                 sendOTP(context);
                               },
                               child: Text(
                                   appStateModel.blocks.localeText.resendOTP,
-                                  style: Theme.of(context).textTheme.bodyMedium.copyWith(
+                                  style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                                       fontSize: 15,
                                       color: Colors.white
                                   ))),
@@ -231,7 +233,7 @@ class _OTPVerificationState extends State<OTPVerification> {
     final snackBar = SnackBar(
         backgroundColor: Colors.red,
         content: Text(message));
-    Scaffold.of(context).showSnackBar(snackBar);
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
   Future<void> sendOTP(BuildContext context) async {
@@ -242,7 +244,7 @@ class _OTPVerificationState extends State<OTPVerification> {
           codeAutoRetrievalTimeout: (String verId) {
             widget.verificationId = verId;
           },
-          codeSent: (String verId, [int forceCodeResend]) {
+          codeSent: (String verId, [int? forceCodeResend]) {
             _btnController.stop();
             widget.verificationId = verId;
           },
