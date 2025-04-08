@@ -1,0 +1,2 @@
+C:/Users/Smart IT Solutions/Documents/Swapna/Fluter/app5/android/app/.cxx/RelWithDebInfo/4k5xi571/arm64-v8a/CMakeFiles/edit_cache.dir
+C:/Users/Smart IT Solutions/Documents/Swapna/Fluter/app5/android/app/.cxx/RelWithDebInfo/4k5xi571/arm64-v8a/CMakeFiles/rebuild_cache.dir

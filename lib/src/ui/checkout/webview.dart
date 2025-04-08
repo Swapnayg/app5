@@ -3,7 +3,7 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:webview_cookie_manager/webview_cookie_manager.dart';
+//import 'package:webview_cookie_manager/webview_cookie_manager.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import '../../config.dart';
 import '../../functions.dart';
@@ -29,7 +29,7 @@ class _WebViewPageState extends State<WebViewPage> {
   late String orderKey;
   late WebViewController controller;
   late String redirectUrl;
-  final cookieManager = WebviewCookieManager();
+  // cookieManager = WebviewCookieManager();
   bool injectCookies = false;
 
   @override
@@ -175,12 +175,12 @@ class _WebViewPageState extends State<WebViewPage> {
     ApiProvider apiProvider = ApiProvider();
     List<Cookie> cookies = apiProvider.generateCookies();
     apiProvider.cookieList.forEach((element) async {
-      await cookieManager.setCookies([
-        Cookie(element.name, element.value)
-          ..domain = domain
-        //..expires = DateTime.now().add(Duration(days: 10))
-        //..httpOnly = true
-      ]);
+      // await cookieManager.setCookies([
+      //   Cookie(element.name, element.value)
+      //     ..domain = domain
+      //   //..expires = DateTime.now().add(Duration(days: 10))
+      //   //..httpOnly = true
+      // ]);
     });
     setState(() {
       injectCookies = true;
